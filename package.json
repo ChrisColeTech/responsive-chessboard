@@ -1,6 +1,6 @@
 {
   "name": "responsive-chessboard",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A responsive and interactive React chessboard component with dynamic sizing, drag-and-drop moves, and modern TypeScript architecture.",
   "author": "ChrisColeTech",
   "license": "MIT",
@@ -17,10 +17,10 @@
   "types": "dist/index.d.ts",
   "source": "src/index.tsx",
   "keywords": [
-    "react", 
-    "chess", 
-    "chessboard", 
-    "responsive", 
+    "react",
+    "chess",
+    "chessboard",
+    "responsive",
     "typescript",
     "drag-and-drop",
     "interactive",
