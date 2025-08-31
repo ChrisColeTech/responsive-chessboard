@@ -1,85 +1,215 @@
-# react-chessboard-ui ♟️
+# Responsive ChessBoard
 
-[![NPM](https://img.shields.io/npm/v/react-chessboard-ui.svg)](https://www.npmjs.com/package/react-chessboard-ui)
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![GitHub CI](https://github.com/ChrisColeTech/responsive-chessboard/workflows/CI/badge.svg)](https://github.com/ChrisColeTech/responsive-chessboard/actions)
+[![npm version](https://badge.fury.io/js/responsive-chessboard.svg)](https://badge.fury.io/js/responsive-chessboard)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/node/v/responsive-chessboard.svg)](https://nodejs.org/en/download/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
+[![GitHub stars](https://img.shields.io/github/stars/ChrisColeTech/responsive-chessboard?style=social)](https://github.com/ChrisColeTech/responsive-chessboard/stargazers)
 
-A lightweight and customizable React chessboard component built with modern UI in mind. Easily integrate chess functionality into your React apps with FEN support, game-end detection, and position handling.
+**A responsive and interactive React chessboard component with dynamic sizing, drag-and-drop moves, and modern TypeScript architecture.**
 
-<img src="./blob/ChessBoard.png?raw=true" width="400px" alt="react-chessboard-ui preview" />
+Built for modern React applications with clean separation of concerns, full TypeScript support, and responsive design that adapts to any container size.
 
-## 📘 **Full documentation**: [https://react-chessboard-ui.dev/](https://react-chessboard-ui.dev/)
+## 🎯 Responsive-First Philosophy
 
----
+**Responsive ChessBoard** embraces **true responsive design** with dynamic sizing props and container-aware scaling:
 
-## 🚀 Features
+- **🔄 Dynamic Sizing**: Automatically adapts to container width with ResizeObserver
+- **📱 Mobile-Friendly**: Optimized touch interactions and responsive scaling
+- **⚡ Performance-First**: Memoized components and optimized re-renders
+- **🎨 Customizable**: Complete theming control with CSS custom properties
 
-- 🎯 Fully controlled via FEN strings
-- ♻️ React functional component with hooks support
-- 🎨 Customizable styles (via CSS or override)
-- ♟️ Game-end and move-change callbacks
-- 🧩 Easy integration into any React project
+This approach gives you **maximum flexibility** while maintaining **clean separation of concerns** and optimal performance.
 
----
+## 🚀 Key Features
+
+- **📏 Responsive Sizing**: Dynamic board sizing with width, height, and container-based scaling
+- **🖱️ Interactive Gameplay**: Drag-and-drop moves, click-to-move, and piece selection
+- **🎨 Full Customization**: Colors, cell sizes, piece styles, and board themes
+- **♟️ Chess Logic**: Complete FEN notation support and game state management
+- **🔄 Move Validation**: Built-in chess engine with legal move validation
+- **📱 Touch Support**: Optimized for mobile devices and touch interactions
+- **⚡ Performance**: Optimized rendering with React.memo and efficient state management
+- **📦 TypeScript**: Full type safety with comprehensive interfaces
 
 ## 📦 Installation
 
-Install via npm:
-
 ```bash
-npm install react-chessboard-ui
+npm install responsive-chessboard
 ```
 
-Or using yarn:
+## 🛠️ Development
 
 ```bash
-yarn add react-chessboard-ui
+# Clone and setup
+git clone https://github.com/ChrisColeTech/responsive-chessboard.git
+cd responsive-chessboard
+npm install
+npm run build
+
+# Development commands
+npm run dev          # Hot reload development
+npm test            # Run test suite  
+npm run lint        # Code quality checks
+npm run type-check  # TypeScript validation
+
+# Test example app
+cd example
+npm run dev         # Launch interactive example
 ```
 
----
+## 🚀 Quick Start
 
-## 💡 Usage Example
+### 1. Basic Usage
 
 ```tsx
 import React from 'react';
-import { ChessBoard } from 'react-chessboard-ui';
-import 'react-chessboard-ui/dist/index.css'; // Required CSS
+import { ChessBoard } from 'responsive-chessboard';
 
-export const App = () => {
+function App() {
+  const handleMove = (moveData) => {
+    console.log('Move:', moveData);
+  };
+
+  const handleEndGame = (result) => {
+    console.log('Game ended:', result);
+  };
+
   return (
-    <div>
-      <ChessBoard
-        FEN="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-        onChange={handleChangePosition}
-        onEndGame={handleEndGame}
-      />
-    </div>
+    <ChessBoard
+      FEN="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+      onChange={handleMove}
+      onEndGame={handleEndGame}
+      boardSize={400}
+      playerColor="white"
+    />
   );
+}
+```
+
+### 2. Responsive Mode
+
+```tsx
+<ChessBoard
+  FEN="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+  onChange={handleMove}
+  onEndGame={handleEndGame}
+  responsive={true}
+  minSize={200}
+  maxSize={600}
+  playerColor="white"
+/>
+```
+
+### 3. Custom Styling
+
+```tsx
+<ChessBoard
+  FEN="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+  onChange={handleMove}
+  onEndGame={handleEndGame}
+  boardSize={500}
+  config={{
+    whiteCellColor: '#f0f0f0',
+    blackCellColor: '#8b7355',
+    selectedCellColor: '#yellow',
+  }}
+  reversed={false}
+  playerColor="white"
+/>
+```
+
+## 📋 Component Props
+
+### Core Props
+- `FEN` (string): Chess position in FEN notation
+- `onChange` (function): Callback for move events
+- `onEndGame` (function): Callback for game end events
+- `playerColor` ('white' | 'black'): Player perspective
+
+### Sizing Props
+- `boardSize` (number): Fixed board size in pixels
+- `width` (number): Board width (alternative to boardSize)
+- `height` (number): Board height (alternative to boardSize)
+- `responsive` (boolean): Enable container-based responsive sizing
+- `minSize` (number): Minimum size for responsive mode
+- `maxSize` (number): Maximum size for responsive mode
+
+### Styling Props
+- `config` (Partial<ChessBoardConfig>): Custom colors and styling
+- `reversed` (boolean): Flip board perspective
+- `change` (ChangeMove): Move animation data
+
+## 🎨 TypeScript Support
+
+```tsx
+import { 
+  ChessBoard, 
+  ChessBoardConfig, 
+  MoveData, 
+  GameResult 
+} from 'responsive-chessboard';
+
+const config: Partial<ChessBoardConfig> = {
+  cellSize: 64,
+  whiteCellColor: '#f0f0f0',
+  blackCellColor: '#8b7355',
+};
+
+const handleMove = (moveData: MoveData) => {
+  // Full type safety for move data
+};
+
+const handleEndGame = (result: GameResult) => {
+  // Type-safe game result handling
 };
 ```
 
-## Full customizable
-<img src="./blob/customization.png?raw=true" width="400px" alt="react-chessboard-ui preview" />
+## 🔧 Customization
 
-### 📘 **Documentation for customization**: [https://react-chessboard-ui.dev/properties/config/](https://react-chessboard-ui.dev/properties/config/)
+### Color Themes
+```tsx
+const darkTheme = {
+  whiteCellColor: '#262522',
+  blackCellColor: '#3c3936', 
+  selectedCellColor: '#646f40',
+  markedCellColor: '#646f40',
+  circleMarkColor: '#15781b',
+};
 
+<ChessBoard config={darkTheme} {...props} />
+```
 
----
+### Responsive Behavior
+```tsx
+// Container-based responsive sizing
+<div style={{ width: '100%', maxWidth: '600px' }}>
+  <ChessBoard
+    responsive={true}
+    minSize={300}
+    maxSize={600}
+    {...props}
+  />
+</div>
+```
 
-## 👥 Authors
+## 📚 Documentation
 
-Created by:
+📖 **[Full Documentation](docs/README.md)** - Comprehensive guide with detailed examples, advanced configuration, and production deployment.
 
-- [Tatiana Utbanova](https://www.linkedin.com/in/tatiana-utbanova-6415b8271/) - Design owner
-- [Alexander Utbanov](https://linkedin.com/in/alexander-utbanov-a9670a210/) - Code owner
-
----
+See also:
+- [API Reference](docs/API_REFERENCE.md)
+- [Examples](example/src/App.tsx)
+- [Project Structure](docs/PROJECT_STRUCTURE.md)
 
 ## 📄 License
 
-MIT © [react-chessboard-ui](https://github.com/)
+MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🧠 Keywords (for discoverability)
+⭐ **Star this repository** if you find it useful!  
+🐛 **Report issues** or suggest features at [GitHub Issues](https://github.com/ChrisColeTech/responsive-chessboard/issues)
 
-`react` `chess` `chessboard` `react-chess` `chess ui` `react chess component` `fen` `chess game` `react board game`
+**Get started today** - `npm install responsive-chessboard` and build your responsive chess application!

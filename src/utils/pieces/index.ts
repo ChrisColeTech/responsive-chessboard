@@ -1,0 +1,1 @@
+export { CHESS_PIECES_MAP } from './chessPiecesMap'

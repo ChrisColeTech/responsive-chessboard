@@ -23,16 +23,6 @@ export interface Cell {
   beated?: boolean;
 }
 
-export interface ChessBoardConfig {
-  cellWhiteBg: string;
-  cellBlackBg: string;
-  cellSelectedBg: string;
-  cellSize: number;
-  figures: {
-    black: { [figureType: string]: string };
-    white: { [figureType: string]: string };
-  };
-}
 
 export interface MoveNotation {
   move: string;

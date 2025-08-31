@@ -1,11 +1,11 @@
 import React, { FC } from "react";
-import { checkIsPossibleMove, getFigureCSS, getFilledArrayBySize } from "./utils";
-import styles from './ChessBoard.module.css';
+import { checkIsPossibleMove, getFigureCSS, getFilledArrayBySize } from "../../utils";
+import styles from '../../styles/ChessBoard.module.css';
 import cn from 'classnames';
-import { CellPos, Figure } from "../JSChessEngine";
-import { HoldedFigure } from "./HoldedFigure";
-import { ChessBoardConfig } from "./models";
-import { FACTOR_FOR_SIZE_CIRCLE_MARK } from "./constants";
+import { CellPos, Figure } from "../../engine";
+import { HoldedFigure } from "../FigurePicker/HoldedFigure";
+import { ChessBoardConfig } from "../../types";
+import { FACTOR_FOR_SIZE_CIRCLE_MARK } from "../../constants";
 
 const BASE_BOARD_SIZE = 8
 
@@ -40,9 +40,9 @@ export const ChessBoardInteractiveLayout: FC<ChessBoardInteractiveLayoutProps> =
                 boardConfig={boardConfig}
             />
             <div className={styles.interactiveLayout}>
-                {getFilledArrayBySize(size).map((_, j) => 
+                {getFilledArrayBySize(size).map((_: any, j: number) => 
                     <div className={styles.row} key={`interactive-layout-${j}`}>
-                        {getFilledArrayBySize(size).map((_, i) => (
+                        {getFilledArrayBySize(size).map((_: any, i: number) => (
                             <div 
                                 className={cn(styles.interactiveCell, { 
                                     [styles.selectedCell]: selectedPos[0] === i && selectedPos[1] === j,

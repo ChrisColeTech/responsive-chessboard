@@ -1,3 +1,5 @@
+**EXAMPLE DO NOT COPY VERBATIM**
+
 # Idiot's Guide to Writing the Claude-Wrapper README
 
 ## Step 1: Research Before Writing Anything

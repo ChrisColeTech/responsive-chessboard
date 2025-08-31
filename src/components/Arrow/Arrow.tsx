@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
-import styles from './ChessBoard.module.css';
-import { calcAngle } from './utils';
+import styles from '../../styles/ChessBoard.module.css';
+import { calcAngle } from '../../utils';
 
 interface ArrowProps {
   start: number[];

@@ -1,15 +1,36 @@
 {
   "name": "responsive-chessboard",
   "version": "1.0.0",
-  "description": "A responsive and customizable chessboard component for React applications with dynamic sizing props and modern build tools.",
+  "description": "A responsive and interactive React chessboard component with dynamic sizing, drag-and-drop moves, and modern TypeScript architecture.",
   "author": "ChrisColeTech",
   "license": "MIT",
-  "repository": "ChrisColeTech/responsive-chessboard",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ChrisColeTech/responsive-chessboard.git"
+  },
+  "homepage": "https://github.com/ChrisColeTech/responsive-chessboard#readme",
+  "bugs": {
+    "url": "https://github.com/ChrisColeTech/responsive-chessboard/issues"
+  },
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "source": "src/index.tsx",
-  "keywords": ["react", "chess", "chessboard", "responsive", "sizing", "typescript", "vite"],
+  "keywords": [
+    "react", 
+    "chess", 
+    "chessboard", 
+    "responsive", 
+    "typescript",
+    "drag-and-drop",
+    "interactive",
+    "component",
+    "game",
+    "ui",
+    "board",
+    "fen",
+    "chess-engine"
+  ],
   "engines": {
     "node": ">=18"
   },

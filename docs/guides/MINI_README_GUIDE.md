@@ -1,3 +1,4 @@
+**DO NOT COPY VERBATIM**
 # Mini README Guide - How to Create the Perfect Streamlined README
 
 Based on lessons learned from claude-wrapper, here's how to create a focused, user-friendly README that's perfect for npm packages and GitHub discovery.

@@ -1,9 +1,9 @@
-import { CellPos, Figure } from "../JSChessEngine";
+import { CellPos, Figure } from "../../engine";
 import React, { FC } from "react";
-import styles from './ChessBoard.module.css';
-import { getFigureCSS } from "./utils";
+import styles from '../../styles/ChessBoard.module.css';
+import { getFigureCSS } from "../../utils";
 import cn from 'classnames';
-import { ChessBoardConfig } from "./models";
+import { ChessBoardConfig } from "../../types";
 
 type HoldedFigureProps = {
     holdedFigure?: Figure;

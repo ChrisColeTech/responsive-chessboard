@@ -1,8 +1,8 @@
 import React, { FC, useCallback } from 'react';
-import styles from './ChessBoard.module.css';
-import { getFigureCSS, getFiguresByColor } from './utils';
-import { Figure, FigureColor } from '../JSChessEngine';
-import { ChessBoardConfig } from './models';
+import styles from '../../styles/ChessBoard.module.css';
+import { getFigureCSS, getFiguresByColor } from '../../utils';
+import { Figure, FigureColor } from '../../engine';
+import { ChessBoardConfig } from '../../types';
 
 interface FigurePickerProps {
   boardConfig: ChessBoardConfig;
@@ -23,7 +23,7 @@ export const FigurePicker: FC<FigurePickerProps> = (props) => {
 
   return (
     <div className={styles.figurePicker}>
-      {getFiguresByColor(color, forPawnTransform).map((figure) => (
+      {getFiguresByColor(color, forPawnTransform).map((figure: Figure) => (
         <div
           key={figure.type}
           className={styles.figurePickerItem}

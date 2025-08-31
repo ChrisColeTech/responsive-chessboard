@@ -1,9 +1,9 @@
-import { Cell, Figure, JSChessEngine } from "../JSChessEngine";
+import { Cell, Figure, JSChessEngine } from "../../engine";
 import React, { FC, useEffect, useState } from "react";
-import styles from './ChessBoard.module.css';
+import styles from '../../styles/ChessBoard.module.css';
 import cn from 'classnames';
-import { checkIsCastlingMove, getFigureCSS, mapCellsToFiguresArray } from "./utils";
-import { ChangeMove, ChessBoardConfig } from "./models";
+import { checkIsCastlingMove, getFigureCSS, mapCellsToFiguresArray } from "../../utils";
+import { ChangeMove, ChessBoardConfig } from "../../types";
 
 type ChessBoardFiguresLayoutProps = {
     initialState: Cell[][];

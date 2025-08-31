@@ -1,7 +1,7 @@
 import React, { FC } from "react";
-import styles from './ChessBoard.module.css';
-import { getFilledArrayBySize, getIsLightCell } from "./utils";
-import { ChessBoardConfig } from "./models";
+import styles from '../../styles/ChessBoard.module.css';
+import { getFilledArrayBySize, getIsLightCell } from "../../utils";
+import type { ChessBoardConfig } from "../../types";
 
 const BASE_BOARD_SIZE = 8;
 

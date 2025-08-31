@@ -1,8 +1,9 @@
-import { Cell, CellPos, Figure, FigureColor, GameResult, JSChessEngine, MoveData, stateToFEN } from "../JSChessEngine";
+import type { Cell, CellPos, Figure, FigureColor, GameResult, MoveData } from "../engine";
+import { JSChessEngine, stateToFEN } from "../engine";
 import { useEffect, useState } from "react"
-import { checkIsPossibleMove, checkPositionsHas, correctGrabbingPosForArrow, getChessBoardConfig, hasCheck } from "./utils";
-import { ArrowCoords, ChangeMove, ChessBoardConfig } from "./models";
-import { DEFAULT_CHESSBORD_CONFIG } from "./constants";
+import { checkIsPossibleMove, checkPositionsHas, correctGrabbingPosForArrow, getChessBoardConfig, hasCheck } from "../utils";
+import type { ArrowCoords, ChangeMove, ChessBoardConfig } from "../types";
+import { DEFAULT_CHESSBOARD_CONFIG } from "../utils";
 
 type UseChessBoardInteractiveProps = {
   config?: Partial<ChessBoardConfig>;
@@ -13,7 +14,7 @@ type UseChessBoardInteractiveProps = {
 export const useChessBoardInteractive = (props: UseChessBoardInteractiveProps) => {
   const { config, onChange, onEndGame } = props;
 
-  const [boardConfig, setBoardConfig] = useState(DEFAULT_CHESSBORD_CONFIG);
+  const [boardConfig, setBoardConfig] = useState(DEFAULT_CHESSBOARD_CONFIG);
   const [initialState, setInitialState] = useState<Cell[][]>([]);
   const [actualState, setActualState] = useState<Cell[][]>([]);
   const [fromPos, setFromPos] = useState<CellPos>([-1, -1]);

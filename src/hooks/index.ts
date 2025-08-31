@@ -1,0 +1,1 @@
+export { useChessBoardInteractive } from './useChessBoardInteractive'

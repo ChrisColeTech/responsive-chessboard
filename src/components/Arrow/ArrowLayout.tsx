@@ -1,8 +1,8 @@
 import React, { FC } from "react";
-import { CellPos } from "../JSChessEngine";
+import { CellPos } from "../../engine";
 import { Arrow } from "./Arrow";
-import { ArrowCoords, ChessBoardConfig } from "./models";
-import styles from './ChessBoard.module.css';
+import { ArrowCoords, ChessBoardConfig } from "../../types";
+import styles from '../../styles/ChessBoard.module.css';
 
 type ArrowLayoutType = {
     startArrowCoord: CellPos;

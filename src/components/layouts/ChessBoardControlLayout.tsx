@@ -1,9 +1,9 @@
 import React, { FC, MouseEvent, useState } from "react";
-import styles from './ChessBoard.module.css';
-import { getFilledArrayBySize } from "./utils";
+import styles from '../../styles/ChessBoard.module.css';
+import { getFilledArrayBySize } from "../../utils";
 import cn from 'classnames';
-import { CellPos } from "../JSChessEngine";
-import { ChessBoardConfig } from "./models";
+import { CellPos } from "../../engine";
+import { ChessBoardConfig } from "../../types";
 
 const BASE_BOARD_SIZE = 8
 
@@ -84,9 +84,9 @@ export const ChessBoardControlLayout: FC<ChessBoardControlLayoutProps> = (props)
             className={cn(styles.controlLayout, {[styles.controlLayoutGrabbing]: pressed})}
             onMouseMove={handleGrabing}
         >
-            {getFilledArrayBySize(size).map((_, j) => 
+            {getFilledArrayBySize(size).map((_: any, j: number) => 
                 <div className={styles.row} key={`control-layout-${j}`}>
-                    {getFilledArrayBySize(size).map((_, i) => (
+                    {getFilledArrayBySize(size).map((_: any, i: number) => (
                         <div 
                             key={`control-layout-${i}`}
                             className={styles.controlCell}

@@ -1,19 +1,64 @@
-import React, { useState } from 'react';
-import { ChessBoard } from '../../src';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { ChessBoard } from 'responsive-chessboard';
 import './App.css';
+
+const ResponsiveChessBoardContainer: React.FC<{
+  FEN: string;
+  playerColor: string;
+}> = ({ FEN, playerColor }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(400);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const resizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        const { width } = entry.contentRect;
+        // Account for padding (20px each side)
+        const availableWidth = width - 40;
+        setContainerWidth(Math.max(200, Math.min(600, availableWidth)));
+      }
+    });
+
+    resizeObserver.observe(container);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
+  return (
+    <div 
+      ref={containerRef} 
+      className="responsive-container"
+      style={{ display: 'flex', justifyContent: 'center' }}
+    >
+      <ChessBoard
+        FEN={FEN}
+        onChange={() => {}}
+        onEndGame={() => {}}
+        boardSize={containerWidth}
+        playerColor={playerColor as any}
+      />
+    </div>
+  );
+};
 
 const App: React.FC = () => {
   const [boardSize, setBoardSize] = useState(400);
   const [position, setPosition] = useState('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
   const [isReversed, setIsReversed] = useState(false);
 
-  const handleMove = (moveData: any) => {
+  // Memoize handlers to prevent unnecessary re-renders
+  const handleMove = useMemo(() => (moveData: any) => {
     console.log('Move:', moveData);
-  };
+  }, []);
 
-  const handleEndGame = (result: any) => {
+  const handleEndGame = useMemo(() => (result: any) => {
     console.log('Game ended:', result);
-  };
+  }, []);
 
   const testSizes = [200, 300, 400, 500, 600, 800];
 
@@ -68,37 +113,14 @@ const App: React.FC = () => {
         />
       </div>
 
-      <div className="test-grid">
-        <h3>Multiple Size Test</h3>
-        <div className="size-grid">
-          {[200, 300, 400, 500].map(size => (
-            <div key={size} className="size-test">
-              <h4>{size}px</h4>
-              <ChessBoard
-                FEN={position}
-                onChange={() => {}}
-                onEndGame={() => {}}
-                boardSize={size}
-                playerColor="white"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
 
       <div className="responsive-test">
         <h3>Responsive Mode Test</h3>
-        <div className="responsive-container">
-          <ChessBoard
-            FEN={position}
-            onChange={() => {}}
-            onEndGame={() => {}}
-            responsive={true}
-            minSize={200}
-            maxSize={600}
-            playerColor="white"
-          />
-        </div>
+        <p>Drag the resize handle in the bottom-right corner to test responsive behavior</p>
+        <ResponsiveChessBoardContainer 
+          FEN={position} 
+          playerColor="white"
+        />
       </div>
     </div>
   );
