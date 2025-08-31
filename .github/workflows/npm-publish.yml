@@ -3,6 +3,8 @@ name: Publish to NPM
 on:
   push:
     branches: [ release ]
+    paths: 
+      - 'package.json'  # Only trigger when version is bumped
   workflow_dispatch:
 
 jobs:
