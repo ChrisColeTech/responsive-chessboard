@@ -1,0 +1,47 @@
+name: Create Release PR
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Check if PR exists
+        id: check-pr
+        run: |
+          PR_EXISTS=$(gh pr list --head develop --base release --json number --jq length)
+          echo "pr_exists=$PR_EXISTS" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Create PR to release
+        if: steps.check-pr.outputs.pr_exists == '0'
+        run: |
+          gh pr create \
+            --title "🚀 Release: $(date +'%Y-%m-%d') - Auto-generated from develop" \
+            --body "$(cat <<'EOF'
+          ## Summary
+          - Automated PR from develop branch to release
+          - Ready for version increment and npm publishing
+          - All changes tested and verified on develop
+          
+          ## Actions on Merge
+          - ✅ Auto-increment package version
+          - ✅ Publish to npm registry  
+          - ✅ Merge back to main branch
+          
+          🤖 Generated with [Claude Code](https://claude.ai/code)
+          EOF
+          )" \
+            --head develop \
+            --base release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
