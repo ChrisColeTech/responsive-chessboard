@@ -1,0 +1,87 @@
+name: Release Automation
+
+on:
+  pull_request:
+    branches: [ release ]
+    types: [ closed ]
+
+jobs:
+  release-automation:
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop'
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v4
+        with:
+          ref: release
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+          
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Increment version
+        run: |
+          # Auto-increment patch version
+          npm version patch --no-git-tag-version
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          
+      - name: Commit version bump
+        run: |
+          git add package.json package-lock.json
+          git commit -m "chore: bump version to $NEW_VERSION [skip ci]"
+          
+      - name: Build package
+        run: npm run build
+        
+      - name: Push version bump to release
+        run: git push origin release
+        
+      - name: Create and merge PR to main
+        run: |
+          # Check if PR to main already exists
+          PR_EXISTS=$(gh pr list --head release --base main --json number --jq length)
+          
+          if [ "$PR_EXISTS" = "0" ]; then
+            # Create PR to main
+            gh pr create \
+              --title "🎉 Release v$NEW_VERSION - Merge to main" \
+              --body "$(cat <<'EOF'
+          ## Release v$NEW_VERSION
+          
+          - Auto-generated release merge from release branch
+          - Package published to npm as v$NEW_VERSION
+          - All changes tested and verified
+          
+          🤖 Generated with [Claude Code](https://claude.ai/code)
+          EOF
+          )" \
+              --head release \
+              --base main
+          fi
+          
+          # Auto-merge the PR
+          PR_NUMBER=$(gh pr list --head release --base main --json number --jq '.[0].number')
+          if [ "$PR_NUMBER" != "null" ] && [ "$PR_NUMBER" != "" ]; then
+            gh pr merge $PR_NUMBER --squash --auto
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
