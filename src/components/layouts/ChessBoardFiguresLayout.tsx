@@ -146,7 +146,7 @@ export const ChessBoardFiguresLayout: FC<ChessBoardFiguresLayoutProps> = (props)
         <div className={styles.figuresLayout}>
             {actualState.map((figure, i) => 
                 <div 
-                    key={i}
+                    key={`${figure.type}-${figure.color}-${figure.position![0]}-${figure.position![1]}`}
                     className={cn([styles.figure], {
                         [styles.hiddenFigure]: figure.position![0] === -1 || figure.position![0] === 8 
                     })}
