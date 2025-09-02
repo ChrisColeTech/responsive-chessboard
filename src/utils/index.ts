@@ -1,35 +1,30 @@
-// Calculations
-export {
-  degrees,
-  calcAngle,
-  correctGrabbingPosByScroll,
-  correctGrabbingPosForArrow
-} from './calculations/geometry'
+/**
+ * Utilities index
+ * Re-exports all utility functions
+ */
 
+// Chess utilities
 export {
-  calculateBoardSize,
-  constrainSize,
-  calculateCellSize,
-  generateCSSProperties
-} from './calculations/responsive'
+  positionToSquareNotation,
+  squareNotationToPosition,
+  isValidSquareNotation,
+  getAllSquares,
+  getSquareDistance,
+  isSameRank,
+  isSameFile,
+  isSameDiagonal,
+  getSquaresBetween,
+  getOppositeColor,
+  createInitialPosition,
+  isLightSquare
+} from './chess.utils';
 
-// Layout utilities
-export {
-  getIsLightCell,
-  getFilledArrayBySize,
-  getFigureCSS,
-  mapCellsToFiguresArray,
-  checkIsPossibleMove,
-  checkPositionsHas,
-  checkIsCastlingMove,
-  hasCheck,
-  getFiguresByColor
-} from './layout/board'
-
-export {
-  DEFAULT_CHESSBOARD_CONFIG,
-  getChessBoardConfig
-} from './layout/config'
-
-// Pieces
-export { CHESS_PIECES_MAP } from './pieces'
+// Common utility - class name helper
+export function cn(...classes: (string | undefined | null | false | Record<string, boolean>)[]): string {
+  return classes.map(cls => {
+    if (typeof cls === 'object' && cls !== null) {
+      return Object.entries(cls).filter(([_, condition]) => condition).map(([key, _]) => key).join(' ');
+    }
+    return cls;
+  }).filter(Boolean).join(' ');
+}

@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light theme - Modern Chess Colors */
+    --background: 248 249 250; /* chess-stone #f8f9fa */
+    --foreground: 26 29 41; /* chess-shadow #1a1d29 */
+
+    --card: 255 255 255; /* white */
+    --card-foreground: 26 29 41; /* chess-shadow #1a1d29 */
+
+    --popover: 255 255 255; /* white */
+    --popover-foreground: 26 29 41; /* chess-shadow #1a1d29 */
+
+    --primary: 67 56 202; /* chess-royal #4338ca */
+    --primary-foreground: 255 255 255; /* white */
+
+    --secondary: 245 245 244; /* stone-100 */
+    --secondary-foreground: 68 64 60; /* stone-700 */
+
+    --muted: 245 245 244; /* stone-100 */
+    --muted-foreground: 120 113 108; /* stone-500 */
+
+    --accent: 212 175 55; /* chess-gold #d4af37 */
+    --accent-foreground: 26 29 41; /* chess-shadow #1a1d29 */
+
+    --destructive: 220 38 38; /* red-600 */
+    --destructive-foreground: 255 255 255; /* white */
+
+    --border: 231 229 228; /* stone-200 */
+    --input: 231 229 228; /* stone-200 */
+    --ring: 67 56 202; /* chess-royal #4338ca */
+    
+    --highlight: 34 197 94; /* green-500 for highlighted squares */
+    --selection: 59 130 246; /* blue-500 for selected squares */
+  }
+
+  .dark {
+    /* Dark theme - Modern Chess Colors */
+    --background: 26 29 41; /* chess-shadow #1a1d29 */
+    --foreground: 248 249 250; /* chess-stone #f8f9fa */
+
+    --card: 41 37 36; /* stone-800 */
+    --card-foreground: 248 249 250; /* chess-stone #f8f9fa */
+
+    --popover: 26 29 41; /* chess-shadow #1a1d29 */
+    --popover-foreground: 248 249 250; /* chess-stone #f8f9fa */
+
+    --primary: 67 56 202; /* chess-royal #4338ca */
+    --primary-foreground: 255 255 255; /* white */
+
+    --secondary: 68 64 60; /* stone-700 */
+    --secondary-foreground: 248 249 250; /* chess-stone #f8f9fa */
+
+    --muted: 68 64 60; /* stone-700 */
+    --muted-foreground: 168 162 158; /* stone-400 */
+
+    --accent: 212 175 55; /* chess-gold #d4af37 */
+    --accent-foreground: 26 29 41; /* chess-shadow #1a1d29 */
+
+    --destructive: 239 68 68; /* red-500 */
+    --destructive-foreground: 255 255 255; /* white */
+
+    --border: 68 64 60; /* stone-700 */
+    --input: 68 64 60; /* stone-700 */
+    --ring: 67 56 202; /* chess-royal #4338ca */
+    
+    --highlight: 34 197 94; /* green-500 for highlighted squares */
+    --selection: 59 130 246; /* blue-500 for selected squares */
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Chess board specific components */
+  .chess-board-container {
+    @apply relative inline-block;
+    @apply shadow-lg rounded-lg;
+  }
+
+  .chess-square {
+    @apply relative transition-colors duration-200;
+  }
+
+  .chess-square.highlighted {
+    @apply bg-highlight/50;
+  }
+
+  .chess-square.selected {
+    @apply bg-blue-500/50;
+  }
+
+  /* Demo page components */
+  .demo-container {
+    @apply min-h-screen bg-background;
+  }
+
+  .demo-content {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Control panel components */
+  .control-panel {
+    @apply bg-card rounded-lg shadow-md p-6;
+    @apply border border-border;
+  }
+
+  .control-section {
+    @apply space-y-4;
+  }
+
+  .control-label {
+    @apply text-sm font-medium text-muted-foreground;
+  }
+
+  /* Button variants */
+  .btn-primary {
+    @apply bg-primary hover:bg-primary/90 text-primary-foreground;
+    @apply px-4 py-2 rounded-md transition-colors duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary hover:bg-secondary/80 text-secondary-foreground;
+    @apply px-4 py-2 rounded-md transition-colors duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+}
+
+@layer utilities {
+  /* Animation utilities */
+  .animate-piece-move {
+    animation: pieceMove 0.3s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-in;
+  }
+
+  /* Layout utilities */
+  .demo-grid {
+    @apply grid gap-6;
+    @apply grid-cols-1 lg:grid-cols-2 xl:grid-cols-3;
+  }
+
+  .demo-card {
+    @apply bg-card rounded-lg shadow-md;
+    @apply border border-border;
+  }
+}
