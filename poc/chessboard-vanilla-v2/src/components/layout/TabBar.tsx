@@ -36,7 +36,7 @@ const tabs: Tab[] = [
 
 export function TabBar({ currentTab, onTabChange }: TabBarProps) {
   return (
-    <div className="w-full h-[84px] glass border-t border-border/20 shadow-gaming">
+    <div className="w-full h-[84px] glass-layout border-t border-border/20 shadow-gaming">
       <div className="flex h-full">
         {tabs.map((tab) => {
           const isActive = currentTab === tab.id

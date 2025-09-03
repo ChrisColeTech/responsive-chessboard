@@ -42,7 +42,7 @@ export const DragTestPage: React.FC = () => {
 
       <section className="relative z-10 space-y-8">
         {/* Ultra-Compact Header with Instructions */}
-        <div className="backdrop-blur-sm bg-card/50 border border-border/50 rounded-xl p-4">
+        <div className="card-gaming p-4">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-primary/10 rounded-lg border border-primary/20 backdrop-blur-sm">
@@ -116,7 +116,7 @@ export const DragTestPage: React.FC = () => {
       />
       
       {/* Professional Control Panel - Fully Responsive */}
-      <div className="mt-6 backdrop-blur-sm bg-card/30 border border-border/30 rounded-xl p-4 md:p-6">
+      <div className="mt-6 card-gaming p-4 md:p-6">
         <div className="flex items-center gap-2 mb-4">
           <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
           <h4 className="text-sm font-semibold text-foreground/90">Testing Controls</h4>

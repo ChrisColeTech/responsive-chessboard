@@ -25,7 +25,7 @@ export const InstructionsModal: React.FC<InstructionsModalProps> = ({
       />
       
       {/* Modal Content */}
-      <div className="relative bg-card border border-border rounded-xl p-6 max-w-md w-full shadow-2xl">
+      <div className="relative card-gaming p-6 max-w-md w-full">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">

@@ -8,7 +8,7 @@ interface HeaderProps {
 
 export function Header({ onOpenSettings, isSettingsOpen }: HeaderProps) {
   return (
-    <div className="w-full glass border-b border-border/20 h-16">
+    <div className="w-full glass-layout border-b border-border/20 h-16">
       <div className="container mx-auto px-6 h-full">
         <div className="flex items-center justify-between h-full">
           <div className="flex items-center gap-3">

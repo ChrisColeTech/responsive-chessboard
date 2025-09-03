@@ -25,12 +25,12 @@ export function BackgroundEffects({ className = '' }: BackgroundEffectsProps) {
       <div className="absolute bottom-20 right-20 w-14 h-14 sm:w-21 sm:h-21 lg:w-28 lg:h-28 floating-particle floating-particle-secondary rounded-full blur-sm animate-pulse-glow animate-drift" />
       
       {/* Floating Chess Pieces */}
-      <div className="absolute top-1/4 left-1/4 text-3xl sm:text-5xl md:text-6xl lg:text-8xl animate-float animation-delay-100" style={{color: 'color-mix(in srgb, var(--foreground) 15%, transparent)'}}>♛</div>
-      <div className="absolute top-1/3 right-1/3 text-2xl sm:text-4xl md:text-5xl lg:text-7xl animate-float animation-delay-500" style={{color: 'color-mix(in srgb, var(--primary) 30%, transparent)'}}>♔</div>
-      <div className="absolute bottom-1/4 right-1/4 text-2xl sm:text-3xl md:text-4xl lg:text-6xl animate-float animation-delay-1000" style={{color: 'color-mix(in srgb, var(--foreground) 15%, transparent)'}}>♝</div>
-      <div className="absolute bottom-1/3 left-1/3 text-2xl sm:text-4xl md:text-5xl lg:text-7xl animate-float animation-delay-1500" style={{color: 'color-mix(in srgb, var(--primary) 20%, transparent)'}}>♞</div>
-      <div className="absolute top-2/3 left-1/5 text-2xl sm:text-3xl md:text-4xl lg:text-6xl animate-float animation-delay-2000" style={{color: 'color-mix(in srgb, var(--foreground) 15%, transparent)'}}>♜</div>
-      <div className="absolute bottom-2/3 right-1/5 text-xl sm:text-2xl md:text-3xl lg:text-5xl animate-float animation-delay-800" style={{color: 'color-mix(in srgb, var(--primary) 20%, transparent)'}}>♟</div>
+      <div className="absolute top-1/4 left-1/4 text-5xl sm:text-6xl md:text-7xl lg:text-8xl animate-float animation-delay-100" style={{color: 'color-mix(in srgb, var(--foreground) 15%, transparent)'}}>♛</div>
+      <div className="absolute top-1/3 right-1/3 text-4xl sm:text-5xl md:text-6xl lg:text-7xl animate-float animation-delay-500" style={{color: 'color-mix(in srgb, var(--primary) 30%, transparent)'}}>♔</div>
+      <div className="absolute bottom-1/4 right-1/4 text-4xl sm:text-5xl md:text-6xl lg:text-7xl animate-float animation-delay-1000" style={{color: 'color-mix(in srgb, var(--foreground) 15%, transparent)'}}>♝</div>
+      <div className="absolute bottom-1/3 left-1/3 text-4xl sm:text-5xl md:text-6xl lg:text-7xl animate-float animation-delay-1500" style={{color: 'color-mix(in srgb, var(--primary) 20%, transparent)'}}>♞</div>
+      <div className="absolute top-2/3 left-1/5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl animate-float animation-delay-2000" style={{color: 'color-mix(in srgb, var(--foreground) 15%, transparent)'}}>♜</div>
+      <div className="absolute bottom-2/3 right-1/5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl animate-float animation-delay-800" style={{color: 'color-mix(in srgb, var(--primary) 20%, transparent)'}}>♟</div>
       
       {/* Sparkle Effects */}
       <div className="absolute top-1/4 right-1/4 w-2 h-2 sparkle animate-twinkle animation-delay-100" style={{backgroundColor: 'var(--primary)'}} />
@@ -45,8 +45,8 @@ export function BackgroundEffects({ className = '' }: BackgroundEffectsProps) {
       <div className="absolute top-3/4 right-1/6 w-6 h-6 sm:w-9 sm:h-9 lg:w-12 lg:h-12 floating-particle floating-particle-secondary rounded-full blur-md animate-pulse-glow animate-drift animation-delay-800" />
       
       {/* More chess pieces for richness */}
-      <div className="absolute top-1/5 right-1/5 text-xl sm:text-2xl md:text-3xl lg:text-5xl animate-float animation-delay-300" style={{color: 'color-mix(in srgb, var(--accent) 20%, transparent)'}}>♕</div>
-      <div className="absolute bottom-1/5 left-1/5 text-xl sm:text-2xl md:text-3xl lg:text-5xl animate-float animation-delay-1800" style={{color: 'color-mix(in srgb, var(--accent) 20%, transparent)'}}>♗</div>
+      <div className="absolute top-1/5 right-1/5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl animate-float animation-delay-300" style={{color: 'color-mix(in srgb, var(--accent) 20%, transparent)'}}>♕</div>
+      <div className="absolute bottom-1/5 left-1/5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl animate-float animation-delay-1800" style={{color: 'color-mix(in srgb, var(--accent) 20%, transparent)'}}>♗</div>
     </div>
   )
 }

@@ -6,6 +6,29 @@ import { SettingsPanel } from '../SettingsPanel'
 import { useSettings } from '../../stores/appStore'
 import type { TabId } from './types'
 
+/**
+ * GLASSMORPHISM DESIGN SYSTEM
+ * ===========================
+ * 
+ * This app uses a consistent glassmorphism design system with two main classes:
+ * 
+ * 1. `glass-layout` - For full-width layout elements (Header, TabBar)
+ *    - No rounded corners (sharp edges for layout)
+ *    - Subtle glassmorphism effect
+ *    - No entry animations
+ * 
+ * 2. `card-gaming` - For content cards (modals, panels, cards)
+ *    - Rounded corners for content separation
+ *    - Same glassmorphism effect
+ *    - Entry animations for engagement
+ * 
+ * USAGE RULES:
+ * - Header/TabBar: Use `glass-layout`
+ * - Content cards/panels: Use `card-gaming`
+ * - Modals/overlays: Use `card-gaming`
+ * - Never mix classes - stick to the designated purpose
+ */
+
 interface AppLayoutProps {
   children: ReactNode
   currentTab: TabId
@@ -19,7 +42,10 @@ export function AppLayout({ children, currentTab, onTabChange }: AppLayoutProps)
     <div className="flex flex-col h-screen bg-background text-foreground">
       <BackgroundEffects />
       
-      {/* Header - fixed height, not fixed position */}
+      {/* 
+        Header - Uses `glass-layout` for sharp edges and subtle glassmorphism
+        ✅ Correct: Full-width layout element with no rounded corners
+      */}
       <header className="flex-shrink-0 relative z-20">
         <Header 
           onOpenSettings={openSettings} 
@@ -36,7 +62,10 @@ export function AppLayout({ children, currentTab, onTabChange }: AppLayoutProps)
             </div>
           </main>
           
-          {/* Settings Panel - overlays main content from right */}
+          {/* 
+            Settings Panel - Uses `card-gaming` for rounded corners and entry animations
+            ✅ Correct: Content overlay with rounded design
+          */}
           <>
             {/* Backdrop - covers entire main content */}
             <div 
@@ -58,7 +87,10 @@ export function AppLayout({ children, currentTab, onTabChange }: AppLayoutProps)
           </>
         </div>
         
-        {/* TabBar - fixed height, not fixed position */}
+        {/* 
+          TabBar - Uses `glass-layout` for sharp edges and subtle glassmorphism
+          ✅ Correct: Full-width layout element with no rounded corners
+        */}
         <footer className="flex-shrink-0 relative z-20">
           <TabBar currentTab={currentTab} onTabChange={onTabChange} />
         </footer>

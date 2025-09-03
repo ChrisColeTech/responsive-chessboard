@@ -380,39 +380,112 @@
     transform: scale(1.05);
   }
 
-  /* Card Styles */
+  /* 
+   * GLASSMORPHISM DESIGN SYSTEM
+   * ============================
+   * 
+   * Two main classes for consistent glassmorphism effects:
+   * 
+   * 1. `.card-gaming` - For content cards, modals, panels
+   * 2. `.glass-layout` - For layout elements (header, tabbar)
+   * 
+   * Both use the same subtle glassmorphism effect:
+   * - 16px backdrop blur (subtle, not overwhelming)
+   * - 3% white background (barely visible, elegant)
+   * - 5% white border (gentle definition)
+   * - Soft shadows (professional depth)
+   * 
+   * Key Differences:
+   * - card-gaming: Has rounded corners + entry animation
+   * - glass-layout: Sharp edges, no animation (for layout)
+   */
+
+  /* Content Cards - Rounded corners with animations */
   .card-gaming {
-    backdrop-filter: blur(24px);
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-    border-radius: 0.75rem;
+    backdrop-filter: blur(16px);
+    background-color: rgba(255, 255, 255, 0.03); /* Very subtle white overlay */
+    border: 1px solid rgba(255, 255, 255, 0.05);  /* Gentle border definition */
+    box-shadow: 0 8px 32px -8px rgb(0 0 0 / 0.15); /* Soft professional shadow */
+    border-radius: 0.75rem; /* Rounded corners for content separation */
     transition: all 0.5s;
-    animation: card-entrance 0.6s ease-out;
+    animation: card-entrance 0.6s ease-out; /* Engaging entry animation */
   }
   
   .card-gaming:hover {
-    border-color: rgba(255, 255, 255, 0.2);
-    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.08);      /* Subtle hover feedback */
+    background-color: rgba(255, 255, 255, 0.05);  /* Gentle background lift */
   }
 
-  /* Form Styles */
+  /* Layout Elements - Sharp edges, no animation */
+  .glass-layout {
+    backdrop-filter: blur(16px);
+    background-color: rgba(255, 255, 255, 0.03);  /* Same subtle effect */
+    border: 1px solid rgba(255, 255, 255, 0.05);  /* Same gentle border */
+    box-shadow: 0 8px 32px -8px rgb(0 0 0 / 0.15); /* Same soft shadow */
+    transition: all 0.5s;
+    /* NO border-radius - sharp edges for layout elements */
+    /* NO animation - layout shouldn't animate on load */
+  }
+
+  /*
+   * USAGE GUIDELINES:
+   * =================
+   * 
+   * ✅ Use `.card-gaming` for:
+   * - Content cards
+   * - Modal dialogs
+   * - Control panels
+   * - Captured pieces displays
+   * - Settings panels
+   * - Any rounded content containers
+   * 
+   * ✅ Use `.glass-layout` for:
+   * - Header component
+   * - TabBar component
+   * - Navigation elements
+   * - Full-width layout components
+   * - Elements that need sharp edges
+   * 
+   * ❌ DON'T:
+   * - Mix the classes
+   * - Use card-gaming for layout elements
+   * - Use glass-layout for content cards
+   * - Modify the opacity values without testing
+   * - Add border-radius to glass-layout
+   */
+
+  /*
+   * FORM & INPUT SYSTEM (Style Guide Compliant)
+   * ============================================
+   * 
+   * Based on the Login Page golden standard from the style guide:
+   * - Semi-transparent backgrounds (30% black for inputs)
+   * - Progressive border opacity (20% → 40% on focus)
+   * - Ring focus states for accessibility
+   * - Theme-aware text using CSS variables
+   * - Consistent spacing and sizing
+   * 
+   * ✅ Use `.input-gaming` for all form inputs:
+   * - Login forms, settings panels, search fields
+   * - Consistent with Login Page styling
+   * - Works across all gaming themes
+   */
   .input-gaming {
-    background-color: rgb(0 0 0 / 0.3);
-    border: 1px solid rgb(255 255 255 / 0.2);
-    color: var(--foreground);
-    border-radius: 0.5rem;
-    transition: all 0.3s;
+    background-color: rgb(0 0 0 / 0.3);        /* Semi-transparent background */
+    border: 1px solid rgb(255 255 255 / 0.2);  /* Progressive border opacity */
+    color: var(--foreground);                   /* Theme-aware text */
+    border-radius: 0.5rem;                     /* Consistent rounded corners */
+    transition: all 0.3s;                      /* Smooth state transitions */
   }
   
   .input-gaming::placeholder {
-    color: var(--muted-foreground);
+    color: var(--muted-foreground);             /* Theme-aware placeholder text */
   }
   
   .input-gaming:focus {
-    border-color: rgb(255 255 255 / 0.4);
-    outline: none;
-    box-shadow: 0 0 0 2px rgb(255 255 255 / 0.2);
+    border-color: rgb(255 255 255 / 0.4);      /* Enhanced border on focus */
+    outline: none;                              /* Remove default outline */
+    box-shadow: 0 0 0 2px rgb(255 255 255 / 0.2); /* Accessible focus ring */
   }
 
   /* Background Effects - Enhanced Gaming Patterns */

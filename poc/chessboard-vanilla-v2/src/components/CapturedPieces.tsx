@@ -32,7 +32,7 @@ export const CapturedPieces: React.FC<CapturedPiecesProps> = ({
   const blackPieces = pieces.filter(p => p.color === 'black')
 
   return (
-    <div className={`backdrop-blur-sm bg-card/30 border border-border/30 rounded-xl p-4 ${className}`}>
+    <div className={`card-gaming p-4 ${className}`}>
       <div className="flex items-center gap-2 mb-3">
         <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
         <h4 className="text-sm font-semibold text-foreground/90">
