@@ -1,34 +1,37 @@
 import { useState } from 'react'
-import { DraggedPiece, TabBar } from './components'
-import { DragProvider, useDrag } from './providers'
-import { DragTestPage, WorkerTestPage, DevToolsPage } from './pages'
-import type { TabId } from './components/TabBar'
-import './App.css'
+import { AppLayout } from './components/layout'
+import type { TabId } from './components/layout'
+import { DragTestPage, LayoutTestPage, WorkerTestPage } from './pages'
+import { DragProvider, useDrag } from './providers/DragProvider'
+import { DraggedPiece } from './components/DraggedPiece'
 
-// Inner App component that uses drag context
+/*
+ * To add a new route/page:
+ * 
+ * 1. Create your page component in ./pages/YourPage.tsx
+ * 2. Export it from ./pages/index.ts
+ * 3. Add the new tab ID to TabId type in ./components/layout/types.ts
+ * 4. Add the tab configuration to the tabs array in ./components/layout/TabBar.tsx
+ * 5. Import your page component above
+ * 6. Add routing condition below in the AppContent component
+ * 7. Optionally update the default currentPage state if needed
+ */
+
 function AppContent() {
-  const [currentPage, setCurrentPage] = useState<TabId>('worker')
-  
-  // New drag system from Document 20
+  const [currentPage, setCurrentPage] = useState<TabId>('layout')
   const { draggedPiece, cursorPosition } = useDrag()
 
   return (
-    <>
-      <div style={{ paddingBottom: '80px' }}>
-        <header>
-          <h1>Responsive Chessboard POC</h1>
-        </header>
-        
-        <main>
-          {currentPage === 'worker' && <WorkerTestPage />}
-          {currentPage === 'drag' && <DragTestPage />}
-        </main>
-      </div>
+    <AppLayout 
+      currentTab={currentPage} 
+      onTabChange={setCurrentPage}
+    >
+      {/* Page routing */}
+      {currentPage === 'layout' && <LayoutTestPage />}
+      {currentPage === 'worker' && <WorkerTestPage />}
+      {currentPage === 'drag' && <DragTestPage />}
       
-      {/* iPad-style tab bar at bottom */}
-      <TabBar currentTab={currentPage} onTabChange={setCurrentPage} />
-      
-      {/* Cursor-following dragged piece (Document 20 pattern) */}
+      {/* Global drag overlay */}
       {draggedPiece && (
         <DraggedPiece
           piece={draggedPiece}
@@ -36,11 +39,10 @@ function AppContent() {
           size={60}
         />
       )}
-    </>
+    </AppLayout>
   )
 }
 
-// Main App component wrapped with DragProvider
 function App() {
   return (
     <DragProvider>

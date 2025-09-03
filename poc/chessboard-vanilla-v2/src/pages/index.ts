@@ -1,4 +1,3 @@
-// pages/index.ts - Page exports
-export { DragTestPage } from './DragTestPage';
-export { WorkerTestPage } from './WorkerTestPage';
-export { DevToolsPage } from './DevToolsPage';
+export { DragTestPage } from './DragTestPage'
+export { LayoutTestPage } from './LayoutTestPage'
+export { WorkerTestPage } from './WorkerTestPage'

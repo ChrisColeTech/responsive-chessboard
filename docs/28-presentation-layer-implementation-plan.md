@@ -12,36 +12,103 @@ This document provides a comprehensive implementation plan for rebuilding the Re
 
 ---
 
-## Phase 1: Clean App Architecture Setup
+## Phase 1: Layout Component Architecture Setup
 
-### 1.1 Core App Structure
-**Objective**: Establish proper React component hierarchy with semantic HTML
+### 1.1 Layout Component Structure
+**Objective**: Establish proper layout component hierarchy with theme support and semantic HTML
 
 #### Files Created:
-- `src/App.tsx` (modified)
+- `src/components/layout/AppLayout.tsx` - Main layout wrapper with theme support
+- `src/components/layout/Header.tsx` - Header with title and theme switcher
+- `src/components/layout/MainContent.tsx` - Main content wrapper with proper spacing
+- `src/components/layout/TabBar.tsx` - iPad-style bottom navigation
+- `src/components/layout/BackgroundEffects.tsx` - Gaming background effects
+- `src/components/layout/index.ts` - Layout component exports
+- `src/App.tsx` (modified to use layout)
 
-#### Key Implementation:
+#### Key Implementation - AppLayout:
 ```typescript
-// Clean app structure with semantic HTML
+// src/components/layout/AppLayout.tsx
+export function AppLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="min-h-screen bg-gaming-gradient">
+      <BackgroundEffects />
+      <Header />
+      <MainContent>
+        {children}
+      </MainContent>
+    </div>
+  )
+}
+```
+
+#### Key Implementation - Header:
+```typescript
+// src/components/layout/Header.tsx
+export function Header() {
+  return (
+    <header className="relative z-20 glass border-b border-white/10">
+      <div className="container mx-auto px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="text-2xl">♕</div>
+            <h1 className="text-xl font-semibold text-foreground">
+              Responsive Chessboard
+            </h1>
+            <span className="bg-primary/20 text-primary px-2 py-1 rounded-lg text-xs font-medium">
+              POC
+            </span>
+          </div>
+          <ThemeSwitcher />
+        </div>
+      </div>
+    </header>
+  )
+}
+```
+
+#### Key Implementation - AppLayout with TabBar:
+```typescript
+// src/components/layout/AppLayout.tsx
+export function AppLayout({ 
+  children, 
+  currentTab, 
+  onTabChange 
+}: { 
+  children: ReactNode
+  currentTab: TabId
+  onTabChange: (tab: TabId) => void
+}) {
+  return (
+    <div className="min-h-screen bg-gaming-gradient">
+      <BackgroundEffects />
+      <Header />
+      <MainContent>
+        {children}
+      </MainContent>
+      <TabBar currentTab={currentTab} onTabChange={onTabChange} />
+    </div>
+  )
+}
+```
+
+#### Key Implementation - App.tsx:
+```typescript
+// Clean app structure using layout components
 function AppContent() {
   const [currentPage, setCurrentPage] = useState<TabId>('worker')
   const { draggedPiece, cursorPosition } = useDrag()
 
   return (
-    <>
-      <div style={{ paddingBottom: '80px' }}>
-        <header>
-          <h1>Responsive Chessboard POC</h1>
-        </header>
-        
-        <main>
-          {currentPage === 'worker' && <WorkerTestPage />}
-          {currentPage === 'drag' && <DragTestPage />}
-        </main>
-      </div>
+    <AppLayout 
+      currentTab={currentPage} 
+      onTabChange={setCurrentPage}
+    >
+      {/* Page routing */}
+      {currentPage === 'worker' && <WorkerTestPage />}
+      {currentPage === 'drag' && <DragTestPage />}
       
-      <TabBar currentTab={currentPage} onTabChange={setCurrentPage} />
-      
+      {/* Global drag overlay */}
       {draggedPiece && (
         <DraggedPiece
           piece={draggedPiece}
@@ -49,16 +116,16 @@ function AppContent() {
           size={60}
         />
       )}
-    </>
+    </AppLayout>
   )
 }
 ```
 
 #### Integration Points:
-- `src/components` - TabBar, DraggedPiece components
-- `src/pages` - WorkerTestPage, DragTestPage, DevToolsPage
-- `src/providers` - DragProvider context
-- `src/components/TabBar` - TabId type definitions
+- `src/components/layout/` - All layout components including TabBar
+- `src/components/ThemeSwitcher.tsx` - Theme switching functionality
+- `src/pages/` - Page components
+- `src/providers/DragProvider` - Drag context
 
 #### Critical Lessons Learned:
 1. **Use semantic HTML**: `<header>`, `<main>` instead of generic divs

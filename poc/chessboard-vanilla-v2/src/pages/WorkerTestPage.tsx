@@ -1,85 +1,46 @@
-// WorkerTestPage.tsx - Stockfish Web Worker testing page
-import React, { useState } from 'react';
-import { useStockfish } from '../hooks/useStockfish';
-import { STARTING_FEN } from '../constants/chess.constants';
+import React from 'react'
+import { Cpu, Play, TestTube } from 'lucide-react'
 
 export const WorkerTestPage: React.FC = () => {
-  const { isReady, isThinking, error, requestMove, setSkillLevel, skillLevel } = useStockfish();
-  const [testResult, setTestResult] = useState<string | null>(null);
-
-  const handleTestWorker = async () => {
-    console.log('🧪 [TEST] Starting Stockfish worker test...');
-    setTestResult('Testing...');
-    
-    try {
-      const startingFen = STARTING_FEN;
-      console.log('🧪 [TEST] Requesting move for starting position:', startingFen);
-      
-      const move = await requestMove(startingFen, 1000);
-      
-      if (move) {
-        setTestResult(`✅ Success! Computer suggests: ${move}`);
-        console.log('🎉 [TEST] Worker test successful!', move);
-      } else {
-        setTestResult('❌ Failed: No move returned');
-        console.error('💥 [TEST] Worker test failed - no move');
-      }
-    } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Unknown error';
-      setTestResult(`❌ Error: ${errorMsg}`);
-      console.error('💥 [TEST] Worker test error:', err);
-    }
-  };
-
-  const handleSkillChange = (level: number) => {
-    setSkillLevel(level);
-  };
-
   return (
     <>
-      <h2>Stockfish Engine Test</h2>
-      
-      <section>
-        <h3>Engine Status</h3>
-        <p>Ready: {isReady ? '✅ Yes' : '❌ No'}</p>
-        <p>Thinking: {isThinking ? '🧠 Yes' : '💤 No'}</p>
-        <p>Skill Level: {skillLevel}</p>
-        {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-      </section>
-
-      <section>
-        <h3>Skill Level</h3>
-        {[1, 5, 10, 15, 20].map(level => (
-          <button 
-            key={level}
-            onClick={() => handleSkillChange(level)}
-            disabled={!isReady || isThinking}
-          >
-            Level {level}
-          </button>
-        ))}
-      </section>
-
-      <section>
-        <h3>Test Engine</h3>
-        <button 
-          onClick={handleTestWorker} 
-          disabled={!isReady || isThinking}
-        >
-          {isThinking ? '🧠 Thinking...' : '🧪 Test Engine'}
-        </button>
-        
-        {testResult && (
-          <div style={{ 
-            marginTop: '16px', 
-            padding: '12px', 
-            backgroundColor: testResult.includes('✅') ? '#d4edda' : '#f8d7da',
-            borderRadius: '4px'
-          }}>
-            {testResult}
+      <section className="space-y-4 mb-8">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="p-1.5 bg-foreground/10 rounded border border-foreground/30">
+            <Play className="w-4 h-4 text-foreground" />
           </div>
-        )}
+          <h3 className="text-lg font-semibold text-foreground">Engine Status</h3>
+        </div>
+        <div className="card-gaming p-4">
+          <p className="text-muted-foreground">
+            Stockfish integration testing will be implemented here.
+          </p>
+          <div className="mt-4 flex gap-4">
+            <button className="btn-gaming-primary gpu-accelerated flex items-center gap-2">
+              <Play className="w-4 h-4" />
+              Initialize Engine
+            </button>
+            <button className="btn-gaming-secondary gpu-accelerated flex items-center gap-2">
+              <TestTube className="w-4 h-4" />
+              Run Tests
+            </button>
+          </div>
+        </div>
+      </section>
+      
+      <section className="space-y-4">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="p-1.5 bg-foreground/10 rounded border border-foreground/30">
+            <Cpu className="w-4 h-4 text-foreground" />
+          </div>
+          <h3 className="text-lg font-semibold text-foreground">Engine Controls</h3>
+        </div>
+        <div className="card-gaming p-4">
+          <p className="text-muted-foreground">
+            Engine control interface will be implemented here following the presentation layer plan.
+          </p>
+        </div>
       </section>
     </>
-  );
-};
+  )
+}
