@@ -2,13 +2,15 @@ import React, { useState } from 'react'
 import { Grid3X3, Volume2, RotateCcw, Sword, Target } from 'lucide-react'
 import { TestBoard } from '../components/TestBoard'
 import { InstructionsModal } from '../components/InstructionsModal'
+import { CapturedPieces } from '../components/CapturedPieces'
 import { useChessAudio } from '../services/audioService'
-import type { ChessPosition } from '../types'
+import type { ChessPosition, ChessPiece } from '../types'
 
 export const DragTestPage: React.FC = () => {
   const [selectedSquare, setSelectedSquare] = useState<ChessPosition | null>(null)
   const [validDropTargets, setValidDropTargets] = useState<ChessPosition[]>([])
   const [showInstructions, setShowInstructions] = useState(false)
+  const [capturedPieces, setCapturedPieces] = useState<ChessPiece[]>([])
   const { playMove, playError } = useChessAudio()
 
   const instructions = [
@@ -61,6 +63,12 @@ export const DragTestPage: React.FC = () => {
           </div>
         </div>
 
+      {/* Black Captured Pieces - Above Board */}
+      <CapturedPieces 
+        pieces={capturedPieces.filter(p => p.color === 'black')} 
+        className="mb-4" 
+      />
+
       {/* Resizable container for testing - 100% width by default */}
       <div 
         className="border-2 border-dashed border-primary/30 rounded-lg p-4 bg-background/50 mb-8"
@@ -95,10 +103,17 @@ export const DragTestPage: React.FC = () => {
               onSquareClick={handleSquareClick}
               selectedSquare={selectedSquare}
               validDropTargets={validDropTargets}
+              onCapturedPiecesChange={setCapturedPieces}
             />
           </div>
         </div>
       </div>
+
+      {/* White Captured Pieces - Below Board */}
+      <CapturedPieces 
+        pieces={capturedPieces.filter(p => p.color === 'white')} 
+        className="mt-4" 
+      />
       
       {/* Professional Control Panel - Fully Responsive */}
       <div className="mt-6 backdrop-blur-sm bg-card/30 border border-border/30 rounded-xl p-4 md:p-6">

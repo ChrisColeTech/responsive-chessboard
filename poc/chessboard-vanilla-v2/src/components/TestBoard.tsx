@@ -9,6 +9,7 @@ interface TestBoardProps {
   onSquareClick: (position: ChessPosition) => void;
   selectedSquare: ChessPosition | null;
   validDropTargets: ChessPosition[];
+  onCapturedPiecesChange?: (pieces: ChessPiece[]) => void;
 }
 
 // Stable piece set selection
@@ -34,12 +35,13 @@ const initialTestPieces: Record<string, ChessPiece> = {
 export const TestBoard = ({ 
   onSquareClick, 
   selectedSquare, 
-  validDropTargets
+  validDropTargets,
+  onCapturedPiecesChange
 }: TestBoardProps) => {
   const { startDrag, updateCursor, endDrag, clearDrag, setMoveHandler } = useDrag();
   const { playMove, playError, playGameStart, preloadSounds } = useChessAudio();
   const [testPieces, setTestPieces] = useState(initialTestPieces);
-  const [, setCapturedPieces] = useState<ChessPiece[]>([]);
+  const [capturedPieces, setCapturedPieces] = useState<ChessPiece[]>([]);
 
   // Set up TestBoard's own simple move handler with delay to override main app
   useEffect(() => {
@@ -57,7 +59,11 @@ export const TestBoard = ({
         if (piece) {
           // If there's a piece to capture, add it to captured pieces
           if (capturedPiece) {
-            setCapturedPieces(prev => [...prev, capturedPiece]);
+            setCapturedPieces(prev => {
+              const newCaptured = [...prev, capturedPiece];
+              onCapturedPiecesChange?.(newCaptured);
+              return newCaptured;
+            });
             console.log(`🧪 [TEST BOARD] Piece captured: ${capturedPiece.color} ${capturedPiece.type}`);
             wasCapture = true;
           }
@@ -123,6 +129,7 @@ export const TestBoard = ({
   const handleReset = () => {
     setTestPieces(initialTestPieces);
     setCapturedPieces([]);
+    onCapturedPiecesChange?.([]);
     console.log('🧪 [TEST BOARD] Board reset to initial position');
   };
 
