@@ -8,7 +8,7 @@ interface HeaderProps {
 
 export function Header({ onOpenSettings, isSettingsOpen }: HeaderProps) {
   return (
-    <header className="relative z-20 glass h-16">
+    <div className="w-full glass border-b border-border/20 h-16">
       <div className="container mx-auto px-6 h-full">
         <div className="flex items-center justify-between h-full">
           <div className="flex items-center gap-3">
@@ -25,6 +25,6 @@ export function Header({ onOpenSettings, isSettingsOpen }: HeaderProps) {
           <ThemeSwitcher onOpenSettings={onOpenSettings} isSettingsOpen={isSettingsOpen} />
         </div>
       </div>
-    </header>
+    </div>
   )
 }
