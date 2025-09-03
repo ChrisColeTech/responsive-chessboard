@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Document 18 Research #5, #14: Theme System with CSS Variables */
+:root {
+  --light-square: #f0d9b5;
+  --dark-square: #b58863;
+}
+
+.theme-classic {
+  --light-square: #f0d9b5;
+  --dark-square: #b58863;
+}
+
+.theme-green {
+  --light-square: #eeeed2;
+  --dark-square: #769656;
+}
+
+.theme-blue {
+  --light-square: #e6f3ff;
+  --dark-square: #4a90b8;
+}
+
+.theme-purple {
+  --light-square: #e1bee7;
+  --dark-square: #7b1fa2;
+}
+
+.theme-wood {
+  --light-square: #d4af37;
+  --dark-square: #8b4513;
+}
+
+/* Document 18 Research #5: Tailwind utilities for theme integration */
+@layer utilities {
+  .bg-light-square {
+    background-color: var(--light-square);
+  }
+  .bg-dark-square {
+    background-color: var(--dark-square);
+  }
+}
+
+/* Document 18 Research #13: SVG piece optimization */
+.chess-piece img {
+  shape-rendering: crispEdges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Document 18 Research #17: Square highlighting patterns */
+.chess-square--selected {
+  @apply ring-2 ring-yellow-400 ring-inset bg-yellow-100;
+}
+
+.chess-square--valid-target {
+  @apply bg-green-200;
+}
+
+.chess-square--last-move {
+  @apply ring-2 ring-blue-400 ring-inset bg-blue-100;
+}
+
+.chess-square--check {
+  @apply ring-4 ring-red-500 ring-inset bg-red-100 animate-pulse;
+}

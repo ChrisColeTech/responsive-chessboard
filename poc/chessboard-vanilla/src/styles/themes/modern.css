@@ -1,0 +1,102 @@
+/* modern.css - Modern theme styling */
+
+:root[data-theme="modern"] {
+  /* Base colors */
+  --chessboard-light-square: #FFFFFF;
+  --chessboard-dark-square: #4A4A4A;
+  --chessboard-border: #2C2C2C;
+  
+  /* Highlight colors */
+  --chessboard-highlight: rgba(64, 191, 255, 0.4);
+  --chessboard-valid-move: rgba(76, 175, 80, 0.6);
+  --chessboard-capture: rgba(244, 67, 54, 0.8);
+  --chessboard-selected: rgba(33, 150, 243, 0.3);
+  
+  /* Visual effects */
+  --board-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  --material-texture: linear-gradient(135deg, transparent 25%, rgba(255,255,255,0.05) 50%, transparent 75%);
+  --material-shine: 0.03;
+  --material-depth: 1px;
+  
+  /* Coordinates */
+  --coordinate-color: #666666;
+  --coordinate-size: 0.75rem;
+}
+
+/* Modern theme specific enhancements */
+:root[data-theme="modern"] .chessboard {
+  border-radius: 8px;
+  box-shadow: var(--board-shadow);
+  border-width: 2px;
+}
+
+:root[data-theme="modern"] .chessboard-square {
+  position: relative;
+}
+
+:root[data-theme="modern"] .chessboard-square.light {
+  background: var(--chessboard-light-square);
+}
+
+:root[data-theme="modern"] .chessboard-square.dark {
+  background: var(--chessboard-dark-square);
+}
+
+:root[data-theme="modern"] .chessboard-square::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--material-texture);
+  opacity: var(--material-shine);
+  pointer-events: none;
+}
+
+/* Glass material enhancement for modern theme */
+:root[data-theme="modern"][data-material="glass"] {
+  --material-texture: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%, rgba(255,255,255,0.1) 100%);
+  --material-shine: 0.25;
+  --material-depth: 2px;
+  --board-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+
+:root[data-theme="modern"][data-material="glass"] .chessboard {
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255,255,255,0.2);
+}
+
+:root[data-theme="modern"][data-material="glass"] .chessboard-square::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+  pointer-events: none;
+}
+
+/* Metal material for modern theme */
+:root[data-theme="modern"][data-material="metal"] {
+  --chessboard-light-square: #E8E8E8;
+  --chessboard-dark-square: #3C3C3C;
+  --material-texture: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, transparent 25%, rgba(255,255,255,0.15) 50%, transparent 75%, rgba(255,255,255,0.1) 100%);
+  --material-shine: 0.3;
+  --material-depth: 1px;
+  --board-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+:root[data-theme="modern"][data-material="metal"] .chessboard {
+  border: 2px solid #1A1A1A;
+}
+
+:root[data-theme="modern"][data-material="metal"] .chessboard-square::before {
+  background: linear-gradient(45deg, rgba(255,255,255,0.2), transparent 50%, rgba(255,255,255,0.1));
+}
+
+/* Enhanced hover effects for modern theme */
+:root[data-theme="modern"] .chessboard-square:hover {
+  background-color: var(--chessboard-highlight) !important;
+  transition: background-color 0.15s ease-out;
+}
+
+:root[data-theme="modern"] .chessboard-piece:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}

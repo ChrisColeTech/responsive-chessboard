@@ -1,1 +1,0 @@
-export { Chessboard } from './Chessboard';

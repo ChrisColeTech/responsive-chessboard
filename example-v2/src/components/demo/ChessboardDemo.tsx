@@ -42,16 +42,31 @@ export const ChessboardDemo: React.FC<ChessboardDemoProps> = ({
   const handleMove = useCallback((move: any) => {
     console.log('ChessboardDemo handleMove called:', move);
     try {
-      // The move should already be in the correct format from the chessboard
-      // Just pass it directly to the parent onMove handler
       if (!onMove) {
         console.log('No onMove handler provided');
-        return;
+        return false;
       }
 
-      console.log('Calling onMove handler...');
-      // For POC API, we don't need to await
-      onMove(move);
+      // Convert ChessMoveInput object to string format expected by chess.js
+      let moveString: string;
+      if (typeof move === 'string') {
+        moveString = move;
+      } else if (move && move.from && move.to) {
+        // Convert {from: "e2", to: "e4"} to "e2e4"
+        moveString = `${move.from}${move.to}`;
+        if (move.promotion) {
+          moveString += move.promotion;
+        }
+      } else {
+        console.error('Invalid move format:', move);
+        return false;
+      }
+
+      console.log('Calling onMove handler with move string:', moveString);
+      // Call the parent onMove handler and return its boolean result
+      const result = onMove(moveString);
+      console.log('Move result:', result);
+      return result;
     } catch (error) {
       console.error('Move error:', error);
       onError?.({ 
@@ -60,6 +75,7 @@ export const ChessboardDemo: React.FC<ChessboardDemoProps> = ({
         timestamp: Date.now(),
         context: { move, error }
       });
+      return false;
     }
   }, [onMove, onError]);
 
@@ -78,8 +94,6 @@ export const ChessboardDemo: React.FC<ChessboardDemoProps> = ({
         initialFen={fen}
         pieceSet={pieceSet}
         boardOrientation={boardOrientation}
-        width={width}
-        height={height}
         onMove={handleMove}
         
         // Basic features

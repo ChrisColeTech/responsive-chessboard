@@ -19,6 +19,7 @@ import type { ComputerDifficulty } from '../../types/chess/computer-opponent.typ
 
 import { ComputerChessService } from '../../services/chess/ComputerChessService';
 import { getStockfishClient } from '../../services/clients/StockfishClient';
+import { parseUCIMove } from '../../utils/chess/computer-chess.utils';
 
 export function useVSComputerState(
   options: UseVSComputerStateOptions = {}
@@ -234,7 +235,12 @@ export function useVSComputerState(
    * Make computer move
    */
   const makeComputerMove = useCallback(async () => {
-    if (isComputerThinking || isGameOver) return;
+    if (isComputerThinking || isGameOver) {
+      console.log('⏭️ Skipping computer move - already thinking or game over');
+      return;
+    }
+    
+    console.log('🤖 Starting computer move generation...');
 
     try {
       startComputerThinking();
@@ -269,17 +275,23 @@ export function useVSComputerState(
       stopComputerThinking();
 
       // Parse and make the move
-      const { from, to, promotion } = require('../../utils/chess/computer-chess.utils').parseUCIMove(moveResult.move);
+      console.log('🔄 Parsing UCI move:', moveResult.move);
+      const { from, to, promotion } = parseUCIMove(moveResult.move);
+      console.log('✅ Parsed move:', { from, to, promotion });
       
       const moveOptions: any = { from, to };
       if (promotion) {
         moveOptions.promotion = promotion;
       }
 
+      console.log('🔄 Attempting to make computer move on chess board...');
       const move = chess.move(moveOptions);
       if (!move) {
+        console.error('❌ Chess.js rejected the computer move:', moveOptions);
         throw new Error('Invalid move returned by computer');
       }
+
+      console.log('✅ Computer move applied to chess.js:', move);
 
       // Update state
       setLastMove({ from, to, promotion });
@@ -288,6 +300,8 @@ export function useVSComputerState(
         lastEvaluation: moveResult.evaluation,
         searchDepth: moveResult.depth
       }));
+      
+      console.log('🎯 Computer move complete - checking if game ended...');
 
       // Update timer
       setTimer(prev => ComputerChessService.updateTimerForMove(prev, 

@@ -1,0 +1,73 @@
+/* classic.css - Classic theme styling */
+
+:root[data-theme="classic"] {
+  /* Base colors */
+  --chessboard-light-square: #F0D9B5;
+  --chessboard-dark-square: #B58863;
+  --chessboard-border: #8B4513;
+  
+  /* Highlight colors */
+  --chessboard-highlight: rgba(255, 255, 0, 0.5);
+  --chessboard-valid-move: rgba(0, 255, 0, 0.6);
+  --chessboard-capture: rgba(255, 0, 0, 0.8);
+  --chessboard-selected: rgba(0, 100, 200, 0.3);
+  
+  /* Visual effects */
+  --board-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  --material-texture: none;
+  --material-shine: 0;
+  --material-depth: 0px;
+  
+  /* Coordinates */
+  --coordinate-color: #8B4513;
+  --coordinate-size: 0.75rem;
+}
+
+/* Classic theme specific enhancements */
+:root[data-theme="classic"] .chessboard {
+  border-radius: 4px;
+  box-shadow: var(--board-shadow);
+}
+
+:root[data-theme="classic"] .chessboard-square.light {
+  background: linear-gradient(135deg, var(--chessboard-light-square) 0%, color-mix(in srgb, var(--chessboard-light-square) 95%, black) 100%);
+}
+
+:root[data-theme="classic"] .chessboard-square.dark {
+  background: linear-gradient(135deg, var(--chessboard-dark-square) 0%, color-mix(in srgb, var(--chessboard-dark-square) 95%, black) 100%);
+}
+
+/* Wood material enhancement for classic theme */
+:root[data-theme="classic"][data-material="wood"] {
+  --material-texture: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  --material-shine: 0.02;
+  --material-depth: 1px;
+}
+
+:root[data-theme="classic"][data-material="wood"] .chessboard-square {
+  position: relative;
+}
+
+:root[data-theme="classic"][data-material="wood"] .chessboard-square::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--material-texture);
+  opacity: var(--material-shine);
+  pointer-events: none;
+}
+
+/* Fabric material for classic theme */
+:root[data-theme="classic"][data-material="fabric"] {
+  --material-texture: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px);
+  --material-shine: 0;
+  --material-depth: 0px;
+}
+
+:root[data-theme="classic"][data-material="fabric"] .chessboard-square::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--material-texture);
+  pointer-events: none;
+}

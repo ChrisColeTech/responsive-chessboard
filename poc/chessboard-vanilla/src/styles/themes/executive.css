@@ -1,0 +1,139 @@
+/* executive.css - Executive theme styling */
+
+:root[data-theme="executive"] {
+  /* Base colors - Rich, professional tones */
+  --chessboard-light-square: #F5F5DC;
+  --chessboard-dark-square: #8B4513;
+  --chessboard-border: #654321;
+  
+  /* Highlight colors - Sophisticated gold accents */
+  --chessboard-highlight: rgba(218, 165, 32, 0.4);
+  --chessboard-valid-move: rgba(34, 139, 34, 0.5);
+  --chessboard-capture: rgba(178, 34, 34, 0.7);
+  --chessboard-selected: rgba(139, 69, 19, 0.4);
+  
+  /* Visual effects - Premium appearance */
+  --board-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  --material-texture: radial-gradient(ellipse at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+  --material-shine: 0.08;
+  --material-depth: 3px;
+  
+  /* Coordinates */
+  --coordinate-color: #654321;
+  --coordinate-size: 0.8rem;
+}
+
+/* Executive theme specific enhancements */
+:root[data-theme="executive"] .chessboard {
+  border-radius: 8px;
+  box-shadow: var(--board-shadow);
+  border-width: 3px;
+  position: relative;
+}
+
+:root[data-theme="executive"] .chessboard::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  background: linear-gradient(45deg, #654321, #8B4513, #A0522D, #654321);
+  border-radius: 12px;
+  z-index: -1;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+:root[data-theme="executive"] .chessboard-square.light {
+  background: linear-gradient(135deg, var(--chessboard-light-square) 0%, color-mix(in srgb, var(--chessboard-light-square) 94%, black) 100%);
+}
+
+:root[data-theme="executive"] .chessboard-square.dark {
+  background: linear-gradient(135deg, var(--chessboard-dark-square) 0%, color-mix(in srgb, var(--chessboard-dark-square) 90%, black) 100%);
+}
+
+:root[data-theme="executive"] .chessboard-square {
+  position: relative;
+  overflow: hidden;
+}
+
+:root[data-theme="executive"] .chessboard-square::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--material-texture);
+  opacity: var(--material-shine);
+  pointer-events: none;
+}
+
+/* Wood material enhancement for executive theme */
+:root[data-theme="executive"][data-material="wood"] {
+  --material-texture: 
+    linear-gradient(90deg, transparent 0%, rgba(139, 69, 19, 0.1) 25%, transparent 50%, rgba(160, 82, 45, 0.1) 75%, transparent 100%),
+    url("data:image/svg+xml,%3Csvg width='120' height='30' viewBox='0 0 120 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23654321' fill-opacity='0.03'%3E%3Cpath d='M0 5h120M0 15h120M0 25h120' stroke='%23654321' stroke-opacity='0.02' stroke-width='1'/%3E%3Cpath d='M10 0v30M30 0v30M50 0v30M70 0v30M90 0v30M110 0v30' stroke='%23654321' stroke-opacity='0.01' stroke-width='0.5'/%3E%3C/g%3E%3C/svg%3E");
+  --material-shine: 0.15;
+  --material-depth: 4px;
+}
+
+:root[data-theme="executive"][data-material="wood"] .chessboard-square::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(139, 69, 19, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(160, 82, 45, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Marble material for executive theme */
+:root[data-theme="executive"][data-material="marble"] {
+  --chessboard-light-square: #F8F8F0;
+  --chessboard-dark-square: #8B4513;
+  --material-texture: 
+    linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%), 
+    radial-gradient(circle at 30% 20%, rgba(139, 69, 19, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 70% 80%, rgba(160, 82, 45, 0.05) 0%, transparent 50%);
+  --material-shine: 0.2;
+  --material-depth: 4px;
+  --board-shadow: 0 8px 32px rgba(0,0,0,0.25);
+}
+
+:root[data-theme="executive"][data-material="marble"] .chessboard {
+  border: 3px solid #654321;
+}
+
+:root[data-theme="executive"][data-material="marble"] .chessboard-square::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(120deg, rgba(255,255,255,0.1) 0%, transparent 30%, rgba(139, 69, 19, 0.05) 70%, transparent 100%),
+    radial-gradient(ellipse at 20% 30%, rgba(255,255,255,0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Enhanced piece styling for executive theme */
+:root[data-theme="executive"] .chessboard-piece {
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.15));
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root[data-theme="executive"] .chessboard-piece:hover {
+  transform: scale(1.08) translateY(-3px);
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2));
+}
+
+/* Coordinate styling for executive theme */
+:root[data-theme="executive"] .chessboard-coordinates {
+  font-family: 'Times New Roman', serif;
+  font-weight: 600;
+  text-shadow: 
+    0 0 3px rgba(245, 245, 220, 0.8), 
+    0 1px 2px rgba(101, 67, 33, 0.3),
+    0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Gold highlight effect */
+:root[data-theme="executive"] .chessboard-square.selected {
+  background-color: var(--chessboard-selected) !important;
+  box-shadow: 
+    inset 0 0 0 3px rgba(218, 165, 32, 0.8),
+    0 0 8px rgba(218, 165, 32, 0.4);
+}

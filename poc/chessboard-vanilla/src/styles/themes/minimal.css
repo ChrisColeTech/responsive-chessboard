@@ -1,0 +1,88 @@
+/* minimal.css - Minimal theme styling */
+
+:root[data-theme="minimal"] {
+  /* Base colors */
+  --chessboard-light-square: #FAFAFA;
+  --chessboard-dark-square: #E0E0E0;
+  --chessboard-border: #BDBDBD;
+  
+  /* Highlight colors */
+  --chessboard-highlight: rgba(33, 150, 243, 0.2);
+  --chessboard-valid-move: rgba(76, 175, 80, 0.3);
+  --chessboard-capture: rgba(244, 67, 54, 0.4);
+  --chessboard-selected: rgba(33, 150, 243, 0.2);
+  
+  /* Visual effects */
+  --board-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  --material-texture: none;
+  --material-shine: 0;
+  --material-depth: 0px;
+  
+  /* Coordinates */
+  --coordinate-color: #757575;
+  --coordinate-size: 0.7rem;
+}
+
+/* Minimal theme specific enhancements */
+:root[data-theme="minimal"] .chessboard {
+  border-radius: 2px;
+  box-shadow: var(--board-shadow);
+  border-width: 1px;
+}
+
+:root[data-theme="minimal"] .chessboard-square.light {
+  background: var(--chessboard-light-square);
+}
+
+:root[data-theme="minimal"] .chessboard-square.dark {
+  background: var(--chessboard-dark-square);
+}
+
+/* Fabric material for minimal theme */
+:root[data-theme="minimal"][data-material="fabric"] {
+  --material-texture: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px);
+  --material-shine: 0;
+  --material-depth: 0px;
+}
+
+:root[data-theme="minimal"][data-material="fabric"] .chessboard-square::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--material-texture);
+  pointer-events: none;
+}
+
+/* Reduced visual effects for minimal theme */
+:root[data-theme="minimal"] .chessboard-square:hover {
+  background-color: var(--chessboard-highlight) !important;
+  transition: background-color 0.1s ease;
+}
+
+:root[data-theme="minimal"] .chessboard-piece:hover {
+  transform: scale(1.02);
+  transition: transform 0.15s ease;
+}
+
+:root[data-theme="minimal"] .chessboard-piece.dragging {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+/* Clean coordinate styling */
+:root[data-theme="minimal"] .chessboard-coordinates {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  text-shadow: none;
+}
+
+/* Remove elaborate animations in minimal theme */
+:root[data-theme="minimal"] .chessboard-square.in-check {
+  background-color: rgba(244, 67, 54, 0.3) !important;
+  animation: none;
+  box-shadow: inset 0 0 0 2px rgba(244, 67, 54, 0.6);
+}
+
+:root[data-theme="minimal"] .chessboard-piece.moving {
+  transition: transform 0.2s ease;
+}

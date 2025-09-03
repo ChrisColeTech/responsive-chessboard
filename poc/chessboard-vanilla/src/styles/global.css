@@ -1,0 +1,132 @@
+/* global.css - Global styles and resets */
+
+/* Modern CSS Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* Focus management */
+:focus {
+  outline: 2px solid #4A90E2;
+  outline-offset: 2px;
+}
+
+/* Remove focus outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --chessboard-light-square: #FFFFFF;
+    --chessboard-dark-square: #000000;
+    --chessboard-border: #000000;
+    --chessboard-valid-move: rgba(0, 255, 0, 0.9);
+    --chessboard-capture: rgba(255, 0, 0, 0.9);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .app {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  }
+  
+  .app-header {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .chessboard-container {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Utility classes */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.error {
+  color: #E74C3C;
+  background: rgba(231, 76, 60, 0.1);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.success {
+  color: #27AE60;
+  background: rgba(39, 174, 96, 0.1);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(39, 174, 96, 0.3);
+}
+
+.warning {
+  color: #F39C12;
+  background: rgba(243, 156, 18, 0.1);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(243, 156, 18, 0.3);
+}

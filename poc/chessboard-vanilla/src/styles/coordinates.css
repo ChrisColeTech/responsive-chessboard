@@ -1,0 +1,417 @@
+/* coordinates.css - Coordinate styling and positioning */
+
+/* Base coordinate variables */
+:root {
+  --coordinate-color: #8B4513;
+  --coordinate-size: 0.75rem;
+  --coordinate-opacity: 0.8;
+  --coordinate-visibility: visible;
+  --coordinate-position: static;
+  --coordinate-files-display: block;
+  --coordinate-ranks-display: block;
+  --coordinate-hints-display: none;
+}
+
+/* Base coordinate display styling */
+.coordinate-display {
+  position: absolute;
+  font-size: var(--coordinate-size);
+  font-weight: bold;
+  font-family: 'Arial', sans-serif;
+  color: var(--coordinate-color);
+  pointer-events: none;
+  z-index: 3;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+  opacity: var(--coordinate-opacity);
+  visibility: var(--coordinate-visibility);
+  user-select: none;
+  line-height: 1;
+}
+
+/* Corner coordinate positioning */
+.coordinate-corner {
+  top: 2px;
+  left: 2px;
+}
+
+.coordinate-corner .coordinate-rank {
+  display: var(--coordinate-ranks-display);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.coordinate-corner .coordinate-file {
+  display: var(--coordinate-files-display);
+  position: absolute;
+  bottom: -12px;
+  right: 0;
+}
+
+/* Edge coordinate positioning */
+.coordinate-edge {
+  position: absolute;
+}
+
+.coordinate-edge.bottom-edge {
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.coordinate-edge.top-edge {
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.coordinate-edge.left-edge {
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.coordinate-edge.right-edge {
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.coordinate-edge .coordinate-file {
+  display: var(--coordinate-files-display);
+}
+
+.coordinate-edge .coordinate-rank {
+  display: var(--coordinate-ranks-display);
+}
+
+/* Overlay coordinate positioning */
+.coordinate-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.4;
+  font-size: calc(var(--coordinate-size) * 0.8);
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  padding: 1px 3px;
+  backdrop-filter: blur(2px);
+}
+
+.coordinate-overlay .coordinate-rank {
+  display: var(--coordinate-ranks-display);
+  margin-right: 2px;
+}
+
+.coordinate-overlay .coordinate-file {
+  display: var(--coordinate-files-display);
+}
+
+/* Focus mode adaptations */
+.coordinate-focus-casual {
+  opacity: 0.8;
+}
+
+.coordinate-focus-tournament {
+  opacity: 0.3;
+  font-size: calc(var(--coordinate-size) * 0.9);
+}
+
+.coordinate-focus-analysis {
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+.coordinate-focus-learning {
+  opacity: 1.0;
+  color: #2E7D32;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 1);
+}
+
+/* Orientation adaptations */
+.coordinate-orientation-white {
+  /* Default positioning for white orientation */
+}
+
+.coordinate-orientation-black {
+  /* Flip positioning for black orientation */
+}
+
+.coordinate-orientation-black.coordinate-corner {
+  top: auto;
+  left: auto;
+  bottom: 2px;
+  right: 2px;
+}
+
+.coordinate-orientation-black.coordinate-corner .coordinate-rank {
+  bottom: 0;
+  right: 0;
+  top: auto;
+  left: auto;
+}
+
+.coordinate-orientation-black.coordinate-corner .coordinate-file {
+  top: -12px;
+  left: 0;
+  bottom: auto;
+  right: auto;
+}
+
+/* Skill level adaptations */
+.coordinate-skill-beginner {
+  font-size: calc(var(--coordinate-size) * 1.2);
+  font-weight: bold;
+  color: #1976D2;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 1);
+}
+
+.coordinate-skill-intermediate {
+  /* Default styling */
+}
+
+.coordinate-skill-advanced {
+  font-size: calc(var(--coordinate-size) * 0.9);
+  opacity: 0.7;
+}
+
+.coordinate-skill-expert {
+  font-size: calc(var(--coordinate-size) * 0.8);
+  opacity: 0.6;
+}
+
+/* Board edge coordinates */
+.board-edge-coordinates {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.file-labels, .rank-labels {
+  position: absolute;
+}
+
+.file-label {
+  position: absolute;
+  bottom: -20px;
+  font-size: var(--coordinate-size);
+  font-weight: bold;
+  color: var(--coordinate-color);
+  text-align: center;
+  width: 100%;
+}
+
+.rank-label {
+  position: absolute;
+  left: -20px;
+  font-size: var(--coordinate-size);
+  font-weight: bold;
+  color: var(--coordinate-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Coordinate hints for learning mode */
+.coordinate-hint {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(46, 125, 50, 0.9);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: calc(var(--coordinate-size) * 0.7);
+  font-weight: normal;
+  white-space: nowrap;
+  z-index: 10;
+  display: var(--coordinate-hints-display);
+  animation: hint-fade-in 0.3s ease-out;
+}
+
+.coordinate-hint::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid rgba(46, 125, 50, 0.9);
+}
+
+@keyframes hint-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.coordinate-hint[data-hint-type="beginner"] {
+  background: rgba(25, 118, 210, 0.9);
+  font-size: calc(var(--coordinate-size) * 0.8);
+}
+
+.coordinate-hint[data-hint-type="beginner"]::after {
+  border-top-color: rgba(25, 118, 210, 0.9);
+}
+
+/* Focus mode specific coordinate displays */
+.focus-mode-tournament .coordinate-display {
+  opacity: 0.2;
+  font-size: calc(var(--coordinate-size) * 0.8);
+}
+
+.focus-mode-tournament .coordinate-overlay {
+  display: none;
+}
+
+.focus-mode-learning .coordinate-display {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.focus-mode-learning .coordinate-hint {
+  display: block;
+}
+
+.focus-mode-analysis .coordinate-display {
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+/* Theme-specific coordinate styling */
+:root[data-theme="elegant"] .coordinate-display {
+  font-family: 'Georgia', serif;
+  font-weight: 500;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.8), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="modern"] .coordinate-display {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
+  color: #666666;
+}
+
+:root[data-theme="minimal"] .coordinate-display {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  color: #757575;
+  text-shadow: none;
+}
+
+:root[data-theme="tournament"] .coordinate-display {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 600;
+  color: #333333;
+}
+
+:root[data-theme="executive"] .coordinate-display {
+  font-family: 'Times New Roman', serif;
+  font-weight: 600;
+  color: #654321;
+  text-shadow: 
+    0 0 3px rgba(245, 245, 220, 0.8), 
+    0 1px 2px rgba(101, 67, 33, 0.3);
+}
+
+:root[data-theme="conqueror"] .coordinate-display {
+  font-family: 'Times New Roman', serif;
+  font-weight: bold;
+  color: #FFD700;
+  text-shadow: 
+    0 0 4px rgba(139,0,0,0.8), 
+    0 0 8px rgba(255,215,0,0.6),
+    0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Responsive coordinate sizing */
+@media (max-width: 768px) {
+  :root {
+    --coordinate-size: 0.65rem;
+  }
+  
+  .coordinate-display {
+    font-weight: 600;
+  }
+  
+  .coordinate-hint {
+    font-size: calc(var(--coordinate-size) * 0.8);
+    padding: 1px 4px;
+  }
+  
+  .file-label, .rank-label {
+    font-size: calc(var(--coordinate-size) * 0.9);
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --coordinate-size: 0.6rem;
+  }
+  
+  .coordinate-overlay {
+    font-size: calc(var(--coordinate-size) * 0.7);
+    padding: 1px 2px;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --coordinate-size: 0.9rem;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .coordinate-display {
+    color: #000000;
+    text-shadow: 0 0 4px rgba(255, 255, 255, 1);
+    font-weight: bold;
+  }
+  
+  .coordinate-overlay {
+    background: rgba(255, 255, 255, 0.9);
+    color: #000000;
+    border: 1px solid #000000;
+  }
+  
+  .coordinate-hint {
+    background: #000000;
+    color: #FFFFFF;
+    border: 2px solid #FFFFFF;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .coordinate-hint {
+    animation: none;
+  }
+  
+  .coordinate-display {
+    transition: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .coordinate-display {
+    opacity: 1 !important;
+    color: #000000 !important;
+    text-shadow: none !important;
+    font-weight: bold !important;
+  }
+  
+  .coordinate-hint {
+    display: none !important;
+  }
+}

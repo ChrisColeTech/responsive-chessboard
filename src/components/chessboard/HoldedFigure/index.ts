@@ -1,1 +1,0 @@
-export { HoldedFigure } from './HoldedFigure';

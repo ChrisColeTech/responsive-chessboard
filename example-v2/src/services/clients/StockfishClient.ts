@@ -11,22 +11,18 @@ import type {
   EngineAnalysis
 } from '../../types/chess/computer-opponent.types';
 
-import { STOCKFISH_UCI_OPTIONS } from '../../constants/chess/computer-difficulty.constants';
 import { validateUCIMove } from '../../utils/chess/computer-chess.utils';
 
-export interface StockfishWorkerMessage {
-  readonly type: 'ready' | 'bestmove' | 'info' | 'error';
-  readonly data: string;
-  readonly evaluation?: number;
-  readonly depth?: number;
-  readonly pv?: string[];
-  readonly error?: string;
+interface StockfishEngine {
+  send: (command: string, callback?: (response: string) => void, stream?: (line: string) => void) => void;
+  quit: () => void;
+  ready: boolean;
+  loaded: boolean;
 }
 
 export class StockfishClient {
-  private worker: Worker | null = null;
+  private engine: StockfishEngine | null = null;
   private isReady = false;
-  private messageQueue: string[] = [];
   private pendingMoveRequest: {
     resolve: (result: ComputerMoveResult) => void;
     reject: (error: Error) => void;
@@ -36,86 +32,215 @@ export class StockfishClient {
   private currentDepth?: number;
 
   constructor() {
-    this.initializeEngine();
+    this.initializeEngine().catch(error => {
+      console.error('Failed to initialize engine in constructor:', error);
+    });
   }
 
   /**
-   * Initialize the Stockfish engine worker
+   * Initialize the Stockfish engine using proper loadEngine pattern
    */
   private async initializeEngine(): Promise<void> {
     try {
-      // Use placeholder for now - focus on drag and drop testing first
-      this.worker = new Worker('/stockfish/stockfish.js');
+      console.log('🏗️ Initializing Stockfish engine...');
       
-      this.worker.onmessage = (event: MessageEvent<string>) => {
-        this.handleWorkerMessage(event.data);
-      };
-
-      this.worker.onerror = (error) => {
-        console.error('Stockfish worker error:', error);
-        this.isReady = false;
-      };
-
-      // Send initial UCI commands
-      this.sendCommand('uci');
+      // Use direct Worker approach with the copied files
+      const wasmSupported = typeof WebAssembly === 'object' && 
+                          WebAssembly.validate(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00));
+      
+      console.log('WASM supported:', wasmSupported);
+      
+      // Choose engine variant based on WASM support and requirements
+      let enginePath: string;
+      if (wasmSupported) {
+        // Use lite single-threaded WASM for better compatibility
+        enginePath = '/stockfish/stockfish-17.1-lite-single-03e3232.js';
+      } else {
+        // Fallback to ASM.js version
+        enginePath = '/stockfish/stockfish-17.1-asm-341ff22.js';
+      }
+      
+      console.log('Loading engine from:', enginePath);
+      
+      // Create engine using simple Worker approach
+      this.engine = await this.createEngineWorker(enginePath);
+      
+      // Initialize UCI protocol
+      await this.initializeUCI();
+      
+      console.log('✅ Stockfish engine initialized successfully');
+      this.isReady = true;
+      
     } catch (error) {
-      console.error('Failed to initialize Stockfish worker:', error);
+      console.error('❌ Failed to initialize Stockfish engine:', error);
       throw new Error('Failed to initialize chess engine');
     }
   }
-
+  
   /**
-   * Handle messages from the Stockfish worker
+   * Create engine worker and set up communication
    */
-  private handleWorkerMessage(data: string): void {
-    const message = data.trim();
-
-    if (message === 'uciok') {
-      this.setupEngine();
-    } else if (message === 'readyok') {
-      this.isReady = true;
-      this.processMessageQueue();
-    } else if (message.startsWith('bestmove')) {
-      this.handleBestMove(message);
-    } else if (message.startsWith('info')) {
-      this.handleEngineInfo(message);
+  private async createEngineWorker(enginePath: string): Promise<StockfishEngine> {
+    return new Promise((resolve, reject) => {
+      try {
+        const worker = new Worker(enginePath);
+        let isLoaded = false;
+        let isReady = false;
+        const messageQueue: Array<{command: string, callback?: (response: string) => void}> = [];
+        
+        const engine: StockfishEngine = {
+          send: (command: string, callback?: (response: string) => void) => {
+            if (!isReady && command !== 'uci' && command !== 'isready') {
+              messageQueue.push({command, callback});
+              return;
+            }
+            
+            worker.postMessage(command);
+            if (callback) {
+              // Store callback for when response comes back
+              this.pendingCallbacks.set(command, callback);
+            }
+          },
+          quit: () => {
+            worker.terminate();
+          },
+          ready: isReady,
+          loaded: isLoaded
+        };
+        
+        worker.onmessage = (event) => {
+          const message = event.data.trim();
+          console.log('🔄 Stockfish:', message);
+          
+          if (message === 'uciok') {
+            isLoaded = true;
+            console.log('✅ UCI protocol loaded');
+          } else if (message === 'readyok') {
+            isReady = true;
+            engine.ready = true;
+            console.log('✅ Engine ready');
+            
+            // Process queued messages
+            messageQueue.forEach(({command, callback}) => {
+              engine.send(command, callback);
+            });
+            messageQueue.length = 0;
+            
+            resolve(engine);
+          } else if (message.startsWith('bestmove')) {
+            console.log('🎯 Received bestmove, calling handleBestMove...');
+            this.handleBestMove(message);
+          } else if (message.startsWith('info')) {
+            this.handleEngineInfo(message);
+          }
+          
+          // Handle any pending callbacks
+          this.processPendingCallbacks(message);
+        };
+        
+        worker.onerror = (error) => {
+          console.error('❌ Worker error:', error);
+          reject(error);
+        };
+        
+        // Resolve immediately with the engine interface
+        // The ready state will be updated asynchronously
+        setTimeout(() => {
+          if (!isLoaded) {
+            resolve(engine); // Return engine even if not ready yet
+          }
+        }, 1000);
+        
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  
+  private pendingCallbacks = new Map<string, (response: string) => void>();
+  
+  private processPendingCallbacks(message: string): void {
+    // Simple callback processing - in a real implementation this would be more sophisticated
+    for (const [command, callback] of this.pendingCallbacks.entries()) {
+      if (message.includes(command) || message === 'uciok' || message === 'readyok') {
+        callback(message);
+        this.pendingCallbacks.delete(command);
+        break;
+      }
     }
   }
-
+  
   /**
-   * Setup engine options after UCI initialization
+   * Initialize UCI protocol
    */
-  private setupEngine(): void {
-    // Set UCI options
-    Object.entries(STOCKFISH_UCI_OPTIONS).forEach(([option, value]) => {
-      this.sendCommand(`setoption name ${option} value ${value}`);
+  private async initializeUCI(): Promise<void> {
+    if (!this.engine) throw new Error('Engine not created');
+    
+    return new Promise((resolve) => {
+      let uciReceived = false;
+      let readyReceived = false;
+      
+      const checkReady = () => {
+        if (uciReceived && readyReceived) {
+          resolve();
+        }
+      };
+      
+      if (this.engine) {
+        this.engine.send('uci', (response) => {
+          if (response === 'uciok') {
+            uciReceived = true;
+            checkReady();
+          }
+        });
+      }
+      
+      // Wait a bit then send isready
+      setTimeout(() => {
+        if (this.engine) {
+          this.engine.send('isready', (response) => {
+            if (response === 'readyok') {
+              readyReceived = true;
+              checkReady();
+            }
+          });
+        }
+      }, 500);
+      
+      // Fallback timeout
+      setTimeout(() => {
+        if (!uciReceived || !readyReceived) {
+          console.warn('⚠️ UCI initialization timeout, proceeding anyway');
+          resolve();
+        }
+      }, 5000);
     });
-
-    // Signal ready
-    this.sendCommand('isready');
   }
 
   /**
-   * Process queued messages when engine is ready
+   * Wait for engine to be ready
    */
-  private processMessageQueue(): void {
-    while (this.messageQueue.length > 0 && this.isReady) {
-      const command = this.messageQueue.shift();
-      if (command) {
-        this.worker?.postMessage(command);
-      }
+  private async waitForEngine(maxWaitMs: number = 10000): Promise<void> {
+    const startTime = Date.now();
+    
+    while (!this.isReady && (Date.now() - startTime) < maxWaitMs) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
+    if (!this.isReady) {
+      throw new Error('Engine initialization timeout');
     }
   }
 
   /**
    * Send command to Stockfish engine
    */
-  private sendCommand(command: string): void {
-    if (this.isReady && this.worker) {
-      this.worker.postMessage(command);
-    } else {
-      this.messageQueue.push(command);
+  private sendCommand(command: string, callback?: (response: string) => void): void {
+    if (!this.engine) {
+      console.error('Engine not initialized');
+      return;
     }
+    this.engine.send(command, callback);
   }
 
   /**
@@ -138,6 +263,7 @@ export class StockfishClient {
         depth: this.currentDepth
       };
       
+      console.log('✅ Stockfish returning successful move result:', result);
       this.pendingMoveRequest.resolve(result);
     } else {
       const result: ComputerMoveResult = {
@@ -146,6 +272,7 @@ export class StockfishClient {
         thinkingTime
       };
       
+      console.log('❌ Stockfish returning failed move result:', result);
       this.pendingMoveRequest.resolve(result);
     }
 
@@ -184,10 +311,16 @@ export class StockfishClient {
    * Request computer move
    */
   async requestMove(request: ComputerMoveRequest): Promise<ComputerMoveResult> {
-    if (!this.isReady) {
+    // Wait for engine to be ready if it's still initializing
+    if (!this.isReady || !this.engine) {
+      console.log('⏳ Engine not ready, waiting for initialization...');
+      await this.waitForEngine();
+    }
+    
+    if (!this.isReady || !this.engine) {
       return {
         success: false,
-        error: 'Engine not ready',
+        error: 'Engine failed to initialize',
         thinkingTime: 0
       };
     }
@@ -200,10 +333,16 @@ export class StockfishClient {
       };
     }
 
-    return new Promise((resolve, reject) => {
+    console.log('🎯 Requesting move for position:', request.fen.substring(0, 30) + '...');
+
+    return new Promise((resolve) => {
       this.pendingMoveRequest = {
         resolve,
-        reject,
+        reject: (error: Error) => resolve({
+          success: false,
+          error: error.message,
+          thinkingTime: 0
+        }),
         startTime: Date.now()
       };
 
@@ -217,6 +356,7 @@ export class StockfishClient {
 
         // Start search with time limit
         const timeMs = Math.min(request.timeLimit, 10000); // Max 10 seconds
+        console.log('🔍 Starting analysis with', timeMs, 'ms time limit');
         this.sendCommand(`go movetime ${timeMs}`);
 
       } catch (error) {
@@ -260,7 +400,7 @@ export class StockfishClient {
    * Check if engine is ready
    */
   isEngineReady(): boolean {
-    return this.isReady;
+    return this.isReady && !!this.engine;
   }
 
   /**
@@ -273,17 +413,17 @@ export class StockfishClient {
   }
 
   /**
-   * Dispose of the engine worker
+   * Dispose of the engine
    */
   dispose(): void {
-    if (this.worker) {
-      this.worker.terminate();
-      this.worker = null;
+    if (this.engine) {
+      this.engine.quit();
+      this.engine = null;
     }
     
     this.isReady = false;
-    this.messageQueue.length = 0;
     this.pendingMoveRequest = null;
+    this.pendingCallbacks.clear();
   }
 }
 

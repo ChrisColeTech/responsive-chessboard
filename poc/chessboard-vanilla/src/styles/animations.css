@@ -1,0 +1,338 @@
+/* animations.css - Animation classes and transitions */
+
+/* Base animation variables */
+:root {
+  --move-duration: 300ms;
+  --move-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --hover-transition: 150ms ease-out;
+  --drag-transition: 150ms ease-out;
+  --animation-enabled: 1;
+  
+  /* Performance optimizations */
+  --will-change: transform;
+  --backface-visibility: hidden;
+  --transform-style: preserve-3d;
+  --animation-fill-mode: both;
+  --animation-play-state: running;
+}
+
+/* Piece movement animations */
+.chessboard-piece {
+  will-change: var(--will-change);
+  backface-visibility: var(--backface-visibility);
+  transform-style: var(--transform-style);
+}
+
+.chessboard-piece.moving {
+  transition: transform var(--move-duration) var(--move-easing);
+  z-index: 10;
+  will-change: transform;
+}
+
+.chessboard-piece.move-fast {
+  --move-duration: 150ms;
+  --move-easing: ease-out;
+}
+
+.chessboard-piece.move-smooth {
+  --move-duration: 300ms;
+  --move-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chessboard-piece.move-none {
+  --move-duration: 0ms;
+  --move-easing: none;
+  transition: none !important;
+}
+
+/* Hover animations */
+.chessboard-piece:hover {
+  transition: 
+    transform var(--hover-transition),
+    filter var(--hover-transition);
+  transform: scale(1.08) translateY(-2px);
+  filter: brightness(1.1) drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+}
+
+.chessboard-piece.no-hover:hover {
+  transform: none;
+  filter: none;
+  transition: none;
+}
+
+/* Drag animations */
+.chessboard-piece.dragging {
+  opacity: 0.7;
+  transform: scale(1.15) rotate(5deg);
+  z-index: 1000;
+  pointer-events: none;
+  transition: 
+    opacity var(--drag-transition),
+    transform var(--drag-transition);
+  filter: brightness(1.2) drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+}
+
+.chessboard-piece.drag-start {
+  animation: piece-lift 150ms ease-out forwards;
+}
+
+@keyframes piece-lift {
+  0% {
+    transform: scale(1) rotate(0deg);
+    filter: none;
+  }
+  100% {
+    transform: scale(1.15) rotate(5deg);
+    filter: brightness(1.2) drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+  }
+}
+
+.chessboard-piece.drag-end {
+  animation: piece-drop 200ms ease-out forwards;
+}
+
+@keyframes piece-drop {
+  0% {
+    transform: scale(1.15) rotate(5deg);
+    filter: brightness(1.2) drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+  }
+  50% {
+    transform: scale(0.95) rotate(0deg);
+    filter: brightness(1.05);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    filter: none;
+  }
+}
+
+/* Square hover animations */
+.chessboard-square {
+  transition: background-color var(--hover-transition);
+}
+
+.chessboard-square:hover {
+  background-color: var(--chessboard-highlight) !important;
+}
+
+/* Valid move indicators with animation */
+.chessboard-square.valid-move::after {
+  content: '';
+  position: absolute;
+  width: 35%;
+  height: 35%;
+  border-radius: 50%;
+  background: var(--chessboard-valid-move);
+  pointer-events: none;
+  z-index: 1;
+  animation: valid-move-pulse 2s ease-in-out infinite;
+}
+
+@keyframes valid-move-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+.chessboard-square.valid-move.capture-target::after {
+  width: 90%;
+  height: 90%;
+  border: 4px solid var(--chessboard-capture);
+  background: transparent;
+  border-radius: 8px;
+  animation: capture-target-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes capture-target-pulse {
+  0%, 100% {
+    opacity: 0.8;
+    border-width: 4px;
+  }
+  50% {
+    opacity: 1;
+    border-width: 6px;
+  }
+}
+
+/* Selection animations */
+.chessboard-square.selected {
+  animation: selected-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes selected-glow {
+  0% {
+    box-shadow: inset 0 0 0 3px rgba(0, 100, 200, 0.8);
+  }
+  100% {
+    box-shadow: inset 0 0 0 3px rgba(0, 100, 200, 1);
+  }
+}
+
+/* Check animation */
+.chessboard-square.in-check {
+  animation: check-pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes check-pulse {
+  0% { 
+    box-shadow: inset 0 0 0 3px rgba(255, 0, 0, 0.8); 
+    background-color: rgba(255, 0, 0, 0.4) !important;
+  }
+  100% { 
+    box-shadow: inset 0 0 0 3px rgba(255, 0, 0, 1);
+    background-color: rgba(255, 0, 0, 0.6) !important;
+  }
+}
+
+/* Staggered animations for piece setup */
+.chessboard-piece.stagger-in {
+  animation: piece-appear var(--move-duration) var(--move-easing) var(--animation-fill-mode);
+}
+
+@keyframes piece-appear {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Loading animations */
+.chessboard.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.chessboard.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: chess-loading 1s linear infinite;
+}
+
+@keyframes chess-loading {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Context-specific optimizations */
+
+/* Bullet chess - no animations */
+.chessboard[data-context="bullet"] .chessboard-piece,
+.chessboard[data-context="bullet"] .chessboard-square {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Blitz chess - fast animations */
+.chessboard[data-context="blitz"] {
+  --move-duration: 100ms;
+  --move-easing: ease-out;
+  --hover-transition: 75ms ease-out;
+}
+
+/* Analysis mode - slower, more detailed animations */
+.chessboard[data-context="analysis"] {
+  --move-duration: 500ms;
+  --move-easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --hover-transition: 200ms ease-out;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  :root {
+    --move-duration: calc(var(--move-duration) * 0.7);
+    --hover-transition: 100ms ease-out;
+  }
+  
+  .chessboard-piece:hover {
+    transform: scale(1.05) translateY(-1px);
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --move-duration: 0ms;
+    --move-easing: none;
+    --hover-transition: 0ms;
+    --drag-transition: 0ms;
+    --animation-enabled: 0;
+    --animation-play-state: paused;
+  }
+  
+  .chessboard-piece,
+  .chessboard-piece.moving,
+  .chessboard-square,
+  .chessboard-square::after,
+  .chessboard-square.selected,
+  .chessboard-square.in-check {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .chessboard-piece:hover {
+    transform: none;
+    filter: none;
+  }
+}
+
+/* High performance mode */
+.chessboard[data-performance="high"] {
+  --will-change: auto;
+  --transform-style: flat;
+}
+
+.chessboard[data-performance="high"] .chessboard-piece {
+  will-change: auto;
+  transform-style: flat;
+}
+
+.chessboard[data-performance="high"] .chessboard-piece:hover {
+  transform: none;
+  filter: none;
+}
+
+/* GPU acceleration for supported devices */
+@supports (transform-style: preserve-3d) {
+  .chessboard-piece {
+    transform: translateZ(0);
+    transform-style: preserve-3d;
+  }
+}
+
+/* Enhanced animations for modern browsers */
+@supports (backdrop-filter: blur(10px)) {
+  .chessboard-piece.dragging {
+    backdrop-filter: blur(2px);
+  }
+}
+
+/* Custom ease curves for different contexts */
+.chessboard[data-context="casual"] {
+  --move-easing: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* ease-out-quad */
+}
+
+.chessboard[data-context="tournament"] {
+  --move-easing: ease-in-out;
+  --hover-transition: 100ms ease;
+}
+
+.chessboard[data-context="analysis"] {
+  --move-easing: cubic-bezier(0.4, 0, 0.2, 1); /* material design standard */
+}

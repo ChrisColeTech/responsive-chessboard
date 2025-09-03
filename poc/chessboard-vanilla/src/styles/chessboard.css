@@ -1,0 +1,578 @@
+/* chessboard.css - Core chessboard styling */
+
+/* CSS Custom Properties for theming and enhancements */
+:root {
+  /* Core chessboard colors */
+  --chessboard-light-square: #F0D9B5;
+  --chessboard-dark-square: #B58863;
+  --chessboard-border: #8B4513;
+  --chessboard-highlight: rgba(255, 255, 0, 0.5);
+  --chessboard-valid-move: rgba(0, 255, 0, 0.6);
+  --chessboard-capture: rgba(255, 0, 0, 0.8);
+  --chessboard-selected: rgba(0, 100, 200, 0.3);
+  --coordinate-color: #8B4513;
+  --coordinate-size: 0.75rem;
+  
+  /* Enhancement variables */
+  /* Theme System */
+  --theme-current: 'classic';
+  --theme-material: 'wood';
+  --theme-transition-duration: 300ms;
+  --theme-transition-easing: ease-out;
+  
+  /* Animation System */
+  --animation-enabled: 1;
+  --animation-duration-fast: 150ms;
+  --animation-duration-normal: 300ms;
+  --animation-duration-slow: 500ms;
+  --animation-easing-ease: ease;
+  --animation-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --animation-easing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --animation-scale-hover: 1.05;
+  --animation-scale-active: 0.95;
+  --animation-scale-drag: 1.1;
+  
+  /* Focus Mode System */
+  --focus-mode: 'casual';
+  --focus-overlay-opacity: 0;
+  --focus-blur-amount: 0px;
+  --focus-brightness: 1;
+  --focus-contrast: 1;
+  --focus-saturation: 1;
+  
+  /* Highlight System */
+  --highlight-move: rgba(100, 200, 100, 0.4);
+  --highlight-threat: rgba(255, 100, 100, 0.4);
+  --highlight-defense: rgba(100, 100, 255, 0.4);
+  --highlight-pattern: rgba(255, 200, 100, 0.3);
+  --highlight-analysis: rgba(200, 100, 255, 0.3);
+  --highlight-intensity-low: 0.2;
+  --highlight-intensity-medium: 0.4;
+  --highlight-intensity-high: 0.6;
+  --highlight-animation-duration: 300ms;
+  
+  /* Coordinate System */
+  --coordinate-style: 'standard';
+  --coordinate-position: 'corner';
+  --coordinate-background: transparent;
+  --coordinate-padding: 2px;
+  --coordinate-border-radius: 2px;
+  --coordinate-font-family: 'Arial', sans-serif;
+  --coordinate-font-weight: bold;
+  --coordinate-text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+  
+  /* Audio System */
+  --audio-enabled: 0;
+  --audio-volume: 0.5;
+  --audio-profile: 'classic';
+  
+  /* Accessibility System */
+  --a11y-high-contrast: 0;
+  --a11y-reduced-motion: 0;
+  --a11y-screen-reader: 0;
+  --a11y-keyboard-nav: 0;
+  --a11y-focus-outline: 3px solid #4A90E2;
+  --a11y-focus-outline-offset: 2px;
+  --a11y-focus-ring-color: #4A90E2;
+  
+  /* Material Enhancement Variables */
+  --material-wood-grain: none;
+  --material-marble-pattern: none;
+  --material-glass-opacity: 1;
+  --material-glass-blur: 0;
+  --material-metal-shine: none;
+  --material-fabric-texture: none;
+  --material-shadow-depth: 2px;
+  --material-reflection: none;
+  
+  /* Performance Variables */
+  --gpu-acceleration: translateZ(0);
+  --will-change: auto;
+  --backface-visibility: hidden;
+}
+
+/* Main chessboard container */
+.chessboard {
+  --board-size: min(90vw, 90vh, 600px);
+  --square-size: calc(var(--board-size) / 8);
+  
+  width: var(--board-size);
+  height: var(--board-size);
+  aspect-ratio: 1;
+  
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  
+  border: 3px solid var(--chessboard-border);
+  border-radius: 4px;
+  position: relative;
+  user-select: none;
+  background: var(--chessboard-light-square);
+  
+  /* Enhancement support */
+  transition: var(--theme-transition-duration) var(--theme-transition-easing);
+  filter: 
+    brightness(var(--focus-brightness)) 
+    contrast(var(--focus-contrast))
+    saturate(var(--focus-saturation))
+    blur(var(--focus-blur-amount));
+  
+  /* Performance optimizations */
+  transform: var(--gpu-acceleration);
+  will-change: var(--will-change);
+  backface-visibility: var(--backface-visibility);
+  
+  /* Prevent layout shift during loading */
+  min-width: 200px;
+  min-height: 200px;
+}
+
+/* Individual squares */
+.chessboard-square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 
+    background-color var(--animation-duration-fast) var(--animation-easing-ease),
+    box-shadow var(--animation-duration-fast) var(--animation-easing-ease),
+    transform var(--animation-duration-fast) var(--animation-easing-ease);
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  
+  /* Enhancement support */
+  background-image: var(--material-wood-grain);
+  background-size: cover;
+  box-shadow: var(--material-shadow-depth) rgba(0, 0, 0, 0.1);
+  
+  /* Performance optimizations */
+  transform: var(--gpu-acceleration);
+  will-change: var(--will-change);
+}
+
+/* Alternating square colors using proper chess board pattern */
+.chessboard-square.light {
+  background-color: var(--chessboard-light-square);
+}
+
+.chessboard-square.dark {
+  background-color: var(--chessboard-dark-square);
+}
+
+/* Square hover effects */
+.chessboard-square:hover {
+  background-color: var(--chessboard-highlight) !important;
+}
+
+/* Selected square highlighting */
+.chessboard-square.selected {
+  background-color: var(--chessboard-selected) !important;
+  box-shadow: inset 0 0 0 3px rgba(0, 100, 200, 0.8);
+}
+
+/* King in check highlighting */
+.chessboard-square.in-check {
+  background-color: rgba(255, 0, 0, 0.4) !important;
+  box-shadow: inset 0 0 0 3px rgba(255, 0, 0, 0.8);
+  animation: check-pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes check-pulse {
+  0% { box-shadow: inset 0 0 0 3px rgba(255, 0, 0, 0.8); }
+  100% { box-shadow: inset 0 0 0 3px rgba(255, 0, 0, 1); }
+}
+
+/* Valid move indicators */
+.chessboard-square.valid-move::after {
+  content: '';
+  position: absolute;
+  width: 35%;
+  height: 35%;
+  border-radius: 50%;
+  background: var(--chessboard-valid-move);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Capture move indicators */
+.chessboard-square.valid-move.capture-target::after {
+  width: 90%;
+  height: 90%;
+  border: 4px solid var(--chessboard-capture);
+  background: transparent;
+  border-radius: 8px;
+}
+
+/* Chess pieces */
+.chessboard-piece {
+  width: 80%;
+  height: 80%;
+  max-width: 100%;
+  max-height: 100%;
+  cursor: pointer;
+  transition: 
+    transform var(--animation-duration-normal) var(--animation-easing-ease),
+    filter var(--animation-duration-fast) var(--animation-easing-ease);
+  z-index: 2;
+  pointer-events: auto;
+  
+  /* Ensure pieces are crisp */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  
+  /* Center the piece properly and maintain aspect ratio */
+  object-fit: contain;
+  
+  /* Performance optimizations */
+  transform: var(--gpu-acceleration);
+  will-change: var(--will-change);
+}
+
+.chessboard-piece:hover {
+  transform: scale(var(--animation-scale-hover)) var(--gpu-acceleration);
+}
+
+.chessboard-piece.dragging {
+  opacity: 0.7;
+  transform: scale(var(--animation-scale-drag)) rotate(5deg) var(--gpu-acceleration);
+  z-index: 1000;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
+}
+
+/* Smooth piece movement animations */
+.chessboard-piece.moving {
+  transition: all var(--animation-duration-slow) var(--animation-easing-smooth);
+  z-index: 10;
+}
+
+/* Animation disabled state */
+.chessboard-piece.reduce-motion,
+.reduce-motion .chessboard-piece {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Enhancement-specific piece classes */
+.chessboard-piece.animated {
+  transition: 
+    transform var(--animation-duration-normal) var(--animation-easing-bounce),
+    filter var(--animation-duration-fast) var(--animation-easing-ease);
+}
+
+.chessboard-piece.theme-elegant {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.chessboard-piece.theme-minimal {
+  filter: none;
+  opacity: 0.9;
+}
+
+.chessboard-piece.focus-tournament {
+  filter: contrast(1.1) brightness(1.05);
+}
+
+.chessboard-piece.focus-analysis {
+  filter: saturate(0.8) brightness(1.1);
+}
+
+/* Coordinate labels */
+.chessboard-coordinates {
+  position: absolute;
+  font-size: var(--coordinate-size);
+  font-weight: var(--coordinate-font-weight);
+  font-family: var(--coordinate-font-family);
+  color: var(--coordinate-color);
+  pointer-events: none;
+  z-index: 3;
+  text-shadow: var(--coordinate-text-shadow);
+  background: var(--coordinate-background);
+  padding: var(--coordinate-padding);
+  border-radius: var(--coordinate-border-radius);
+  transition: all var(--animation-duration-fast) var(--animation-easing-ease);
+}
+
+/* Enhanced coordinate styles */
+.chessboard-coordinates.style-modern {
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(2px);
+  border-radius: 4px;
+  padding: 4px 6px;
+}
+
+.chessboard-coordinates.style-bold {
+  font-weight: 900;
+  text-shadow: 
+    0 0 4px rgba(255, 255, 255, 0.8),
+    0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+.chessboard-coordinates.style-subtle {
+  opacity: 0.6;
+  font-weight: 300;
+}
+
+.coordinate-rank {
+  top: 2px;
+  left: 2px;
+}
+
+.coordinate-file {
+  bottom: 2px;
+  right: 2px;
+}
+
+/* Drag preview (for HTML5 drag API) */
+.drag-preview {
+  position: fixed;
+  top: -1000px;
+  left: -1000px;
+  width: 60px;
+  height: 60px;
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+  .chessboard {
+    --board-size: min(95vw, 95vh);
+    border-width: 2px;
+  }
+  
+  .chessboard-coordinates {
+    --coordinate-size: 0.65rem;
+  }
+  
+  .chessboard-piece {
+    width: 85%;
+    height: 85%;
+  }
+}
+
+@media (max-width: 480px) {
+  .chessboard {
+    --board-size: min(98vw, 98vh);
+    border-width: 1px;
+  }
+  
+  .chessboard-coordinates {
+    --coordinate-size: 0.6rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .chessboard {
+    --board-size: min(70vw, 70vh, 800px);
+  }
+  
+  .chessboard-coordinates {
+    --coordinate-size: 0.9rem;
+  }
+}
+
+/* High DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+  .chessboard-piece {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .chessboard-piece,
+  .chessboard-piece.moving,
+  .chessboard-square {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Focus indicators for keyboard navigation */
+.chessboard-square:focus {
+  outline: 3px solid #4A90E2;
+  outline-offset: -3px;
+}
+
+.chessboard-piece:focus {
+  outline: 2px solid #4A90E2;
+  outline-offset: 2px;
+}
+
+/* Loading state */
+.chessboard.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.chessboard.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: chess-loading 1s linear infinite;
+}
+
+@keyframes chess-loading {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Theme variations */
+.chessboard.theme-wood {
+  --chessboard-light-square: #F7E8A4;
+  --chessboard-dark-square: #C5833A;
+  --chessboard-border: #8B4513;
+}
+
+.chessboard.theme-green {
+  --chessboard-light-square: #FFFFDD;
+  --chessboard-dark-square: #86A666;
+  --chessboard-border: #5F5F5F;
+}
+
+.chessboard.theme-blue {
+  --chessboard-light-square: #E8F4FD;
+  --chessboard-dark-square: #4A90E2;
+  --chessboard-border: #2C5985;
+}
+
+/* Enhancement-specific chessboard classes */
+
+/* Focus Mode Enhancements */
+.chessboard.focus-tournament {
+  --focus-contrast: 1.1;
+  --focus-saturation: 0.9;
+}
+
+.chessboard.focus-analysis {
+  --focus-brightness: 1.1;
+  --focus-saturation: 0.8;
+}
+
+.chessboard.focus-learning {
+  --focus-brightness: 1.05;
+  --focus-contrast: 1.05;
+}
+
+/* Highlight Classes */
+.chessboard-square.highlight-move {
+  background-color: var(--highlight-move) !important;
+  animation: highlight-pulse var(--highlight-animation-duration) ease-in-out infinite alternate;
+}
+
+.chessboard-square.highlight-threat {
+  background-color: var(--highlight-threat) !important;
+  animation: threat-pulse var(--highlight-animation-duration) ease-in-out infinite alternate;
+}
+
+.chessboard-square.highlight-defense {
+  background-color: var(--highlight-defense) !important;
+}
+
+.chessboard-square.highlight-pattern {
+  background-color: var(--highlight-pattern) !important;
+}
+
+.chessboard-square.highlight-analysis {
+  background-color: var(--highlight-analysis) !important;
+}
+
+/* Highlight intensity modifiers */
+.chessboard-square.highlight-low {
+  opacity: var(--highlight-intensity-low);
+}
+
+.chessboard-square.highlight-medium {
+  opacity: var(--highlight-intensity-medium);
+}
+
+.chessboard-square.highlight-high {
+  opacity: var(--highlight-intensity-high);
+}
+
+/* Highlight animations */
+@keyframes highlight-pulse {
+  0% { opacity: var(--highlight-intensity-medium); }
+  100% { opacity: var(--highlight-intensity-high); }
+}
+
+@keyframes threat-pulse {
+  0% { 
+    background-color: var(--highlight-threat);
+    box-shadow: inset 0 0 0 2px rgba(255, 0, 0, 0.3);
+  }
+  100% { 
+    background-color: rgba(255, 100, 100, 0.6);
+    box-shadow: inset 0 0 0 2px rgba(255, 0, 0, 0.6);
+  }
+}
+
+/* Material Enhancement Classes */
+.chessboard.material-wood {
+  --material-wood-grain: url('/textures/wood-grain.jpg');
+  --material-shadow-depth: 3px;
+}
+
+.chessboard.material-marble {
+  --material-marble-pattern: url('/textures/marble.jpg');
+  --material-shadow-depth: 4px;
+  --material-reflection: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.1) 50%, transparent 60%);
+}
+
+.chessboard.material-glass {
+  --material-glass-opacity: 0.9;
+  --material-glass-blur: 2px;
+  backdrop-filter: blur(var(--material-glass-blur));
+  opacity: var(--material-glass-opacity);
+}
+
+.chessboard.material-metal {
+  --material-metal-shine: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%);
+  --material-shadow-depth: 2px;
+}
+
+.chessboard.material-fabric {
+  --material-fabric-texture: url('/textures/fabric.jpg');
+  --material-shadow-depth: 1px;
+}
+
+/* Animation Enhancement Classes */
+.chessboard.animated {
+  --animation-enabled: 1;
+}
+
+.chessboard.animated .chessboard-square:hover {
+  transform: scale(1.02);
+  transition: transform var(--animation-duration-fast) var(--animation-easing-bounce);
+}
+
+.chessboard.animated .chessboard-piece:hover {
+  transform: scale(var(--animation-scale-hover)) rotate(2deg) var(--gpu-acceleration);
+  transition: transform var(--animation-duration-normal) var(--animation-easing-bounce);
+}
+
+/* Performance optimization classes */
+.chessboard.gpu-accelerated {
+  --will-change: transform;
+}
+
+.chessboard.gpu-accelerated .chessboard-square,
+.chessboard.gpu-accelerated .chessboard-piece {
+  will-change: var(--will-change);
+  transform: var(--gpu-acceleration);
+}

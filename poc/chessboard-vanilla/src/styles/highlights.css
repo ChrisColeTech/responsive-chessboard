@@ -1,0 +1,501 @@
+/* highlights.css - Highlight styling and animations */
+
+/* Base highlight variables */
+:root {
+  /* Highlight opacity levels */
+  --highlight-opacity-subtle: 0.3;
+  --highlight-opacity-standard: 0.5;
+  --highlight-opacity-vivid: 0.8;
+  --highlight-opacity-minimal: 0.2;
+  
+  /* Base highlight colors */
+  --highlight-check: rgba(255, 0, 0, 0.8);
+  --highlight-threat: rgba(255, 165, 0, 0.7);
+  --highlight-pattern: rgba(138, 43, 226, 0.6);
+  --highlight-last-move: rgba(255, 255, 0, 0.4);
+  --highlight-selected: rgba(0, 100, 200, 0.5);
+  --highlight-valid-move: rgba(0, 255, 0, 0.6);
+  --highlight-capture: rgba(255, 69, 0, 0.8);
+  
+  /* Animation settings */
+  --highlight-animation-duration: 1s;
+  --highlight-pulse-duration: 2s;
+  --highlight-fade-duration: 0.3s;
+}
+
+/* Base highlight overlay */
+.highlight-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  border-radius: 4px;
+}
+
+/* Highlight style variations */
+.highlight-style-subtle .highlight-overlay {
+  opacity: var(--highlight-opacity-subtle);
+}
+
+.highlight-style-standard .highlight-overlay {
+  opacity: var(--highlight-opacity-standard);
+}
+
+.highlight-style-vivid .highlight-overlay {
+  opacity: var(--highlight-opacity-vivid);
+}
+
+.highlight-style-minimal .highlight-overlay {
+  opacity: var(--highlight-opacity-minimal);
+}
+
+/* Check highlights */
+.highlight-check {
+  position: absolute;
+  inset: 0;
+  background: var(--highlight-check);
+  border-radius: 4px;
+  animation: check-pulse var(--highlight-pulse-duration) ease-in-out infinite alternate;
+}
+
+.highlight-check .check-indicator {
+  position: absolute;
+  inset: 2px;
+  border: 4px solid rgba(255, 0, 0, 1);
+  border-radius: 4px;
+  animation: check-border-pulse var(--highlight-animation-duration) ease-in-out infinite alternate;
+}
+
+.highlight-check .check-pulse {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 0, 0, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: check-radial-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes check-pulse {
+  0% { background: rgba(255, 0, 0, 0.6); }
+  100% { background: rgba(255, 0, 0, 0.9); }
+}
+
+@keyframes check-border-pulse {
+  0% { border-color: rgba(255, 0, 0, 0.8); transform: scale(1); }
+  100% { border-color: rgba(255, 0, 0, 1); transform: scale(1.05); }
+}
+
+@keyframes check-radial-pulse {
+  0% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0; transform: scale(1.4); }
+}
+
+/* Threat highlights */
+.highlight-threat {
+  position: absolute;
+  inset: 0;
+  background: var(--highlight-threat);
+  border-radius: 4px;
+}
+
+.highlight-threat .threat-indicator {
+  position: absolute;
+  inset: 0;
+  border: 3px dashed rgba(255, 165, 0, 1);
+  border-radius: 4px;
+  animation: threat-dash 2s linear infinite;
+}
+
+.highlight-threat .threat-warning {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 16px;
+  height: 16px;
+  background: rgba(255, 69, 0, 1);
+  border-radius: 50%;
+  animation: threat-warning-pulse 1s ease-in-out infinite alternate;
+}
+
+.highlight-threat .threat-warning::before {
+  content: '!';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+@keyframes threat-dash {
+  0% { border-offset: 0; }
+  100% { border-offset: 16px; }
+}
+
+@keyframes threat-warning-pulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.3); }
+}
+
+/* Pattern highlights */
+.highlight-pattern {
+  position: absolute;
+  inset: 0;
+  background: var(--highlight-pattern);
+  border-radius: 4px;
+}
+
+.highlight-pattern .pattern-indicator {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(138, 43, 226, 1);
+  border-radius: 4px;
+}
+
+.highlight-pattern .pattern-lines {
+  position: absolute;
+  inset: 4px;
+}
+
+.highlight-pattern .pattern-lines::before,
+.highlight-pattern .pattern-lines::after {
+  content: '';
+  position: absolute;
+  background: rgba(138, 43, 226, 0.8);
+}
+
+.highlight-pattern .pattern-lines::before {
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.highlight-pattern .pattern-lines::after {
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+/* Last move highlights */
+.highlight-last-move {
+  position: absolute;
+  inset: 0;
+  background: var(--highlight-last-move);
+  border-radius: 4px;
+}
+
+.highlight-last-move .last-move-indicator {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(255, 255, 0, 0.8);
+  border-radius: 4px;
+  animation: last-move-fade 3s ease-in-out;
+}
+
+@keyframes last-move-fade {
+  0% { opacity: 1; border-color: rgba(255, 255, 0, 1); }
+  70% { opacity: 1; border-color: rgba(255, 255, 0, 0.8); }
+  100% { opacity: 0.5; border-color: rgba(255, 255, 0, 0.4); }
+}
+
+/* Selection highlights */
+.highlight-selected {
+  position: absolute;
+  inset: 0;
+  background: var(--highlight-selected);
+  border-radius: 4px;
+}
+
+.highlight-selected .selection-border {
+  position: absolute;
+  inset: 0;
+  border: 3px solid rgba(0, 100, 200, 1);
+  border-radius: 4px;
+  animation: selection-glow var(--highlight-pulse-duration) ease-in-out infinite alternate;
+}
+
+.highlight-selected .selection-glow {
+  position: absolute;
+  inset: -4px;
+  border: 2px solid rgba(0, 100, 200, 0.3);
+  border-radius: 8px;
+  animation: selection-outer-glow var(--highlight-pulse-duration) ease-in-out infinite alternate;
+}
+
+@keyframes selection-glow {
+  0% { border-color: rgba(0, 100, 200, 0.8); }
+  100% { border-color: rgba(0, 100, 200, 1); }
+}
+
+@keyframes selection-outer-glow {
+  0% { 
+    border-color: rgba(0, 100, 200, 0.2); 
+    transform: scale(1); 
+  }
+  100% { 
+    border-color: rgba(0, 100, 200, 0.4); 
+    transform: scale(1.05); 
+  }
+}
+
+/* Valid move highlights */
+.highlight-valid-move {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.highlight-valid-move .valid-move-dot {
+  width: 35%;
+  height: 35%;
+  background: var(--highlight-valid-move);
+  border-radius: 50%;
+  animation: valid-move-pulse var(--highlight-pulse-duration) ease-in-out infinite;
+}
+
+@keyframes valid-move-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+/* Capture highlights */
+.highlight-capture {
+  position: absolute;
+  inset: 0;
+}
+
+.highlight-capture .capture-border {
+  position: absolute;
+  inset: 0;
+  border: 4px solid var(--highlight-capture);
+  border-radius: 8px;
+  background: transparent;
+  animation: capture-pulse 1.5s ease-in-out infinite;
+}
+
+.highlight-capture .capture-corners {
+  position: absolute;
+  inset: 2px;
+}
+
+.highlight-capture .corner {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--highlight-capture);
+}
+
+.highlight-capture .corner.top-left {
+  top: 0;
+  left: 0;
+  border-radius: 0 0 4px 0;
+}
+
+.highlight-capture .corner.top-right {
+  top: 0;
+  right: 0;
+  border-radius: 0 0 0 4px;
+}
+
+.highlight-capture .corner.bottom-left {
+  bottom: 0;
+  left: 0;
+  border-radius: 0 4px 0 0;
+}
+
+.highlight-capture .corner.bottom-right {
+  bottom: 0;
+  right: 0;
+  border-radius: 4px 0 0 0;
+}
+
+@keyframes capture-pulse {
+  0%, 100% {
+    opacity: 0.8;
+    border-width: 4px;
+  }
+  50% {
+    opacity: 1;
+    border-width: 6px;
+  }
+}
+
+/* Generic highlight */
+.highlight-overlay .generic-highlight-indicator {
+  position: absolute;
+  inset: 2px;
+  border: 2px solid rgba(128, 128, 128, 0.8);
+  border-radius: 4px;
+  background: rgba(128, 128, 128, 0.3);
+}
+
+/* Intensity variations */
+.highlight-intensity-low {
+  opacity: 0.4;
+}
+
+.highlight-intensity-medium {
+  opacity: 0.6;
+}
+
+.highlight-intensity-high {
+  opacity: 0.9;
+}
+
+/* Multi-highlight overlay */
+.multi-highlight-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Focus mode adaptations */
+.highlight-focus-tournament .highlight-overlay {
+  opacity: 0.3;
+  animation-duration: 0s; /* Disable animations in tournament mode */
+}
+
+.highlight-focus-tournament .highlight-pattern,
+.highlight-focus-tournament .highlight-threat {
+  display: none; /* Hide complex highlights in tournament mode */
+}
+
+.highlight-focus-learning .highlight-overlay {
+  opacity: 0.8;
+  animation-duration: calc(var(--highlight-animation-duration) * 1.5);
+}
+
+.highlight-focus-analysis .highlight-overlay {
+  opacity: 0.7;
+}
+
+/* Theme-specific highlight colors */
+:root[data-theme="elegant"] {
+  --highlight-selected: rgba(139, 115, 85, 0.5);
+  --highlight-valid-move: rgba(76, 175, 80, 0.5);
+  --highlight-last-move: rgba(218, 165, 32, 0.4);
+}
+
+:root[data-theme="modern"] {
+  --highlight-selected: rgba(33, 150, 243, 0.4);
+  --highlight-valid-move: rgba(76, 175, 80, 0.6);
+  --highlight-capture: rgba(244, 67, 54, 0.8);
+}
+
+:root[data-theme="minimal"] {
+  --highlight-selected: rgba(33, 150, 243, 0.2);
+  --highlight-valid-move: rgba(76, 175, 80, 0.3);
+  --highlight-capture: rgba(244, 67, 54, 0.4);
+  --highlight-check: rgba(244, 67, 54, 0.3);
+}
+
+:root[data-theme="tournament"] {
+  --highlight-selected: rgba(33, 150, 243, 0.25);
+  --highlight-valid-move: rgba(76, 175, 80, 0.4);
+  --highlight-capture: rgba(244, 67, 54, 0.6);
+}
+
+:root[data-theme="conqueror"] {
+  --highlight-selected: rgba(255, 215, 0, 0.4);
+  --highlight-valid-move: rgba(50, 205, 50, 0.6);
+  --highlight-capture: rgba(255, 69, 0, 0.8);
+  --highlight-threat: rgba(255, 140, 0, 0.7);
+  --highlight-pattern: rgba(186, 85, 211, 0.6);
+}
+
+:root[data-theme="executive"] {
+  --highlight-selected: rgba(139, 69, 19, 0.4);
+  --highlight-valid-move: rgba(34, 139, 34, 0.5);
+  --highlight-capture: rgba(178, 34, 34, 0.7);
+  --highlight-last-move: rgba(218, 165, 32, 0.4);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  :root {
+    --highlight-animation-duration: 0.8s;
+    --highlight-pulse-duration: 1.5s;
+  }
+  
+  .highlight-overlay {
+    border-radius: 2px;
+  }
+  
+  .highlight-valid-move .valid-move-dot {
+    width: 40%;
+    height: 40%;
+  }
+  
+  .highlight-threat .threat-warning {
+    width: 12px;
+    height: 12px;
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .highlight-pattern .pattern-lines::before,
+  .highlight-pattern .pattern-lines::after {
+    display: none; /* Simplify pattern highlights on small screens */
+  }
+  
+  .highlight-capture .capture-corners .corner {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --highlight-check: rgba(255, 0, 0, 1);
+    --highlight-threat: rgba(255, 165, 0, 1);
+    --highlight-pattern: rgba(138, 43, 226, 1);
+    --highlight-selected: rgba(0, 0, 255, 0.8);
+    --highlight-valid-move: rgba(0, 255, 0, 0.8);
+    --highlight-capture: rgba(255, 0, 0, 1);
+  }
+  
+  .highlight-overlay {
+    border: 2px solid #000000;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .highlight-overlay,
+  .highlight-overlay * {
+    animation-duration: 0s !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .highlight-overlay {
+    opacity: 0.3 !important;
+    background: #cccccc !important;
+    border: 1px solid #000000 !important;
+  }
+  
+  .highlight-overlay * {
+    animation: none !important;
+    background: transparent !important;
+  }
+}

@@ -72,12 +72,8 @@ export function VSComputerPage(): React.ReactElement {
   };
 
   const handleMoveAttempt = async (move: { from: string; to: string; promotion?: string }) => {
-    console.log('Move attempt:', move, 'canMakeMove:', canMakeMove);
-    
-    if (move && move.from && move.to) {
-      console.log('Attempting move:', move.from, 'to', move.to);
+    if (move && move.from && move.to && canMakeMove) {
       const success = await makeMove(move.from, move.to, move.promotion);
-      console.log('Move result:', success);
       return success;
     }
     return false;
