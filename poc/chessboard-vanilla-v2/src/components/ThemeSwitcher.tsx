@@ -1,4 +1,3 @@
-import { useState, useEffect, useRef } from 'react'
 import { Settings, Sun, Moon, Zap, Crown, TreePine, Gem, Shield } from 'lucide-react'
 
 export type ThemeId = 'light' | 'dark' | 'cyber-neon' | 'cyber-neon-light' | 'dragon-gold' | 'dragon-gold-light' | 'shadow-knight' | 'shadow-knight-light' | 'forest-mystique' | 'forest-mystique-light' | 'royal-purple' | 'royal-purple-light'
@@ -162,62 +161,15 @@ export const baseThemes: BaseThemeConfig[] = [
 
 interface ThemeSwitcherProps {
   onOpenSettings: () => void
+  isSettingsOpen?: boolean
 }
 
-export function ThemeSwitcher({ onOpenSettings }: ThemeSwitcherProps) {
-  const [currentTheme, setCurrentTheme] = useState<ThemeId>('dark')
-  const currentThemeRef = useRef(currentTheme)
-  
-  // Keep ref in sync with state
-  useEffect(() => {
-    currentThemeRef.current = currentTheme
-  }, [currentTheme])
-
-  useEffect(() => {
-    // Load saved theme from localStorage
-    const saved = localStorage.getItem('chess-app-theme') as ThemeId
-    if (saved) {
-      setCurrentTheme(saved)
-    }
-  }, [])
-
-  useEffect(() => {
-    // Apply theme to document
-    const html = document.documentElement
-    
-    console.log('🎨 [THEME] Applying theme:', currentTheme)
-    
-    // Remove all theme classes
-    const themeClasses = ['dark', 'theme-cyber-neon', 'theme-cyber-neon-light', 'theme-dragon-gold', 'theme-dragon-gold-light', 'theme-shadow-knight', 'theme-shadow-knight-light', 'theme-forest-mystique', 'theme-forest-mystique-light', 'theme-royal-purple', 'theme-royal-purple-light']
-    themeClasses.forEach(cls => html.classList.remove(cls))
-    
-    // Add current theme class
-    if (currentTheme === 'dark') {
-      html.classList.add('dark')
-    } else if (currentTheme !== 'light') {
-      html.classList.add(`theme-${currentTheme}`)
-    }
-    
-    console.log('🎨 [THEME] Document classes:', Array.from(html.classList).join(', '))
-    
-    // Save to localStorage
-    localStorage.setItem('chess-app-theme', currentTheme)
-  }, [currentTheme])
-
-  // Expose theme functions globally so SettingsPanel can use them
-  useEffect(() => {
-    (window as any).__setTheme = (theme: ThemeId) => {
-      setCurrentTheme(theme)
-    }
-    (window as any).__getCurrentTheme = () => currentThemeRef.current
-    (window as any).__getThemes = () => themes
-    (window as any).__getCurrentThemeInfo = () => themes.find(t => t.id === currentThemeRef.current)
-  }, [])
+export function ThemeSwitcher({ onOpenSettings, isSettingsOpen = false }: ThemeSwitcherProps) {
 
   return (
     <button
       onClick={onOpenSettings}
-      className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-colors"
+      className={`flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-all ${isSettingsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       title="Change Theme"
     >
       <Settings className="w-5 h-5" />

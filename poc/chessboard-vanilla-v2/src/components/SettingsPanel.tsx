@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
-import { Settings, X } from 'lucide-react'
-import { themes, type ThemeId } from './ThemeSwitcher'
+import { Settings, X, Sun, Moon } from 'lucide-react'
+import { baseThemes, type BaseTheme } from './ThemeSwitcher'
+import { useTheme } from '../contexts/ThemeContext'
 
 interface SettingsPanelProps {
   isOpen: boolean
@@ -8,58 +8,22 @@ interface SettingsPanelProps {
 }
 
 export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
-  const [currentTheme, setCurrentTheme] = useState<ThemeId>('dark')
-  const [currentThemeInfo, setCurrentThemeInfo] = useState<any>(null)
+  const { isDarkMode, selectedBaseTheme, setBaseTheme, toggleMode } = useTheme()
 
-  // Update theme data when panel opens
-  useEffect(() => {
-    if (isOpen) {
-      // Try to get current theme from localStorage first
-      const savedTheme = localStorage.getItem('chess-app-theme') as ThemeId || 'dark'
-      const themeInfo = themes.find(t => t.id === savedTheme)
-      
-      setCurrentTheme(savedTheme)
-      setCurrentThemeInfo(themeInfo)
-      
-      // Also try global function if available
-      if (typeof window !== 'undefined' && (window as any).__getCurrentTheme) {
-        try {
-          const globalTheme = (window as any).__getCurrentTheme()
-          if (globalTheme && globalTheme !== savedTheme) {
-            setCurrentTheme(globalTheme)
-            setCurrentThemeInfo(themes.find(t => t.id === globalTheme))
-          }
-        } catch (e) {
-          console.log('Global theme function not ready yet, using localStorage')
-        }
-      }
-    }
-  }, [isOpen])
-
-  const handleThemeChange = (themeId: ThemeId) => {
-    // Use global theme setter
-    if (typeof window !== 'undefined' && (window as any).__setTheme) {
-      (window as any).__setTheme(themeId)
-    }
-    onClose()
+  const handleBaseThemeChange = (baseThemeId: BaseTheme) => {
+    setBaseTheme(baseThemeId)
+  }
+  
+  const handleModeToggle = () => {
+    toggleMode()
   }
 
   return (
-    <>
-      {/* Backdrop */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40" 
-          onClick={onClose}
-        />
-      )}
-
-      {/* Slide-out Panel */}
-      <div className={`
-        fixed top-0 right-0 h-full w-80 sm:w-96 bg-background/95 backdrop-blur-xl border-l border-border shadow-2xl z-50
-        transform transition-transform duration-300 ease-out
-        ${isOpen ? 'translate-x-0' : 'translate-x-full'}
-      `}>
+    <div className={`
+      fixed top-16 right-0 bottom-[84px] w-80 sm:w-96 bg-background/95 backdrop-blur-xl border-l border-border shadow-2xl z-[1100]
+      transform transition-transform duration-300 ease-out
+      ${isOpen ? 'translate-x-0' : 'translate-x-full'}
+    `}>
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-border">
@@ -75,29 +39,41 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
             </button>
           </div>
 
-          {/* Current Theme Display */}
-          <div className="p-4 border-b border-border">
-            <div className="flex items-center gap-3 p-3 bg-primary/10 rounded-lg border border-primary/20">
-              <div className={`w-10 h-10 rounded-full border-2 ${currentThemeInfo?.preview || 'bg-slate-900 border-slate-700'} flex items-center justify-center`}>
-                {(() => {
-                  const CurrentIcon = currentThemeInfo?.icon || Settings
-                  return <CurrentIcon className="w-5 h-5" />
-                })()}
-              </div>
-              <div>
-                <div className="text-sm font-medium text-foreground">
-                  {currentThemeInfo?.name || 'Current Theme'}
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  {currentThemeInfo?.description || 'Active theme'}
-                </div>
+          {/* Settings Content */}
+          <div className="flex-1 overflow-y-auto p-4 pb-20 space-y-6">
+            
+            {/* Light/Dark Mode Toggle */}
+            <div>
+              <h3 className="text-base font-semibold text-foreground mb-3 flex items-center gap-2">
+                <Settings className="w-4 h-4" />
+                Brightness
+              </h3>
+              <div className="flex items-center justify-center p-1 bg-muted/30 rounded-lg border border-border">
+                <button
+                  onClick={handleModeToggle}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all flex-1 justify-center ${
+                    !isDarkMode 
+                      ? 'bg-primary text-primary-foreground shadow-md' 
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                  }`}
+                >
+                  <Sun className="w-4 h-4" />
+                  <span className="text-sm font-medium">Light</span>
+                </button>
+                <button
+                  onClick={handleModeToggle}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all flex-1 justify-center ${
+                    isDarkMode 
+                      ? 'bg-primary text-primary-foreground shadow-md' 
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                  }`}
+                >
+                  <Moon className="w-4 h-4" />
+                  <span className="text-sm font-medium">Dark</span>
+                </button>
               </div>
             </div>
-          </div>
 
-          {/* Settings Content */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-6">
-            
             {/* Theme Section */}
             <div>
               <h3 className="text-base font-semibold text-foreground mb-3 flex items-center gap-2">
@@ -105,14 +81,15 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                 Theme
               </h3>
               <div className="grid grid-cols-2 gap-3">
-              {themes.map((theme) => {
-                const isActive = currentTheme === theme.id
-                const ThemeIcon = theme.icon
+              {baseThemes.map((baseTheme) => {
+                const isActive = selectedBaseTheme === baseTheme.id
+                const ThemeIcon = baseTheme.icon
+                const preview = isDarkMode ? baseTheme.darkPreview : baseTheme.lightPreview
                 
                 return (
                   <button
-                    key={theme.id}
-                    onClick={() => handleThemeChange(theme.id)}
+                    key={baseTheme.id}
+                    onClick={() => handleBaseThemeChange(baseTheme.id)}
                     className={`
                       flex flex-col items-center gap-3 p-4 rounded-xl border transition-all
                       ${isActive 
@@ -121,12 +98,12 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                       }
                     `}
                   >
-                    <div className={`w-12 h-12 rounded-full border-2 ${theme.preview} flex items-center justify-center`}>
+                    <div className={`w-12 h-12 rounded-full border-2 ${preview} flex items-center justify-center`}>
                       <ThemeIcon className="w-6 h-6" />
                     </div>
                     <div className="text-center">
-                      <div className="text-sm font-medium">{theme.name}</div>
-                      <div className="text-xs opacity-70 leading-tight mt-1">{theme.description}</div>
+                      <div className="text-sm font-medium">{baseTheme.name}</div>
+                      <div className="text-xs opacity-70 leading-tight mt-1">{baseTheme.description}</div>
                     </div>
                   </button>
                 )
@@ -151,7 +128,6 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
             </div>
           </div>
         </div>
-      </div>
-    </>
+    </div>
   )
 }

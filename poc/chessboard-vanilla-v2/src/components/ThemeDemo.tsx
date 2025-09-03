@@ -26,7 +26,7 @@ export function ThemeDemo() {
               <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
                 Select Theme
               </h3>
-              <ThemeSwitcher />
+              <ThemeSwitcher onOpenSettings={() => {}} />
             </div>
           </div>
           
