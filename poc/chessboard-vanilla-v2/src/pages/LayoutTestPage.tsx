@@ -1,5 +1,4 @@
 import React from 'react'
-import { Layout } from 'lucide-react'
 
 export const LayoutTestPage: React.FC = () => {
   return (

@@ -45,17 +45,22 @@ export function AppLayout({ children }: { children: ReactNode }) {
 #### Key Implementation - Header:
 ```typescript
 // src/components/layout/Header.tsx
+import { Crown } from 'lucide-react'
+import { ThemeSwitcher } from '../ThemeSwitcher'
+
 export function Header() {
   return (
-    <header className="relative z-20 glass border-b border-white/10">
+    <header className="relative z-20 glass border-b border-border">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="text-2xl">♕</div>
+            <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
+              <Crown className="w-5 h-5 text-primary" />
+            </div>
             <h1 className="text-xl font-semibold text-foreground">
               Responsive Chessboard
             </h1>
-            <span className="bg-primary/20 text-primary px-2 py-1 rounded-lg text-xs font-medium">
+            <span className="bg-muted text-muted-foreground px-2 py-1 rounded-lg text-xs font-medium border border-border">
               POC
             </span>
           </div>
@@ -70,17 +75,22 @@ export function Header() {
 #### Key Implementation - AppLayout with TabBar:
 ```typescript
 // src/components/layout/AppLayout.tsx
-export function AppLayout({ 
-  children, 
-  currentTab, 
-  onTabChange 
-}: { 
+import type { ReactNode } from 'react'
+import { BackgroundEffects } from './BackgroundEffects'
+import { Header } from './Header'
+import { MainContent } from './MainContent'
+import { TabBar } from './TabBar'
+import type { TabId } from './types'
+
+interface AppLayoutProps {
   children: ReactNode
   currentTab: TabId
   onTabChange: (tab: TabId) => void
-}) {
+}
+
+export function AppLayout({ children, currentTab, onTabChange }: AppLayoutProps) {
   return (
-    <div className="min-h-screen bg-gaming-gradient">
+    <div className="min-h-screen bg-background text-foreground">
       <BackgroundEffects />
       <Header />
       <MainContent>
@@ -94,9 +104,16 @@ export function AppLayout({
 
 #### Key Implementation - App.tsx:
 ```typescript
-// Clean app structure using layout components
+// src/App.tsx
+import { useState } from 'react'
+import { AppLayout } from './components/layout'
+import type { TabId } from './components/layout'
+import { DragTestPage, LayoutTestPage, WorkerTestPage } from './pages'
+import { DragProvider, useDrag } from './providers/DragProvider'
+import { DraggedPiece } from './components/DraggedPiece'
+
 function AppContent() {
-  const [currentPage, setCurrentPage] = useState<TabId>('worker')
+  const [currentPage, setCurrentPage] = useState<TabId>('layout')
   const { draggedPiece, cursorPosition } = useDrag()
 
   return (
@@ -105,6 +122,7 @@ function AppContent() {
       onTabChange={setCurrentPage}
     >
       {/* Page routing */}
+      {currentPage === 'layout' && <LayoutTestPage />}
       {currentPage === 'worker' && <WorkerTestPage />}
       {currentPage === 'drag' && <DragTestPage />}
       
@@ -119,19 +137,171 @@ function AppContent() {
     </AppLayout>
   )
 }
+
+function App() {
+  return (
+    <DragProvider>
+      <AppContent />
+    </DragProvider>
+  )
+}
+
+export default App
+```
+
+#### Key Implementation - BackgroundEffects:
+```typescript
+// src/components/layout/BackgroundEffects.tsx
+import { useEffect, useState } from 'react'
+
+export function BackgroundEffects({ className = '' }: { className?: string }) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+
+  return (
+    <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
+      {/* Full-screen theme gradient background */}
+      <div className="absolute inset-0 bg-theme-gradient" />
+      
+      {/* Floating Orbs - Gaming Style */}
+      <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-blue-600/30 rounded-full blur-sm animate-pulse-glow animate-drift animation-delay-500" />
+      <div className="absolute top-40 right-32 w-24 h-24 bg-gradient-to-br from-green-400/20 to-green-600/30 rounded-full blur-sm animate-pulse-glow animate-hover animation-delay-1000" />
+      
+      {/* Floating Chess Pieces */}
+      <div className="absolute top-1/4 left-1/4 text-8xl text-gray-700/15 dark:text-white/25 animate-float animation-delay-100">♛</div>
+      <div className="absolute top-1/3 right-1/3 text-7xl text-gray-700/20 dark:text-white/30 animate-float animation-delay-500">♔</div>
+      
+      {/* Sparkle Effects */}
+      <div className="absolute top-1/4 right-1/4 w-2 h-2 bg-gray-700 dark:bg-white rounded-full animate-twinkle animation-delay-100" />
+      <div className="absolute top-1/3 left-1/3 w-1.5 h-1.5 bg-gray-700 dark:bg-white rounded-full animate-twinkle animation-delay-500" />
+    </div>
+  )
+}
+```
+
+#### Key Implementation - ThemeSwitcher:
+```typescript
+// src/components/ThemeSwitcher.tsx
+import { useState, useEffect } from 'react'
+import { Sun, Moon } from 'lucide-react'
+
+type ThemeId = 'light' | 'dark'
+
+export function ThemeSwitcher() {
+  const [currentTheme, setCurrentTheme] = useState<ThemeId>('dark')
+
+  useEffect(() => {
+    // Load saved theme from localStorage
+    const saved = localStorage.getItem('chess-app-theme') as ThemeId
+    if (saved && ['light', 'dark'].includes(saved)) {
+      setCurrentTheme(saved)
+    }
+  }, [])
+
+  useEffect(() => {
+    // Apply theme to document
+    const html = document.documentElement
+    html.classList.remove('dark')
+    
+    if (currentTheme === 'dark') {
+      html.classList.add('dark')
+    }
+    
+    localStorage.setItem('chess-app-theme', currentTheme)
+  }, [currentTheme])
+
+  return (
+    <button
+      onClick={() => setCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')}
+      className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-colors"
+      title={`Switch to ${currentTheme === 'light' ? 'dark' : 'light'} theme`}
+    >
+      {currentTheme === 'light' ? (
+        <>
+          <Moon className="w-4 h-4" />
+          <span className="text-sm">Dark</span>
+        </>
+      ) : (
+        <>
+          <Sun className="w-4 h-4" />
+          <span className="text-sm">Light</span>
+        </>
+      )}
+    </button>
+  )
+}
 ```
 
 #### Integration Points:
 - `src/components/layout/` - All layout components including TabBar
-- `src/components/ThemeSwitcher.tsx` - Theme switching functionality
-- `src/pages/` - Page components
+- `src/components/ThemeSwitcher.tsx` - Advanced theme switching with localStorage persistence
+- `src/pages/` - Page components (LayoutTestPage, WorkerTestPage, DragTestPage)
 - `src/providers/DragProvider` - Drag context
+- `src/index.css` - Comprehensive CSS custom properties and gaming themes
+
+#### Key Implementation - CSS Architecture:
+The application uses a comprehensive CSS custom properties system with multiple gaming themes:
+
+```css
+/* src/index.css - Base Theme Variables */
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --primary: #334155;
+  --border: #e2e8f0;
+  /* ... extensive theme variables ... */
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --primary: #64748b;
+  /* ... dark theme overrides ... */
+}
+
+/* Gaming Theme Support */
+.theme-cyber-neon { /* Neon blue gaming theme */ }
+.theme-dragon-gold { /* Gold medieval theme */ }
+.theme-shadow-knight { /* Blue knight theme */ }
+.theme-forest-mystique { /* Green forest theme */ }
+.theme-royal-purple { /* Purple royal theme */ }
+
+/* Gaming Component Styles */
+.glass {
+  backdrop-filter: blur(24px);
+  background-color: color-mix(in srgb, var(--card) 80%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 20%, transparent);
+}
+
+.btn-gaming-primary {
+  background: linear-gradient(135deg, #0099ff, #ff6600);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 0 20px #0099ff40;
+  /* ... gaming button styles ... */
+}
+
+/* Advanced Animations */
+@keyframes pulse-glow { /* Floating orb animations */ }
+@keyframes float { /* Chess piece floating */ }
+@keyframes twinkle { /* Sparkle effects */ }
+```
+
+#### CSS Layer Architecture:
+- `@layer base` - Theme variables and base styles
+- `@layer components` - Gaming components (buttons, cards, glass effects)
+- `@layer utilities` - Animation delays and gaming utilities
 
 #### Critical Lessons Learned:
 1. **Use semantic HTML**: `<header>`, `<main>` instead of generic divs
 2. **Proper React Fragments**: Use `<>` instead of wrapper divs when possible
 3. **Global drag overlay**: DraggedPiece must be outside main content for z-index
-4. **Bottom padding**: Add space for fixed tab bar (80px)
+4. **Bottom padding**: Add space for fixed tab bar (84px)
+5. **Lucide React icons**: Use proper icon components instead of Unicode symbols
+6. **CSS custom properties**: Comprehensive theme system with gaming variants
 
 ---
 
@@ -221,26 +391,81 @@ export const WorkerTestPage: React.FC = () => {
 
 #### Key Implementation:
 ```typescript
-export type TabId = 'worker' | 'drag';
+// src/components/layout/TabBar.tsx
+import { Layout, Settings, Target } from 'lucide-react'
+import type { TabId } from './types'
 
-export const TabBar: React.FC<TabBarProps> = ({ currentTab, onTabChange }) => {
+interface Tab {
+  id: TabId
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+  description: string
+}
+
+const tabs: Tab[] = [
+  {
+    id: 'layout',
+    label: 'Layout',
+    icon: Layout,
+    description: 'Background Test'
+  },
+  {
+    id: 'worker',
+    label: 'Stockfish',
+    icon: Settings,
+    description: 'Engine Testing'
+  },
+  {
+    id: 'drag',
+    label: 'Drag Test',
+    icon: Target,
+    description: 'Drag & Drop'
+  }
+]
+
+export function TabBar({ currentTab, onTabChange }: TabBarProps) {
   return (
-    <div style={{
-      position: 'fixed',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      height: '84px',
-      background: 'linear-gradient(180deg, rgba(248, 250, 252, 0.8) 0%, rgba(248, 250, 252, 0.95) 100%)',
-      backdropFilter: 'blur(40px) saturate(180%)',
-      borderTop: '0.5px solid rgba(0, 0, 0, 0.05)',
-      zIndex: 1000,
-      boxShadow: '0 -1px 30px rgba(0, 0, 0, 0.08), 0 -1px 1px rgba(0, 0, 0, 0.05)'
-    }}>
-      {/* Tab buttons with iOS-style active states */}
+    <div className="fixed bottom-0 left-0 right-0 h-[84px] glass border-t border-border/20 z-[1000] shadow-gaming">
+      <div className="flex h-full">
+        {tabs.map((tab) => {
+          const isActive = currentTab === tab.id
+          const IconComponent = tab.icon
+          
+          return (
+            <button
+              key={tab.id}
+              onClick={() => onTabChange(tab.id)}
+              className={`
+                flex-1 flex flex-col items-center justify-center gap-1 py-2 border-none
+                bg-transparent cursor-pointer transition-all duration-300 text-xs font-medium
+                ${isActive 
+                  ? 'bg-foreground/10 text-foreground -translate-y-1 shadow-lg border-t-2 border-foreground/50' 
+                  : 'text-muted-foreground hover:text-foreground hover:bg-foreground/5 hover:-translate-y-0.5'
+                }
+              `}
+            >
+              <IconComponent className={`w-6 h-6 mb-1 transition-all duration-300 ${isActive ? 'scale-110' : ''}`} />
+              <span className="leading-tight font-medium">
+                {tab.label}
+              </span>
+              {isActive && (
+                <span className="text-[10px] opacity-70 font-normal -mt-0.5">
+                  {tab.description}
+                </span>
+              )}
+            </button>
+          )
+        })}
+      </div>
     </div>
-  );
-};
+  )
+}
+```
+
+#### Type Definition:
+```typescript
+// src/components/layout/types.ts
+export type TabId = 'layout' | 'worker' | 'drag'
 ```
 
 #### Active State Styling:
@@ -630,20 +855,22 @@ const { startDrag, updateCursor, endDrag, clearDrag, setMoveHandler } = useDrag(
 - [x] Hot Module Replacement working
 
 ### 📋 Implementation Order for Rebuild:
-1. **Phase 1**: Set up clean App.tsx structure with semantic HTML
-2. **Phase 2**: Create page components with React Fragments, no wrapper divs
-3. **Phase 3**: Implement iPad-style TabBar with authentic iOS styling
-4. **Phase 4**: Enhance TestBoard with two pieces and capture mechanics
-5. **Phase 5**: Apply all critical bug fixes from lessons learned
-6. **Phase 6**: Test build system, HMR, and all functionality
+1. **Phase 1**: Set up clean App.tsx structure with DragProvider and semantic layout
+2. **Phase 2**: Create layout components (AppLayout, Header, MainContent, TabBar, BackgroundEffects)
+3. **Phase 3**: Implement comprehensive CSS theme system with gaming styles
+4. **Phase 4**: Create page components (LayoutTestPage, WorkerTestPage, DragTestPage) with React Fragments
+5. **Phase 5**: Enhance TestBoard with two pieces and capture mechanics
+6. **Phase 6**: Apply all critical bug fixes and test build system
 
 ### 🎯 Key Success Metrics:
-- Pages render without wrapper divs
-- iPad-style tab bar with proper iOS styling
+- Pages render without wrapper divs using React Fragments
+- Modern TabBar with Lucide React icons and proper Tailwind styling  
+- Comprehensive theme system with light/dark modes and 5+ gaming themes
 - Drag and drop works with visual capture feedback
 - Reset functionality restores initial state
 - Build completes without TypeScript errors
-- Professional, maintainable code structure
+- Professional, maintainable code structure with proper TypeScript interfaces
+- Gaming-style visual effects with floating chess pieces and animated orbs
 
 ---
 

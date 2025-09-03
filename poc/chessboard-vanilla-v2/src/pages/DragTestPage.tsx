@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Mouse, Grid3X3, RotateCcw, Trash2 } from 'lucide-react'
+import { Grid3X3, RotateCcw, Trash2 } from 'lucide-react'
 import { TestBoard } from '../components/TestBoard'
 import type { ChessPosition } from '../types'
 
