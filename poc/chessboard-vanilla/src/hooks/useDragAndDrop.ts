@@ -94,7 +94,7 @@ export const useDragAndDrop = (
           const deltaY = toRect.top - fromRect.top;
           
           pieceElement.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-          pieceElement.style.zIndex = '1000';
+          pieceElement.style.zIndex = '10000';
         }
       }
       
@@ -142,18 +142,16 @@ export const useDragAndDrop = (
     const targetSquares = getValidTargetSquares(sourceSquare);
     setValidDropTargets(targetSquares);
     
-    // Add drag animation class if enabled
-    if (animationConfig?.enabled) {
-      const pieceElement = document.querySelector(`[data-position="${position}"] .chessboard-piece`);
-      if (pieceElement && pieceElement instanceof HTMLElement) {
-        pieceElement.classList.add('dragging');
-      }
+    // Add drag styling class - always add for drag feedback
+    const pieceElement = document.querySelector(`[data-position="${position}"] .chessboard-piece`);
+    if (pieceElement && pieceElement instanceof HTMLElement) {
+      pieceElement.classList.add('dragging');
     }
   }, [gameState, getValidTargetSquares, isAnimating, animationConfig]);
 
   const handleDragEnd = useCallback(() => {
-    // Remove drag animation classes
-    if (animationConfig?.enabled && dragDataRef.current) {
+    // Remove drag styling classes
+    if (dragDataRef.current) {
       const sourceSquare = dragDataRef.current.source;
       const pieceElement = document.querySelector(`[data-position="${sourceSquare}"] .chessboard-piece`);
       if (pieceElement && pieceElement instanceof HTMLElement) {

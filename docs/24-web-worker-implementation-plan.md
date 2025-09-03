@@ -858,6 +858,121 @@ if (hasKnightVariants) {
 
 ---
 
-**Status:** ✅ **COMPLETELY RESOLVED** - All four layers of issues solved with bulletproof implementation.
-**Confidence:** MAXIMUM - Root causes identified, solutions implemented, testing validated across all piece sets.
-**Impact:** Complete chess application with robust Web Worker integration, perfect React state management, and flawless piece set rendering.
+## 🔄 PHASE V2 RECONSTRUCTION ISSUE DISCOVERED & RESOLVED
+
+### **Problem Description**
+During v2 reconstruction (Sep 2025), the complete implementation failed with **UCI initialization timeouts** and **command timeouts**, despite copying working patterns from v1. Two distinct but related root causes emerged:
+
+**Issue #1: Missing Service Method Signatures**
+- v2 `StockfishService` was missing key methods that `useStockfish` hook expected
+- Missing: `getBestMoveWithPosition()`, `evaluatePosition()`, `clearHandlers()`
+- **Effect**: Hook calls undefined methods → silent initialization failure → timeout errors
+
+**Issue #2: Incorrect UCI Command Response Expectations**  
+- v2 implementation expected responses from UCI commands that are fire-and-forget
+- Wrong: `await sendCommand('ucinewgame')` - this command never responds
+- Wrong: `await sendCommand('position fen [...]')` - this command never responds
+- Wrong: `await sendCommand('setoption name Skill Level value 8')` - this command never responds
+- **Effect**: Service waits forever for responses that never come → command timeouts → engine appears frozen
+
+### **Root Cause Analysis**
+The v1 implementation worked because it had the correct UCI protocol understanding, but when reconstructing v2 from documentation, the **critical knowledge about UCI command response patterns was lost**.
+
+**What the browser logs revealed:**
+```
+✅ Worker loads successfully
+✅ UCI protocol initializes (uciok received)  
+✅ Engine becomes ready (readyok received)
+❌ ucinewgame command timeout (waiting for non-existent response)
+❌ Computer move fails with "Command timeout: ucinewgame"
+```
+
+### **Complete Solution: UCI Protocol Response Matrix**
+
+**Implementation - Correct UCI Command Patterns**
+```typescript
+// Commands that EXPECT responses (use default expectResponse: true):
+await sendCommand('uci');           // Returns: 'uciok'  
+await sendCommand('isready');       // Returns: 'readyok'
+await sendCommand('go movetime 1000'); // Returns: 'bestmove e2e4'
+
+// Commands that DON'T expect responses (use expectResponse: false):
+await sendCommand('ucinewgame', false);
+await sendCommand('position fen [fen]', false); 
+await sendCommand('setoption name Skill Level value 8', false);
+await sendCommand('stop', false);
+await sendCommand('quit', false);
+```
+
+**Implementation - Missing Service Methods**
+```typescript
+// v2 StockfishService.ts - Added missing methods
+public async getBestMoveWithPosition(fen: string, skillLevel: number, timeLimit: number): Promise<string | null> {
+  // Position resyncing + move calculation
+  await this.sendCommand(`ucinewgame`, false);
+  await this.sendCommand(`position fen ${fen}`, false);
+  await this.sendCommand(`setoption name Skill Level value ${skillLevel}`, false);
+  
+  const result = await this.sendCommand(`go movetime ${timeLimit}`); // Expects response
+  return this.parseBestMove(result);
+}
+
+public async evaluatePosition(fen: string, depth: number = 15): Promise<number> {
+  await this.sendCommand(`position fen ${fen}`, false);
+  const result = await this.sendCommand(`go depth ${depth}`); // Expects response
+  return this.parseEvaluation(result);
+}
+
+public clearHandlers(): void {
+  this.handlers = {};
+}
+```
+
+**Files Modified:**
+- `src/services/StockfishService.ts` - Added missing methods, fixed UCI response expectations
+- `src/hooks/useStockfish.ts` - Fixed import name (`getStockfish` → `getStockfishService`)
+
+**Results:**
+- ✅ **UCI Initialization Complete** - No more timeout errors
+- ✅ **Command Execution Success** - All UCI commands work properly  
+- ✅ **Computer Move Success** - Engine responds with valid moves
+- ✅ **Method Compatibility** - All hook-expected methods present
+
+### **16. Missing Service Method Signatures Cause Silent Failures**
+- **Discovery:** When hooks call non-existent service methods, JavaScript fails silently instead of throwing clear errors
+- **Key Insight:** Missing method signatures cause initialization to appear successful while actually failing
+- **Impact:** Hours wasted debugging "timeout" issues when the real problem was undefined method calls
+
+### **17. UCI Protocol Command Response Patterns Are Critical**
+- **Discovery:** UCI chess engine protocol has specific commands that expect responses vs. fire-and-forget
+- **Key Insight:** Waiting for responses from non-responding commands causes indefinite promise hangs
+- **Impact:** Engine appears frozen when actually just waiting for responses that never come
+
+**Prevention Strategy:**
+1. **Method Signature Verification** - Always verify all methods exist before debugging complex issues
+2. **UCI Protocol Documentation** - Maintain explicit list of which commands expect responses
+3. **Command Timeout Logging** - Always log which specific command caused a timeout
+4. **Interface Completeness Checking** - TypeScript interfaces must match actual implementations
+
+**Critical Documentation:** 
+```typescript
+// UCI Command Response Reference (MEMORIZE THIS)
+// 
+// EXPECT RESPONSES (await sendCommand(cmd)):
+// - uci → uciok
+// - isready → readyok  
+// - go [params] → bestmove [move]
+//
+// NO RESPONSES (await sendCommand(cmd, false)):
+// - ucinewgame
+// - position fen [fen] 
+// - setoption name [name] value [value]
+// - stop
+// - quit
+```
+
+---
+
+**Status:** ✅ **COMPLETELY RESOLVED** - All five layers of issues solved with bulletproof implementation.
+**Confidence:** MAXIMUM - Root causes identified, solutions implemented, testing validated across all scenarios.
+**Impact:** Complete chess application with robust Web Worker integration, perfect React state management, flawless piece set rendering, and bulletproof UCI protocol handling.

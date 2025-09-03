@@ -118,7 +118,8 @@ export const Piece: React.FC<PieceProps> = React.memo(({
   }, [cssVariables, animationConfig]);
 
   const handleDragStart = useCallback((e: React.DragEvent) => {
-    onDragStart?.(piece, positionToSquare(piece.position));
+    const positionString = positionToSquare(piece.position);
+    onDragStart?.(piece, positionString);
     e.dataTransfer.effectAllowed = 'move';
     
     // Add drag styling

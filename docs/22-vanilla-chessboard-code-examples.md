@@ -17,7 +17,11 @@ export type PieceType = 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn'
 export type File = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h';
 export type Rank = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
-export interface ChessPosition {
+// ChessPosition as string type for compatibility with chess.js and string methods
+export type ChessPosition = string;
+
+// Helper interface for position object form when needed
+export interface ChessPositionObject {
   readonly file: File;
   readonly rank: Rank;
 }
@@ -26,7 +30,7 @@ export interface ChessPiece {
   readonly id: string;
   readonly type: PieceType;
   readonly color: PieceColor;
-  readonly position: ChessPosition;
+  readonly position: ChessPositionObject;
 }
 
 export interface ChessMove {
@@ -34,6 +38,7 @@ export interface ChessMove {
   readonly to: ChessPosition;
   readonly piece: ChessPiece;
   readonly capturedPiece?: ChessPiece;
+  readonly captured?: ChessPiece; // Alternative property name for compatibility
   readonly promotion?: PieceType;
   readonly isCheck: boolean;
   readonly isCheckmate: boolean;
@@ -150,13 +155,13 @@ export interface DraggedPieceProps {
 
 ```typescript
 // chess.utils.ts - Core chess utilities
-import { ChessPosition, File, Rank } from '../types';
+import { ChessPosition, ChessPositionObject, File, Rank } from '../types';
 
-export const positionToSquare = (position: ChessPosition): string => {
+export const positionToSquare = (position: ChessPositionObject): string => {
   return `${position.file}${position.rank}`;
 };
 
-export const squareToPosition = (square: string): ChessPosition => {
+export const squareToPosition = (square: string): ChessPositionObject => {
   if (square.length !== 2) {
     throw new Error(`Invalid square format: ${square}`);
   }
