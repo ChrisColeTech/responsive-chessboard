@@ -1,20 +1,44 @@
-import React, { useState } from 'react'
-import { CheckCircle, XCircle, Clock, Zap, Brain, TrendingUp } from 'lucide-react'
+import React, { useState, useCallback } from 'react'
+import { CheckCircle, XCircle, Clock, Zap, Brain, TrendingUp, Cpu } from 'lucide-react'
 import { useStockfish } from '../hooks/useStockfish'
+import { useTheme } from '../stores/appStore'
 
 export const WorkerTestPage: React.FC = () => {
   const { isReady, isThinking, skillLevel, setSkillLevel, requestMove, evaluatePosition, error } = useStockfish()
+  const { currentTheme, selectedBaseTheme } = useTheme()
   const [testResults, setTestResults] = useState<string[]>([])
   const [lastMove, setLastMove] = useState<string>('')
   const [responseTime, setResponseTime] = useState<number>(0)
   const [evaluation, setEvaluation] = useState<string>('')
+  const [isTestingReady, setIsTestingReady] = useState(false)
+  const [isTestingSpeed, setIsTestingSpeed] = useState(false)
+  const [isTestingPosition, setIsTestingPosition] = useState(false)
 
   const addTestResult = (message: string) => {
     setTestResults(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`])
   }
 
-  const testGoodMove = async () => {
-    addTestResult("Asking chess computer for a good opening move...")
+  const testWorkerReady = useCallback(async () => {
+    setIsTestingReady(true)
+    addTestResult("🔍 Testing if worker is ready...")
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 500)) // Visual delay for feedback
+      if (isReady) {
+        addTestResult("✅ Worker is ready and responsive!")
+      } else {
+        addTestResult("❌ Worker not ready yet")
+      }
+    } catch (err) {
+      addTestResult("❌ Worker readiness test failed")
+    } finally {
+      setIsTestingReady(false)
+    }
+  }, [isReady])
+
+  const testGoodMove = useCallback(async () => {
+    setIsTestingPosition(true)
+    addTestResult("🎯 Asking chess computer for a good opening move...")
     const startTime = Date.now()
     
     try {
@@ -25,45 +49,62 @@ export const WorkerTestPage: React.FC = () => {
       if (move) {
         setLastMove(move)
         setResponseTime(time)
-        addTestResult(`✅ Computer suggests: Move ${move} (${time}ms)`)
+        addTestResult(`✅ Computer suggests: ${move} (${time}ms)`)
       } else {
         addTestResult("❌ Computer couldn't suggest a move")
       }
     } catch (err) {
       addTestResult("❌ Error asking for move")
+    } finally {
+      setIsTestingPosition(false)
     }
-  }
+  }, [requestMove])
 
-  const testSpeed = async () => {
-    addTestResult("Testing how fast the computer thinks...")
+  const testSpeed = useCallback(async () => {
+    setIsTestingSpeed(true)
+    addTestResult("⚡ Testing response speed with 500ms limit...")
     const startTime = Date.now()
     
     try {
       await requestMove("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1", 500)
       const time = Date.now() - startTime
       setResponseTime(time)
-      addTestResult(`✅ Computer responded in ${time}ms`)
+      const speedRating = time < 700 ? "Fast ⚡" : time < 1500 ? "Good ⭐" : "Slow 🐌"
+      addTestResult(`✅ Response: ${time}ms (${speedRating})`)
     } catch (err) {
       addTestResult("❌ Speed test failed")
+    } finally {
+      setIsTestingSpeed(false)
     }
-  }
+  }, [requestMove])
 
-  const testPosition = async () => {
-    addTestResult("Asking computer if this is a good position...")
+  const testPosition = useCallback(async () => {
+    setIsTestingPosition(true)
+    addTestResult("📊 Evaluating starting chess position...")
     
     try {
       // Starting position
       const score = await evaluatePosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
-      const evaluation = score > 0 ? `White is better (+${score.toFixed(1)})` : 
-                        score < 0 ? `Black is better (${score.toFixed(1)})` : 
-                        "Position is equal (0.0)"
+      const evaluation = score > 0 ? `White advantage (+${score.toFixed(1)})` : 
+                        score < 0 ? `Black advantage (${score.toFixed(1)})` : 
+                        "Equal position (0.0)"
       
       setEvaluation(evaluation)
       addTestResult(`✅ ${evaluation}`)
     } catch (err) {
       addTestResult("❌ Position evaluation failed")
+    } finally {
+      setIsTestingPosition(false)
     }
-  }
+  }, [evaluatePosition])
+
+  const clearResults = useCallback(() => {
+    setTestResults([])
+    setLastMove('')
+    setResponseTime(0)
+    setEvaluation('')
+    addTestResult("🧹 Results cleared")
+  }, [])
 
   const getSkillDescription = (level: number) => {
     if (level <= 2) return "Beginner (learning the rules)"

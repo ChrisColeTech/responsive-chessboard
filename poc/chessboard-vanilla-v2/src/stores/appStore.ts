@@ -15,6 +15,14 @@ interface AppState {
   // Settings
   isSettingsPanelOpen: boolean
   
+  // Audio settings
+  audioEnabled: boolean
+  audioVolume: number
+  moveSound: boolean
+  captureSound: boolean
+  checkSound: boolean
+  uiSounds: boolean
+  
   // UI State
   lastVisited: Date
 }
@@ -33,6 +41,15 @@ interface AppActions {
   closeSettings: () => void
   toggleSettings: () => void
   
+  // Audio actions
+  setAudioEnabled: (enabled: boolean) => void
+  setAudioVolume: (volume: number) => void
+  setMoveSound: (enabled: boolean) => void
+  setCaptureSound: (enabled: boolean) => void
+  setCheckSound: (enabled: boolean) => void
+  setUiSounds: (enabled: boolean) => void
+  toggleAudio: () => void
+  
   // Utility actions
   reset: () => void
 }
@@ -45,6 +62,12 @@ const initialState: AppState = {
   isDarkMode: true,
   selectedBaseTheme: 'default',
   isSettingsPanelOpen: false,
+  audioEnabled: true,
+  audioVolume: 0.7,
+  moveSound: true,
+  captureSound: true,
+  checkSound: true,
+  uiSounds: true,
   lastVisited: new Date(),
 }
 
@@ -123,6 +146,15 @@ export const useAppStore = create<AppStore>()(
       closeSettings: () => set({ isSettingsPanelOpen: false }),
       toggleSettings: () => set((state) => ({ isSettingsPanelOpen: !state.isSettingsPanelOpen })),
       
+      // Audio actions
+      setAudioEnabled: (enabled) => set({ audioEnabled: enabled }),
+      setAudioVolume: (volume) => set({ audioVolume: Math.max(0, Math.min(1, volume)) }),
+      setMoveSound: (enabled) => set({ moveSound: enabled }),
+      setCaptureSound: (enabled) => set({ captureSound: enabled }),
+      setCheckSound: (enabled) => set({ checkSound: enabled }),
+      setUiSounds: (enabled) => set({ uiSounds: enabled }),
+      toggleAudio: () => set((state) => ({ audioEnabled: !state.audioEnabled })),
+      
       // Utility actions
       reset: () => set(initialState),
     }),
@@ -133,6 +165,12 @@ export const useAppStore = create<AppStore>()(
         currentTheme: state.currentTheme,
         isDarkMode: state.isDarkMode,
         selectedBaseTheme: state.selectedBaseTheme,
+        audioEnabled: state.audioEnabled,
+        audioVolume: state.audioVolume,
+        moveSound: state.moveSound,
+        captureSound: state.captureSound,
+        checkSound: state.checkSound,
+        uiSounds: state.uiSounds,
         lastVisited: new Date(),
       }),
       onRehydrateStorage: () => (state) => {
@@ -206,5 +244,38 @@ export const useSettings = () => {
     open,
     close,
     toggle,
+  }
+}
+
+export const useAudio = () => {
+  const audioEnabled = useAppStore((state) => state.audioEnabled)
+  const audioVolume = useAppStore((state) => state.audioVolume)
+  const moveSound = useAppStore((state) => state.moveSound)
+  const captureSound = useAppStore((state) => state.captureSound)
+  const checkSound = useAppStore((state) => state.checkSound)
+  const uiSounds = useAppStore((state) => state.uiSounds)
+  
+  const setAudioEnabled = useAppStore((state) => state.setAudioEnabled)
+  const setAudioVolume = useAppStore((state) => state.setAudioVolume)
+  const setMoveSound = useAppStore((state) => state.setMoveSound)
+  const setCaptureSound = useAppStore((state) => state.setCaptureSound)
+  const setCheckSound = useAppStore((state) => state.setCheckSound)
+  const setUiSounds = useAppStore((state) => state.setUiSounds)
+  const toggleAudio = useAppStore((state) => state.toggleAudio)
+  
+  return {
+    audioEnabled,
+    audioVolume,
+    moveSound,
+    captureSound,
+    checkSound,
+    uiSounds,
+    setAudioEnabled,
+    setAudioVolume,
+    setMoveSound,
+    setCaptureSound,
+    setCheckSound,
+    setUiSounds,
+    toggleAudio,
   }
 }

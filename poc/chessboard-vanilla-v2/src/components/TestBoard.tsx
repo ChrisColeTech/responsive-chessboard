@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import type { ChessPiece, ChessPosition } from '../types';
 import { PIECE_SETS, getPieceImagePath } from '../constants/pieces.constants';
 import { useDrag } from '../providers';
+import { useChessAudio } from '../services/audioService';
 
 interface TestBoardProps {
   onSquareClick: (position: ChessPosition) => void;
@@ -30,27 +31,22 @@ const initialTestPieces: Record<string, ChessPiece> = {
   }
 };
 
-interface TestBoardProps {
-  onSquareClick: (position: ChessPosition) => void;
-  selectedSquare: ChessPosition | null;
-  validDropTargets: ChessPosition[];
-  onReset?: () => void;
-}
-
 export const TestBoard = ({ 
   onSquareClick, 
   selectedSquare, 
-  validDropTargets,
-  onReset 
+  validDropTargets
 }: TestBoardProps) => {
   const { startDrag, updateCursor, endDrag, clearDrag, setMoveHandler } = useDrag();
+  const { playMove, playError, playGameStart, preloadSounds } = useChessAudio();
   const [testPieces, setTestPieces] = useState(initialTestPieces);
-  const [capturedPieces, setCapturedPieces] = useState<ChessPiece[]>([]);
+  const [, setCapturedPieces] = useState<ChessPiece[]>([]);
 
   // Set up TestBoard's own simple move handler with delay to override main app
   useEffect(() => {
     const handleTestMove = async (move: { from: ChessPosition, to: ChessPosition }) => {
       console.log(`🧪 [TEST BOARD] Handling move: ${move.from} → ${move.to}`);
+      
+      let wasCapture = false;
       
       // Simple move logic for TestBoard
       setTestPieces(prevPieces => {
@@ -63,6 +59,7 @@ export const TestBoard = ({
           if (capturedPiece) {
             setCapturedPieces(prev => [...prev, capturedPiece]);
             console.log(`🧪 [TEST BOARD] Piece captured: ${capturedPiece.color} ${capturedPiece.type}`);
+            wasCapture = true;
           }
           
           // Move the piece
@@ -75,10 +72,16 @@ export const TestBoard = ({
             }
           };
           console.log(`🧪 [TEST BOARD] Move successful: piece moved to ${move.to}`);
+          
+          // Play sound effect after successful move
+          playMove(wasCapture);
+          
           return newPieces;
         }
         
         console.log(`🧪 [TEST BOARD] Move failed: no piece at ${move.from}`);
+        // Play error sound for failed move
+        playError();
         return prevPieces;
       });
       
@@ -92,13 +95,34 @@ export const TestBoard = ({
     }, 0);
     
     return () => clearTimeout(timer);
-  }, [setMoveHandler]);
+  }, [setMoveHandler, playMove, playError]);
+
+  // Initialize audio on first user interaction
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      console.log('🧪 [TEST BOARD] First user interaction - preloading sounds');
+      preloadSounds();
+      playGameStart(); // Welcome sound
+      
+      // Remove listeners after first interaction
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+    };
+
+    // Listen for first user interaction to enable audio
+    document.addEventListener('click', handleFirstInteraction, { once: true });
+    document.addEventListener('keydown', handleFirstInteraction, { once: true });
+
+    return () => {
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+    };
+  }, [preloadSounds, playGameStart]);
 
   // Reset function
   const handleReset = () => {
     setTestPieces(initialTestPieces);
     setCapturedPieces([]);
-    if (onReset) onReset();
     console.log('🧪 [TEST BOARD] Board reset to initial position');
   };
 
@@ -121,9 +145,14 @@ export const TestBoard = ({
     
     console.log(`🎯 [TEST BOARD] Mouse down: ${piece.color} ${piece.type} from ${square}`);
     
+    // Calculate current piece size for dragged piece matching
+    const pieceElement = e.target as HTMLImageElement;
+    const actualSize = Math.max(pieceElement.offsetWidth, pieceElement.offsetHeight);
+    console.log(`🎯 [TEST BOARD] Calculated piece size: ${actualSize}px`);
+    
     // Start drag with valid moves (for now, allow all other squares)
     const validMoves = squares.filter(s => s !== square) as ChessPosition[];
-    startDrag(piece, square as ChessPosition, validMoves);
+    startDrag(piece, square as ChessPosition, validMoves, actualSize);
     
     // Set up global mouse tracking
     const handleGlobalMouseMove = (moveEvent: MouseEvent) => {
@@ -204,155 +233,88 @@ export const TestBoard = ({
 
   return (
     <div style={{ 
-      display: 'flex',
-      flexDirection: 'column',
-      width: '100%',
-      maxWidth: '300px', // Reasonable max size
-      margin: '16px auto 0', // Center it
+      display: 'grid', 
+      gridTemplateColumns: 'repeat(2, 1fr)', 
+      gridTemplateRows: 'repeat(2, 1fr)',
+      width: '100%', // Fill parent container
+      height: '100%', // Fill parent container
       border: '2px solid #8B4513', 
-      borderRadius: '4px'
+      borderRadius: '4px',
+      boxSizing: 'border-box',
+      gap: '0'
     }}>
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(2, 1fr)', 
-        gridTemplateRows: 'repeat(2, 1fr)',
-        width: '100%',
-        aspectRatio: '1', // Keep it square
-        gap: '0'
-      }}>
-        {squares.map((square) => {
-          const piece = testPieces[square];
-          const isHighlighted = isSelected(square);
-          const isValidDrop = isValidTarget(square);
+      {squares.map((square) => {
+        const piece = testPieces[square];
+        const isHighlighted = isSelected(square);
+        const isValidDrop = isValidTarget(square);
 
-          return (
-            <div
-              key={square}
-              data-square={square} // Essential for drop detection
-              onClick={() => onSquareClick(square as ChessPosition)}
-              style={{
-                backgroundColor: getSquareColor(square),
-                border: isHighlighted ? '3px solid #4A90E2' : '1px solid #999',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: piece ? 'pointer' : 'default',
-                position: 'relative',
-                fontSize: '32px',
-                userSelect: 'none',
-                ...(isValidDrop && {
-                  boxShadow: 'inset 0 0 0 4px rgba(0, 255, 0, 0.6)'
-                })
-              }}
-            >
-              {piece && (
-                <img
-                  src={getPieceImagePath(piece.color, piece.type, STABLE_PIECE_SET)}
-                  alt={`${piece.color} ${piece.type}`}
-                  draggable={false} // No HTML5 drag - use mouse events only
-                  onMouseDown={(e) => handleMouseDown(e, piece, square)}
-                  style={{
-                    width: '70%',
-                    height: '70%',
-                    maxWidth: '60px',
-                    maxHeight: '60px',
-                    cursor: 'grab',
-                    userSelect: 'none',
-                    pointerEvents: 'auto'
-                  }}
-                  onError={(e) => {
-                    console.log(`Failed to load piece image: ${getPieceImagePath(piece.color, piece.type, STABLE_PIECE_SET)}`);
-                    // Fallback to Unicode if SVG fails to load
-                    (e.target as HTMLImageElement).style.display = 'none';
-                  }}
-                />
-              )}
-              
-              {/* Square label */}
-              <div style={{
-                position: 'absolute',
-                bottom: '2px',
-                right: '2px',
-                fontSize: '10px',
-                fontWeight: 'bold',
-                color: getSquareColor(square) === '#F0D9B5' ? '#8B4513' : '#F0D9B5',
-                pointerEvents: 'none'
-              }}>
-                {square}
-              </div>
-
-              {/* Valid move indicator */}
-              {isValidDrop && !piece && (
-                <div style={{
-                  width: '20px',
-                  height: '20px',
-                  borderRadius: '50%',
-                  backgroundColor: 'rgba(0, 255, 0, 0.6)',
-                  pointerEvents: 'none'
-                }} />
-              )}
-            </div>
-          );
-        })}
-      </div>
-      
-      <div style={{ 
-        padding: '8px', 
-        fontSize: '12px', 
-        textAlign: 'center', 
-        backgroundColor: 'rgba(0,0,0,0.1)',
-        color: '#666'
-      }}>
-        2x2 Test Board - <strong>{STABLE_PIECE_SET}</strong> piece set<br/>
-        ♕ White Queen & ♟ Black Pawn - Test capturing & movement
-      </div>
-
-      {/* Captured pieces indicator */}
-      {capturedPieces.length > 0 && (
-        <div style={{
-          marginTop: '8px',
-          padding: '8px',
-          backgroundColor: 'rgba(239, 68, 68, 0.1)',
-          borderRadius: '8px',
-          textAlign: 'center'
-        }}>
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#dc2626', marginBottom: '4px' }}>
-            Captured Pieces
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '4px' }}>
-            {capturedPieces.map((piece, index) => (
+        return (
+          <div
+            key={square}
+            data-square={square} // Essential for drop detection
+            onClick={() => onSquareClick(square as ChessPosition)}
+            style={{
+              backgroundColor: getSquareColor(square),
+              border: isHighlighted ? '3px solid #4A90E2' : '1px solid #999',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: piece ? 'pointer' : 'default',
+              position: 'relative',
+              fontSize: '32px',
+              userSelect: 'none',
+              ...(isValidDrop && {
+                boxShadow: 'inset 0 0 0 4px rgba(0, 255, 0, 0.6)'
+              })
+            }}
+          >
+            {piece && (
               <img
-                key={`${piece.id}-${index}`}
                 src={getPieceImagePath(piece.color, piece.type, STABLE_PIECE_SET)}
                 alt={`${piece.color} ${piece.type}`}
+                draggable={false} // No HTML5 drag - use mouse events only
+                onMouseDown={(e) => handleMouseDown(e, piece, square)}
                 style={{
-                  width: '20px',
-                  height: '20px',
-                  opacity: 0.7
+                  width: '85%',
+                  height: '85%',
+                  cursor: 'grab',
+                  userSelect: 'none',
+                  pointerEvents: 'auto'
+                }}
+                onError={(e) => {
+                  console.log(`Failed to load piece image: ${getPieceImagePath(piece.color, piece.type, STABLE_PIECE_SET)}`);
+                  // Fallback to Unicode if SVG fails to load
+                  (e.target as HTMLImageElement).style.display = 'none';
                 }}
               />
-            ))}
-          </div>
-        </div>
-      )}
+            )}
+            
+            {/* Square label */}
+            <div style={{
+              position: 'absolute',
+              bottom: '2px',
+              right: '2px',
+              fontSize: '10px',
+              fontWeight: 'bold',
+              color: getSquareColor(square) === '#F0D9B5' ? '#8B4513' : '#F0D9B5',
+              pointerEvents: 'none'
+            }}>
+              {square}
+            </div>
 
-      {/* Reset button */}
-      <div style={{ marginTop: '8px', textAlign: 'center' }}>
-        <button
-          onClick={handleReset}
-          style={{
-            padding: '4px 12px',
-            backgroundColor: '#6b7280',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            fontSize: '11px',
-            cursor: 'pointer'
-          }}
-        >
-          🔄 Reset Board
-        </button>
-      </div>
+            {/* Valid move indicator */}
+            {isValidDrop && !piece && (
+              <div style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(0, 255, 0, 0.6)',
+                pointerEvents: 'none'
+              }} />
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };

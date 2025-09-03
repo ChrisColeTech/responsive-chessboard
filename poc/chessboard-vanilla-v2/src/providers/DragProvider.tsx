@@ -8,9 +8,10 @@ interface DragContextType {
   cursorPosition: { x: number; y: number };
   validMoves: ChessPosition[];
   isDragging: boolean;
+  draggedPieceSize: number;
   
   // Actions
-  startDrag: (piece: ChessPiece, from: ChessPosition, moves: ChessPosition[]) => void;
+  startDrag: (piece: ChessPiece, from: ChessPosition, moves: ChessPosition[], pieceSize?: number) => void;
   updateCursor: (x: number, y: number) => void;
   endDrag: (to: ChessPosition) => Promise<boolean>;
   clearDrag: () => void;
@@ -25,6 +26,7 @@ export const DragProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [validMoves, setValidMoves] = useState<ChessPosition[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+  const [draggedPieceSize, setDraggedPieceSize] = useState(80);
 
   // Refs for immediate access during drag operations (avoids React state race conditions)
   const dragStateRef = useRef<{
@@ -40,13 +42,14 @@ export const DragProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Internal move handler ref (connects to chessboard's internal logic)
   const moveHandlerRef = useRef<((move: { from: ChessPosition; to: ChessPosition }) => Promise<boolean>) | null>(null);
 
-  const startDrag = useCallback((piece: ChessPiece, from: ChessPosition, moves: ChessPosition[]) => {
-    console.log('🎯 [DRAG] Starting drag:', piece.type, 'from', from, 'valid moves:', moves);
+  const startDrag = useCallback((piece: ChessPiece, from: ChessPosition, moves: ChessPosition[], pieceSize = 80) => {
+    console.log('🎯 [DRAG] Starting drag:', piece.type, 'from', from, 'valid moves:', moves, 'size:', pieceSize);
     
     // Update UI state
     setDraggedPiece(piece);
     setValidMoves(moves);
     setIsDragging(true);
+    setDraggedPieceSize(pieceSize);
     
     // Update ref for immediate access
     dragStateRef.current = {
@@ -106,6 +109,7 @@ export const DragProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setValidMoves([]);
     setIsDragging(false);
     setCursorPosition({ x: 0, y: 0 });
+    setDraggedPieceSize(80);
     
     // Clear ref state
     dragStateRef.current = {
@@ -125,6 +129,7 @@ export const DragProvider: React.FC<{ children: React.ReactNode }> = ({ children
     cursorPosition,
     validMoves,
     isDragging,
+    draggedPieceSize,
     startDrag,
     updateCursor,
     endDrag,

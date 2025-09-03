@@ -19,7 +19,7 @@ import { useSelectedTab, useAppStore } from './stores/appStore'
 function AppContent() {
   const selectedTab = useSelectedTab()
   const setSelectedTab = useAppStore((state) => state.setSelectedTab)
-  const { draggedPiece, cursorPosition } = useDrag()
+  const { draggedPiece, cursorPosition, draggedPieceSize } = useDrag()
 
   return (
     <AppLayout 
@@ -36,7 +36,7 @@ function AppContent() {
         <DraggedPiece
           piece={draggedPiece}
           position={cursorPosition}
-          size={60}
+          size={draggedPieceSize}
         />
       )}
     </AppLayout>
