@@ -1,13 +1,13 @@
 import { Settings, X, Sun, Moon } from 'lucide-react'
 import { baseThemes, type BaseTheme } from './ThemeSwitcher'
-import { useTheme } from '../contexts/ThemeContext'
+import { useTheme } from '../stores/appStore'
 
 interface SettingsPanelProps {
   isOpen: boolean
   onClose: () => void
 }
 
-export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
+export function SettingsPanel({ onClose }: SettingsPanelProps) {
   const { isDarkMode, selectedBaseTheme, setBaseTheme, toggleMode } = useTheme()
 
   const handleBaseThemeChange = (baseThemeId: BaseTheme) => {

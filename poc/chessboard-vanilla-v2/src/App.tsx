@@ -1,9 +1,8 @@
-import { useState } from 'react'
 import { AppLayout } from './components/layout'
-import type { TabId } from './components/layout'
 import { DragTestPage, LayoutTestPage, WorkerTestPage } from './pages'
 import { DragProvider, useDrag } from './providers/DragProvider'
 import { DraggedPiece } from './components/DraggedPiece'
+import { useSelectedTab, useAppStore } from './stores/appStore'
 
 /*
  * To add a new route/page:
@@ -18,18 +17,19 @@ import { DraggedPiece } from './components/DraggedPiece'
  */
 
 function AppContent() {
-  const [currentPage, setCurrentPage] = useState<TabId>('layout')
+  const selectedTab = useSelectedTab()
+  const setSelectedTab = useAppStore((state) => state.setSelectedTab)
   const { draggedPiece, cursorPosition } = useDrag()
 
   return (
     <AppLayout 
-      currentTab={currentPage} 
-      onTabChange={setCurrentPage}
+      currentTab={selectedTab} 
+      onTabChange={setSelectedTab}
     >
       {/* Page routing */}
-      {currentPage === 'layout' && <LayoutTestPage />}
-      {currentPage === 'worker' && <WorkerTestPage />}
-      {currentPage === 'drag' && <DragTestPage />}
+      {selectedTab === 'layout' && <LayoutTestPage />}
+      {selectedTab === 'worker' && <WorkerTestPage />}
+      {selectedTab === 'drag' && <DragTestPage />}
       
       {/* Global drag overlay */}
       {draggedPiece && (

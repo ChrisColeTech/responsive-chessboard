@@ -1,10 +1,9 @@
 import type { ReactNode } from 'react'
-import { useState } from 'react'
 import { BackgroundEffects } from './BackgroundEffects'
 import { Header } from './Header'
 import { TabBar } from './TabBar'
 import { SettingsPanel } from '../SettingsPanel'
-import { ThemeProvider } from '../../contexts/ThemeContext'
+import { useSettings } from '../../stores/appStore'
 import type { TabId } from './types'
 
 interface AppLayoutProps {
@@ -14,20 +13,19 @@ interface AppLayoutProps {
 }
 
 export function AppLayout({ children, currentTab, onTabChange }: AppLayoutProps) {
-  const [isSettingsPanelOpen, setIsSettingsPanelOpen] = useState(false)
+  const { isOpen: isSettingsPanelOpen, open: openSettings, close: closeSettings } = useSettings()
 
   return (
-    <ThemeProvider>
-      <div className="flex flex-col h-screen bg-background text-foreground">
-        <BackgroundEffects />
-        
-        {/* Header - fixed height, not fixed position */}
-        <header className="flex-shrink-0 relative z-20">
-          <Header 
-            onOpenSettings={() => setIsSettingsPanelOpen(true)} 
-            isSettingsOpen={isSettingsPanelOpen} 
-          />
-        </header>
+    <div className="flex flex-col h-screen bg-background text-foreground">
+      <BackgroundEffects />
+      
+      {/* Header - fixed height, not fixed position */}
+      <header className="flex-shrink-0 relative z-20">
+        <Header 
+          onOpenSettings={openSettings} 
+          isSettingsOpen={isSettingsPanelOpen} 
+        />
+      </header>
         
         {/* Main Content Area - with overlay settings */}
         <div className="flex-1 relative z-10 overflow-hidden">
@@ -45,7 +43,7 @@ export function AppLayout({ children, currentTab, onTabChange }: AppLayoutProps)
               className={`absolute inset-0 bg-black/20 backdrop-blur-sm z-20 transition-opacity duration-300 ease-out ${
                 isSettingsPanelOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
               }`}
-              onClick={() => setIsSettingsPanelOpen(false)}
+              onClick={closeSettings}
             />
             
             {/* Settings Panel */}
@@ -54,7 +52,7 @@ export function AppLayout({ children, currentTab, onTabChange }: AppLayoutProps)
             }`}>
               <SettingsPanel 
                 isOpen={isSettingsPanelOpen}
-                onClose={() => setIsSettingsPanelOpen(false)}
+                onClose={closeSettings}
               />
             </aside>
           </>
@@ -64,7 +62,6 @@ export function AppLayout({ children, currentTab, onTabChange }: AppLayoutProps)
         <footer className="flex-shrink-0 relative z-20">
           <TabBar currentTab={currentTab} onTabChange={onTabChange} />
         </footer>
-      </div>
-    </ThemeProvider>
+    </div>
   )
 }
