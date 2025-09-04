@@ -3,6 +3,7 @@ export { TestBoard } from "./TestBoard";
 export { DraggedPiece } from "./DraggedPiece";
 export { Header } from "./layout/Header";
 export { ThemeSwitcher } from "./ThemeSwitcher";
+export { InstructionsFAB } from "./InstructionsFAB";
 
 // Layout components
 export { AppLayout, TabBar, MainContent, BackgroundEffects } from "./layout";

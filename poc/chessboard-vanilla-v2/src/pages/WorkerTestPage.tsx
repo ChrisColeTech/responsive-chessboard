@@ -1,11 +1,12 @@
-import React, { useState, useCallback } from 'react'
-import { CheckCircle, XCircle, Clock, Brain, Cpu, Target } from 'lucide-react'
+import React, { useState, useCallback, useEffect } from 'react'
+import { CheckCircle, XCircle, Clock, Brain } from 'lucide-react'
 import { useStockfish } from '../hooks/useStockfish'
+import { useInstructions } from '../contexts/InstructionsContext'
 // import { useTheme } from '../stores/appStore'
-import { InstructionsModal } from '../components/InstructionsModal'
 
 export const WorkerTestPage: React.FC = () => {
   const { isReady, isThinking, skillLevel, setSkillLevel, requestMove, evaluatePosition, error } = useStockfish()
+  const { setInstructions } = useInstructions()
   // Theme store available if needed
   // const { currentTheme, selectedBaseTheme } = useTheme()
   const [testResults, setTestResults] = useState<string[]>([])
@@ -16,7 +17,6 @@ export const WorkerTestPage: React.FC = () => {
   // Individual test states for UI feedback
   const [, setIsTestingSpeed] = useState(false)
   const [, setIsTestingPosition] = useState(false)
-  const [showInstructions, setShowInstructions] = useState(false)
   const [isRunningAllTests, setIsRunningAllTests] = useState(false)
 
   const addTestResult = (message: string) => {
@@ -143,30 +143,13 @@ export const WorkerTestPage: React.FC = () => {
     "Run quick tests to verify the chess engine is functioning properly"
   ]
 
+  // Register instructions when component mounts
+  useEffect(() => {
+    setInstructions("Chess Computer Testing Guide", instructions)
+  }, [setInstructions])
+
   return (
-    <div className="relative min-h-full pb-12">
-      <section className="relative z-10 space-y-8">
-        {/* Ultra-Compact Header with Instructions */}
-        <div className="card-gaming p-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-lg border border-primary/20 backdrop-blur-sm">
-                <Cpu className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-foreground">Chess Computer Status & Tests</h3>
-                <span className="text-sm text-muted-foreground">Worker Readiness Testing Interface</span>
-              </div>
-            </div>
-            <button 
-              onClick={() => setShowInstructions(true)}
-              className="flex items-center gap-2 text-sm text-primary font-medium hover:text-primary/80 transition-colors"
-            >
-              <Target className="w-4 h-4" />
-              <span>Instructions</span>
-            </button>
-          </div>
-        </div>
+    <div className="relative space-y-8">
 
         {/* Main Content - Consolidated */}
         <div className="card-gaming p-6 space-y-6">
@@ -218,34 +201,34 @@ export const WorkerTestPage: React.FC = () => {
           </div>
 
           {/* Test Controls */}
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <button
               onClick={testWorkerReady}
               disabled={isTestingReady || isRunningAllTests}
-              className="w-full btn-secondary"
+              className="btn-secondary"
             >
-              {isTestingReady ? "Testing Worker..." : "Test Worker Ready"}
+              {isTestingReady ? "Testing..." : "Test Ready"}
             </button>
             <button
               onClick={testGoodMove}
               disabled={!isReady || isThinking || isRunningAllTests}
-              className="w-full btn-secondary"
+              className="btn-secondary"
             >
-              Ask for a Good Opening Move
+              Chess Move
             </button>
             <button
               onClick={testSpeed}
               disabled={!isReady || isThinking || isRunningAllTests}
-              className="w-full btn-secondary"
+              className="btn-secondary"
             >
-              How Fast Can It Think?
+              Speed Test
             </button>
             <button
               onClick={testPosition}
               disabled={!isReady || isThinking || isRunningAllTests}
-              className="w-full btn-secondary"
+              className="btn-secondary"
             >
-              Is This a Good Position?
+              Position Test
             </button>
           </div>
           
@@ -299,14 +282,6 @@ export const WorkerTestPage: React.FC = () => {
             )}
           </div>
         </div>
-      </section>
-
-      <InstructionsModal
-        isOpen={showInstructions}
-        onClose={() => setShowInstructions(false)}
-        title="Chess Computer Testing Guide"
-        instructions={instructions}
-      />
     </div>
   )
 }

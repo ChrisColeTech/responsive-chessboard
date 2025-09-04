@@ -1,18 +1,18 @@
-import React, { useState } from 'react'
-import { Grid3X3, Volume2, RotateCcw, Sword, Target } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { Volume2, RotateCcw, Sword, Target } from 'lucide-react'
 import { TestBoard } from '../components/TestBoard'
-import { InstructionsModal } from '../components/InstructionsModal'
 import { CapturedPieces } from '../components/CapturedPieces'
 import { useChessAudio } from '../services/audioService'
+import { useInstructions } from '../contexts/InstructionsContext'
 import type { ChessPosition, ChessPiece } from '../types'
 
 export const DragTestPage: React.FC = () => {
   const [selectedSquare, setSelectedSquare] = useState<ChessPosition | null>(null)
   const [validDropTargets, setValidDropTargets] = useState<ChessPosition[]>([])
-  const [showInstructions, setShowInstructions] = useState(false)
   const [capturedPieces, setCapturedPieces] = useState<ChessPiece[]>([])
   const [moveHandler, setMoveHandler] = useState<((from: ChessPosition, to: ChessPosition) => Promise<boolean>) | null>(null)
   const { playMove, playError } = useChessAudio()
+  const { setInstructions } = useInstructions()
 
   const instructions = [
     "Test drag and drop functionality with visual feedback, capture mechanics, and sound effects",
@@ -20,6 +20,11 @@ export const DragTestPage: React.FC = () => {
     "Use the control buttons below to test different sound effects",
     "Click on squares to select them and see valid drop targets highlighted"
   ]
+
+  // Register instructions when component mounts
+  useEffect(() => {
+    setInstructions("Interactive Chess Board Guide", instructions)
+  }, [setInstructions])
 
   const handleSquareClick = (position: ChessPosition) => {
     console.log(`🎯 [DRAG TEST PAGE] Square clicked: ${position}`);
@@ -62,27 +67,6 @@ export const DragTestPage: React.FC = () => {
       </div>
 
       <section className="relative z-10 space-y-8">
-        {/* Ultra-Compact Header with Instructions */}
-        <div className="card-gaming p-4">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-lg border border-primary/20 backdrop-blur-sm">
-                <Grid3X3 className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-foreground">Interactive Chess Board</h3>
-                <span className="text-sm text-muted-foreground">Responsive Test Environment</span>
-              </div>
-            </div>
-            <button 
-              onClick={() => setShowInstructions(true)}
-              className="flex items-center gap-2 text-sm text-primary font-medium hover:text-primary/80 transition-colors"
-            >
-              <Target className="w-4 h-4" />
-              <span>Instructions</span>
-            </button>
-          </div>
-        </div>
 
       {/* White Captured Pieces - Above Board */}
       <CapturedPieces 
@@ -202,13 +186,6 @@ export const DragTestPage: React.FC = () => {
         </div>
       </div>
     </section>
-
-    <InstructionsModal
-      isOpen={showInstructions}
-      onClose={() => setShowInstructions(false)}
-      title="Interactive Chess Board Guide"
-      instructions={instructions}
-    />
     </div>
   )
 }

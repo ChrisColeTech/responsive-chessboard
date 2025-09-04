@@ -3,7 +3,10 @@ import { BackgroundEffects } from './BackgroundEffects'
 import { Header } from './Header'
 import { TabBar } from './TabBar'
 import { SettingsPanel } from '../SettingsPanel'
+import { InstructionsFAB } from '../InstructionsFAB'
+import { InstructionsModal } from '../InstructionsModal'
 import { useSettings } from '../../stores/appStore'
+import { useInstructions } from '../../contexts/InstructionsContext'
 import type { TabId } from './types'
 
 /**
@@ -38,6 +41,7 @@ interface AppLayoutProps {
 
 export function AppLayout({ children, currentTab, onTabChange, coinBalance }: AppLayoutProps) {
   const { isOpen: isSettingsPanelOpen, open: openSettings, close: closeSettings } = useSettings()
+  const { instructions, title, showInstructions, openInstructions, closeInstructions } = useInstructions()
 
   return (
     <div className="relative min-h-screen min-h-[100dvh] bg-background text-foreground">
@@ -51,7 +55,7 @@ export function AppLayout({ children, currentTab, onTabChange, coinBalance }: Ap
         <Header 
           onOpenSettings={openSettings} 
           isSettingsOpen={isSettingsPanelOpen}
-          coinBalance={currentTab === 'slots' ? coinBalance : undefined}
+          coinBalance={coinBalance}
         />
       </header>
         
@@ -63,6 +67,9 @@ export function AppLayout({ children, currentTab, onTabChange, coinBalance }: Ap
               {children}
             </div>
           </main>
+          
+          {/* Instructions FAB - positioned within main content area */}
+          <InstructionsFAB onClick={openInstructions} />
           
           {/* 
             Settings Panel - Uses `card-gaming` for rounded corners and entry animations
@@ -96,6 +103,14 @@ export function AppLayout({ children, currentTab, onTabChange, coinBalance }: Ap
         <footer className="fixed bottom-0 left-0 right-0 z-20">
           <TabBar currentTab={currentTab} onTabChange={onTabChange} />
         </footer>
+        
+        {/* Global Instructions Modal */}
+        <InstructionsModal
+          isOpen={showInstructions}
+          onClose={closeInstructions}
+          title={title}
+          instructions={instructions}
+        />
     </div>
   )
 }

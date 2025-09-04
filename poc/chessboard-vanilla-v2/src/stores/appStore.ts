@@ -75,7 +75,7 @@ const initialState: AppState = {
   checkSound: true,
   uiSounds: true,
   lastVisited: new Date(),
-  coinBalance: 1000,
+  coinBalance: 350,
 }
 
 export const useAppStore = create<AppStore>()(

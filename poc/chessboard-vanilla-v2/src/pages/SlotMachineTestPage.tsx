@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
-import { Coins, Volume2, RotateCcw, TrendingUp } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { Volume2, RotateCcw, Coins, RefreshCw } from 'lucide-react'
 import { SlotMachine } from '../components/SlotMachine'
-import { InstructionsModal } from '../components/InstructionsModal'
 import { useChessAudio } from '../services/audioService'
+import { useInstructions } from '../contexts/InstructionsContext'
 import { useAppStore } from '../stores/appStore'
 
 export const SlotMachineTestPage: React.FC = () => {
-  const [showInstructions, setShowInstructions] = useState(false)
   const coinBalance = useAppStore((state) => state.coinBalance)
   const setCoinBalance = useAppStore((state) => state.setCoinBalance)
   const { playMove, playError } = useChessAudio()
+  const { setInstructions } = useInstructions()
 
   const instructions = [
     "Experience the thrill of a casino slot machine with visual and audio feedback",
@@ -17,6 +17,11 @@ export const SlotMachineTestPage: React.FC = () => {
     "Click the SPIN button to start the slot machine animation",
     "Watch for winning combinations and enjoy the casino atmosphere"
   ]
+
+  // Register instructions when component mounts
+  useEffect(() => {
+    setInstructions("Slot Machine Casino Experience", instructions)
+  }, [setInstructions])
 
   return (
     <div className="relative min-h-full pb-12">
@@ -34,31 +39,9 @@ export const SlotMachineTestPage: React.FC = () => {
       </div>
 
       <section className="relative z-10 space-y-8">
-        {/* Chess Casino Header */}
-        <div className="card-gaming p-4">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-lg border border-primary/20 backdrop-blur-sm">
-                <Coins className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-foreground">Chess Slot Machine</h3>
-                <span className="text-sm text-muted-foreground">Royal Gaming Experience</span>
-              </div>
-            </div>
-            
-            <button 
-              onClick={() => setShowInstructions(true)}
-              className="flex items-center gap-2 text-sm text-primary font-medium hover:text-primary/80 transition-colors"
-            >
-              <TrendingUp className="w-4 h-4" />
-              <span>How to Play</span>
-            </button>
-          </div>
-        </div>
 
         {/* Slot Machine Container */}
-        <div className="flex justify-center items-center min-h-[60vh]">
+        <div className="flex justify-center">
           <SlotMachine coinBalance={coinBalance} setCoinBalance={setCoinBalance} />
         </div>
         
@@ -68,7 +51,7 @@ export const SlotMachineTestPage: React.FC = () => {
             <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
             <h4 className="text-sm font-semibold text-foreground/90">Gaming Controls</h4>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <button
               onClick={() => {
                 playMove(false);
@@ -107,16 +90,22 @@ export const SlotMachineTestPage: React.FC = () => {
                 <span>Test Lose</span>
               </div>
             </button>
+            
+            <button
+              onClick={() => {
+                setCoinBalance(100);
+                console.log('Coins reset to 100');
+              }}
+              className="group relative btn-muted"
+            >
+              <div className="flex items-center gap-2">
+                <RefreshCw className="w-4 h-4" />
+                <span>Reset Coins</span>
+              </div>
+            </button>
           </div>
         </div>
       </section>
-
-      <InstructionsModal
-        isOpen={showInstructions}
-        onClose={() => setShowInstructions(false)}
-        title="Chess Slot Machine Guide"
-        instructions={instructions}
-      />
     </div>
   )
 }

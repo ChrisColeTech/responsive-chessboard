@@ -1,6 +1,7 @@
 import { AppLayout } from './components/layout'
 import { DragTestPage, LayoutTestPage, WorkerTestPage, SlotMachineTestPage } from './pages'
 import { DragProvider, useDrag } from './providers/DragProvider'
+import { InstructionsProvider } from './contexts/InstructionsContext'
 import { DraggedPiece } from './components/DraggedPiece'
 import { useSelectedTab, useAppStore } from './stores/appStore'
 import { useChessAudio } from './services/audioService'
@@ -73,9 +74,11 @@ function AppContent() {
 
 function App() {
   return (
-    <DragProvider>
-      <AppContent />
-    </DragProvider>
+    <InstructionsProvider>
+      <DragProvider>
+        <AppContent />
+      </DragProvider>
+    </InstructionsProvider>
   )
 }
 
