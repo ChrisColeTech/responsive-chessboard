@@ -76,38 +76,75 @@ This style guide establishes the **golden standard** for the Chess Training appl
 
 // Input fields
 <Input
-  className={`bg-black/30 border-white/20 ${theme.text} placeholder:text-gray-400 focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300`}
+  className="bg-muted/30 border border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300"
 />
 
 // Labels
-<Label className={`text-sm font-medium ${theme.text}`}>
+<Label className="text-sm font-medium text-foreground">
 ```
 
 **Design Rules**:
-- **Semi-transparent backgrounds**: `bg-black/30` for inputs
-- **Progressive border opacity**: `border-white/20` → `border-white/40` on focus
-- **Ring focus states**: `focus:ring-2 focus:ring-white/20`
-- **Theme-aware text**: Always use `${theme.text}` for foreground
+- **Semi-transparent backgrounds**: `bg-muted/30` for inputs  
+- **Semantic borders**: `border-border` → `border-primary` on focus
+- **Ring focus states**: `focus:ring-2 focus:ring-primary/20`
+- **Theme-aware text**: Always use `text-foreground` and `text-muted-foreground`
 - **Consistent spacing**: `space-y-4` for form sections
 
 ### **Button Hierarchy** 🔘
 
-**✅ PRIMARY BUTTON** (Sign In):
+**✅ STANDARDIZED BUTTON CLASSES** (Recommended Approach):
 ```tsx
-<Button className={`w-full bg-gradient-to-r ${theme.primary} hover:opacity-90 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl hover-glow active:animate-button-press transition-all duration-300 border-0 gpu-accelerated`}>
+// Primary actions (submit, run, execute)
+<button className="btn-primary">Run All Tests</button>
+
+// Secondary actions (test, check, verify)
+<button className="w-full btn-secondary">Test Worker Ready</button>
+
+// Utility actions (clear, reset, cancel)
+<button className="btn-muted">Clear Results</button>
+
+// Error/warning actions (delete, error, warning)
+<button className="btn-destructive">Error Sound</button>
 ```
 
-**✅ SECONDARY BUTTON** (Demo Login):
+**✅ LEGACY INLINE STYLES** (For reference only):
 ```tsx
-<Button className={`w-full bg-black/20 border-white/20 ${theme.text} hover:bg-black/30 hover:border-white/30 hover-grow active:animate-button-press transition-all duration-300 gpu-accelerated`}>
+// Primary button (legacy)
+<Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] gpu-accelerated backdrop-blur-sm">
+
+// Secondary button (legacy)
+<Button className="w-full bg-secondary hover:bg-secondary/80 border border-border hover:border-primary text-secondary-foreground hover:text-primary font-medium py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] gpu-accelerated backdrop-blur-sm">
 ```
 
-**Button Design Rules**:
-- **Primary**: Theme gradient background, white text, glow effects
-- **Secondary**: Transparent background, themed borders, grow effects  
-- **All buttons**: Press animation, GPU acceleration, 300ms transitions
-- **Shape**: Rounded-xl (12px) for modern feel
-- **Padding**: py-3 px-6 for comfortable touch targets
+**✅ BUTTON DESIGN STANDARDS**:
+
+**Base `.btn-standard` provides**:
+- **Glass Morphism**: `backdrop-blur-sm` for modern glassmorphism effect
+- **Professional Sizing**: `py-3 px-6 rounded-xl` for comfortable touch targets
+- **Shadow System**: `shadow-lg hover:shadow-xl` for depth and polish
+- **Hover Animations**: `hover:scale-[1.02] active:scale-[0.98]` for tactile feedback
+- **Border System**: `border-border hover:border-primary` for theme-aware borders
+- **Accessibility**: `disabled:opacity-50 disabled:cursor-not-allowed` for proper states
+- **Performance**: `gpu-accelerated transition-all duration-200` for smooth animations
+
+**Color Variants with Glass Morphism**:
+- **`.btn-primary`**: `background-color: var(--primary); opacity: 0.8` - Main actions, CTAs
+- **`.btn-secondary`**: `background-color: var(--secondary); opacity: 0.7` - Secondary actions  
+- **`.btn-muted`**: `background-color: var(--muted); opacity: 0.9` - Utility actions, less prominent
+- **`.btn-destructive`**: `background-color: var(--destructive); opacity: 0.8` - Error/warning actions
+
+**Glass Morphism Implementation**:
+- **Semi-transparent backgrounds**: Direct theme colors with CSS `opacity` for transparency
+- **Backdrop blur**: `backdrop-blur-sm` creates the glass effect behind semi-transparent buttons
+- **Hover states**: Increased opacity on hover (`0.8` → `0.9`, `0.7` → `0.8`, etc.)
+- **Theme compatibility**: Works across all themes by using CSS custom properties
+
+**Usage Rules**:
+- ✅ **ALWAYS use standardized classes**: `btn-primary`, `btn-secondary`, etc.
+- ✅ **Combine with layout classes**: `w-full`, `flex-1`, etc. as needed
+- ✅ **Semantic naming**: Choose class based on action importance, not appearance
+- ❌ **AVOID inline styles**: Don't recreate button styling manually
+- ❌ **AVOID hardcoded colors**: Classes automatically adapt to all themes
 
 ---
 

@@ -42,6 +42,11 @@ export const TestBoard = ({
   const { playMove, playError, playGameStart, preloadSounds } = useChessAudio();
   const [testPieces, setTestPieces] = useState(initialTestPieces);
   const [capturedPieces, setCapturedPieces] = useState<ChessPiece[]>([]);
+  
+  // Update parent component when captured pieces change
+  useEffect(() => {
+    onCapturedPiecesChange?.(capturedPieces);
+  }, [capturedPieces, onCapturedPiecesChange]);
 
   // Set up TestBoard's own simple move handler with delay to override main app
   useEffect(() => {

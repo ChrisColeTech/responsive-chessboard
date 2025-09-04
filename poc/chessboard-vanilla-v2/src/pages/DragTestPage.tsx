@@ -128,15 +128,7 @@ export const DragTestPage: React.FC = () => {
               (window as any).__testBoardReset();
             }
           }}
-          className="group relative px-4 py-2 rounded-lg font-medium text-sm
-                     bg-gradient-to-br from-muted-foreground/20 to-muted-foreground/10 
-                     border border-border/50 text-foreground
-                     backdrop-blur-sm
-                     hover:from-muted-foreground/30 hover:to-muted-foreground/20 
-                     hover:border-primary/30 hover:text-primary
-                     active:scale-[0.98] 
-                     transition-all duration-200 ease-out
-                     gpu-accelerated focus-glow"
+          className="group relative btn-muted"
         >
           <div className="flex items-center gap-2">
             <RotateCcw className="w-4 h-4" />
@@ -149,15 +141,7 @@ export const DragTestPage: React.FC = () => {
             playMove(false);
             console.log('Move sound test');
           }}
-          className="group relative px-4 py-2 rounded-lg font-medium text-sm
-                     bg-gradient-to-br from-green-500/20 to-green-600/10 
-                     border border-green-500/30 text-green-400
-                     backdrop-blur-sm
-                     hover:from-green-500/30 hover:to-green-600/20 
-                     hover:border-green-400/50 hover:text-green-300
-                     active:scale-[0.98] 
-                     transition-all duration-200 ease-out
-                     gpu-accelerated focus-glow"
+          className="group relative btn-secondary"
         >
           <div className="flex items-center gap-2">
             <Volume2 className="w-4 h-4" />
@@ -170,15 +154,7 @@ export const DragTestPage: React.FC = () => {
             playMove(true);
             console.log('Capture sound test');
           }}
-          className="group relative px-4 py-2 rounded-lg font-medium text-sm
-                     bg-gradient-to-br from-red-500/20 to-red-600/10 
-                     border border-red-500/30 text-red-400
-                     backdrop-blur-sm
-                     hover:from-red-500/30 hover:to-red-600/20 
-                     hover:border-red-400/50 hover:text-red-300
-                     active:scale-[0.98] 
-                     transition-all duration-200 ease-out
-                     gpu-accelerated focus-glow"
+          className="group relative btn-primary"
         >
           <div className="flex items-center gap-2">
             <Target className="w-4 h-4" />
@@ -191,15 +167,7 @@ export const DragTestPage: React.FC = () => {
             playError();
             console.log('Error sound test');
           }}
-          className="group relative px-4 py-2 rounded-lg font-medium text-sm
-                     bg-gradient-to-br from-orange-500/20 to-orange-600/10 
-                     border border-orange-500/30 text-orange-400
-                     backdrop-blur-sm
-                     hover:from-orange-500/30 hover:to-orange-600/20 
-                     hover:border-orange-400/50 hover:text-orange-300
-                     active:scale-[0.98] 
-                     transition-all duration-200 ease-out
-                     gpu-accelerated focus-glow"
+          className="group relative btn-destructive"
         >
           <div className="flex items-center gap-2">
             <Sword className="w-4 h-4" />

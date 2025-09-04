@@ -488,6 +488,77 @@
     box-shadow: 0 0 0 2px rgb(255 255 255 / 0.2); /* Accessible focus ring */
   }
 
+  /*
+   * BUTTON SYSTEM (Style Guide Compliant)
+   * ======================================
+   * 
+   * Standard button classes following the style guide:
+   * - Glass morphism with backdrop blur
+   * - Consistent padding, shadows, and animations
+   * - Theme-aware semantic colors
+   * - Professional hover and active states
+   * 
+   * ✅ Base class `.btn-standard` provides:
+   * - Standard sizing, shadows, animations
+   * - Glass morphism backdrop blur
+   * - Hover/active scale effects
+   * 
+   * ✅ Color variants:
+   * - `.btn-primary` - Primary actions (bg-primary)
+   * - `.btn-secondary` - Secondary actions (bg-secondary)  
+   * - `.btn-muted` - Utility actions (bg-muted)
+   * - `.btn-destructive` - Error/warning actions (bg-destructive)
+   */
+
+  /* Base button class with consistent styling */
+  .btn-standard {
+    @apply font-medium py-3 px-6 rounded-xl shadow-lg hover:shadow-xl;
+    @apply border border-border hover:border-primary;
+    @apply backdrop-blur-sm;
+    @apply transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98];
+    @apply disabled:opacity-50 disabled:cursor-not-allowed gpu-accelerated;
+  }
+
+  /* Primary button variant */
+  .btn-primary {
+    @apply btn-standard text-primary-foreground;
+    background-color: var(--primary);
+    opacity: 0.8;
+  }
+  .btn-primary:hover {
+    opacity: 0.9;
+  }
+
+  /* Secondary button variant */
+  .btn-secondary {
+    @apply btn-standard text-secondary-foreground hover:text-primary;
+    background-color: var(--secondary);
+    opacity: 0.7;
+  }
+  .btn-secondary:hover {
+    opacity: 0.8;
+  }
+
+  /* Muted/utility button variant */
+  .btn-muted {
+    @apply btn-standard text-muted-foreground;
+    background-color: var(--muted);
+    opacity: 0.9;
+  }
+  .btn-muted:hover {
+    opacity: 1.0;
+  }
+
+  /* Destructive/error button variant */
+  .btn-destructive {
+    @apply btn-standard text-destructive-foreground;
+    background-color: var(--destructive);
+    opacity: 0.8;
+  }
+  .btn-destructive:hover {
+    opacity: 0.9;
+  }
+
   /* Background Effects - Enhanced Gaming Patterns */
   .bg-gaming-gradient {
     background: linear-gradient(135deg, 

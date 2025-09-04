@@ -1,18 +1,23 @@
 import React, { useState, useCallback } from 'react'
-import { CheckCircle, XCircle, Clock, Zap, Brain, TrendingUp, Cpu } from 'lucide-react'
+import { CheckCircle, XCircle, Clock, Brain, Cpu, Target } from 'lucide-react'
 import { useStockfish } from '../hooks/useStockfish'
-import { useTheme } from '../stores/appStore'
+// import { useTheme } from '../stores/appStore'
+import { InstructionsModal } from '../components/InstructionsModal'
 
 export const WorkerTestPage: React.FC = () => {
   const { isReady, isThinking, skillLevel, setSkillLevel, requestMove, evaluatePosition, error } = useStockfish()
-  const { currentTheme, selectedBaseTheme } = useTheme()
+  // Theme store available if needed
+  // const { currentTheme, selectedBaseTheme } = useTheme()
   const [testResults, setTestResults] = useState<string[]>([])
   const [lastMove, setLastMove] = useState<string>('')
   const [responseTime, setResponseTime] = useState<number>(0)
   const [evaluation, setEvaluation] = useState<string>('')
   const [isTestingReady, setIsTestingReady] = useState(false)
-  const [isTestingSpeed, setIsTestingSpeed] = useState(false)
-  const [isTestingPosition, setIsTestingPosition] = useState(false)
+  // Individual test states for UI feedback
+  const [, setIsTestingSpeed] = useState(false)
+  const [, setIsTestingPosition] = useState(false)
+  const [showInstructions, setShowInstructions] = useState(false)
+  const [isRunningAllTests, setIsRunningAllTests] = useState(false)
 
   const addTestResult = (message: string) => {
     setTestResults(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`])
@@ -106,6 +111,23 @@ export const WorkerTestPage: React.FC = () => {
     addTestResult("🧹 Results cleared")
   }, [])
 
+  const runAllTests = useCallback(async () => {
+    setIsRunningAllTests(true)
+    addTestResult("🚀 Running all tests...")
+    try {
+      await testWorkerReady()
+      await new Promise(resolve => setTimeout(resolve, 1000)) // Delay between tests
+      await testGoodMove()
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      await testSpeed()
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      await testPosition()
+      addTestResult("🎉 All tests completed!")
+    } finally {
+      setIsRunningAllTests(false)
+    }
+  }, [testWorkerReady, testGoodMove, testSpeed, testPosition])
+
   const getSkillDescription = (level: number) => {
     if (level <= 2) return "Beginner (learning the rules)"
     if (level <= 4) return "Casual player (plays for fun)"
@@ -114,18 +136,42 @@ export const WorkerTestPage: React.FC = () => {
     return "Expert level (very strong)"
   }
 
+  const instructions = [
+    "Test if the chess computer is working and ready to play games",
+    "Check how fast the computer can think and respond to moves", 
+    "Adjust the computer's skill level from beginner to expert",
+    "Run quick tests to verify the chess engine is functioning properly"
+  ]
+
   return (
-    <div className="space-y-6">
-      {/* Status Section */}
-      <section>
-        <div className="flex items-center gap-2 mb-4">
-          <div className="p-1.5 bg-foreground/10 rounded border border-foreground/30">
-            {isReady ? <CheckCircle className="w-4 h-4 text-green-500" /> : <XCircle className="w-4 h-4 text-red-500" />}
+    <div className="relative min-h-full pb-12">
+      <section className="relative z-10 space-y-8">
+        {/* Ultra-Compact Header with Instructions */}
+        <div className="card-gaming p-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-primary/10 rounded-lg border border-primary/20 backdrop-blur-sm">
+                <Cpu className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-foreground">Chess Computer Status & Tests</h3>
+                <span className="text-sm text-muted-foreground">Worker Readiness Testing Interface</span>
+              </div>
+            </div>
+            <button 
+              onClick={() => setShowInstructions(true)}
+              className="flex items-center gap-2 text-sm text-primary font-medium hover:text-primary/80 transition-colors"
+            >
+              <Target className="w-4 h-4" />
+              <span>Instructions</span>
+            </button>
           </div>
-          <h3 className="text-lg font-semibold text-foreground">Is the Chess Computer Working?</h3>
         </div>
-        <div className="card-gaming p-6">
-          <div className="flex items-center gap-3 mb-4">
+
+        {/* Main Content - Consolidated */}
+        <div className="card-gaming p-6 space-y-6">
+          {/* Worker Status */}
+          <div className="flex items-center gap-3">
             {isReady ? (
               <>
                 <CheckCircle className="w-6 h-6 text-green-500" />
@@ -142,29 +188,18 @@ export const WorkerTestPage: React.FC = () => {
                 <span className="text-lg text-foreground">⏳ Starting up the chess computer...</span>
               </>
             )}
+            {isThinking && (
+              <div className="flex items-center gap-2 text-foreground/70 ml-4">
+                <Brain className="w-4 h-4 animate-pulse" />
+                <span>Thinking...</span>
+              </div>
+            )}
           </div>
-          
-          {isThinking && (
-            <div className="flex items-center gap-2 text-foreground/70 mb-4">
-              <Brain className="w-4 h-4 animate-pulse" />
-              <span>Computer is thinking...</span>
-            </div>
-          )}
-        </div>
-      </section>
 
-      {/* Skill Level Section */}
-      <section>
-        <div className="flex items-center gap-2 mb-4">
-          <div className="p-1.5 bg-foreground/10 rounded border border-foreground/30">
-            <TrendingUp className="w-4 h-4 text-foreground" />
-          </div>
-          <h3 className="text-lg font-semibold text-foreground">How Smart Should It Be?</h3>
-        </div>
-        <div className="card-gaming p-6">
-          <div className="mb-4">
+          {/* Skill Level Control */}
+          <div>
             <div className="flex justify-between text-sm text-muted-foreground mb-2">
-              <span>Beginner</span>
+              <span>Skill Level: Beginner</span>
               <span>Expert</span>
             </div>
             <input
@@ -181,39 +216,53 @@ export const WorkerTestPage: React.FC = () => {
               <span className="text-muted-foreground">{getSkillDescription(skillLevel)}</span>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Quick Tests Section */}
-      <section>
-        <div className="flex items-center gap-2 mb-4">
-          <div className="p-1.5 bg-foreground/10 rounded border border-foreground/30">
-            <Zap className="w-4 h-4 text-foreground" />
-          </div>
-          <h3 className="text-lg font-semibold text-foreground">Quick Tests</h3>
-        </div>
-        <div className="card-gaming p-6 space-y-4">
+          {/* Test Controls */}
           <div className="space-y-3">
             <button
+              onClick={testWorkerReady}
+              disabled={isTestingReady || isRunningAllTests}
+              className="w-full btn-secondary"
+            >
+              {isTestingReady ? "Testing Worker..." : "Test Worker Ready"}
+            </button>
+            <button
               onClick={testGoodMove}
-              disabled={!isReady || isThinking}
-              className="w-full bg-foreground/10 hover:bg-foreground/20 text-foreground border border-foreground/20 rounded-lg p-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!isReady || isThinking || isRunningAllTests}
+              className="w-full btn-secondary"
             >
               Ask for a Good Opening Move
             </button>
             <button
               onClick={testSpeed}
-              disabled={!isReady || isThinking}
-              className="w-full bg-foreground/10 hover:bg-foreground/20 text-foreground border border-foreground/20 rounded-lg p-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!isReady || isThinking || isRunningAllTests}
+              className="w-full btn-secondary"
             >
               How Fast Can It Think?
             </button>
             <button
               onClick={testPosition}
-              disabled={!isReady || isThinking}
-              className="w-full bg-foreground/10 hover:bg-foreground/20 text-foreground border border-foreground/20 rounded-lg p-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!isReady || isThinking || isRunningAllTests}
+              className="w-full btn-secondary"
             >
               Is This a Good Position?
+            </button>
+          </div>
+          
+          {/* Control buttons */}
+          <div className="flex gap-3 mt-4">
+            <button
+              onClick={runAllTests}
+              disabled={!isReady || isThinking || isRunningAllTests}
+              className="flex-1 btn-primary"
+            >
+              Run All Tests
+            </button>
+            <button
+              onClick={clearResults}
+              className="flex-1 btn-muted"
+            >
+              Clear Results
             </button>
           </div>
 
@@ -251,6 +300,13 @@ export const WorkerTestPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      <InstructionsModal
+        isOpen={showInstructions}
+        onClose={() => setShowInstructions(false)}
+        title="Chess Computer Testing Guide"
+        instructions={instructions}
+      />
     </div>
   )
 }
