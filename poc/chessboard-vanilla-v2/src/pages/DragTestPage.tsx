@@ -25,19 +25,17 @@ export const DragTestPage: React.FC = () => {
     console.log(`🎯 [DRAG TEST PAGE] Square clicked: ${position}`);
     
     if (selectedSquare === null) {
-      // First click - select a square
+      // First click - select a square (TestBoard will provide valid moves via drag system)
       setSelectedSquare(position)
-      // For demo purposes, set valid targets (allow moves to other squares)
-      const allSquares: ChessPosition[] = ['a1', 'a2', 'b1', 'b2']
-      const validTargets = allSquares.filter(sq => sq !== position)
-      setValidDropTargets(validTargets)
+      // Don't set validDropTargets here - let TestBoard handle it through game service
+      setValidDropTargets([])
     } else if (selectedSquare === position) {
       // Clicking same square - deselect
       setSelectedSquare(null)
       setValidDropTargets([])
     } else {
       // Second click - attempt move using TestBoard's move handler
-      if (moveHandler && validDropTargets.includes(position)) {
+      if (moveHandler) {
         console.log(`🎯 [DRAG TEST PAGE] Executing move: ${selectedSquare} → ${position}`);
         moveHandler(selectedSquare, position).then(success => {
           console.log(`🎯 [DRAG TEST PAGE] Move result: ${success ? 'SUCCESS' : 'FAILED'}`);

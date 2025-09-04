@@ -1,9 +1,11 @@
-// TestBoard.tsx - Simple 2x2 board using definitive POC mouse event pattern
+// TestBoard.tsx - 3x3 chess board with game logic validation
 import React, { useState, useEffect } from 'react';
 import type { ChessPiece, ChessPosition } from '../types';
 import { PIECE_SETS, getPieceImagePath } from '../constants/pieces.constants';
 import { useDrag } from '../providers';
 import { useChessAudio } from '../services/audioService';
+import { TestBoardGameService, type GameStatus } from '../services/TestBoardGameService';
+import { CheckmateModal } from './CheckmateModal';
 
 interface TestBoardProps {
   onSquareClick: (position: ChessPosition) => void;
@@ -17,19 +19,33 @@ interface TestBoardProps {
 const pieceSetKeys = Object.keys(PIECE_SETS) as Array<keyof typeof PIECE_SETS>;
 const STABLE_PIECE_SET = pieceSetKeys[0]; // Use first piece set consistently
 
-// Initial test pieces for drag testing - with capturing
+// Initial test pieces for 3x3 board - with check/checkmate testing
 const initialTestPieces: Record<string, ChessPiece> = {
-  a2: {
-    id: 'test-white-queen-a2',
-    type: 'queen',
+  // White pieces (bottom row)
+  a1: {
+    id: 'test-white-king-a1',
+    type: 'king',
     color: 'white',
-    position: { file: 'a', rank: 2 }
+    position: { file: 'a', rank: 1 }
   },
   b1: {
-    id: 'test-black-pawn-b1',
+    id: 'test-white-queen-b1',
+    type: 'queen',
+    color: 'white',
+    position: { file: 'b', rank: 1 }
+  },
+  // Black pieces (top row)
+  b3: {
+    id: 'test-black-pawn-b3',
     type: 'pawn',
     color: 'black',
-    position: { file: 'b', rank: 1 }
+    position: { file: 'b', rank: 3 }
+  },
+  c3: {
+    id: 'test-black-pawn-c3',
+    type: 'pawn',
+    color: 'black',
+    position: { file: 'c', rank: 3 }
   }
 };
 
@@ -41,64 +57,70 @@ export const TestBoard = ({
   onMoveHandlerReady
 }: TestBoardProps) => {
   const { startDrag, updateCursor, endDrag, clearDrag, setMoveHandler } = useDrag();
-  const { playMove, playError, playGameStart, preloadSounds } = useChessAudio();
+  const { playMove, playError, playGameStart, playCheck, preloadSounds } = useChessAudio();
+  
+  // Game service and state
+  const [gameService] = useState(() => new TestBoardGameService(initialTestPieces));
   const [testPieces, setTestPieces] = useState(initialTestPieces);
   const [capturedPieces, setCapturedPieces] = useState<ChessPiece[]>([]);
+  const [gameStatus, setGameStatus] = useState<GameStatus>('playing');
+  const [kingInCheck, setKingInCheck] = useState<string | null>(null);
   
   // Update parent component when captured pieces change
   useEffect(() => {
     onCapturedPiecesChange?.(capturedPieces);
   }, [capturedPieces, onCapturedPiecesChange]);
 
-  // Set up TestBoard's own simple move handler with delay to override main app
+  // Set up TestBoard's move handler using game service
   useEffect(() => {
     const handleTestMove = async (move: { from: ChessPosition, to: ChessPosition }) => {
       console.log(`🧪 [TEST BOARD] Handling move: ${move.from} → ${move.to}`);
       
-      let wasCapture = false;
+      // Check if game is over
+      if (gameStatus === 'checkmate') {
+        console.log(`🧪 [TEST BOARD] Game is over, move rejected`);
+        playError();
+        return false;
+      }
       
-      // Simple move logic for TestBoard
-      setTestPieces(prevPieces => {
-        const newPieces = { ...prevPieces };
-        const piece = newPieces[move.from];
-        const capturedPiece = newPieces[move.to];
+      // Use game service to validate and execute move
+      const result = gameService.makeMove(move.from, move.to);
+      
+      if (result.success && result.newGameState) {
+        console.log(`🧪 [TEST BOARD] Move successful: ${move.from} → ${move.to}`);
         
-        if (piece) {
-          // If there's a piece to capture, add it to captured pieces
-          if (capturedPiece) {
-            setCapturedPieces(prev => {
-              const newCaptured = [...prev, capturedPiece];
-              onCapturedPiecesChange?.(newCaptured);
-              return newCaptured;
-            });
-            console.log(`🧪 [TEST BOARD] Piece captured: ${capturedPiece.color} ${capturedPiece.type}`);
-            wasCapture = true;
-          }
-          
-          // Move the piece
-          delete newPieces[move.from];
-          newPieces[move.to] = {
-            ...piece,
-            position: { 
-              file: move.to[0] as any, 
-              rank: parseInt(move.to[1]) as any 
-            }
-          };
-          console.log(`🧪 [TEST BOARD] Move successful: piece moved to ${move.to}`);
-          
-          // Play sound effect after successful move
-          playMove(wasCapture);
-          
-          return newPieces;
+        // Update UI state
+        setTestPieces(result.newGameState.pieces);
+        setGameStatus(result.newGameState.gameStatus);
+        setKingInCheck(result.newGameState.kingInCheck);
+        
+        // Handle captured piece
+        if (result.capturedPiece) {
+          setCapturedPieces(prev => {
+            const newCaptured = [...prev, result.capturedPiece!];
+            onCapturedPiecesChange?.(newCaptured);
+            return newCaptured;
+          });
+          console.log(`🧪 [TEST BOARD] Piece captured: ${result.capturedPiece.color} ${result.capturedPiece.type}`);
         }
         
-        console.log(`🧪 [TEST BOARD] Move failed: no piece at ${move.from}`);
-        // Play error sound for failed move
+        // Play appropriate sound effects
+        if (result.newGameState.gameStatus === 'checkmate') {
+          playGameStart(); // Use game start as "game over" sound for now
+          console.log(`🧪 [TEST BOARD] CHECKMATE! Game over.`);
+        } else if (result.newGameState.gameStatus === 'check') {
+          playCheck();
+          console.log(`🧪 [TEST BOARD] CHECK! King is in check.`);
+        } else {
+          playMove(!!result.capturedPiece);
+        }
+        
+        return true;
+      } else {
+        console.log(`🧪 [TEST BOARD] Move failed: ${result.error}`);
         playError();
-        return prevPieces;
-      });
-      
-      return true; // Always successful in TestBoard
+        return false;
+      }
     };
 
     // Create a simplified move handler for tap-to-move
@@ -119,7 +141,7 @@ export const TestBoard = ({
     }, 0);
     
     return () => clearTimeout(timer);
-  }, [setMoveHandler, playMove, playError, onMoveHandlerReady, onCapturedPiecesChange]);
+  }, []); // Empty dependency array - only run once on mount
 
   // Initialize audio on first user interaction
   useEffect(() => {
@@ -145,8 +167,11 @@ export const TestBoard = ({
 
   // Reset function
   const handleReset = () => {
+    gameService.reset(initialTestPieces);
     setTestPieces(initialTestPieces);
     setCapturedPieces([]);
+    setGameStatus('playing');
+    setKingInCheck(null);
     onCapturedPiecesChange?.([]);
     console.log('🧪 [TEST BOARD] Board reset to initial position');
   };
@@ -158,8 +183,8 @@ export const TestBoard = ({
     }
   }, []);
 
-  // 2x2 squares: a1, b1, a2, b2
-  const squares = ['a2', 'b2', 'a1', 'b1'];
+  // 3x3 squares: arranged in grid (top to bottom, left to right)
+  const squares = ['a3', 'b3', 'c3', 'a2', 'b2', 'c2', 'a1', 'b1', 'c1'];
 
   // POC Mouse Event Pattern - Document 20
   const handleMouseDown = (e: React.MouseEvent, piece: ChessPiece, square: string) => {
@@ -175,8 +200,10 @@ export const TestBoard = ({
     const actualSize = Math.max(pieceElement.offsetWidth, pieceElement.offsetHeight);
     console.log(`🎯 [TEST BOARD] Calculated piece size: ${actualSize}px`);
     
-    // Start drag with valid moves (for now, allow all other squares)
-    const validMoves = squares.filter(s => s !== square) as ChessPosition[];
+    // Get valid moves from game service
+    console.log(`🔧 [TEST BOARD] About to call gameService.getValidMoves for ${square}`, gameService);
+    const validMoves = gameService.getValidMoves(square as ChessPosition);
+    console.log(`🎯 [TEST BOARD] Valid moves for ${piece.color} ${piece.type} at ${square}:`, validMoves);
     startDrag(piece, square as ChessPosition, validMoves, actualSize);
     
     // Set up global mouse tracking
@@ -251,16 +278,19 @@ export const TestBoard = ({
   };
 
   const getSquareColor = (square: string) => {
-    // Simple alternating colors for 2x2
-    const isLight = (square === 'a2' || square === 'b1');
+    // Standard chess board coloring for 3x3
+    const file = square[0];
+    const rank = parseInt(square[1]);
+    const fileIndex = file.charCodeAt(0) - 'a'.charCodeAt(0); // a=0, b=1, c=2
+    const isLight = (fileIndex + rank) % 2 === 0;
     return isLight ? '#F0D9B5' : '#B58863';
   };
 
   return (
     <div style={{ 
       display: 'grid', 
-      gridTemplateColumns: 'repeat(2, 1fr)', 
-      gridTemplateRows: 'repeat(2, 1fr)',
+      gridTemplateColumns: 'repeat(3, 1fr)', 
+      gridTemplateRows: 'repeat(3, 1fr)',
       width: '100%', // Fill parent container
       height: '100%', // Fill parent container
       border: '2px solid #8B4513', 
@@ -272,6 +302,7 @@ export const TestBoard = ({
         const piece = testPieces[square];
         const isHighlighted = isSelected(square);
         const isValidDrop = isValidTarget(square);
+        const isKingInCheck = piece?.type === 'king' && kingInCheck === piece.color && gameStatus === 'check';
 
         return (
           <div
@@ -284,7 +315,8 @@ export const TestBoard = ({
             }}
             style={{
               backgroundColor: getSquareColor(square),
-              border: isHighlighted ? '3px solid #4A90E2' : '1px solid #999',
+              border: isHighlighted ? '3px solid #4A90E2' : 
+                      isKingInCheck ? '4px solid #FF0000' : '1px solid #999',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -296,6 +328,10 @@ export const TestBoard = ({
               WebkitTapHighlightColor: 'transparent', // Remove iOS tap highlight
               ...(isValidDrop && {
                 boxShadow: 'inset 0 0 0 4px rgba(0, 255, 0, 0.6)'
+              }),
+              ...(isKingInCheck && {
+                backgroundColor: 'rgba(255, 0, 0, 0.2)', // Red tint for king in check
+                animation: 'pulse 1s infinite'
               })
             }}
           >
@@ -346,6 +382,13 @@ export const TestBoard = ({
           </div>
         );
       })}
+
+      {/* Checkmate Modal */}
+      <CheckmateModal
+        isOpen={gameStatus === 'checkmate'}
+        winner={gameStatus === 'checkmate' && kingInCheck ? (kingInCheck === 'white' ? 'black' : 'white') : 'white'}
+        onReset={handleReset}
+      />
     </div>
   );
 };
