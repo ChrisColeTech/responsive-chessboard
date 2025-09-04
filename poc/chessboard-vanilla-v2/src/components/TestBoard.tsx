@@ -1,5 +1,5 @@
 // TestBoard.tsx - 3x3 chess board with game logic validation
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { ChessPiece, ChessPosition } from '../types';
 import { PIECE_SETS, getPieceImagePath } from '../constants/pieces.constants';
 import { useDrag } from '../providers';
@@ -93,32 +93,40 @@ export const TestBoard = ({
       const result = gameService.makeMove(move.from, move.to);
       
       if (result.needsPromotion) {
-        // Show promotion modal dialog
+        // Show promotion modal dialog - defer state updates
         console.log(`🎉 [TEST BOARD] Pawn promotion needed at ${result.promotionSquare}`);
         const piece = gameService.getGameState().pieces[move.from];
-        setPromotionMove({ from: move.from, to: move.to });
-        setPromotionColor(piece?.color || 'white');
-        setShowPromotionModal(true);
+        
+        setTimeout(() => {
+          setPromotionMove({ from: move.from, to: move.to });
+          setPromotionColor(piece?.color || 'white');
+          setShowPromotionModal(true);
+        }, 0);
+        
         return false; // Don't complete the move yet
       }
       
       if (result.success && result.newGameState) {
         console.log(`🧪 [TEST BOARD] Move successful: ${move.from} → ${move.to}`);
         
-        // Update UI state
-        setTestPieces(result.newGameState.pieces);
-        setGameStatus(result.newGameState.gameStatus);
-        setKingInCheck(result.newGameState.kingInCheck);
-        
-        // Handle captured piece
-        if (result.capturedPiece) {
-          setCapturedPieces(prev => {
-            const newCaptured = [...prev, result.capturedPiece!];
-            onCapturedPiecesChange?.(newCaptured);
-            return newCaptured;
-          });
-          console.log(`🧪 [TEST BOARD] Piece captured: ${result.capturedPiece.color} ${result.capturedPiece.type}`);
-        }
+        // Defer all state updates to avoid render-time updates
+        setTimeout(() => {
+          // Update UI state
+          setTestPieces(result.newGameState!.pieces);
+          setGameStatus(result.newGameState!.gameStatus);
+          setKingInCheck(result.newGameState!.kingInCheck);
+          
+          // Handle captured piece
+          if (result.capturedPiece) {
+            setCapturedPieces(prev => {
+              const newCaptured = [...prev, result.capturedPiece!];
+              // Call parent update outside of setTimeout to avoid stale closure
+              setTimeout(() => onCapturedPiecesChange?.(newCaptured), 0);
+              return newCaptured;
+            });
+            console.log(`🧪 [TEST BOARD] Piece captured: ${result.capturedPiece.color} ${result.capturedPiece.type}`);
+          }
+        }, 0);
         
         // Play appropriate sound effects
         if (result.newGameState.gameStatus === 'checkmate') {
@@ -190,7 +198,8 @@ export const TestBoard = ({
       if (result.capturedPiece) {
         setCapturedPieces(prev => {
           const newCaptured = [...prev, result.capturedPiece!];
-          onCapturedPiecesChange?.(newCaptured);
+          // Call parent update outside of setTimeout to avoid stale closure
+          setTimeout(() => onCapturedPiecesChange?.(newCaptured), 0);
           return newCaptured;
         });
       }
@@ -409,18 +418,20 @@ export const TestBoard = ({
               />
             )}
             
-            {/* Square label */}
-            <div style={{
-              position: 'absolute',
-              bottom: '2px',
-              right: '2px',
-              fontSize: '10px',
-              fontWeight: 'bold',
-              color: getSquareColor(square) === '#F0D9B5' ? '#8B4513' : '#F0D9B5',
-              pointerEvents: 'none'
-            }}>
-              {square}
-            </div>
+            {/* Square label - only on bottom row and right column */}
+            {(square[1] === '1' || square[0] === 'c') && (
+              <div style={{
+                position: 'absolute',
+                bottom: '2px',
+                right: '2px',
+                fontSize: '10px',
+                fontWeight: 'bold',
+                color: getSquareColor(square) === '#F0D9B5' ? '#8B4513' : '#F0D9B5',
+                pointerEvents: 'none'
+              }}>
+                {square}
+              </div>
+            )}
 
             {/* Valid move indicator */}
             {isValidDrop && !piece && (
