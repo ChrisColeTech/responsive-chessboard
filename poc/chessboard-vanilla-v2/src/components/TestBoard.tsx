@@ -6,6 +6,7 @@ import { useDrag } from '../providers';
 import { useChessAudio } from '../services/audioService';
 import { TestBoardGameService, type GameStatus } from '../services/TestBoardGameService';
 import { CheckmateModal } from './CheckmateModal';
+import { PromotionModal } from './PromotionModal';
 
 interface TestBoardProps {
   onSquareClick: (position: ChessPosition) => void;
@@ -66,6 +67,11 @@ export const TestBoard = ({
   const [gameStatus, setGameStatus] = useState<GameStatus>('playing');
   const [kingInCheck, setKingInCheck] = useState<string | null>(null);
   
+  // Promotion state
+  const [showPromotionModal, setShowPromotionModal] = useState(false);
+  const [promotionMove, setPromotionMove] = useState<{ from: ChessPosition; to: ChessPosition } | null>(null);
+  const [promotionColor, setPromotionColor] = useState<'white' | 'black'>('white');
+  
   // Update parent component when captured pieces change
   useEffect(() => {
     onCapturedPiecesChange?.(capturedPieces);
@@ -85,6 +91,16 @@ export const TestBoard = ({
       
       // Use game service to validate and execute move
       const result = gameService.makeMove(move.from, move.to);
+      
+      if (result.needsPromotion) {
+        // Show promotion modal dialog
+        console.log(`🎉 [TEST BOARD] Pawn promotion needed at ${result.promotionSquare}`);
+        const piece = gameService.getGameState().pieces[move.from];
+        setPromotionMove({ from: move.from, to: move.to });
+        setPromotionColor(piece?.color || 'white');
+        setShowPromotionModal(true);
+        return false; // Don't complete the move yet
+      }
       
       if (result.success && result.newGameState) {
         console.log(`🧪 [TEST BOARD] Move successful: ${move.from} → ${move.to}`);
@@ -143,27 +159,62 @@ export const TestBoard = ({
     return () => clearTimeout(timer);
   }, []); // Empty dependency array - only run once on mount
 
-  // Initialize audio on first user interaction
-  useEffect(() => {
-    const handleFirstInteraction = () => {
-      console.log('🧪 [TEST BOARD] First user interaction - preloading sounds');
-      preloadSounds();
-      playGameStart(); // Welcome sound
+
+  // Promotion handling functions
+  const handlePromotionSelect = async (promotionPiece: 'queen' | 'rook' | 'bishop' | 'knight') => {
+    if (!promotionMove) return;
+    
+    console.log(`🎉 [TEST BOARD] Promotion selected: ${promotionPiece}`);
+    
+    // Execute the move with promotion
+    const result = gameService.makeMove(promotionMove.from, promotionMove.to, promotionPiece);
+    
+    if (result.success && result.newGameState) {
+      console.log(`🎉 [TEST BOARD] Promotion completed! New pieces:`, result.newGameState.pieces);
+      console.log(`🎉 [TEST BOARD] Setting UI state with pieces:`, Object.keys(result.newGameState.pieces));
       
-      // Remove listeners after first interaction
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('keydown', handleFirstInteraction);
-    };
+      // Update UI state
+      setTestPieces(result.newGameState.pieces);
+      setGameStatus(result.newGameState.gameStatus);
+      setKingInCheck(result.newGameState.kingInCheck);
+      
+      // Force UI update to match game service state
+      console.log(`🎉 [TEST BOARD] Forcing UI sync with game service state`);
+      setTimeout(() => {
+        const currentGameState = gameService.getGameState();
+        setTestPieces(currentGameState.pieces);
+        console.log(`🎉 [TEST BOARD] UI state forcibly synced:`, Object.keys(currentGameState.pieces));
+      }, 50);
+      
+      // Handle captured piece
+      if (result.capturedPiece) {
+        setCapturedPieces(prev => {
+          const newCaptured = [...prev, result.capturedPiece!];
+          onCapturedPiecesChange?.(newCaptured);
+          return newCaptured;
+        });
+      }
+      
+      // Play sound effects
+      if (result.newGameState.gameStatus === 'checkmate') {
+        playGameStart(); // Use game start as "game over" sound
+      } else if (result.newGameState.gameStatus === 'check') {
+        playCheck();
+      } else {
+        playMove(!!result.capturedPiece);
+      }
+    }
+    
+    // Close promotion modal and reset state
+    setShowPromotionModal(false);
+    setPromotionMove(null);
+  };
 
-    // Listen for first user interaction to enable audio
-    document.addEventListener('click', handleFirstInteraction, { once: true });
-    document.addEventListener('keydown', handleFirstInteraction, { once: true });
-
-    return () => {
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('keydown', handleFirstInteraction);
-    };
-  }, [preloadSounds, playGameStart]);
+  const handlePromotionCancel = () => {
+    console.log('🎉 [TEST BOARD] Promotion cancelled');
+    setShowPromotionModal(false);
+    setPromotionMove(null);
+  };
 
   // Reset function
   const handleReset = () => {
@@ -172,6 +223,8 @@ export const TestBoard = ({
     setCapturedPieces([]);
     setGameStatus('playing');
     setKingInCheck(null);
+    setShowPromotionModal(false);
+    setPromotionMove(null);
     onCapturedPiecesChange?.([]);
     console.log('🧪 [TEST BOARD] Board reset to initial position');
   };
@@ -379,6 +432,7 @@ export const TestBoard = ({
                 pointerEvents: 'none'
               }} />
             )}
+
           </div>
         );
       })}
@@ -389,6 +443,15 @@ export const TestBoard = ({
         winner={gameStatus === 'checkmate' && kingInCheck ? (kingInCheck === 'white' ? 'black' : 'white') : 'white'}
         onReset={handleReset}
       />
+
+      {/* Promotion Modal */}
+      <PromotionModal
+        isOpen={showPromotionModal}
+        color={promotionColor}
+        onSelect={handlePromotionSelect}
+        onCancel={handlePromotionCancel}
+      />
+
     </div>
   );
 };

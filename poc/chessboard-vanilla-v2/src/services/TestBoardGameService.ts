@@ -15,6 +15,8 @@ export interface MoveResult {
   capturedPiece?: ChessPiece;
   newGameState?: GameState;
   error?: string;
+  needsPromotion?: boolean;
+  promotionSquare?: ChessPosition;
 }
 
 export class TestBoardGameService {
@@ -56,17 +58,38 @@ export class TestBoardGameService {
   }
 
   // Attempt to make a move (FREE PLAY - no turn restrictions)
-  makeMove(from: ChessPosition, to: ChessPosition): MoveResult {
+  makeMove(from: ChessPosition, to: ChessPosition, promotionPiece?: 'queen' | 'rook' | 'bishop' | 'knight'): MoveResult {
+    console.log(`🎯 [GAME SERVICE] makeMove called: ${from} → ${to}${promotionPiece ? ` (promote to ${promotionPiece})` : ''}`);
+    
     const piece = this.gameState.pieces[from];
+    console.log(`🎯 [GAME SERVICE] Piece at ${from}:`, piece);
     
     // Basic validation
     if (!piece) {
+      console.log(`❌ [GAME SERVICE] No piece found at ${from}`);
       return { success: false, error: 'No piece at source position' };
     }
+
+    console.log(`🎯 [GAME SERVICE] Current game state pieces:`, Object.keys(this.gameState.pieces));
 
     const validMoves = this.getValidMoves(from);
     if (!validMoves.includes(to)) {
       return { success: false, error: 'Invalid move' };
+    }
+
+    // Check for pawn promotion
+    const isPromotion = piece.type === 'pawn' && 
+      ((piece.color === 'white' && to[1] === '3') || // White pawn reaches rank 3
+       (piece.color === 'black' && to[1] === '1'));   // Black pawn reaches rank 1
+
+    if (isPromotion && !promotionPiece) {
+      // Need promotion piece selection
+      return {
+        success: false,
+        needsPromotion: true,
+        promotionSquare: to,
+        error: 'Pawn promotion requires piece selection'
+      };
     }
 
     // Execute the move
@@ -75,10 +98,24 @@ export class TestBoardGameService {
     
     // Move the piece
     delete newPieces[from];
-    newPieces[to] = {
-      ...piece,
-      position: this.parsePosition(to)
-    };
+    
+    if (isPromotion && promotionPiece) {
+      // Promote pawn to selected piece
+      const promotedPiece = {
+        id: `promoted-${promotionPiece}-${to}`,
+        type: promotionPiece,
+        color: piece.color,
+        position: this.parsePosition(to)
+      };
+      newPieces[to] = promotedPiece;
+      console.log(`🎉 [GAME SERVICE] Pawn promoted to ${promotionPiece} at ${to}:`, promotedPiece);
+    } else {
+      // Normal move
+      newPieces[to] = {
+        ...piece,
+        position: this.parsePosition(to)
+      };
+    }
 
     // Update game state (FREE PLAY - don't change turns)
     const newState: GameState = {
@@ -204,6 +241,74 @@ export class TestBoardGameService {
           }
         }
         break;
+
+      case 'rook':
+        // Rook moves horizontally and vertically
+        const rookDirections = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+        
+        for (const [df, dr] of rookDirections) {
+          for (let distance = 1; distance <= 3; distance++) {
+            const newFile = String.fromCharCode(file.charCodeAt(0) + df * distance);
+            const newRank = rank + dr * distance;
+            const newPos = `${newFile}${newRank}` as ChessPosition;
+            
+            if (!this.isValidSquare(newPos)) break;
+            
+            const targetPiece = this.gameState.pieces[newPos];
+            if (targetPiece) {
+              if (targetPiece.color !== piece.color) {
+                moves.push(newPos);
+              }
+              break;
+            } else {
+              moves.push(newPos);
+            }
+          }
+        }
+        break;
+
+      case 'bishop':
+        // Bishop moves diagonally
+        const bishopDirections = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+        
+        for (const [df, dr] of bishopDirections) {
+          for (let distance = 1; distance <= 3; distance++) {
+            const newFile = String.fromCharCode(file.charCodeAt(0) + df * distance);
+            const newRank = rank + dr * distance;
+            const newPos = `${newFile}${newRank}` as ChessPosition;
+            
+            if (!this.isValidSquare(newPos)) break;
+            
+            const targetPiece = this.gameState.pieces[newPos];
+            if (targetPiece) {
+              if (targetPiece.color !== piece.color) {
+                moves.push(newPos);
+              }
+              break;
+            } else {
+              moves.push(newPos);
+            }
+          }
+        }
+        break;
+
+      case 'knight':
+        // Knight moves in L-shapes
+        const knightMoves = [
+          [-2, -1], [-2, 1], [-1, -2], [-1, 2],
+          [1, -2], [1, 2], [2, -1], [2, 1]
+        ];
+        
+        for (const [df, dr] of knightMoves) {
+          const newFile = String.fromCharCode(file.charCodeAt(0) + df);
+          const newRank = rank + dr;
+          const newPos = `${newFile}${newRank}` as ChessPosition;
+          
+          if (this.isValidSquare(newPos) && this.canMoveTo(piece.color, newPos)) {
+            moves.push(newPos);
+          }
+        }
+        break;
     }
 
     return moves;
@@ -224,7 +329,6 @@ export class TestBoardGameService {
     const kingPos = piece.type === 'king' ? to : this.findKing(piece.color, simulatedPieces);
     if (!kingPos) {
       // No king found - in free play mode, allow move (no king to protect)
-      console.log(`🔍 [GAME SERVICE] No ${piece.color} king found - allowing move in free play mode`);
       return false;
     }
 
@@ -299,6 +403,59 @@ export class TestBoardGameService {
             moves.push(newPos);
             
             if (pieces[newPos]) break; // Stop at first piece encountered
+          }
+        }
+        break;
+
+      case 'rook':
+        const rookDirections = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+        
+        for (const [df, dr] of rookDirections) {
+          for (let distance = 1; distance <= 3; distance++) {
+            const newFile = String.fromCharCode(file.charCodeAt(0) + df * distance);
+            const newRank = rank + dr * distance;
+            const newPos = `${newFile}${newRank}` as ChessPosition;
+            
+            if (!this.isValidSquare(newPos)) break;
+            
+            moves.push(newPos);
+            
+            if (pieces[newPos]) break;
+          }
+        }
+        break;
+
+      case 'bishop':
+        const bishopDirections = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+        
+        for (const [df, dr] of bishopDirections) {
+          for (let distance = 1; distance <= 3; distance++) {
+            const newFile = String.fromCharCode(file.charCodeAt(0) + df * distance);
+            const newRank = rank + dr * distance;
+            const newPos = `${newFile}${newRank}` as ChessPosition;
+            
+            if (!this.isValidSquare(newPos)) break;
+            
+            moves.push(newPos);
+            
+            if (pieces[newPos]) break;
+          }
+        }
+        break;
+
+      case 'knight':
+        const knightMoves = [
+          [-2, -1], [-2, 1], [-1, -2], [-1, 2],
+          [1, -2], [1, 2], [2, -1], [2, 1]
+        ];
+        
+        for (const [df, dr] of knightMoves) {
+          const newFile = String.fromCharCode(file.charCodeAt(0) + df);
+          const newRank = rank + dr;
+          const newPos = `${newFile}${newRank}` as ChessPosition;
+          
+          if (this.isValidSquare(newPos)) {
+            moves.push(newPos);
           }
         }
         break;

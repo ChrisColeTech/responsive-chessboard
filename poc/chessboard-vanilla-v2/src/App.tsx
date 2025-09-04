@@ -3,6 +3,8 @@ import { DragTestPage, LayoutTestPage, WorkerTestPage } from './pages'
 import { DragProvider, useDrag } from './providers/DragProvider'
 import { DraggedPiece } from './components/DraggedPiece'
 import { useSelectedTab, useAppStore } from './stores/appStore'
+import { useChessAudio } from './services/audioService'
+import { useEffect } from 'react'
 
 /*
  * To add a new route/page:
@@ -20,6 +22,29 @@ function AppContent() {
   const selectedTab = useSelectedTab()
   const setSelectedTab = useAppStore((state) => state.setSelectedTab)
   const { draggedPiece, cursorPosition, draggedPieceSize } = useDrag()
+  const { preloadSounds, playGameStart } = useChessAudio()
+
+  // Initialize audio system on first user interaction (application-wide)
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      console.log('🎵 [APP] First user interaction - initializing audio system');
+      preloadSounds();
+      playGameStart(); // Welcome sound
+      
+      // Remove listeners after first interaction
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+    };
+
+    // Listen for first user interaction to enable audio
+    document.addEventListener('click', handleFirstInteraction, { once: true });
+    document.addEventListener('keydown', handleFirstInteraction, { once: true });
+
+    return () => {
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+    };
+  }, [preloadSounds, playGameStart])
 
   return (
     <AppLayout 

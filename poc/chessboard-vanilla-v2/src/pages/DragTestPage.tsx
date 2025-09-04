@@ -84,9 +84,9 @@ export const DragTestPage: React.FC = () => {
           </div>
         </div>
 
-      {/* Black Captured Pieces - Above Board */}
+      {/* White Captured Pieces - Above Board */}
       <CapturedPieces 
-        pieces={capturedPieces.filter(p => p.color === 'black')} 
+        pieces={capturedPieces.filter(p => p.color === 'white')} 
         className="mb-4" 
       />
 
@@ -134,9 +134,9 @@ export const DragTestPage: React.FC = () => {
         </div>
       </div>
 
-      {/* White Captured Pieces - Below Board */}
+      {/* Black Captured Pieces - Below Board */}
       <CapturedPieces 
-        pieces={capturedPieces.filter(p => p.color === 'white')} 
+        pieces={capturedPieces.filter(p => p.color === 'black')} 
         className="mt-4" 
       />
       

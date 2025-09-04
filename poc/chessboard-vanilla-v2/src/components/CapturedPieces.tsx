@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import type { ChessPiece } from '../types'
 
 interface CapturedPiecesProps {
@@ -23,61 +23,33 @@ export const CapturedPieces: React.FC<CapturedPiecesProps> = ({
   pieces, 
   className = "" 
 }) => {
-  if (pieces.length === 0) {
-    return null
-  }
-
-  // Group pieces by color for better organization
-  const whitePieces = pieces.filter(p => p.color === 'white')
-  const blackPieces = pieces.filter(p => p.color === 'black')
-
   return (
-    <div className={`card-gaming p-4 ${className}`}>
+    <div 
+      className={`card-gaming p-4 ${className}`} 
+      style={{ 
+        scrollBehavior: 'auto', 
+        scrollMargin: '0px',
+        contain: 'layout style paint'
+      }}
+    >
       <div className="flex items-center gap-2 mb-3">
-        <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+        <div className={`w-2 h-2 rounded-full ${pieces.length > 0 ? 'bg-red-500 animate-pulse' : 'bg-muted-foreground/30'}`}></div>
         <h4 className="text-sm font-semibold text-foreground/90">
           Captured Pieces ({pieces.length})
         </h4>
       </div>
       
-      <div className="space-y-3">
-        {whitePieces.length > 0 && (
-          <div>
-            <div className="text-xs text-muted-foreground mb-1 font-medium">
-              White pieces ({whitePieces.length})
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {whitePieces.map((piece, index) => (
-                <div 
-                  key={`${piece.id}-${index}`}
-                  className="w-8 h-8 bg-muted rounded-lg border border-border/50 flex items-center justify-center text-lg hover:bg-muted/80 transition-colors"
-                  title={`${piece.color} ${piece.type}`}
-                >
-                  {getPieceSymbol(piece)}
-                </div>
-              ))}
-            </div>
+      <div className="flex flex-wrap gap-2">
+        {pieces.map((piece, index) => (
+          <div 
+            key={`${piece.id}-${index}`}
+            className="w-8 h-8 bg-muted rounded-lg border border-border/50 flex items-center justify-center text-lg hover:bg-muted/80 transition-colors"
+            title={`${piece.color} ${piece.type}`}
+            tabIndex={-1}
+          >
+            {getPieceSymbol(piece)}
           </div>
-        )}
-        
-        {blackPieces.length > 0 && (
-          <div>
-            <div className="text-xs text-muted-foreground mb-1 font-medium">
-              Black pieces ({blackPieces.length})
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {blackPieces.map((piece, index) => (
-                <div 
-                  key={`${piece.id}-${index}`}
-                  className="w-8 h-8 bg-muted rounded-lg border border-border/50 flex items-center justify-center text-lg hover:bg-muted/80 transition-colors"
-                  title={`${piece.color} ${piece.type}`}
-                >
-                  {getPieceSymbol(piece)}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        ))}
       </div>
     </div>
   )
