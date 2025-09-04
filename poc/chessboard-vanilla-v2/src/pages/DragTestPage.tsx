@@ -11,6 +11,7 @@ export const DragTestPage: React.FC = () => {
   const [validDropTargets, setValidDropTargets] = useState<ChessPosition[]>([])
   const [showInstructions, setShowInstructions] = useState(false)
   const [capturedPieces, setCapturedPieces] = useState<ChessPiece[]>([])
+  const [moveHandler, setMoveHandler] = useState<((from: ChessPosition, to: ChessPosition) => Promise<boolean>) | null>(null)
   const { playMove, playError } = useChessAudio()
 
   const instructions = [
@@ -21,9 +22,31 @@ export const DragTestPage: React.FC = () => {
   ]
 
   const handleSquareClick = (position: ChessPosition) => {
-    setSelectedSquare(position)
-    // For demo purposes, set some valid targets
-    setValidDropTargets(['b1', 'b2'])
+    console.log(`🎯 [DRAG TEST PAGE] Square clicked: ${position}`);
+    
+    if (selectedSquare === null) {
+      // First click - select a square
+      setSelectedSquare(position)
+      // For demo purposes, set valid targets (allow moves to other squares)
+      const allSquares: ChessPosition[] = ['a1', 'a2', 'b1', 'b2']
+      const validTargets = allSquares.filter(sq => sq !== position)
+      setValidDropTargets(validTargets)
+    } else if (selectedSquare === position) {
+      // Clicking same square - deselect
+      setSelectedSquare(null)
+      setValidDropTargets([])
+    } else {
+      // Second click - attempt move using TestBoard's move handler
+      if (moveHandler && validDropTargets.includes(position)) {
+        console.log(`🎯 [DRAG TEST PAGE] Executing move: ${selectedSquare} → ${position}`);
+        moveHandler(selectedSquare, position).then(success => {
+          console.log(`🎯 [DRAG TEST PAGE] Move result: ${success ? 'SUCCESS' : 'FAILED'}`);
+        });
+      }
+      // Clear selection after move attempt
+      setSelectedSquare(null)
+      setValidDropTargets([])
+    }
   }
 
   return (
@@ -104,6 +127,10 @@ export const DragTestPage: React.FC = () => {
               selectedSquare={selectedSquare}
               validDropTargets={validDropTargets}
               onCapturedPiecesChange={setCapturedPieces}
+              onMoveHandlerReady={(handler) => {
+                console.log('🎯 [DRAG TEST PAGE] Move handler ready');
+                setMoveHandler(() => handler);
+              }}
             />
           </div>
         </div>

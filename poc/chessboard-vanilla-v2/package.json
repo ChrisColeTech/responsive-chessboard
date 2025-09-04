@@ -4,10 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently --kill-others --prefix \"{name}\" --names \"VITE,TUNNEL\" \"vite\" \"sleep 3 && ngrok http 5173 --domain=eager-terrier-especially.ngrok-free.app\"",
+    "dev:local": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "ngrok": "ngrok http 5173",
+    "ngrok:url": "curl -s http://localhost:4040/api/tunnels | grep -o '\"public_url\":\"[^\"]*\"' | cut -d'\"' -f4",
+    "tunnel:url": "echo 'Permanent URL: https://eager-terrier-especially.ngrok-free.app'",
+    "cloudflared": "cloudflared tunnel --url http://localhost:5173 --no-autoupdate"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
@@ -36,6 +41,7 @@
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^9.2.1",
     "eslint": "^9.33.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",

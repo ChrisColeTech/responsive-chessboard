@@ -5,12 +5,22 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    port: process.env.PORT ? parseInt(process.env.PORT) : 5173, // Use PORT env var or default to 5173
+    host: true, // Allow external connections
+    allowedHosts: [
+      'localhost',
+      '127.0.0.1',
+      '.ngrok-free.app', // Allow all ngrok free domains
+      '.ngrok.io', // Allow ngrok.io domains
+      '.ngrok.app', // Allow ngrok.app domains
+      '.trycloudflare.com' // Allow Cloudflare tunnel domains
+    ],
     watch: {
       usePolling: true,
-      interval: 1000, // Check for changes every 1 second
+      interval: 100
     },
     hmr: {
-      overlay: true, // Show HMR errors as overlay
-    },
+      overlay: true
+    }
   },
 })

@@ -10,6 +10,7 @@ interface TestBoardProps {
   selectedSquare: ChessPosition | null;
   validDropTargets: ChessPosition[];
   onCapturedPiecesChange?: (pieces: ChessPiece[]) => void;
+  onMoveHandlerReady?: (moveHandler: (from: ChessPosition, to: ChessPosition) => Promise<boolean>) => void;
 }
 
 // Stable piece set selection
@@ -36,7 +37,8 @@ export const TestBoard = ({
   onSquareClick, 
   selectedSquare, 
   validDropTargets,
-  onCapturedPiecesChange
+  onCapturedPiecesChange,
+  onMoveHandlerReady
 }: TestBoardProps) => {
   const { startDrag, updateCursor, endDrag, clearDrag, setMoveHandler } = useDrag();
   const { playMove, playError, playGameStart, preloadSounds } = useChessAudio();
@@ -98,15 +100,26 @@ export const TestBoard = ({
       
       return true; // Always successful in TestBoard
     };
+
+    // Create a simplified move handler for tap-to-move
+    const tapMoveHandler = async (from: ChessPosition, to: ChessPosition): Promise<boolean> => {
+      console.log(`🎯 [TAP-TO-MOVE] Executing move: ${from} → ${to}`);
+      return await handleTestMove({ from, to });
+    };
     
     // Use setTimeout to ensure TestBoard handler is set after main app handler
     const timer = setTimeout(() => {
       console.log('🧪 [TEST BOARD] Setting TestBoard move handler (overriding main app)');
       setMoveHandler(handleTestMove);
+      
+      // Provide tap-to-move handler to parent
+      if (onMoveHandlerReady) {
+        onMoveHandlerReady(tapMoveHandler);
+      }
     }, 0);
     
     return () => clearTimeout(timer);
-  }, [setMoveHandler, playMove, playError]);
+  }, [setMoveHandler, playMove, playError, onMoveHandlerReady, onCapturedPiecesChange]);
 
   // Initialize audio on first user interaction
   useEffect(() => {
@@ -265,6 +278,10 @@ export const TestBoard = ({
             key={square}
             data-square={square} // Essential for drop detection
             onClick={() => onSquareClick(square as ChessPosition)}
+            onTouchEnd={(e) => {
+              e.preventDefault(); // Prevent double-firing with onClick
+              onSquareClick(square as ChessPosition);
+            }}
             style={{
               backgroundColor: getSquareColor(square),
               border: isHighlighted ? '3px solid #4A90E2' : '1px solid #999',
@@ -275,6 +292,8 @@ export const TestBoard = ({
               position: 'relative',
               fontSize: '32px',
               userSelect: 'none',
+              touchAction: 'manipulation', // Improves touch responsiveness
+              WebkitTapHighlightColor: 'transparent', // Remove iOS tap highlight
               ...(isValidDrop && {
                 boxShadow: 'inset 0 0 0 4px rgba(0, 255, 0, 0.6)'
               })

@@ -39,25 +39,25 @@ export function AppLayout({ children, currentTab, onTabChange }: AppLayoutProps)
   const { isOpen: isSettingsPanelOpen, open: openSettings, close: closeSettings } = useSettings()
 
   return (
-    <div className="flex flex-col h-screen bg-background text-foreground">
+    <div className="relative min-h-screen min-h-[100dvh] bg-background text-foreground">
       <BackgroundEffects />
       
       {/* 
-        Header - Uses `glass-layout` for sharp edges and subtle glassmorphism
-        ✅ Correct: Full-width layout element with no rounded corners
+        Header - Fixed positioning for mobile compatibility
+        ✅ Fixed to top with proper z-index
       */}
-      <header className="flex-shrink-0 relative z-20">
+      <header className="fixed top-0 left-0 right-0 z-20">
         <Header 
           onOpenSettings={openSettings} 
           isSettingsOpen={isSettingsPanelOpen} 
         />
       </header>
         
-        {/* Main Content Area - with overlay settings */}
-        <div className="flex-1 relative z-10 overflow-hidden">
-          {/* Primary Content */}
+        {/* Main Content Area - constrained between fixed header and footer */}
+        <div className="absolute top-16 bottom-[84px] left-0 right-0 z-10">
+          {/* Primary Content - scrollable within the constrained area */}
           <main className="w-full h-full overflow-auto">
-            <div className="container mx-auto px-6 py-8 h-full">
+            <div className="container mx-auto px-6 py-8">
               {children}
             </div>
           </main>
@@ -88,10 +88,10 @@ export function AppLayout({ children, currentTab, onTabChange }: AppLayoutProps)
         </div>
         
         {/* 
-          TabBar - Uses `glass-layout` for sharp edges and subtle glassmorphism
-          ✅ Correct: Full-width layout element with no rounded corners
+          TabBar - Fixed positioning for mobile compatibility  
+          ✅ Fixed to bottom with proper z-index
         */}
-        <footer className="flex-shrink-0 relative z-20">
+        <footer className="fixed bottom-0 left-0 right-0 z-20">
           <TabBar currentTab={currentTab} onTabChange={onTabChange} />
         </footer>
     </div>
