@@ -1,12 +1,13 @@
-import { Crown } from 'lucide-react'
+import { Crown, Coins } from 'lucide-react'
 import { ThemeSwitcher } from '../ThemeSwitcher'
 
 interface HeaderProps {
   onOpenSettings: () => void
   isSettingsOpen: boolean
+  coinBalance?: number
 }
 
-export function Header({ onOpenSettings, isSettingsOpen }: HeaderProps) {
+export function Header({ onOpenSettings, isSettingsOpen, coinBalance }: HeaderProps) {
   return (
     <div className="w-full glass-layout border-b border-border/20 h-16">
       <div className="container mx-auto px-6 h-full">
@@ -22,7 +23,17 @@ export function Header({ onOpenSettings, isSettingsOpen }: HeaderProps) {
               POC
             </span>
           </div>
-          <ThemeSwitcher onOpenSettings={onOpenSettings} isSettingsOpen={isSettingsOpen} />
+          
+          <div className="flex items-center gap-4">
+            {coinBalance !== undefined && (
+              <div className="flex items-center gap-2 bg-background/50 px-3 py-1 rounded-lg border border-border">
+                <Coins className="w-4 h-4 text-accent animate-pulse" />
+                <span className="text-sm font-bold text-foreground">{coinBalance.toLocaleString()}</span>
+                <span className="text-xs text-muted-foreground">coins</span>
+              </div>
+            )}
+            <ThemeSwitcher onOpenSettings={onOpenSettings} isSettingsOpen={isSettingsOpen} />
+          </div>
         </div>
       </div>
     </div>

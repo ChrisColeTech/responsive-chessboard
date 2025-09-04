@@ -33,9 +33,10 @@ interface AppLayoutProps {
   children: ReactNode
   currentTab: TabId
   onTabChange: (tab: TabId) => void
+  coinBalance?: number
 }
 
-export function AppLayout({ children, currentTab, onTabChange }: AppLayoutProps) {
+export function AppLayout({ children, currentTab, onTabChange, coinBalance }: AppLayoutProps) {
   const { isOpen: isSettingsPanelOpen, open: openSettings, close: closeSettings } = useSettings()
 
   return (
@@ -49,7 +50,8 @@ export function AppLayout({ children, currentTab, onTabChange }: AppLayoutProps)
       <header className="fixed top-0 left-0 right-0 z-20">
         <Header 
           onOpenSettings={openSettings} 
-          isSettingsOpen={isSettingsPanelOpen} 
+          isSettingsOpen={isSettingsPanelOpen}
+          coinBalance={currentTab === 'slots' ? coinBalance : undefined}
         />
       </header>
         

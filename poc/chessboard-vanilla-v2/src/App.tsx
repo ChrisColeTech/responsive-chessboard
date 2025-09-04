@@ -1,5 +1,5 @@
 import { AppLayout } from './components/layout'
-import { DragTestPage, LayoutTestPage, WorkerTestPage } from './pages'
+import { DragTestPage, LayoutTestPage, WorkerTestPage, SlotMachineTestPage } from './pages'
 import { DragProvider, useDrag } from './providers/DragProvider'
 import { DraggedPiece } from './components/DraggedPiece'
 import { useSelectedTab, useAppStore } from './stores/appStore'
@@ -21,6 +21,7 @@ import { useEffect } from 'react'
 function AppContent() {
   const selectedTab = useSelectedTab()
   const setSelectedTab = useAppStore((state) => state.setSelectedTab)
+  const coinBalance = useAppStore((state) => state.coinBalance)
   const { draggedPiece, cursorPosition, draggedPieceSize } = useDrag()
   const { preloadSounds, playGameStart } = useChessAudio()
 
@@ -50,11 +51,13 @@ function AppContent() {
     <AppLayout 
       currentTab={selectedTab} 
       onTabChange={setSelectedTab}
+      coinBalance={coinBalance}
     >
       {/* Page routing */}
       {selectedTab === 'layout' && <LayoutTestPage />}
       {selectedTab === 'worker' && <WorkerTestPage />}
       {selectedTab === 'drag' && <DragTestPage />}
+      {selectedTab === 'slots' && <SlotMachineTestPage />}
       
       {/* Global drag overlay */}
       {draggedPiece && (

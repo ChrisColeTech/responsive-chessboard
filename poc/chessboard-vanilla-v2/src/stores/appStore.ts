@@ -25,6 +25,9 @@ interface AppState {
   
   // UI State
   lastVisited: Date
+  
+  // Game State
+  coinBalance: number
 }
 
 interface AppActions {
@@ -52,6 +55,9 @@ interface AppActions {
   
   // Utility actions
   reset: () => void
+  
+  // Game actions
+  setCoinBalance: (balance: number) => void
 }
 
 type AppStore = AppState & AppActions
@@ -69,6 +75,7 @@ const initialState: AppState = {
   checkSound: true,
   uiSounds: true,
   lastVisited: new Date(),
+  coinBalance: 1000,
 }
 
 export const useAppStore = create<AppStore>()(
@@ -157,6 +164,9 @@ export const useAppStore = create<AppStore>()(
       
       // Utility actions
       reset: () => set(initialState),
+      
+      // Game actions
+      setCoinBalance: (balance) => set({ coinBalance: Math.max(0, balance) }),
     }),
     {
       name: 'chess-app-store',
@@ -172,6 +182,7 @@ export const useAppStore = create<AppStore>()(
         checkSound: state.checkSound,
         uiSounds: state.uiSounds,
         lastVisited: new Date(),
+        coinBalance: state.coinBalance,
       }),
       onRehydrateStorage: () => (state) => {
         if (state?.currentTheme) {

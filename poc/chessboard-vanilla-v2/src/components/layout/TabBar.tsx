@@ -1,4 +1,4 @@
-import { Layout, Settings, Target } from 'lucide-react'
+import { Layout, Settings, Target, Coins } from 'lucide-react'
 import type { TabId } from './types'
 
 interface TabBarProps {
@@ -31,6 +31,12 @@ const tabs: Tab[] = [
     label: 'Drag Test',
     icon: Target,
     description: 'Drag & Drop'
+  },
+  {
+    id: 'slots',
+    label: 'Casino',
+    icon: Coins,
+    description: 'Slot Machine'
   }
 ]
 
