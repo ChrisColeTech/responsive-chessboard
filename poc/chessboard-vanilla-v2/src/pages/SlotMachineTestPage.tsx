@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Volume2, RotateCcw, Coins, RefreshCw } from 'lucide-react'
 import { SlotMachine } from '../components/SlotMachine'
 import { useChessAudio } from '../services/audioService'

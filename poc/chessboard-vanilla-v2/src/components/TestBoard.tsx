@@ -1,5 +1,5 @@
 // TestBoard.tsx - 3x3 chess board with game logic validation
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { ChessPiece, ChessPosition } from '../types';
 import { PIECE_SETS, getPieceImagePath } from '../constants/pieces.constants';
 import { useDrag } from '../providers';
@@ -58,7 +58,7 @@ export const TestBoard = ({
   onMoveHandlerReady
 }: TestBoardProps) => {
   const { startDrag, updateCursor, endDrag, clearDrag, setMoveHandler } = useDrag();
-  const { playMove, playError, playGameStart, playCheck, preloadSounds } = useChessAudio();
+  const { playMove, playError, playGameStart, playCheck, preloadSounds: _preloadSounds } = useChessAudio();
   
   // Game service and state
   const [gameService] = useState(() => new TestBoardGameService(initialTestPieces));

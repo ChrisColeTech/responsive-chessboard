@@ -1,4 +1,3 @@
-import React from 'react';
 import { Crown, RotateCcw } from 'lucide-react';
 
 interface CheckmateModalProps {

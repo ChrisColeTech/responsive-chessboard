@@ -1,4 +1,3 @@
-import React from 'react';
 import { Crown, X } from 'lucide-react';
 import { getPieceImagePath, DEFAULT_PIECE_SET } from '../constants/pieces.constants';
 

@@ -1,4 +1,4 @@
-import type { ChessPiece, ChessPosition } from '../types';
+import type { ChessPiece, ChessPosition, ChessPositionObject, File, Rank } from '../types';
 
 export type PieceColor = 'white' | 'black';
 export type GameStatus = 'playing' | 'check' | 'checkmate';
@@ -101,7 +101,7 @@ export class TestBoardGameService {
     
     if (isPromotion && promotionPiece) {
       // Promote pawn to selected piece
-      const promotedPiece = {
+      const promotedPiece: ChessPiece = {
         id: `promoted-${promotionPiece}-${to}`,
         type: promotionPiece,
         color: piece.color,
@@ -321,7 +321,6 @@ export class TestBoardGameService {
 
     // Simulate the move
     const simulatedPieces = { ...this.gameState.pieces };
-    const capturedPiece = simulatedPieces[to];
     delete simulatedPieces[from];
     simulatedPieces[to] = piece;
 
@@ -529,10 +528,10 @@ export class TestBoardGameService {
   }
 
   // Helper: Parse position string to file/rank
-  private parsePosition(position: ChessPosition): { file: string; rank: number } {
+  private parsePosition(position: ChessPosition): ChessPositionObject {
     return {
-      file: position[0],
-      rank: parseInt(position[1])
+      file: position[0] as File,
+      rank: parseInt(position[1]) as Rank
     };
   }
 }

@@ -6,15 +6,12 @@ interface SlotMachineProps {
   setCoinBalance: (balance: number) => void
 }
 
-export const SlotMachine: React.FC<SlotMachineProps> = ({ coinBalance, setCoinBalance }) => {
+export const SlotMachine: React.FC<SlotMachineProps> = ({ coinBalance: _coinBalance, setCoinBalance: _setCoinBalance }) => {
   const [wager, setWager] = useState(10)
   const [isSpinning, setIsSpinning] = useState(false)
   
-  // Chess-themed slot symbols (using Unicode chess pieces)
-  const symbols = ['♔', '♕', '♖', '♗', '♘', '♙', '♚', '♛', '♜', '♝', '♞', '♟']
-  
   // Current displayed symbols (3 reels) - starting with a mix of pieces
-  const [reels, setReels] = useState(['♔', '♛', '♖'])
+  const [reels, _setReels] = useState(['♔', '♛', '♖'])
 
   const handleWagerChange = (delta: number) => {
     const newWager = Math.max(1, Math.min(100, wager + delta))
