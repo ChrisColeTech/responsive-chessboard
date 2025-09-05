@@ -71,9 +71,9 @@ export class GlobalUIAudioService implements IGlobalUIAudioService {
       return;
     }
 
-    // Use capture phase (true) to catch events before they bubble
-    // This ensures we catch clicks even if stopPropagation() is called
-    document.addEventListener('click', this.globalClickHandler, true);
+    // Use event delegation on window with capture phase (avoids React conflicts)
+    window.addEventListener('click', this.globalClickHandler, true);
+    console.log('🔊 [GLOBAL UI AUDIO] Event listener attached to window with capture phase');
     
     this.initialized = true;
     console.log('🔊 [GLOBAL UI AUDIO] Service initialized and listening for click events');
@@ -88,10 +88,11 @@ export class GlobalUIAudioService implements IGlobalUIAudioService {
       return;
     }
 
-    document.removeEventListener('click', this.globalClickHandler, true);
+    // Clean up event listener
+    window.removeEventListener('click', this.globalClickHandler, true);
     
     this.initialized = false;
-    console.log('🔊 [GLOBAL UI AUDIO] Service destroyed, event listeners removed');
+    console.log('🔊 [GLOBAL UI AUDIO] Service destroyed, event listener removed from window');
   }
 
   /**
@@ -174,18 +175,23 @@ export class GlobalUIAudioService implements IGlobalUIAudioService {
    * Global click event handler - the core of the audio detection system
    */
   private handleGlobalClick(event: Event): void {
+    console.log('🔊 [GLOBAL UI AUDIO] Click detected:', event.target);
+    
     if (!this.config.enabled || !this.config.autoDetection) {
+      console.log('🔊 [GLOBAL UI AUDIO] Disabled - enabled:', this.config.enabled, 'autoDetection:', this.config.autoDetection);
       return;
     }
 
     const target = event.target as Element;
     if (!target) {
+      console.log('🔊 [GLOBAL UI AUDIO] No target');
       return;
     }
 
     try {
       // Detect if this click should trigger audio
       const detectionResult = this.detectClickableElement(target);
+      console.log('🔊 [GLOBAL UI AUDIO] Detection result:', detectionResult);
       
       if (detectionResult.shouldPlaySound) {
         console.log(
@@ -196,6 +202,8 @@ export class GlobalUIAudioService implements IGlobalUIAudioService {
         
         // Play the UI click sound
         this.playAudioForInteraction('click');
+      } else {
+        console.log('🔊 [GLOBAL UI AUDIO] Not playing sound - element excluded or not clickable');
       }
     } catch (error) {
       console.error('🔊 [GLOBAL UI AUDIO] Error in click handler:', error);

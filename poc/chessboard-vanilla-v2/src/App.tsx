@@ -5,7 +5,7 @@ import { InstructionsProvider } from './contexts/InstructionsContext'
 import { DraggedPiece } from './components/DraggedPiece'
 import { useSelectedTab, useAppStore } from './stores/appStore'
 import { useChessAudio } from './services/audioService'
-import { useGlobalUIAudio } from './hooks/useGlobalUIAudio'
+import SplashPage from './pages/SplashPage'
 import { useEffect } from 'react'
 
 /*
@@ -27,23 +27,7 @@ function AppContent() {
   const { draggedPiece, cursorPosition, draggedPieceSize } = useDrag()
   const { preloadSounds, playGameStart } = useChessAudio()
   
-  // Initialize global UI audio system
-  useGlobalUIAudio({
-    autoInitialize: true,
-    initialConfig: {
-      enabled: true,
-      autoDetection: true,
-      excludeSelectors: [
-        '[data-no-sound]',
-        '.no-sound', 
-        '.chess-piece',
-        '.chess-square',
-        '.chess-board',
-        '[disabled]',
-        '.disabled'
-      ]
-    }
-  })
+  // Use use-sound library for simple, reliable UI click sounds
 
   // Initialize audio system on first user interaction (application-wide)
   useEffect(() => {
@@ -83,6 +67,7 @@ function AppContent() {
       {selectedTab === 'uitests' && <UITestPage />}
       {selectedTab === 'slots' && <SlotMachineTestPage />}
       {selectedTab === 'play' && <PlayPage />}
+      {selectedTab === 'splash' && <SplashPage />}
       
       {/* Global drag overlay */}
       {draggedPiece && (

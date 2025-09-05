@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Play, Plus, Minus, Coins } from 'lucide-react'
+import { useUIClickSound } from '../hooks/useUIClickSound'
 
 interface SlotMachineProps {
   coinBalance: number
@@ -9,11 +10,13 @@ interface SlotMachineProps {
 export const SlotMachine: React.FC<SlotMachineProps> = ({ coinBalance: _coinBalance, setCoinBalance: _setCoinBalance }) => {
   const [wager, setWager] = useState(10)
   const [isSpinning, setIsSpinning] = useState(false)
+  const { playUIClick } = useUIClickSound()
   
   // Current displayed symbols (3 reels) - starting with a mix of pieces
   const [reels, _setReels] = useState(['♔', '♛', '♖'])
 
   const handleWagerChange = (delta: number) => {
+    playUIClick(`Wager ${delta > 0 ? 'Up' : 'Down'}`)
     const newWager = Math.max(1, Math.min(100, wager + delta))
     setWager(newWager)
   }
@@ -21,6 +24,7 @@ export const SlotMachine: React.FC<SlotMachineProps> = ({ coinBalance: _coinBala
   const handleSpin = () => {
     if (isSpinning) return
     
+    playUIClick('Slot Spin')
     setIsSpinning(true)
     
     // TODO: Add actual spinning logic later

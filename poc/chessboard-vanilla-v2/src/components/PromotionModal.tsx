@@ -1,5 +1,6 @@
 import { Crown, X } from 'lucide-react';
 import { getPieceImagePath, DEFAULT_PIECE_SET } from '../constants/pieces.constants';
+import { useUIClickSound } from '../hooks/useUIClickSound';
 
 type PromotionPiece = 'queen' | 'rook' | 'bishop' | 'knight';
 type PieceColor = 'white' | 'black';
@@ -22,6 +23,18 @@ const promotionPieces: Array<{ type: PromotionPiece; name: string }> = [
 ];
 
 export function PromotionModal({ isOpen, color, onSelect, onCancel }: PromotionModalProps) {
+  const { playUIClick } = useUIClickSound();
+  
+  const handleSelect = (pieceType: PromotionPiece) => {
+    playUIClick(`Promote to ${pieceType}`);
+    onSelect(pieceType);
+  };
+  
+  const handleCancel = () => {
+    playUIClick('Promotion Cancel');
+    onCancel();
+  };
+  
   if (!isOpen) return null;
 
   console.log(`🔍 [PROMOTION] Modal opened for ${color} pieces using piece set: ${STABLE_PIECE_SET}`);
@@ -37,7 +50,7 @@ export function PromotionModal({ isOpen, color, onSelect, onCancel }: PromotionM
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onCancel}
+        onClick={handleCancel}
       />
       
       {/* Modal Content */}
@@ -50,7 +63,7 @@ export function PromotionModal({ isOpen, color, onSelect, onCancel }: PromotionM
             <h3 className="text-lg font-semibold text-foreground">Pawn Promotion</h3>
           </div>
           <button
-            onClick={onCancel}
+            onClick={handleCancel}
             className="p-1 hover:bg-muted rounded-lg transition-colors"
             aria-label="Cancel promotion"
           >
@@ -67,7 +80,7 @@ export function PromotionModal({ isOpen, color, onSelect, onCancel }: PromotionM
           {promotionPieces.map((pieceOption) => (
             <button
               key={pieceOption.type}
-              onClick={() => onSelect(pieceOption.type)}
+              onClick={() => handleSelect(pieceOption.type)}
               className="flex flex-col items-center gap-3 p-4 rounded-lg border border-border hover:border-primary/50 hover:bg-muted/30 transition-all group"
             >
               {/* Piece SVG with background for visibility */}
@@ -98,7 +111,7 @@ export function PromotionModal({ isOpen, color, onSelect, onCancel }: PromotionM
 
         {/* Cancel Button */}
         <button
-          onClick={onCancel}
+          onClick={handleCancel}
           className="w-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground border border-border rounded-lg hover:bg-muted/30 transition-colors"
         >
           Cancel Move

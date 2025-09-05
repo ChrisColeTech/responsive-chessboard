@@ -1,4 +1,5 @@
 import { Crown, RotateCcw } from 'lucide-react';
+import { useUIClickSound } from '../hooks/useUIClickSound';
 
 interface CheckmateModalProps {
   isOpen: boolean;
@@ -7,6 +8,13 @@ interface CheckmateModalProps {
 }
 
 export function CheckmateModal({ isOpen, winner, onReset }: CheckmateModalProps) {
+  const { playUIClick } = useUIClickSound();
+  
+  const handleReset = () => {
+    playUIClick('Play Again');
+    onReset();
+  };
+  
   if (!isOpen) return null;
 
   return (
@@ -30,7 +38,7 @@ export function CheckmateModal({ isOpen, winner, onReset }: CheckmateModalProps)
 
           {/* Reset Button */}
           <button
-            onClick={onReset}
+            onClick={handleReset}
             className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-semibold transition-colors"
           >
             <RotateCcw className="w-5 h-5" />

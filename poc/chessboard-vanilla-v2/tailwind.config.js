@@ -41,6 +41,13 @@ module.exports = {
           DEFAULT: "var(--card)",
           foreground: "var(--card-foreground)",
         },
+        // Title bar colors
+        titlebar: {
+          DEFAULT: "var(--titlebar)",
+          foreground: "var(--titlebar-foreground)",
+          hover: "var(--titlebar-hover)",
+          'close-hover': "var(--titlebar-close-hover)",
+        },
         // Gaming theme colors
         'cyber-neon': {
           50: '#f0f9ff',

@@ -1,4 +1,5 @@
 import { Settings, Sun, Moon, Zap, Crown, TreePine, Gem, Shield } from 'lucide-react'
+import { useUIClickSound } from '../hooks/useUIClickSound'
 
 export type ThemeId = 'light' | 'dark' | 'cyber-neon' | 'cyber-neon-light' | 'dragon-gold' | 'dragon-gold-light' | 'shadow-knight' | 'shadow-knight-light' | 'forest-mystique' | 'forest-mystique-light' | 'royal-purple' | 'royal-purple-light'
 
@@ -165,10 +166,16 @@ interface ThemeSwitcherProps {
 }
 
 export function ThemeSwitcher({ onOpenSettings, isSettingsOpen = false }: ThemeSwitcherProps) {
+  const { playUIClick } = useUIClickSound()
+
+  const handleSettingsClick = () => {
+    playUIClick('Settings Button')
+    onOpenSettings()
+  }
 
   return (
     <button
-      onClick={onOpenSettings}
+      onClick={handleSettingsClick}
       className={`flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/20 hover:scale-105 transition-all duration-300 ${isSettingsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       title="Change Theme"
     >
