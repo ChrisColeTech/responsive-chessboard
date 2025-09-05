@@ -1,4 +1,4 @@
-import { Crown, Coins } from 'lucide-react'
+import { Coins } from 'lucide-react'
 
 interface HeaderProps {
   onOpenSettings: () => void

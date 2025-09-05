@@ -16,14 +16,14 @@ export function TitleBar({
   onClose 
 }: TitleBarProps) {
   return (
-    <div className="w-full h-10 bg-titlebar flex items-center justify-between select-none" style={{ WebkitAppRegion: 'drag' as any }}>
+    <div className="w-full h-10 bg-titlebar flex items-center justify-between select-none" style={{ WebkitAppRegion: 'drag' }}>
       {/* Left side - Hamburger menu + App title */}
       <div className="flex items-center">
         <button
           onClick={onMenuClick}
           className="w-12 h-10 flex items-center justify-center titlebar-btn hover:bg-titlebar-hover transition-colors duration-200 text-titlebar-foreground"
           title="Menu"
-          style={{ WebkitAppRegion: 'no-drag' as any }}
+          style={{ WebkitAppRegion: 'no-drag' }}
         >
           <HiOutlineMenu className="w-4 h-4" />
         </button>
@@ -43,7 +43,7 @@ export function TitleBar({
           onClick={onMinimize}
           className="w-12 h-10 flex items-center justify-center titlebar-btn hover:bg-titlebar-hover transition-colors duration-200 text-titlebar-foreground"
           title="Minimize"
-          style={{ WebkitAppRegion: 'no-drag' as any }}
+          style={{ WebkitAppRegion: 'no-drag' }}
         >
           <VscChromeMinimize className="w-4 h-4" />
         </button>
@@ -51,7 +51,7 @@ export function TitleBar({
           onClick={onMaximize}
           className="w-12 h-10 flex items-center justify-center titlebar-btn hover:bg-titlebar-hover transition-colors duration-200 text-titlebar-foreground"
           title="Maximize"
-          style={{ WebkitAppRegion: 'no-drag' as any }}
+          style={{ WebkitAppRegion: 'no-drag' }}
         >
           <VscChromeMaximize className="w-4 h-4" />
         </button>
@@ -59,7 +59,7 @@ export function TitleBar({
           onClick={onClose}
           className="w-12 h-10 flex items-center justify-center titlebar-btn hover:bg-titlebar-close-hover transition-colors duration-200 text-titlebar-foreground hover:text-white"
           title="Close"
-          style={{ WebkitAppRegion: 'no-drag' as any }}
+          style={{ WebkitAppRegion: 'no-drag' }}
         >
           <VscChromeClose className="w-4 h-4" />
         </button>

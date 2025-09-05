@@ -127,12 +127,8 @@ export function AppLayout({
       </div>
 
       {/* Menu Dropdown - positioned at layout level like settings panel */}
-      {console.log('🔍 [MENU DEBUG] isMenuOpen:', isMenuOpen)}
       {isMenuOpen && (
-        <>
-          {console.log('🔍 [MENU DEBUG] Rendering MenuDropdown')}
-          <MenuDropdown onClose={closeMenu} />
-        </>
+        <MenuDropdown onClose={closeMenu} />
       )}
 
       {/* 
