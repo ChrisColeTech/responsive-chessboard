@@ -540,9 +540,9 @@
   .glass-layout {
     -webkit-backdrop-filter: blur(16px);
     backdrop-filter: blur(16px);
-    background-color: rgb(var(--foreground) / 0.03);
+    background-color: rgb(var(--foreground) / 0.15);
     
-    background-color: rgb(var(--foreground) / 0.03);
+    background-color: rgb(var(--foreground) / 0.15);
     border: 1px solid rgb(var(--border) / 0.2);
 
     box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.15);
@@ -555,6 +555,25 @@
     color: var(--foreground); 
     border-radius: 0.5rem; 
     transition: all 0.3s;
+  }
+
+  /* Tab and Menu Button Base Styles */
+  .tab-button {
+    @apply flex flex-col items-center justify-center gap-1 py-2 border-none;
+    @apply bg-transparent cursor-pointer transition-all duration-300 text-xs font-medium;
+    @apply focus:outline-none;
+  }
+
+  .tab-button-inactive {
+    @apply text-muted-foreground;
+  }
+
+  .tab-button-inactive:hover {
+    @apply text-foreground glass -translate-y-0.5;
+  }
+
+  .tab-button-active {
+    @apply text-foreground font-bold shadow-xl border-t-4 border-primary glass -translate-y-1;
   }
 
   .input-gaming::placeholder {

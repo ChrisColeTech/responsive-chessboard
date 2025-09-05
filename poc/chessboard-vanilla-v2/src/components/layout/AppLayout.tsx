@@ -4,10 +4,12 @@ import { TitleBar } from "./TitleBar";
 import { Header } from "./Header";
 import { TabBar } from "./TabBar";
 import { SettingsPanel } from "../SettingsPanel";
+import { MenuDropdown } from "./MenuDropdown";
 import { InstructionsFAB } from "../InstructionsFAB";
 import { InstructionsModal } from "../InstructionsModal";
 import { useSettings } from "../../stores/appStore";
 import { useInstructions } from "../../contexts/InstructionsContext";
+import { useMenuDropdown } from "../../hooks/useMenuDropdown";
 import type { TabId } from "./types";
 
 /**
@@ -51,6 +53,11 @@ export function AppLayout({
     open: openSettings,
     close: closeSettings,
   } = useSettings();
+  const {
+    isMenuOpen,
+    toggleMenu,
+    closeMenu,
+  } = useMenuDropdown();
   const {
     instructions,
     title,
@@ -119,12 +126,26 @@ export function AppLayout({
         </>
       </div>
 
+      {/* Menu Dropdown - positioned at layout level like settings panel */}
+      {console.log('🔍 [MENU DEBUG] isMenuOpen:', isMenuOpen)}
+      {isMenuOpen && (
+        <>
+          {console.log('🔍 [MENU DEBUG] Rendering MenuDropdown')}
+          <MenuDropdown onClose={closeMenu} />
+        </>
+      )}
+
       {/* 
           TabBar - Fixed positioning for mobile compatibility  
           ✅ Fixed to bottom with proper z-index
         */}
       <footer className="fixed bottom-0 left-0 right-0 z-20 glass-layout">
-        <TabBar currentTab={currentTab} onTabChange={onTabChange} />
+        <TabBar 
+          currentTab={currentTab} 
+          onTabChange={onTabChange}
+          isMenuOpen={isMenuOpen}
+          onToggleMenu={toggleMenu}
+        />
       </footer>
 
       {/* Global Instructions Modal */}

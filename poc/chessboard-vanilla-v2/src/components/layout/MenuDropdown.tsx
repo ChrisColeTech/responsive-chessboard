@@ -9,6 +9,7 @@ interface MenuDropdownProps {
 }
 
 export function MenuDropdown({ onClose }: MenuDropdownProps) {
+  console.log('🔍 [MENU DEBUG] MenuDropdown component rendered!')
   const { open: openSettings } = useSettings()
   const { openInstructions } = useInstructions()
   const { playMove } = useChessAudio()
@@ -43,13 +44,13 @@ export function MenuDropdown({ onClose }: MenuDropdownProps) {
       role="menu"
       aria-label="Navigation menu"
       onKeyDown={handleKeyDown}
-      className="fixed bottom-[84px] mb-1 z-50 left-0 right-0 md:absolute md:bottom-full md:left-0 md:right-0 md:w-auto md:min-w-48"
+      className="fixed bottom-[84px] left-0 right-0 z-50 md:w-[25vw] md:right-auto glass-layout border border-border shadow-2xl"
     >
-      <div className="glass-layout p-2 space-y-1 border-t border-border/20">
+      <div className="glass-layout space-y-1">
         <button 
           onClick={() => { playMove(false); openSettings(); onClose(); }}
           role="menuitem"
-          className="w-full p-2 text-left text-muted-foreground hover:text-foreground hover:bg-foreground/5 rounded transition-all duration-200 flex items-center gap-2 group focus:outline-none"
+          className="w-full p-2 text-left text-muted-foreground hover:text-foreground hover:glass rounded transition-all duration-200 flex items-center gap-2 group focus:outline-none"
         >
           <Settings className="w-4 h-4 group-hover:scale-105 transition-transform" />
           <span className="group-hover:translate-x-0.5 transition-transform">Settings</span>
@@ -57,7 +58,7 @@ export function MenuDropdown({ onClose }: MenuDropdownProps) {
         <button 
           onClick={() => { playMove(false); openInstructions(); onClose(); }}
           role="menuitem"
-          className="w-full p-2 text-left text-muted-foreground hover:text-foreground hover:bg-foreground/5 rounded transition-all duration-200 flex items-center gap-2 group focus:outline-none"
+          className="w-full p-2 text-left text-muted-foreground hover:text-foreground hover:glass rounded transition-all duration-200 flex items-center gap-2 group focus:outline-none"
         >
           <HelpCircle className="w-4 h-4 group-hover:scale-105 transition-transform" />
           <span className="group-hover:translate-x-0.5 transition-transform">Help</span>
@@ -65,7 +66,7 @@ export function MenuDropdown({ onClose }: MenuDropdownProps) {
         <button 
           onClick={() => { playMove(false); onClose(); }}
           role="menuitem"
-          className="w-full p-2 text-left text-muted-foreground hover:text-foreground hover:bg-foreground/5 rounded transition-all duration-200 flex items-center gap-2 group focus:outline-none"
+          className="w-full p-2 text-left text-muted-foreground hover:text-foreground hover:glass rounded transition-all duration-200 flex items-center gap-2 group focus:outline-none"
         >
           <BarChart className="w-4 h-4 group-hover:scale-105 transition-transform" />
           <span className="group-hover:translate-x-0.5 transition-transform">Stats</span>
@@ -73,7 +74,7 @@ export function MenuDropdown({ onClose }: MenuDropdownProps) {
         <button 
           onClick={() => { playMove(false); onClose(); }}
           role="menuitem"
-          className="w-full p-2 text-left text-muted-foreground hover:text-foreground hover:bg-foreground/5 rounded transition-all duration-200 flex items-center gap-2 group focus:outline-none"
+          className="w-full p-2 text-left text-muted-foreground hover:text-foreground hover:glass rounded transition-all duration-200 flex items-center gap-2 group focus:outline-none"
         >
           <Palette className="w-4 h-4 group-hover:scale-105 transition-transform" />
           <span className="group-hover:translate-x-0.5 transition-transform">Themes</span>

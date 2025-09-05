@@ -6,6 +6,8 @@ import { useUIClickSound } from "../../hooks/useUIClickSound";
 interface TabBarProps {
   currentTab: TabId;
   onTabChange: (tab: TabId) => void;
+  isMenuOpen: boolean;
+  onToggleMenu: () => void;
 }
 
 interface Tab {
@@ -54,7 +56,7 @@ const tabs: Tab[] = [
   },
 ];
 
-export function TabBar({ currentTab, onTabChange }: TabBarProps) {
+export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: TabBarProps) {
   const { playUIClick } = useUIClickSound();
   const handleKeyDown = (event: React.KeyboardEvent, tabId: TabId) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -86,7 +88,7 @@ export function TabBar({ currentTab, onTabChange }: TabBarProps) {
       aria-label="Main navigation"
     >
       {/* Menu Button - First item */}
-      <MenuButton />
+      <MenuButton isMenuOpen={isMenuOpen} onToggleMenu={onToggleMenu} />
 
       {tabs.map((tab) => {
         const isActive = currentTab === tab.id;
@@ -116,8 +118,8 @@ export function TabBar({ currentTab, onTabChange }: TabBarProps) {
                 focus:outline-none
                 ${
                   isActive
-                    ? "text-foreground font-bold -translate-y-1 shadow-xl border-t-4 border-primary"
-                    : "text-muted-foreground hover:text-foreground hover:-translate-y-0.5"
+                    ? "text-foreground font-bold -translate-y-1 shadow-xl border-t-4 border-primary glass"
+                    : "text-muted-foreground hover:text-foreground hover:-translate-y-0.5 hover:glass"
                 }
               `}
           >
