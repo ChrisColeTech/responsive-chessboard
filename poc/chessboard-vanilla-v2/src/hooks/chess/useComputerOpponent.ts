@@ -169,7 +169,7 @@ export const useComputerOpponent = (initialDifficulty: ComputerDifficulty = 5) =
       isReady,
       difficulty,
       thinking: thinkingState,
-      error,
+      error: error ?? undefined,
       stats: stats ? {
         movesCalculated: stats.movesCalculated,
         averageThinkingTime: stats.averageThinkingTime,

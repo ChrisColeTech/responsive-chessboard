@@ -83,7 +83,7 @@ export const DragTestPage: React.FC = () => {
           minWidth: '200px', 
           minHeight: '200px',
           width: '100%', // Start at 100% width
-          height: 'clamp(400px, 60vh, 800px)', // Increased default height
+          height: 'clamp(300px, 50vh, 600px)', // Reduced default height for better mobile experience
           display: 'flex',
           flexDirection: 'column',
           containerType: 'size' // Modern CSS container queries

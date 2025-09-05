@@ -150,8 +150,8 @@ export class StockfishEngineClient {
       if (clampedLevel !== this.currentSkillLevel) {
         console.log(`🔧 [STOCKFISH CLIENT] Setting skill level: ${clampedLevel}`);
         
-        // Update skill level through direct command since there's no specific method
-        await this.stockfishService.sendCommand(`setoption name Skill Level value ${clampedLevel}`, false);
+        // Update skill level through the service's public method
+        await this.stockfishService.setSkillLevel(clampedLevel);
         
         this.currentSkillLevel = clampedLevel;
         console.log('✅ [STOCKFISH CLIENT] Skill level updated');

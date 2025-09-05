@@ -6,12 +6,10 @@ import { StockfishEngineClient } from '../../services/clients/StockfishEngineCli
 import { useChessAudio } from '../../services/audioService';
 import type { 
   ChessGameState,
-  ChessMoveResult,
   PieceType,
   PieceColor,
   ComputerDifficulty,
-  PlayGameState,
-  ComputerThinkingState
+  PlayGameState
 } from '../../types';
 import { parseEngineMove } from '../../utils/chess/computer-chess.utils';
 

@@ -1,4 +1,5 @@
 import { Layout, Settings, Target, Coins } from 'lucide-react'
+import { MenuButton } from './MenuButton'
 import type { TabId } from './types'
 
 interface TabBarProps {
@@ -50,6 +51,9 @@ export function TabBar({ currentTab, onTabChange }: TabBarProps) {
   return (
     <div className="w-full h-[84px] glass-layout border-t border-border/20 shadow-gaming">
       <div className="flex h-full">
+        {/* Menu Button - First item */}
+        <MenuButton />
+        
         {tabs.map((tab) => {
           const isActive = currentTab === tab.id
           const IconComponent = tab.icon

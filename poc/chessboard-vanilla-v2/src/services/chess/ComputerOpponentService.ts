@@ -6,7 +6,6 @@ import type {
   ComputerThinkingState
 } from '../../types';
 import { 
-  DIFFICULTY_CONFIGS, 
   getDifficultyConfig,
   getDifficultyDescription
 } from '../../constants/chess/computer-difficulty.constants';

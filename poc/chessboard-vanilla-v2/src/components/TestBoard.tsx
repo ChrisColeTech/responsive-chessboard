@@ -404,8 +404,8 @@ export const TestBoard = ({
                 draggable={false} // No HTML5 drag - use mouse events only
                 onMouseDown={(e) => handleMouseDown(e, piece, square)}
                 style={{
-                  width: '85%',
-                  height: '85%',
+                  width: '95%',
+                  height: '95%',
                   cursor: 'grab',
                   userSelect: 'none',
                   pointerEvents: 'auto'

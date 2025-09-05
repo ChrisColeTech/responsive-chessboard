@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useState, useEffect } from 'react'
 import { BackgroundEffects } from './BackgroundEffects'
 import { Header } from './Header'
 import { TabBar } from './TabBar'
@@ -42,6 +43,7 @@ interface AppLayoutProps {
 export function AppLayout({ children, currentTab, onTabChange, coinBalance }: AppLayoutProps) {
   const { isOpen: isSettingsPanelOpen, open: openSettings, close: closeSettings } = useSettings()
   const { instructions, title, showInstructions, openInstructions, closeInstructions } = useInstructions()
+
 
   return (
     <div className="relative min-h-screen min-h-[100dvh] bg-background text-foreground">
@@ -101,7 +103,10 @@ export function AppLayout({ children, currentTab, onTabChange, coinBalance }: Ap
           ✅ Fixed to bottom with proper z-index
         */}
         <footer className="fixed bottom-0 left-0 right-0 z-20">
-          <TabBar currentTab={currentTab} onTabChange={onTabChange} />
+          <TabBar 
+            currentTab={currentTab} 
+            onTabChange={onTabChange}
+          />
         </footer>
         
         {/* Global Instructions Modal */}
