@@ -60,6 +60,7 @@ export interface ChessGameState {
   readonly isGameOver: boolean;
   readonly fen: string;
   readonly history: readonly ChessMove[];
+  readonly lastMove?: { from: string; to: string };
 }
 
 // Service interfaces

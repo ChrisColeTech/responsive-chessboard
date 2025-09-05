@@ -49,3 +49,12 @@ export interface DraggedPieceProps {
   pieceSet: string;
 }
 
+export interface PlayChessboardProps {
+  playerColor?: PieceColor;
+  showCoordinates?: boolean;
+  highlightLastMove?: boolean;
+  showValidMoves?: boolean;
+  disabled?: boolean;
+  className?: string;
+}
+

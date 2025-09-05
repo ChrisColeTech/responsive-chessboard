@@ -1,7 +1,7 @@
 // play-components.types.ts - Play page UI component interface definitions
 // Phase 1: Foundation Types - Play UI component interfaces
 
-import type { ChessPiece, PieceColor } from '../chess.types';
+import type { ChessPiece, PieceColor, ChessPosition } from '../chess.types';
 import type { ComputerDifficulty, ComputerThinkingState } from '../chess/computer-opponent.types';
 import type { PlayGameResult, PlayerInfo } from '../chess/play-game.types';
 
@@ -148,6 +148,8 @@ export interface PlayChessboardProps {
   showCoordinates?: boolean;
   /** Custom board size */
   boardSize?: number;
+  /** Handler for square clicks */
+  onSquareClick?: (square: ChessPosition) => void;
   /** Custom CSS classes */
   className?: string;
 }

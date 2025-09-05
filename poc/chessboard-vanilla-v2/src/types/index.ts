@@ -22,7 +22,8 @@ export type {
   BoardProps,
   SquareProps,
   PieceProps,
-  DraggedPieceProps
+  DraggedPieceProps,
+  PlayChessboardProps
 } from './component.types';
 
 // Phase 1: Computer opponent types
@@ -57,7 +58,6 @@ export type {
   ComputerThinkingProps,
   GameStatusBarProps,
   PlaySettingsProps,
-  PlayChessboardProps,
   MoveHistoryProps,
   GameResultModalProps,
   BasePlayComponentProps,
