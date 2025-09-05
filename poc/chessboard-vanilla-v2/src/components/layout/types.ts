@@ -1,1 +1,1 @@
-export type TabId = 'layout' | 'worker' | 'drag' | 'slots'
+export type TabId = 'layout' | 'worker' | 'drag' | 'slots' | 'play'

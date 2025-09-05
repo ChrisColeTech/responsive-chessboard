@@ -20,14 +20,14 @@
 |-------|----------|--------|---------------|----------------|-------------------|
 | **Phase 1: Foundation Types** | 🔴 Critical | ✅ Complete | 3 new | 1 modified | - |
 | **Phase 2: Utilities & Constants** | 🔴 Critical | ✅ Complete | 3 new | 0 modified | types/ |
-| **Phase 3: Business Logic Services** | 🟡 High | ⏳ Pending | 2 new | 0 modified | types/, utils/ |
-| **Phase 4: External Communication** | 🟡 High | ⏳ Pending | 1 new | 0 modified | services/chess/ |
-| **Phase 5: State Management Hooks** | 🟡 High | ⏳ Pending | 2 new | 0 modified | services/, types/ |
-| **Phase 6: UI Components** | 🟢 Medium | ⏳ Pending | 6 new | 0 modified | hooks/, types/ |
-| **Phase 7: Board Integration** | 🟢 Medium | ⏳ Pending | 1 new | 1 modified | components/, hooks/ |
-| **Phase 8: Play Page Assembly** | 🔵 Low | ⏳ Pending | 1 new | 3 modified | components/, hooks/ |
-| **Phase 9: Navigation Integration** | 🔵 Low | ⏳ Pending | 0 new | 3 modified | pages/ |
-| **Phase 10: Audio Integration** | 🔵 Low | ⏳ Pending | 0 new | 2 modified | services/audioService |
+| **Phase 3: Navigation Integration** | 🔴 Critical | ⏳ Pending | 1 new | 3 modified | pages/ |
+| **Phase 4: Audio Integration** | 🔴 Critical | ⏳ Pending | 0 new | 2 modified | services/audioService |
+| **Phase 5: Business Logic Services** | 🟡 High | ⏳ Pending | 2 new | 0 modified | types/, utils/ |
+| **Phase 6: External Communication** | 🟡 High | ⏳ Pending | 1 new | 0 modified | services/chess/ |
+| **Phase 7: State Management Hooks** | 🟡 High | ⏳ Pending | 2 new | 0 modified | services/, types/ |
+| **Phase 8: Board Integration & Drag/Drop** | 🟡 High | ⏳ Pending | 1 new | 1 modified | components/, hooks/, DragProvider |
+| **Phase 9: UI Components** | 🟢 Medium | ⏳ Pending | 6 new | 0 modified | hooks/, types/ |
+| **Phase 10: Play Page Assembly** | 🟢 Medium | ⏳ Pending | 1 new | 2 modified | components/, hooks/ |
 
 ---
 
@@ -37,6 +37,62 @@
 **[Document 42 - Play Page Code Examples](42-play-page-code-examples.md)**
 
 This includes complete TypeScript interfaces, service implementations, React hooks, UI components, and integration patterns organized by phase.
+
+---
+
+## **Play Page Layout Mockup**
+
+Based on DragTestPage structure, here's the exact layout for the Play page:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │  🔴 Computer Captured (3)    ♛ ♜ ♝                        │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                     │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐│    │
+│  ││                                                         ││    │
+│  ││              8x8 Professional Chess Board              ││    │
+│  ││                                                         ││    │
+│  ││   ♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜   ← Computer (Black)                ││    │
+│  ││   ♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟                                      ││    │
+│  ││   · · · · · · · ·   [Selected squares highlighted]     ││    │
+│  ││   · · · ♙ · · · ·   [Valid moves shown as dots]       ││    │
+│  ││   · · · · · · · ·                                      ││    │
+│  ││   · · · · · · · ·                                      ││    │
+│  ││   ♙ ♙ ♙ · ♙ ♙ ♙ ♙                                      ││    │
+│  ││   ♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖   ← You (White)                     ││    │
+│  ││                                                         ││    │
+│  ││ Drag the corner to resize board for testing →          ││    │
+│  │└ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘│    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                     │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │  🔴 Your Captured (2)        ♟ ♞                          │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                     │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │  🔴 Game Controls                                          │    │
+│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐      │    │
+│  │  │🔄 New Game   │ │❌ Quit Game  │ │🔄 Flip Board │      │    │
+│  │  │  / Restart   │ │              │ │              │      │    │
+│  │  └──────────────┘ └──────────────┘ └──────────────┘      │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+**Layout Components:**
+1. **Computer Captured Pieces** - Shows pieces captured by human player (replaces white captured pieces)
+2. **Resizable Chess Board Container** - 8x8 professional chessboard with drag & drop (replaces 3x3 TestBoard)
+3. **Your Captured Pieces** - Shows pieces captured by computer (replaces black captured pieces) 
+4. **Game Controls Panel** - 3 buttons for game management (replaces 4 test buttons)
+
+**Control Functions:**
+- **New Game / Restart**: Starts new game or restarts current game using `usePlayGame.resetGame()`
+- **Quit Game**: Ends current game and returns to menu/idle state
+- **Flip Board**: Toggles board orientation between white/black perspective
 
 ---
 
@@ -84,9 +140,9 @@ This includes complete TypeScript interfaces, service implementations, React hoo
 
 ---
 
-### Phase 3: Business Logic Services
+### Phase 5: Business Logic Services
 **Priority**: 🟡 High  
-**Dependencies**: Phase 1 (types), Phase 2 (utils)  
+**Dependencies**: Phase 1-4 (types, utils, navigation, audio)  
 **Estimated Complexity**: Medium
 
 **Files Created**:
@@ -98,6 +154,19 @@ This includes complete TypeScript interfaces, service implementations, React hoo
 - `utils/chess/` - Utility functions
 - `services/chess/ChessGameService.ts` - Existing chess service
 
+**🚨 WHY NEW SERVICES ARE NEEDED (vs Existing Code):**
+
+**Existing Services are Test/Demo-Specific:**
+- `TestBoardGameService.ts` - Hardcoded for **3x3 board** and **free play** (no turn restrictions)
+- `ChessGameService.ts` - Generic chess engine wrapper, but no **computer opponent game flow**
+- `useStockfish.ts` - Only handles **engine communication**, not **human vs computer game flow**
+
+**New Services Handle Computer Opponent-Specific Logic:**
+- `PlayGameService.ts` - **Turn-based play** (human turn → computer turn), **move validation with turn enforcement**, **game flow coordination**
+- `ComputerOpponentService.ts` - **Difficulty mapping** (1-10 user → Stockfish settings), **thinking delays**, **computer-specific logic**
+
+**Key Difference**: Existing code is for testing/demos, new services handle structured **human vs computer gameplay**.
+
 **Description**: Implement business logic services that handle game state management and computer opponent behavior. Services are pure business logic with no external dependencies.
 
 **Key Methods**: `makePlayerMove`, `validateMove`, `getDifficultyConfig`, `calculateSearchDepth`, `generateThinkingDelay`
@@ -106,9 +175,9 @@ This includes complete TypeScript interfaces, service implementations, React hoo
 
 ---
 
-### Phase 4: External Communication
+### Phase 6: External Communication
 **Priority**: 🟡 High  
-**Dependencies**: Phase 3 (services)  
+**Dependencies**: Phase 5 (services)  
 **Estimated Complexity**: Complex
 
 **Files Created**:
@@ -118,6 +187,18 @@ This includes complete TypeScript interfaces, service implementations, React hoo
 - `services/chess/ComputerOpponentService.ts` - Business logic service
 - `workers/` directory (create if not exists) - Stockfish worker files
 - `types/chess/computer-opponent.types.ts` - Request/response interfaces
+
+**🚨 WHY NEW CLIENT IS NEEDED (vs Existing Code):**
+
+**Existing Stockfish Code is Generic/Low-Level:**
+- `StockfishService.ts` - Low-level UCI protocol wrapper (generic engine communication)
+- `useStockfish.ts` - Direct hook to service (no business logic integration)
+
+**New Client Provides Play-Specific Interface:**
+- `StockfishEngineClient.ts` - **Play-specific wrapper** with **difficulty mapping**, **computer opponent interface**, **integration with ComputerOpponentService**
+- **Clean separation**: Business logic (Phase 3) → Client (Phase 4) → External service
+
+**Key Difference**: Existing code is generic engine access, new client is **computer opponent-specific interface**.
 
 **Description**: Create external communication layer that interfaces with Stockfish.js web worker. Handles worker lifecycle, move requests, and engine communication.
 
@@ -132,9 +213,9 @@ This includes complete TypeScript interfaces, service implementations, React hoo
 
 ---
 
-### Phase 5: State Management Hooks
+### Phase 7: State Management Hooks
 **Priority**: 🟡 High  
-**Dependencies**: Phase 3 (services), Phase 4 (client)  
+**Dependencies**: Phase 5 (services), Phase 6 (client)  
 **Estimated Complexity**: Complex
 
 **Files Created**:
@@ -147,6 +228,20 @@ This includes complete TypeScript interfaces, service implementations, React hoo
 - `providers/DragProvider.tsx` - Existing drag system
 - `services/audioService.ts` - Audio feedback
 
+**🚨 WHY NEW HOOKS ARE NEEDED (vs Existing Code):**
+
+**Existing Hooks are Generic/Test-Specific:**
+- `useStockfish.ts` - Generic Stockfish communication (no game flow)
+- `useChessGame.ts` - Generic chess engine wrapper (no computer opponent logic)
+- No existing hook handles **human vs computer game flow**
+
+**New Hooks Handle Computer Opponent Game Flow:**
+- `usePlayGame.ts` - **Complete game flow**: human move → computer thinking → computer move → repeat
+- `useComputerOpponent.ts` - **Computer-specific state**: thinking indicators, difficulty management, move coordination
+- **Turn management**: Enforces whose turn it is, prevents moves during computer thinking
+
+**Key Difference**: Existing hooks are generic utilities, new hooks handle **structured computer opponent gameplay**.
+
 **Description**: Create React hooks that bridge services and UI components. Manage React state and coordinate between business logic and external services.
 
 **Key Features**: Game state management, move validation, turn management, computer move requests, thinking state management, difficulty settings
@@ -155,9 +250,9 @@ This includes complete TypeScript interfaces, service implementations, React hoo
 
 ---
 
-### Phase 6: UI Components
+### Phase 9: UI Components
 **Priority**: 🟢 Medium  
-**Dependencies**: Phase 5 (hooks)  
+**Dependencies**: Phase 7 (hooks)  
 **Estimated Complexity**: Medium
 
 **Files Created**:
@@ -184,10 +279,10 @@ This includes complete TypeScript interfaces, service implementations, React hoo
 
 ---
 
-### Phase 7: Board Integration
-**Priority**: 🟢 Medium  
-**Dependencies**: Phase 6 (components)  
-**Estimated Complexity**: Medium
+### Phase 8: Board Integration & Drag/Drop
+**Priority**: 🟡 High  
+**Dependencies**: Phase 7 (hooks)  
+**Estimated Complexity**: High
 
 **Files Created**:
 - `/src/components/play/PlayChessboard.tsx` - Chessboard wrapper with play-specific features
@@ -200,21 +295,32 @@ This includes complete TypeScript interfaces, service implementations, React hoo
 - `providers/DragProvider.tsx` - Drag and drop system
 - `components/ui/` - Modal components for promotion/checkmate
 
-**Description**: Create a specialized chessboard component for play mode that integrates with the play game hooks and provides the professional chess experience.
+**🚨 WHY DRAG & DROP IS HIGH PRIORITY:**
 
-**Features**:
+**Core Interaction Method**: Drag and drop is the primary way users interact with chess pieces - this is fundamental UX, not a nice-to-have feature.
+
+**Description**: Create a specialized chessboard component that integrates full drag and drop functionality with real chess game logic. This phase combines the existing DragProvider system with computer opponent gameplay.
+
+**Drag & Drop Features**:
+- **Complete mouse event handling** - Global mouse tracking, element detection, cursor following
+- **Integration with DragProvider** - Uses existing proven drag system from TestBoard
+- **Real-time visual feedback** - Piece follows cursor, valid moves highlighted, drop zone indicators
+- **Click-to-move fallback** - Both drag and click interactions supported
+
+**Chess Integration Features**:
 - Real chess.js move validation
-- Drag and drop support
+- Computer opponent turn management  
 - Square highlighting for valid moves
 - Last move highlighting
 - Promotion modal integration
 - Checkmate/stalemate detection
+- Audio feedback integration
 
 ---
 
-### Phase 8: Play Page Assembly
-**Priority**: 🔵 Low  
-**Dependencies**: Phase 7 (board integration)  
+### Phase 10: Play Page Assembly
+**Priority**: 🟢 Medium  
+**Dependencies**: Phase 8 (board integration), Phase 9 (UI components)  
 **Estimated Complexity**: Medium
 
 **Files Created**:
@@ -240,32 +346,41 @@ This includes complete TypeScript interfaces, service implementations, React hoo
 
 ---
 
-### Phase 9: Navigation Integration
-**Priority**: 🔵 Low  
-**Dependencies**: Phase 8 (play page)  
+### Phase 3: Navigation Integration
+**Priority**: 🔴 Critical  
+**Dependencies**: Phase 1-2 (types, utils)  
 **Estimated Complexity**: Simple
+
+**Files Created**:
+- `/src/pages/PlayPage.tsx` - **SIMPLE PLACEHOLDER PAGE ONLY** (real implementation in Phase 10)
 
 **Files Modified**:
 - `/src/components/layout/types.ts` - Add 'play' to TabId type
 - `/src/components/layout/TabBar.tsx` - Add play tab with chess icon
+- `/src/pages/index.ts` - Export PlayPage
+- `/src/App.tsx` - Add play page routing
 - `/src/stores/appStore.ts` - Update initial state if needed
 
 **Integration Points**:
-- `pages/PlayPage.tsx` - New page route
 - Navigation system components
+- Instructions system for placeholder messaging
 
-**Description**: Integrate the play page into the existing navigation system with proper routing and tab management.
+**Description**: Integrate the play page into the existing navigation system with proper routing and tab management. **Create only a minimal placeholder page** - the full Play page implementation happens in Phase 10 after all supporting infrastructure is built.
 
 **Changes**:
 - Add 'play' tab with chess piece icon
+- Create simple placeholder PlayPage component with instructions
 - Update routing logic in App.tsx
-- Set play as potential default tab
+- Export placeholder page for navigation testing
+- Set expectations for upcoming features
+
+**⚠️ Important**: This phase creates only a placeholder page to complete navigation routing. The full PlayPage implementation with game logic, components, and hooks is deferred to Phase 10: Play Page Assembly.
 
 ---
 
-### Phase 10: Audio Integration
-**Priority**: 🔵 Low  
-**Dependencies**: Phase 9 (navigation)  
+### Phase 4: Audio Integration
+**Priority**: 🔴 Critical  
+**Dependencies**: Phase 3 (navigation)  
 **Estimated Complexity**: Simple
 
 **Files Modified**:
@@ -944,59 +1059,5 @@ const { isReady, isThinking, requestMove, setSkillLevel } = useStockfish();
 const { boardSize, squareSize, containerRef } = useResponsiveBoard();
 const { draggedPiece, validDropTargets, handleDragStart, handleDrop, handleSquareClick } = useDragAndDrop(gameState, makeMove, getValidMoves);
 ```
-
-## **Play Page Layout Mockup**
-
-Based on DragTestPage structure, here's the exact layout for the Play page:
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  🔴 Computer Captured (3)    ♛ ♜ ♝                        │    │
-│  └─────────────────────────────────────────────────────────────┘    │
-│                                                                     │
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐│    │
-│  ││                                                         ││    │
-│  ││              8x8 Professional Chess Board              ││    │
-│  ││                                                         ││    │
-│  ││   ♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜   ← Computer (Black)                ││    │
-│  ││   ♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟                                      ││    │
-│  ││   · · · · · · · ·   [Selected squares highlighted]     ││    │
-│  ││   · · · ♙ · · · ·   [Valid moves shown as dots]       ││    │
-│  ││   · · · · · · · ·                                      ││    │
-│  ││   · · · · · · · ·                                      ││    │
-│  ││   ♙ ♙ ♙ · ♙ ♙ ♙ ♙                                      ││    │
-│  ││   ♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖   ← You (White)                     ││    │
-│  ││                                                         ││    │
-│  ││ Drag the corner to resize board for testing →          ││    │
-│  │└ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘│    │
-│  └─────────────────────────────────────────────────────────────┘    │
-│                                                                     │
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  🔴 Your Captured (2)        ♟ ♞                          │    │
-│  └─────────────────────────────────────────────────────────────┘    │
-│                                                                     │
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  🔴 Game Controls                                          │    │
-│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐      │    │
-│  │  │🔄 New Game   │ │❌ Quit Game  │ │🔄 Flip Board │      │    │
-│  │  │  / Restart   │ │              │ │              │      │    │
-│  │  └──────────────┘ └──────────────┘ └──────────────┘      │    │
-│  └─────────────────────────────────────────────────────────────┘    │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
-```
-
-**Layout Components:**
-1. **Computer Captured Pieces** - Shows pieces captured by human player (replaces white captured pieces)
-2. **Resizable Chess Board Container** - 8x8 professional chessboard with drag & drop (replaces 3x3 TestBoard)
-3. **Your Captured Pieces** - Shows pieces captured by computer (replaces black captured pieces) 
-4. **Game Controls Panel** - 3 buttons for game management (replaces 4 test buttons)
-
-**Control Functions:**
-- **New Game / Restart**: Starts new game or restarts current game using `usePlayGame.resetGame()`
-- **Quit Game**: Ends current game and returns to menu/idle state
-- **Flip Board**: Toggles board orientation between white/black perspective
 
 This implementation plan ensures a professional, maintainable, and scalable Play page that showcases the responsive-chessboard library with world-class computer opponent functionality while strictly adhering to architectural best practices.

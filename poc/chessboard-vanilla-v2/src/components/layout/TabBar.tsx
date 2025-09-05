@@ -37,6 +37,12 @@ const tabs: Tab[] = [
     label: 'Casino',
     icon: Coins,
     description: 'Slot Machine'
+  },
+  {
+    id: 'play',
+    label: 'Play',
+    icon: Target,
+    description: 'vs Computer'
   }
 ]
 

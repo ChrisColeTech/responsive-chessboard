@@ -1,5 +1,5 @@
 import { AppLayout } from './components/layout'
-import { DragTestPage, LayoutTestPage, WorkerTestPage, SlotMachineTestPage } from './pages'
+import { DragTestPage, LayoutTestPage, WorkerTestPage, SlotMachineTestPage, PlayPage } from './pages'
 import { DragProvider, useDrag } from './providers/DragProvider'
 import { InstructionsProvider } from './contexts/InstructionsContext'
 import { DraggedPiece } from './components/DraggedPiece'
@@ -59,6 +59,7 @@ function AppContent() {
       {selectedTab === 'worker' && <WorkerTestPage />}
       {selectedTab === 'drag' && <DragTestPage />}
       {selectedTab === 'slots' && <SlotMachineTestPage />}
+      {selectedTab === 'play' && <PlayPage />}
       
       {/* Global drag overlay */}
       {draggedPiece && (
