@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { useState, useEffect } from 'react'
 import { BackgroundEffects } from './BackgroundEffects'
 import { Header } from './Header'
 import { TabBar } from './TabBar'

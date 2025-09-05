@@ -65,3 +65,42 @@ export type {
   PlayComponentSize,
   PlayComponentAnimation
 } from './ui/play-components.types';
+
+// Phase 2: UI Audio types
+export type {
+  UIInteractionType,
+  UISoundType,
+  UIInteractionConfig,
+  UIElementSelector,
+  UIExclusionConfig
+} from './audio/ui-audio.types';
+
+// Phase 2: Global Audio Service types
+export type {
+  GlobalUIAudioConfig,
+  GlobalUIAudioConfigUpdate,
+  GlobalUIAudioService,
+  GlobalClickHandler,
+  ElementDetectionResult
+} from './audio/global-audio.types';
+
+// Phase 3: UI Tests types
+export type {
+  UITestRoute,
+  UITestNavigationState,
+  UITestNavigationActions,
+  UITestNavigationHook,
+  AudioDemoConfiguration,
+  DemoSection,
+  DemoButtonExample,
+  ExclusionExample,
+  CodeSnippet,
+  AudioDemoState,
+  AudioDemoActions,
+  AudioDemoHook,
+  DragTestConfiguration,
+  DragTestState,
+  DragTestActions,
+  MoveHandler,
+  DragTestingHook
+} from './ui-tests';

@@ -1,12 +1,11 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import { CheckCircle, XCircle, Clock, Brain } from 'lucide-react'
 import { useStockfish } from '../hooks/useStockfish'
-import { useInstructions } from '../contexts/InstructionsContext'
+import { usePageInstructions } from '../hooks/usePageInstructions'
 // import { useTheme } from '../stores/appStore'
 
 export const WorkerTestPage: React.FC = () => {
   const { isReady, isThinking, skillLevel, setSkillLevel, requestMove, evaluatePosition, error } = useStockfish()
-  const { setInstructions } = useInstructions()
   // Theme store available if needed
   // const { currentTheme, selectedBaseTheme } = useTheme()
   const [testResults, setTestResults] = useState<string[]>([])
@@ -18,6 +17,8 @@ export const WorkerTestPage: React.FC = () => {
   const [, setIsTestingSpeed] = useState(false)
   const [, setIsTestingPosition] = useState(false)
   const [isRunningAllTests, setIsRunningAllTests] = useState(false)
+
+  usePageInstructions('worker')
 
   const addTestResult = (message: string) => {
     setTestResults(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`])
@@ -136,17 +137,6 @@ export const WorkerTestPage: React.FC = () => {
     return "Expert level (very strong)"
   }
 
-  const instructions = [
-    "Test if the chess computer is working and ready to play games",
-    "Check how fast the computer can think and respond to moves", 
-    "Adjust the computer's skill level from beginner to expert",
-    "Run quick tests to verify the chess engine is functioning properly"
-  ]
-
-  // Register instructions when component mounts
-  useEffect(() => {
-    setInstructions("Chess Computer Testing Guide", instructions)
-  }, [setInstructions])
 
   return (
     <div className="relative space-y-8">

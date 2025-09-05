@@ -28,10 +28,10 @@ const tabs: Tab[] = [
     description: 'Engine Testing'
   },
   {
-    id: 'drag',
-    label: 'Drag Test',
+    id: 'uitests',
+    label: 'UI Tests',
     icon: Target,
-    description: 'Drag & Drop'
+    description: 'UI Testing Hub'
   },
   {
     id: 'slots',
@@ -48,23 +48,58 @@ const tabs: Tab[] = [
 ]
 
 export function TabBar({ currentTab, onTabChange }: TabBarProps) {
+  const handleKeyDown = (event: React.KeyboardEvent, tabId: TabId) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      console.log(`⌨️ [TAB BAR] Keyboard activation: ${event.key} on ${tabId}`);
+      onTabChange(tabId)
+      console.log(`⌨️ [TAB BAR] Keyboard tab change called`);
+    }
+    
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault()
+      const currentIndex = tabs.findIndex(tab => tab.id === currentTab)
+      const direction = event.key === 'ArrowLeft' ? -1 : 1
+      const nextIndex = (currentIndex + direction + tabs.length) % tabs.length
+      console.log(`⌨️ [TAB BAR] Arrow key navigation: ${event.key} from ${currentTab} to ${tabs[nextIndex].id}`);
+      onTabChange(tabs[nextIndex].id)
+      console.log(`⌨️ [TAB BAR] Arrow navigation tab change called`);
+    }
+  }
   return (
-    <div className="w-full h-[84px] glass-layout border-t border-border/20 shadow-gaming">
-      <div className="flex h-full">
-        {/* Menu Button - First item */}
-        <MenuButton />
-        
-        {tabs.map((tab) => {
+    <div 
+      className="
+        w-full h-[84px] glass-layout border-t border-border/20 shadow-gaming
+        grid grid-cols-6 
+      "
+      role="tablist" 
+      aria-label="Main navigation"
+    >
+      {/* Menu Button - First item */}
+      <MenuButton />
+      
+      {tabs.map((tab) => {
           const isActive = currentTab === tab.id
           const IconComponent = tab.icon
           
           return (
             <button
               key={tab.id}
-              onClick={() => onTabChange(tab.id)}
+              onClick={() => {
+                console.log(`🔄 [TAB BAR] Tab clicked: ${tab.id} (${tab.label})`);
+                console.log(`🔄 [TAB BAR] Previous tab was: ${currentTab}`);
+                onTabChange(tab.id);
+                console.log(`🔄 [TAB BAR] Tab change function called`);
+              }}
+              onKeyDown={(e) => handleKeyDown(e, tab.id)}
+              role="tab"
+              aria-selected={isActive}
+              aria-controls={`panel-${tab.id}`}
+              tabIndex={isActive ? 0 : -1}
               className={`
-                flex-1 flex flex-col items-center justify-center gap-1 py-2 border-none
+                flex flex-col items-center justify-center gap-1 py-2 border-none
                 bg-transparent cursor-pointer transition-all duration-300 text-xs font-medium
+                focus:outline-none
                 ${isActive 
                   ? 'bg-foreground/10 text-foreground font-bold -translate-y-1 shadow-xl border-t-4 border-primary' 
                   : 'text-muted-foreground hover:text-foreground hover:bg-foreground/5 hover:-translate-y-0.5'
@@ -83,7 +118,6 @@ export function TabBar({ currentTab, onTabChange }: TabBarProps) {
             </button>
           )
         })}
-      </div>
     </div>
   )
 }

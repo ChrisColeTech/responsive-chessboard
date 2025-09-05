@@ -1,27 +1,15 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Volume2, RotateCcw, Coins, RefreshCw } from 'lucide-react'
 import { SlotMachine } from '../components/SlotMachine'
 import { useChessAudio } from '../services/audioService'
-import { useInstructions } from '../contexts/InstructionsContext'
+import { usePageInstructions } from '../hooks/usePageInstructions'
 import { useAppStore } from '../stores/appStore'
 
 export const SlotMachineTestPage: React.FC = () => {
   const coinBalance = useAppStore((state) => state.coinBalance)
   const setCoinBalance = useAppStore((state) => state.setCoinBalance)
   const { playMove, playError } = useChessAudio()
-  const { setInstructions } = useInstructions()
-
-  const instructions = [
-    "Experience the thrill of a casino slot machine with visual and audio feedback",
-    "Use the +/- buttons to adjust your coin wager amount", 
-    "Click the SPIN button to start the slot machine animation",
-    "Watch for winning combinations and enjoy the casino atmosphere"
-  ]
-
-  // Register instructions when component mounts
-  useEffect(() => {
-    setInstructions("Slot Machine Casino Experience", instructions)
-  }, [setInstructions])
+  usePageInstructions('slots')
 
   return (
     <div className="relative min-h-full pb-12">

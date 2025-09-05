@@ -1,6 +1,6 @@
 import { Howl } from 'howler';
 
-export type SoundEffect = 'move' | 'capture' | 'check' | 'gameStart' | 'gameEnd' | 'error';
+export type SoundEffect = 'move' | 'capture' | 'check' | 'gameStart' | 'gameEnd' | 'error' | 'uiClick';
 
 interface AudioSettings {
   enabled: boolean;
@@ -60,6 +60,11 @@ class ChessAudioService {
         src: ['/sounds/error.mp3', '/sounds/error.wav'],
         volume: 0.5,
         fallback: () => this.generateTone(200, 0.3, 'square'),
+      },
+      uiClick: {
+        src: ['/sounds/ui-click.mp3', '/sounds/ui-click.wav'],
+        volume: 0.4,
+        fallback: () => this.generateTone(1000, 0.05, 'sine'),
       },
     };
 
@@ -144,6 +149,7 @@ class ChessAudioService {
       case 'error':
       case 'gameStart':
       case 'gameEnd':
+      case 'uiClick':
         if (!this.settings.uiSounds) return;
         break;
     }
@@ -203,6 +209,10 @@ class ChessAudioService {
 
   public playGameEnd(): void {
     this.play('gameEnd');
+  }
+
+  public playUIClick(): void {
+    this.play('uiClick');
   }
 
   public setVolume(volume: number): void {
@@ -283,6 +293,7 @@ export function useChessAudio() {
     playError: () => audioService.playError(),
     playGameStart: () => audioService.playGameStart(),
     playGameEnd: () => audioService.playGameEnd(),
+    playUIClick: () => audioService.playUIClick(),
     setVolume: (volume: number) => audioService.setVolume(volume),
     toggleEnabled: () => audioService.toggleEnabled(),
     setEnabled: (enabled: boolean) => audioService.setEnabled(enabled),

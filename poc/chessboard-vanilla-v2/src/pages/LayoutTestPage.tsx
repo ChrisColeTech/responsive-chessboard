@@ -1,6 +1,9 @@
 import React from 'react'
+import { usePageInstructions } from '../hooks/usePageInstructions'
 
 export const LayoutTestPage: React.FC = () => {
+  usePageInstructions('layout')
+
   return (
     <section className="space-y-4">
       <div className="card-gaming p-8">

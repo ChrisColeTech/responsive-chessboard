@@ -1,19 +1,9 @@
 // /src/pages/PlayPage.tsx - SIMPLE PLACEHOLDER FOR PHASE 3
-import React, { useEffect } from 'react';
-import { useInstructions } from '../contexts/InstructionsContext';
+import React from 'react';
+import { usePageInstructions } from '../hooks/usePageInstructions';
 
 export const PlayPage: React.FC = () => {
-  const { setInstructions } = useInstructions();
-
-  useEffect(() => {
-    setInstructions("Play Chess vs Computer - Coming Soon", [
-      "This page will feature human vs computer chess gameplay",
-      "Computer opponent with 10 difficulty levels (1-10)",
-      "Full drag & drop chessboard interface",
-      "Audio feedback and professional game controls",
-      "Currently under development..."
-    ]);
-  }, [setInstructions]);
+  usePageInstructions('play');
 
   return (
     <div className="flex items-center justify-center min-h-[400px]">

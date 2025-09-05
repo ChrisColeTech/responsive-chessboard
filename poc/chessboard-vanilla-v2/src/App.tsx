@@ -1,10 +1,11 @@
 import { AppLayout } from './components/layout'
-import { DragTestPage, LayoutTestPage, WorkerTestPage, SlotMachineTestPage, PlayPage } from './pages'
+import { UITestPage, LayoutTestPage, WorkerTestPage, SlotMachineTestPage, PlayPage } from './pages'
 import { DragProvider, useDrag } from './providers/DragProvider'
 import { InstructionsProvider } from './contexts/InstructionsContext'
 import { DraggedPiece } from './components/DraggedPiece'
 import { useSelectedTab, useAppStore } from './stores/appStore'
 import { useChessAudio } from './services/audioService'
+import { useGlobalUIAudio } from './hooks/useGlobalUIAudio'
 import { useEffect } from 'react'
 
 /*
@@ -25,17 +26,39 @@ function AppContent() {
   const coinBalance = useAppStore((state) => state.coinBalance)
   const { draggedPiece, cursorPosition, draggedPieceSize } = useDrag()
   const { preloadSounds, playGameStart } = useChessAudio()
+  
+  // Initialize global UI audio system
+  useGlobalUIAudio({
+    autoInitialize: true,
+    initialConfig: {
+      enabled: true,
+      autoDetection: true,
+      excludeSelectors: [
+        '[data-no-sound]',
+        '.no-sound', 
+        '.chess-piece',
+        '.chess-square',
+        '.chess-board',
+        '[disabled]',
+        '.disabled'
+      ]
+    }
+  })
 
   // Initialize audio system on first user interaction (application-wide)
   useEffect(() => {
     const handleFirstInteraction = () => {
       console.log('🎵 [APP] First user interaction - initializing audio system');
+      console.log('🎵 [APP] About to preload sounds...');
       preloadSounds();
+      console.log('🎵 [APP] About to play welcome sound...');
       playGameStart(); // Welcome sound
+      console.log('🎵 [APP] Welcome sound playGameStart() called');
       
       // Remove listeners after first interaction
       document.removeEventListener('click', handleFirstInteraction);
       document.removeEventListener('keydown', handleFirstInteraction);
+      console.log('🎵 [APP] Event listeners removed - welcome sound setup complete');
     };
 
     // Listen for first user interaction to enable audio
@@ -46,7 +69,7 @@ function AppContent() {
       document.removeEventListener('click', handleFirstInteraction);
       document.removeEventListener('keydown', handleFirstInteraction);
     };
-  }, [preloadSounds, playGameStart])
+  }, []) // Empty dependency array - run only on mount
 
   return (
     <AppLayout 
@@ -57,7 +80,7 @@ function AppContent() {
       {/* Page routing */}
       {selectedTab === 'layout' && <LayoutTestPage />}
       {selectedTab === 'worker' && <WorkerTestPage />}
-      {selectedTab === 'drag' && <DragTestPage />}
+      {selectedTab === 'uitests' && <UITestPage />}
       {selectedTab === 'slots' && <SlotMachineTestPage />}
       {selectedTab === 'play' && <PlayPage />}
       

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Volume2, RotateCcw, Sword, Target } from 'lucide-react'
 import { TestBoard } from '../components/TestBoard'
 import { CapturedPieces } from '../components/CapturedPieces'
 import { useChessAudio } from '../services/audioService'
-import { useInstructions } from '../contexts/InstructionsContext'
+import { usePageInstructions } from '../hooks/usePageInstructions'
 import type { ChessPosition, ChessPiece } from '../types'
 
 export const DragTestPage: React.FC = () => {
@@ -12,19 +12,7 @@ export const DragTestPage: React.FC = () => {
   const [capturedPieces, setCapturedPieces] = useState<ChessPiece[]>([])
   const [moveHandler, setMoveHandler] = useState<((from: ChessPosition, to: ChessPosition) => Promise<boolean>) | null>(null)
   const { playMove, playError } = useChessAudio()
-  const { setInstructions } = useInstructions()
-
-  const instructions = [
-    "Test drag and drop functionality with visual feedback, capture mechanics, and sound effects",
-    "Drag the bottom-right corner of the dashed container to test responsive scaling", 
-    "Use the control buttons below to test different sound effects",
-    "Click on squares to select them and see valid drop targets highlighted"
-  ]
-
-  // Register instructions when component mounts
-  useEffect(() => {
-    setInstructions("Interactive Chess Board Guide", instructions)
-  }, [setInstructions])
+  usePageInstructions('uitests.drag-test')
 
   const handleSquareClick = (position: ChessPosition) => {
     console.log(`🎯 [DRAG TEST PAGE] Square clicked: ${position}`);

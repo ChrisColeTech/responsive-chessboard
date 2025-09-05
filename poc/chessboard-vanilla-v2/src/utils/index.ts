@@ -24,3 +24,24 @@ export {
 export type {
   BoardCoordinates
 } from './coordinate.utils';
+
+// Phase 2: UI Tests utilities
+export {
+  generateDemoButtons,
+  generateExclusionExamples,
+  generateCodeSnippets,
+  formatCodeSnippet,
+  getDemoButtonById,
+  getExclusionExampleById,
+  generateInteractiveSelectors,
+  generateExclusionSelectors,
+  mapInteractionToSound,
+  generateSelectorFromExample,
+  matchesExclusionPattern,
+  validateDemoConfiguration,
+  generateImplementationTip,
+  extractElementTypeFromSelector,
+  isInteractiveSelector,
+  groupExamplesByCategory,
+  formatSelectorForDisplay
+} from './ui-tests';
