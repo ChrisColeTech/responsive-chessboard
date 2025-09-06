@@ -18,7 +18,7 @@ export const MinimalSplashPage: React.FC<MinimalSplashPageProps> = ({ variant = 
             <span className="splash-chess-king-professional">♚</span>
           </div>
           
-          <h1 className="splash-title splash-professional-title">Chess Master</h1>
+          <h1 className="splash-title splash-professional-title">Chess Training</h1>
           <p className="splash-subtitle splash-professional-subtitle">Tournament Ready</p>
         </div>
       </div>

@@ -28,7 +28,7 @@ export const LoadingProgressPage: React.FC<LoadingProgressPageProps> = ({ varian
             <span className="splash-chess-king-dashboard">♔</span>
           </div>
           
-          <h1 className="splash-title splash-dashboard-title">Master Chess Training</h1>
+          <h1 className="splash-title splash-dashboard-title">Chess Training</h1>
           <p className="splash-subtitle splash-dashboard-subtitle">Engine Initialization</p>
         </div>
       </div>

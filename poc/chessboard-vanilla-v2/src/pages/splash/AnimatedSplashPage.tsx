@@ -26,7 +26,7 @@ export const AnimatedSplashPage: React.FC<AnimatedSplashPageProps> = ({ variant 
             ))}
           </div>
           
-          <h1 className="splash-title splash-assembly-title">Chess Master</h1>
+          <h1 className="splash-title splash-assembly-title">Chess Training</h1>
           <p className="splash-subtitle splash-assembly-subtitle">Building Excellence</p>
         </div>
       </div>

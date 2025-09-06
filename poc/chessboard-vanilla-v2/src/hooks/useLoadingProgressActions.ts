@@ -25,7 +25,7 @@ interface EngineComponent {
 export function useLoadingProgressActions() {
   const [animationKey, setAnimationKey] = useState(0)
   const [componentProgress, setComponentProgress] = useState<Record<string, number>>({})
-  const [currentStatus, setCurrentStatus] = useState('Starting Master Chess Training...')
+  const [currentStatus, setCurrentStatus] = useState('Starting Chess Training...')
   const [activeComponents, setActiveComponents] = useState<Set<string>>(new Set())
   const { goToMinimal, goToAnimated, goToBranded } = useSplashActions()
   const openSplashModal = useAppStore((state) => state.openSplashModal)
@@ -107,7 +107,7 @@ export function useLoadingProgressActions() {
 
     // Set final status when all complete - increased timing to match slower loading
     const finalTimeout = setTimeout(() => {
-      setCurrentStatus('Master Chess Training ready for analysis')
+      setCurrentStatus('Chess Training ready for analysis')
     }, 7000) // Increased from 3000 to accommodate slower component loading
     intervals.push(finalTimeout)
 

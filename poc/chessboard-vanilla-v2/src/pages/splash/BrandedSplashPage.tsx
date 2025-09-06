@@ -25,7 +25,7 @@ export const BrandedSplashPage: React.FC<BrandedSplashPageProps> = ({ variant = 
             <div className="splash-premium-ring"></div>
           </div>
           
-          <h1 className="splash-title splash-academy-title">Master Chess Training</h1>
+          <h1 className="splash-title splash-academy-title">Chess Training</h1>
           <p className="splash-subtitle splash-academy-subtitle">Elite Chess Academy</p>
           <div className="splash-credentials">
             <span className="splash-credential">FIDE Certified</span>

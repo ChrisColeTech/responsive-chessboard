@@ -11,14 +11,14 @@ import { useAppStore } from '../stores/appStore'
 export function useBrandedSplashActions() {
   const [animationKey, setAnimationKey] = useState(0)
   const [progress, setProgress] = useState(0)
-  const [status, setStatus] = useState('Accessing Master Chess Training Academy...')
+  const [status, setStatus] = useState('Accessing Chess Training Academy...')
   const { goToMinimal, goToAnimated, goToProgress } = useSplashActions()
   const openSplashModal = useAppStore((state) => state.openSplashModal)
 
   // Premium academy loading sequence
   useEffect(() => {
     setProgress(0)
-    setStatus('Accessing Master Chess Training Academy...')
+    setStatus('Accessing Chess Training Academy...')
 
     const loadingSequence = [
       { progress: 20, status: 'Verifying premium credentials...', delay: 400 },
