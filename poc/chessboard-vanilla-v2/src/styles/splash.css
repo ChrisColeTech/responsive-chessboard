@@ -332,6 +332,248 @@
 }
 
 /* ==========================================================================
+   MINIMAL CONCEPT VARIANTS - 4 variations of "Minimal Tournament Professional"
+   ========================================================================== */
+
+/* VARIANT 1A: Ultra-minimal king focus */
+.splash-minimal-1a {
+  background: linear-gradient(135deg, var(--background), rgba(0, 0, 0, 0.01));
+}
+
+.splash-king-minimal {
+  margin-bottom: 3rem;
+}
+
+.splash-chess-king-1a {
+  font-size: 5rem;
+  color: var(--foreground);
+  opacity: 0.8;
+  animation: splash-ultra-minimal-float 4s ease-in-out infinite;
+}
+
+@keyframes splash-ultra-minimal-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.splash-minimal-title-1a {
+  font-weight: 200;
+  font-size: 3rem;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+}
+
+.splash-minimal-subtitle-1a {
+  font-weight: 300;
+  opacity: 0.6;
+  font-size: 1rem;
+  margin-bottom: 4rem;
+}
+
+.splash-hairline-1a {
+  height: 1px;
+  background: rgba(var(--foreground-rgb), 0.08);
+  margin-top: 0;
+}
+
+.splash-minimal-fill-1a {
+  background: var(--accent);
+  opacity: 0.7;
+  animation: none;
+}
+
+/* VARIANT 1B: Clean typography emphasis */
+.splash-minimal-1b {
+  background: var(--background);
+}
+
+.splash-king-typography {
+  margin-bottom: 2rem;
+}
+
+.splash-chess-king-1b {
+  font-size: 2rem;
+  color: var(--accent);
+  opacity: 0.7;
+}
+
+.splash-typography-title-1b {
+  font-weight: 600;
+  font-size: 3.5rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 1rem;
+}
+
+.splash-typography-subtitle-1b {
+  font-weight: 400;
+  font-size: 1.2rem;
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+}
+
+.splash-typography-tagline-1b {
+  font-size: 0.9rem;
+  opacity: 0.6;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  margin-bottom: 3rem;
+}
+
+.splash-clean-1b {
+  height: 2px;
+  background: rgba(var(--foreground-rgb), 0.1);
+  margin-top: 0;
+}
+
+.splash-typography-fill-1b {
+  background: var(--accent);
+  animation: none;
+}
+
+/* VARIANT 1C: Subtle progress animation focus */
+.splash-minimal-1c {
+  background: linear-gradient(135deg, var(--background), rgba(var(--accent-rgb), 0.02));
+}
+
+.splash-king-progress {
+  margin-bottom: 2rem;
+}
+
+.splash-chess-king-1c {
+  font-size: 3rem;
+  color: var(--accent);
+  opacity: 0.9;
+  animation: splash-progress-king-pulse 3s ease-in-out infinite;
+}
+
+@keyframes splash-progress-king-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.02); opacity: 1; }
+}
+
+.splash-progress-title-1c {
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+
+.splash-progress-subtitle-1c {
+  font-weight: 300;
+  opacity: 0.7;
+  margin-bottom: 3rem;
+}
+
+.splash-animated-1c {
+  height: 3px;
+  background: rgba(var(--accent-rgb), 0.1);
+  border-radius: 1.5px;
+  overflow: hidden;
+  margin-top: 0;
+}
+
+.splash-smooth-animation-1c {
+  background: var(--accent);
+  position: relative;
+  animation: splash-smooth-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes splash-smooth-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+.splash-progress-shimmer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: splash-shimmer-move 2s ease-in-out infinite;
+}
+
+@keyframes splash-shimmer-move {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
+
+.splash-progress-status-1c {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-top: 1rem;
+}
+
+/* VARIANT 1D: Professional tournament style */
+.splash-minimal-1d {
+  background: var(--background);
+}
+
+.splash-tournament-logo {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.splash-chess-king-1d {
+  font-size: 3.5rem;
+  color: var(--foreground);
+  opacity: 0.9;
+}
+
+.splash-tournament-border {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border: 1px solid rgba(var(--foreground-rgb), 0.2);
+  border-radius: 50%;
+}
+
+.splash-tournament-title-1d {
+  font-weight: 500;
+  font-size: 3.2rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+}
+
+.splash-tournament-subtitle-1d {
+  font-weight: 400;
+  font-size: 1.1rem;
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}
+
+.splash-tournament-credentials {
+  font-size: 0.8rem;
+  font-weight: 500;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 3rem;
+}
+
+.splash-tournament-1d {
+  height: 2px;
+  background: rgba(var(--foreground-rgb), 0.1);
+  border-radius: 1px;
+  margin-top: 0;
+}
+
+.splash-professional-fill-1d {
+  background: var(--accent);
+  opacity: 0.9;
+  animation: none;
+}
+
+.splash-tournament-status-1d {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin-top: 0.8rem;
+  font-weight: 400;
+}
+
+/* ==========================================================================
    RESPONSIVE DESIGN - Mobile-first approach
    ========================================================================== */
 
