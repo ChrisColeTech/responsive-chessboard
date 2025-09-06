@@ -1,3 +1,6 @@
+/* React Spring Bottom Sheet Styles - Must come first */
+@import 'react-spring-bottom-sheet/dist/style.css';
+
 /* Foundational CSS - @layer base + @tailwind + @keyframes */
 /* This includes all infrastructure: themes, variables, base styles */
 
@@ -6,6 +9,7 @@
 @tailwind components;
 
 @tailwind utilities;
+
 
 @keyframes pulse-glow {
   0%,

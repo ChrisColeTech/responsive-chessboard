@@ -4,12 +4,12 @@ import { TitleBar } from "./TitleBar";
 import { Header } from "./Header";
 import { TabBar } from "./TabBar";
 import { SettingsPanel } from "../SettingsPanel";
-import { MenuDropdown } from "./MenuDropdown";
+import { ActionSheet } from "../action-sheet";
 import { InstructionsFAB } from "../InstructionsFAB";
 import { InstructionsModal } from "../InstructionsModal";
 import { useSettings } from "../../stores/appStore";
 import { useInstructions } from "../../contexts/InstructionsContext";
-import { useMenuDropdown } from "../../hooks/useMenuDropdown";
+import { useActionSheet, usePageActions, useActionSheetEventHandlers } from "../../hooks";
 import type { TabId } from "./types";
 
 /**
@@ -54,10 +54,17 @@ export function AppLayout({
     close: closeSettings,
   } = useSettings();
   const {
-    isMenuOpen,
-    toggleMenu,
-    closeMenu,
-  } = useMenuDropdown();
+    isOpen: isActionSheetOpen,
+    currentActions,
+    toggleSheet,
+    closeSheet
+  } = useActionSheet();
+  const {
+    sheetRef,
+    handleActionSelect,
+    handleKeyDown
+  } = useActionSheetEventHandlers(isActionSheetOpen, closeSheet);
+  const { actions, handleAction } = usePageActions(currentTab);
   const {
     instructions,
     title,
@@ -129,10 +136,21 @@ export function AppLayout({
         </>
       </div>
 
-      {/* Menu Dropdown - positioned at layout level like settings panel */}
-      {isMenuOpen && (
-        <MenuDropdown onClose={closeMenu} />
-      )}
+      {/* Action Sheet - positioned at layout level like settings panel */}
+      <ActionSheet
+        open={isActionSheetOpen}
+        onDismiss={closeSheet}
+        actions={currentActions.length > 0 ? currentActions : actions}
+        onActionSelect={async (actionId) => {
+          const result = await handleAction(actionId)
+          if (result.closeSheet) {
+            closeSheet()
+          }
+        }}
+        sheetRef={sheetRef}
+        onKeyDown={handleKeyDown}
+        onActionSelectWithSound={handleActionSelect}
+      />
 
       {/* 
           TabBar - Fixed positioning for mobile compatibility  
@@ -142,8 +160,8 @@ export function AppLayout({
         <TabBar 
           currentTab={currentTab} 
           onTabChange={onTabChange}
-          isMenuOpen={isMenuOpen}
-          onToggleMenu={toggleMenu}
+          isMenuOpen={isActionSheetOpen}
+          onToggleMenu={() => toggleSheet(currentTab, actions)}
         />
       </footer>
 

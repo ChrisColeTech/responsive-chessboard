@@ -11,12 +11,12 @@ export function MenuButton({ isMenuOpen, onToggleMenu }: MenuButtonProps) {
 
   const handleMenuClick = () => {
     console.log(
-      "🔍 [MENU DEBUG] Menu button clicked, current isMenuOpen:",
+      "📋 [ACTION SHEET] Menu button clicked, current isMenuOpen:",
       isMenuOpen
     );
     playMove(false); // Play UI interaction sound
     onToggleMenu();
-    console.log("🔍 [MENU DEBUG] onToggleMenu called");
+    console.log("📋 [ACTION SHEET] onToggleMenu called");
   };
 
   return (

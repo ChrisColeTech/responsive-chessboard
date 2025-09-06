@@ -14,6 +14,11 @@ export { useStockfish } from './useStockfish';
 // Menu hooks
 export { useMenuDropdown } from './useMenuDropdown';
 
+// Action sheet hooks
+export { useActionSheet } from './useActionSheet';
+export { usePageActions } from './usePageActions';
+export { useActionSheetEventHandlers } from './useActionSheetEventHandlers';
+
 // Chess subdomain hooks
 export { useComputerOpponent, usePlayGame } from './chess';
 
