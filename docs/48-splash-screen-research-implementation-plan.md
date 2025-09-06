@@ -183,10 +183,53 @@ src/hooks/
 
 ### CSS Architecture (Implemented ✅)
 
-**Dedicated Splash Stylesheet**: `src/styles/splash.css`
-- **Import Location**: Added to `src/index.css` via `@import './styles/splash.css'`
-- **Integration**: Follows existing pattern alongside theme CSS files
-- **Isolation**: All splash-specific styles contained in single file for maintainability
+**Centralized Splash Stylesheet Philosophy**: `src/styles/splash.css`
+
+The decision to use a single CSS file for all splash screens during R&D phase follows these architectural principles:
+
+**🎯 Why Single CSS File During R&D:**
+- **Centralized Location**: All splash styles in one place prevents scattered style files throughout the component tree
+- **Rapid Iteration**: Easy to find and modify styles across all splash variants without hunting through multiple files
+- **Consistency**: Shared base classes ensure visual consistency across all splash screens
+- **Maintainability**: Single file is easier to maintain than 4+ separate CSS files per component
+- **Theme Integration**: CSS custom properties work consistently when defined in one location
+
+**📁 Import Strategy:**
+- **Location**: `src/main.tsx` - `import './styles/splash.css'`
+- **Why not index.css**: JavaScript imports ensure proper load order after theme variables are defined
+- **Benefits**: HMR (Hot Module Replacement) works properly, reliable loading sequence
+
+**🏗️ CSS Architecture Principles:**
+```css
+/* ARCHITECTURE PRINCIPLES DOCUMENTED IN splash.css:
+   - Single CSS file for all splash screens during R&D phase
+   - Full-screen splash layouts (no centered boxes/modals)
+   - Semantic class naming following BEM-like patterns  
+   - Theme integration via CSS custom properties
+   - Mobile-first responsive design */
+```
+
+**🎨 Class Organization:**
+```
+/* Base Layout Classes */
+.splash-container        /* Full viewport takeover */
+.splash-brand-section    /* Main content area */  
+.splash-progress-section /* Bottom progress area */
+
+/* Typography Hierarchy */  
+.splash-title           /* 60px → 40px → 32px responsive */
+.splash-subtitle        /* 20px → 18px → 16px responsive */
+
+/* Page-Specific Modifiers */
+.splash-animated        /* Animated page background */
+.splash-progress        /* Progress page styling */
+.splash-branded         /* Branded page luxury styling */
+
+/* Component Variations */
+.splash-luxury-title    /* Gold gradient text */
+.splash-thick           /* 6px progress bars */
+.splash-multi-progress  /* Multiple progress bars */
+```
 
 **Core CSS Classes Implemented:**
 ```css
@@ -251,6 +294,108 @@ const restartAnimation = useCallback(() => {
   {/* Component re-mounts with new key, restarting CSS animations */}
 </div>
 ```
+
+### Single Responsibility Principle (SRP) Architecture ✅
+
+**Component Separation Philosophy**: Each file has a single, focused responsibility following clean architecture principles:
+
+**🎯 Component Layer - Presentation Only:**
+```typescript
+// src/pages/splash/MinimalSplashPage.tsx
+// RESPONSIBILITY: Pure presentation component
+// - Renders JSX structure only
+// - Uses CSS classes from splash.css
+// - No business logic, no state, no side effects  
+// - No inline styles (except dynamic width values)
+// - Import React only, no other dependencies
+
+export const MinimalSplashPage: React.FC = () => {
+  return (
+    <div className="splash-container splash-fade-in">
+      {/* Pure JSX structure with semantic CSS classes */}
+    </div>
+  );
+};
+```
+
+**🎭 Hook Layer - Business Logic & State:**
+```typescript
+// src/hooks/useMinimalSplashActions.ts
+// RESPONSIBILITY: State management and business logic
+// - Animation state (animationKey)
+// - Action callbacks (restartAnimation, toggleFullscreen)
+// - Cross-navigation logic (goToAnimated, goToProgress)
+// - Audio integration (playMove)
+// - NO JSX, NO presentation concerns
+
+export function useMinimalSplashActions() {
+  const [animationKey, setAnimationKey] = useState(0)
+  const { playMove } = useChessAudio()
+  // ... business logic only
+  return { /* action functions */ }
+}
+```
+
+**🎨 Style Layer - Visual Design:**
+```css
+/* src/styles/splash.css  
+   RESPONSIBILITY: All splash visual styling
+   - Layout structure classes
+   - Typography hierarchy
+   - Animation definitions
+   - Theme integration
+   - Responsive breakpoints
+   - NO component-specific files during R&D */
+```
+
+**🔗 Integration Layer - Context Bridging:**
+```typescript
+// src/components/MinimalSplashPageWrapper.tsx
+// RESPONSIBILITY: Context integration only
+// - Connects usePageInstructions hook
+// - Connects usePageActions hook  
+// - Bridges component with app navigation system
+// - NO business logic, delegates to hooks
+
+export const MinimalSplashPageWrapper: React.FC = () => {
+  usePageInstructions(/* instructions */)
+  usePageActions(useMinimalSplashActions())
+  return <MinimalSplashPage />
+}
+```
+
+**📊 Type Layer - Data Structure:**
+```typescript
+// src/stores/appStore.ts (splash modal state)
+// RESPONSIBILITY: Data structure definitions
+// - State shape: splashModalOpen, splashModalPage
+// - Action signatures: openSplashModal, closeSplashModal
+// - Type definitions for splash page identifiers
+// - NO UI concerns, pure data layer
+```
+
+**🎵 Service Layer - External Integration:**
+```typescript
+// src/services/audioService.ts
+// RESPONSIBILITY: Audio system integration
+// - Sound effect management
+// - Audio context handling
+// - NO splash-specific logic, reusable across app
+```
+
+**❌ Anti-Patterns Avoided:**
+- **No inline styles in components** (except dynamic width values)
+- **No business logic in JSX files** (moved to hooks)
+- **No scattered CSS files** (centralized in splash.css during R&D)
+- **No mixed responsibilities** (each file has one clear purpose)
+- **No tight coupling** (components don't import hooks directly)
+
+**✅ Benefits Achieved:**
+- **Testability**: Each layer can be unit tested independently
+- **Maintainability**: Changes to business logic don't affect presentation
+- **Reusability**: Hooks can be reused, styles can be shared  
+- **Clarity**: Each file's purpose is immediately obvious
+- **Scalability**: Easy to add new splash pages following same pattern
 
 ### Theme Integration
 
@@ -638,7 +783,7 @@ border: 1px solid var(--accent);   /* Theme accent colors */
 
 ### 🚀 Phase 2: UX Design Implementation (READY TO START)
 
-**Current State**: All 4 splash pages have placeholder content with basic splash CSS styling
+**Current State**: All 4 splash pages now follow modern UX best practices with full-screen layouts and centralized CSS architecture. No more centered boxes - true splash screen implementations.
 
 **Next Priority Tasks:**
 

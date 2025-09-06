@@ -1,23 +1,51 @@
 /* ==========================================================================
-   Splash Screen Styles
-   Modern chess training application splash screens
+   Splash Screen Styles - Centralized CSS Architecture
+   Modern chess training application splash screens following best practices
+   
+   ARCHITECTURE PRINCIPLES:
+   - Single CSS file for all splash screens during R&D phase
+   - Full-screen splash layouts (no centered boxes/modals)
+   - Semantic class naming following BEM-like patterns
+   - Theme integration via CSS custom properties
+   - Mobile-first responsive design
    ========================================================================== */
 
-/* Base splash container */
+/* Base splash container - Full viewport takeover */
 .splash-container {
   min-height: 100vh;
+  width: 100vw;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   background: var(--background);
   position: relative;
   overflow: hidden;
+  padding: 2rem;
+  box-sizing: border-box;
 }
 
-.splash-content {
-  text-align: center;
+/* Layout sections for full-screen splash architecture */
+.splash-brand-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   z-index: 2;
+}
+
+.splash-logo-area {
+  text-align: center;
+  max-width: 800px;
+}
+
+.splash-progress-section {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.splash-status-section {
+  padding: 1rem 0;
+  text-align: center;
 }
 
 /* Typography Hierarchy */
@@ -98,32 +126,258 @@
   animation: splash-pulse 2s ease-in-out infinite;
 }
 
-/* Responsive design */
+/* ==========================================================================
+   PAGE-SPECIFIC STYLES
+   ========================================================================== */
+
+/* Status text */
+.splash-status-text {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin-top: 0.5rem;
+}
+
+/* ANIMATED SPLASH PAGE STYLES */
+.splash-animated {
+  background: linear-gradient(135deg, var(--background), rgba(99, 102, 241, 0.05));
+}
+
+.splash-background-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 50%);
+}
+
+.splash-piece-assembly {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.splash-chess-piece {
+  font-size: 3rem;
+  opacity: 0;
+  animation: splash-piece-enter 0.8s ease-out forwards;
+}
+
+@keyframes splash-piece-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) rotate(180deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+.splash-animated-title {
+  color: rgb(99, 102, 241);
+}
+
+.splash-multi-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.splash-multi-progress .splash-progress-bar {
+  margin-top: 0;
+}
+
+.splash-multi-progress .splash-progress-fill:nth-child(1) {
+  background: rgb(99, 102, 241);
+}
+
+.splash-multi-progress .splash-progress-fill:nth-child(2) {
+  background: rgb(168, 85, 247);
+}
+
+.splash-multi-progress .splash-progress-fill:nth-child(3) {
+  background: rgb(236, 72, 153);
+}
+
+/* LOADING PROGRESS PAGE STYLES */
+.splash-progress {
+  background: linear-gradient(135deg, var(--background), rgba(34, 197, 94, 0.05));
+}
+
+.splash-engine-title {
+  color: rgb(34, 197, 94);
+}
+
+.splash-dashboard-section {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.splash-progress-item {
+  margin-bottom: 1.5rem;
+}
+
+.splash-progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.splash-thick {
+  height: 6px;
+  margin-top: 0;
+}
+
+/* BRANDED SPLASH PAGE STYLES */
+.splash-branded {
+  background: linear-gradient(135deg, var(--background), rgba(245, 158, 11, 0.08));
+}
+
+.splash-brand-decoration {
+  position: absolute;
+  font-size: 4rem;
+  opacity: 0.15;
+  color: rgb(245, 158, 11);
+  pointer-events: none;
+}
+
+.splash-top-right {
+  top: 2rem;
+  right: 2rem;
+}
+
+.splash-bottom-left {
+  bottom: 2rem;
+  left: 2rem;
+}
+
+.splash-center-bg {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8rem;
+  opacity: 0.05;
+  z-index: 1;
+}
+
+.splash-luxury-title {
+  background: linear-gradient(135deg, rgb(245, 158, 11), rgb(217, 119, 6));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
+  font-size: 4rem;
+}
+
+.splash-luxury-subtitle {
+  color: rgb(217, 119, 6);
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.splash-quote {
+  color: rgb(120, 53, 15);
+  font-size: 1rem;
+  font-weight: 500;
+  font-style: italic;
+  margin-top: 2rem;
+  opacity: 0.9;
+}
+
+.splash-luxury {
+  height: 8px;
+  background: rgba(245, 158, 11, 0.2);
+  border-radius: 4px;
+  margin-top: 0;
+}
+
+.splash-luxury-fill {
+  background: linear-gradient(90deg, rgb(245, 158, 11), rgb(217, 119, 6));
+  border-radius: 4px;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+}
+
+.splash-luxury-status {
+  color: rgb(217, 119, 6);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN - Mobile-first approach
+   ========================================================================== */
+
 @media (max-width: 768px) {
+  .splash-container {
+    padding: 1.5rem;
+  }
+  
   .splash-title {
     font-size: 2.5rem; /* 40px */
+  }
+  
+  .splash-luxury-title {
+    font-size: 3rem;
   }
   
   .splash-subtitle {
     font-size: 1.125rem; /* 18px */
   }
   
-  .splash-test-border {
-    padding: 2rem;
-    margin: 1rem;
+  .splash-piece-assembly {
+    gap: 0.5rem;
+  }
+  
+  .splash-chess-piece {
+    font-size: 2rem;
+  }
+  
+  .splash-brand-decoration {
+    font-size: 2.5rem;
   }
 }
 
 @media (max-width: 480px) {
+  .splash-container {
+    padding: 1rem;
+  }
+  
   .splash-title {
     font-size: 2rem; /* 32px */
+  }
+  
+  .splash-luxury-title {
+    font-size: 2.5rem;
   }
   
   .splash-subtitle {
     font-size: 1rem; /* 16px */
   }
   
-  .splash-test-border {
-    padding: 1.5rem;
+  .splash-chess-piece {
+    font-size: 1.5rem;
+  }
+  
+  .splash-brand-decoration {
+    font-size: 2rem;
+  }
+  
+  .splash-top-right {
+    top: 1rem;
+    right: 1rem;
+  }
+  
+  .splash-bottom-left {
+    bottom: 1rem;
+    left: 1rem;
   }
 }
