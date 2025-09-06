@@ -751,7 +751,6 @@
 
   /* 4. COMMON LAYOUTS */
   .test-container {
-    border: 2px dashed color-mix(in srgb, var(--primary) 30%, transparent);
     border-radius: 0.5rem;
     padding: 1rem;
     background-color: color-mix(in srgb, var(--background) 50%, transparent);

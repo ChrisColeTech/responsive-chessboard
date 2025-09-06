@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { Volume2, RotateCcw, Sword, Target } from "lucide-react";
 import { TestBoard } from "../../components/TestBoard";
 import { CapturedPieces } from "../../components/CapturedPieces";
-import { useChessAudio } from "../../services/audioService";
 import { usePageInstructions } from "../../hooks/usePageInstructions";
 import type { ChessPosition, ChessPiece } from "../../types";
 
@@ -15,7 +13,6 @@ export const DragTestPage: React.FC = () => {
   const [moveHandler, setMoveHandler] = useState<
     ((from: ChessPosition, to: ChessPosition) => Promise<boolean>) | null
   >(null);
-  const { playMove, playError } = useChessAudio();
   usePageInstructions("uitests.drag-test");
 
   const handleSquareClick = (position: ChessPosition) => {
@@ -121,73 +118,6 @@ export const DragTestPage: React.FC = () => {
           pieces={capturedPieces.filter((p) => p.color === "black")}
           className="mt-4"
         />
-
-        {/* Professional Control Panel - Fully Responsive */}
-        <div className="control-panel">
-          <div className="control-header">
-            <div className="status-indicator"></div>
-            <h4 className="text-sm font-semibold text-foreground/90">
-              Testing Controls
-            </h4>
-          </div>
-          <div className="grid-control grid-control-2-4 grid-control-responsive">
-            <button
-              onClick={() => {
-                if (
-                  typeof window !== "undefined" &&
-                  (window as any).__testBoardReset
-                ) {
-                  (window as any).__testBoardReset();
-                }
-              }}
-              className="group relative btn-muted"
-            >
-              <div className="icon-button-content">
-                <RotateCcw className="w-4 h-4" />
-                <span>Reset</span>
-              </div>
-            </button>
-
-            <button
-              onClick={() => {
-                playMove(false);
-                console.log("Move sound test");
-              }}
-              className="group relative btn-secondary"
-            >
-              <div className="icon-button-content">
-                <Volume2 className="w-4 h-4" />
-                <span>Move</span>
-              </div>
-            </button>
-
-            <button
-              onClick={() => {
-                playMove(true);
-                console.log("Capture sound test");
-              }}
-              className="group relative btn-primary"
-            >
-              <div className="icon-button-content">
-                <Target className="w-4 h-4" />
-                <span>Capture</span>
-              </div>
-            </button>
-
-            <button
-              onClick={() => {
-                playError();
-                console.log("Error sound test");
-              }}
-              className="group relative btn-destructive"
-            >
-              <div className="icon-button-content">
-                <Sword className="w-4 h-4" />
-                <span>Error</span>
-              </div>
-            </button>
-          </div>
-        </div>
       </section>
     </div>
   );
