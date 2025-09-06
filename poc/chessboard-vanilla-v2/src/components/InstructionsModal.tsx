@@ -17,18 +17,18 @@ export const InstructionsModal: React.FC<InstructionsModalProps> = ({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="modal-backdrop modal-backdrop-padding">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 modal-backdrop-dark"
         onClick={onClose}
       />
       
       {/* Modal Content */}
-      <div className="relative bg-background border border-border rounded-xl shadow-2xl p-6 max-w-md w-full">
+      <div className="modal-content modal-content-md">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
+            <div className="modal-icon-container">
               <Target className="w-5 h-5 text-primary" />
             </div>
             <h3 className="text-lg font-semibold text-foreground">{title}</h3>

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { AppLayout } from './components/layout'
 import { UITestPage, LayoutTestPage, WorkerTestPage, SlotMachineTestPage, PlayPage } from './pages'
 import { DragProvider, useDrag } from './providers/DragProvider'
@@ -6,7 +7,6 @@ import { DraggedPiece } from './components/DraggedPiece'
 import { useSelectedTab, useAppStore } from './stores/appStore'
 import { useChessAudio } from './services/audioService'
 import SplashPage from './pages/SplashPage'
-import { useEffect } from 'react'
 
 /*
  * To add a new route/page:

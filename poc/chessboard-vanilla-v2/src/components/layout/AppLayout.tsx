@@ -78,8 +78,11 @@ export function AppLayout({
       {/* 
         Header - Fixed positioning for mobile compatibility
         ✅ Fixed to top with proper z-index, below title bar
+        Hide when settings panel is open
       */}
-      <header className="fixed top-10 left-0 right-0 z-20">
+      <header className={`fixed top-10 left-0 right-0 z-20 transition-transform duration-300 ease-out ${
+        isSettingsPanelOpen ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
+      }`}>
         <Header
           onOpenSettings={openSettings}
           isSettingsOpen={isSettingsPanelOpen}

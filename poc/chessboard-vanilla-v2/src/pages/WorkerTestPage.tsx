@@ -191,7 +191,7 @@ export const WorkerTestPage: React.FC = () => {
           </div>
 
           {/* Test Controls */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid-control grid-control-1-4">
             <button
               onClick={testWorkerReady}
               disabled={isTestingReady || isRunningAllTests}
@@ -223,7 +223,7 @@ export const WorkerTestPage: React.FC = () => {
           </div>
           
           {/* Control buttons */}
-          <div className="flex gap-3 mt-4">
+          <div className="control-buttons-row">
             <button
               onClick={runAllTests}
               disabled={!isReady || isThinking || isRunningAllTests}
@@ -240,7 +240,7 @@ export const WorkerTestPage: React.FC = () => {
           </div>
 
           {/* Results Display */}
-          <div className="bg-background/50 rounded-lg p-4 border border-border/50">
+          <div className="status-card">
             <h4 className="font-medium text-foreground mb-3">Test Results:</h4>
             {lastMove && (
               <div className="mb-2 text-foreground">

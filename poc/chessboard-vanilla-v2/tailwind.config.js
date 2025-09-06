@@ -4,6 +4,15 @@ module.exports = {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: [
+    { pattern: /bg-(primary|secondary|accent|muted|foreground|background|border|black|titlebar)\/\d+/ },
+    { pattern: /border-(primary|secondary|accent|muted|foreground|background|border)\/\d+/ },
+    { pattern: /ring-(primary|secondary|accent|muted|foreground|background|border)\/\d+/ },
+    { pattern: /bg-titlebar(-hover|-close-hover)?/ },
+    { pattern: /text-titlebar(-foreground)?/ },
+    'hover:bg-titlebar-hover',
+    'hover:bg-titlebar-close-hover',
+  ],
   darkMode: ['class'],
   theme: {
     extend: {

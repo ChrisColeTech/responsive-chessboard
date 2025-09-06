@@ -112,30 +112,12 @@ export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: Ta
             aria-selected={isActive}
             aria-controls={`panel-${tab.id}`}
             tabIndex={isActive ? 0 : -1}
-            className={`
-                flex flex-col items-center justify-center gap-1 py-2 border-none
-                bg-transparent cursor-pointer transition-all duration-300 text-xs font-medium
-                focus:outline-none
-                ${
-                  isActive
-                    ? "text-foreground font-bold -translate-y-1 shadow-xl border-t-4 border-primary glass"
-                    : "text-muted-foreground hover:text-foreground hover:-translate-y-0.5 hover:glass"
-                }
-              `}
+            className={`tab-button ${isActive ? "tab-button-active" : "tab-button-inactive"}`}
           >
             <IconComponent
-              className={`w-6 h-6 mb-1 transition-all duration-300 ${
-                isActive
-                  ? "scale-110 text-primary drop-shadow-lg"
-                  : "text-muted-foreground hover:scale-105 hover:text-foreground"
-              }`}
+              className={isActive ? "tab-icon-active" : "tab-icon-inactive"}
             />
             <span className="leading-tight font-medium">{tab.label}</span>
-            {isActive && (
-              <span className="text-[10px] opacity-70 font-normal -mt-0.5">
-                {tab.description}
-              </span>
-            )}
           </button>
         );
       })}

@@ -14,16 +14,16 @@ export const SlotMachineTestPage: React.FC = () => {
   return (
     <div className="relative min-h-full pb-12">
       {/* Enhanced gaming background effects */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="bg-overlay">
         {/* Floating Gaming Elements */}
-        <div className="absolute top-20 left-20 w-32 h-32 bg-primary/20 rounded-full opacity-20 blur-xl animate-pulse gpu-accelerated animation-delay-500"></div>
-        <div className="absolute bottom-32 right-16 w-24 h-24 bg-accent/20 rounded-full opacity-15 blur-lg animate-pulse gpu-accelerated animation-delay-1000"></div>
-        <div className="absolute top-1/3 left-1/4 w-16 h-16 bg-primary/10 rounded-full opacity-10 blur-md animate-pulse gpu-accelerated animation-delay-1500"></div>
+        <div className="bg-orb bg-orb-lg bg-orb-primary top-20 left-20 animation-delay-500"></div>
+        <div className="bg-orb bg-orb-md bg-orb-accent bottom-32 right-16 animation-delay-1000"></div>
+        <div className="bg-orb bg-orb-sm bg-orb-primary-light top-1/3 left-1/4 animation-delay-1500"></div>
         
         {/* Sparkle Effects */}
-        <div className="absolute top-1/4 right-1/4 w-2 h-2 bg-primary/60 rounded-full animate-ping animation-delay-300"></div>
-        <div className="absolute bottom-1/3 left-1/3 w-1 h-1 bg-accent/40 rounded-full animate-ping animation-delay-700"></div>
-        <div className="absolute top-2/3 right-1/3 w-1.5 h-1.5 bg-primary/50 rounded-full animate-pulse animation-delay-1200"></div>
+        <div className="bg-sparkle bg-sparkle-lg bg-orb-primary-60 top-1/4 right-1/4 animation-delay-300"></div>
+        <div className="bg-sparkle bg-sparkle-sm bg-orb-accent-40 bottom-1/3 left-1/3 animation-delay-700"></div>
+        <div className="bg-sparkle bg-sparkle-md bg-orb-foreground-50 top-2/3 right-1/3 animation-delay-1200"></div>
       </div>
 
       <section className="relative z-10 space-y-8">
@@ -34,12 +34,12 @@ export const SlotMachineTestPage: React.FC = () => {
         </div>
         
         {/* Chess Gaming Control Panel */}
-        <div className="mt-6 card-gaming p-4 md:p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+        <div className="control-panel">
+          <div className="control-header">
+            <div className="status-indicator"></div>
             <h4 className="text-sm font-semibold text-foreground/90">Gaming Controls</h4>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid-control grid-control-1-4">
             <button
               onClick={() => {
                 playMove(false);
@@ -47,7 +47,7 @@ export const SlotMachineTestPage: React.FC = () => {
               }}
               className="group relative btn-primary"
             >
-              <div className="flex items-center gap-2">
+              <div className="icon-button-content">
                 <RotateCcw className="w-4 h-4" />
                 <span>Test Spin</span>
               </div>
@@ -60,7 +60,7 @@ export const SlotMachineTestPage: React.FC = () => {
               }}
               className="group relative btn-secondary"
             >
-              <div className="flex items-center gap-2">
+              <div className="icon-button-content">
                 <Coins className="w-4 h-4" />
                 <span>Test Win</span>
               </div>
@@ -73,7 +73,7 @@ export const SlotMachineTestPage: React.FC = () => {
               }}
               className="group relative btn-destructive"
             >
-              <div className="flex items-center gap-2">
+              <div className="icon-button-content">
                 <Volume2 className="w-4 h-4" />
                 <span>Test Lose</span>
               </div>
@@ -86,7 +86,7 @@ export const SlotMachineTestPage: React.FC = () => {
               }}
               className="group relative btn-muted"
             >
-              <div className="flex items-center gap-2">
+              <div className="icon-button-content">
                 <RefreshCw className="w-4 h-4" />
                 <span>Reset Coins</span>
               </div>

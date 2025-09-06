@@ -29,18 +29,15 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
   };
 
   return (
-    <div className="w-80 sm:w-96 h-full glass-layout border-l border-border shadow-2xl">
+    <div className="settings-panel">
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-border">
+        <div className="settings-header">
           <div className="flex items-center gap-2">
             <Settings className="w-5 h-5 text-primary" />
             <h2 className="text-lg font-semibold text-foreground">Settings</h2>
           </div>
-          <button
-            onClick={handleCloseClick}
-            className="w-8 h-8 rounded-lg bg-muted/50 hover:bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
-          >
+          <button onClick={handleCloseClick} className="settings-close-btn">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -53,7 +50,7 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
               <Settings className="w-4 h-4" />
               Brightness
             </h3>
-            <div className="flex items-center justify-center p-1 bg-muted/30 rounded-lg border border-border">
+            <div className="settings-toggle-container">
               <button
                 onClick={handleModeToggle}
                 className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all flex-1 justify-center ${
@@ -85,7 +82,7 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
               <Settings className="w-4 h-4" />
               Theme
             </h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid-settings">
               {baseThemes.map((baseTheme) => {
                 const isActive = selectedBaseTheme === baseTheme.id;
                 const ThemeIcon = baseTheme.icon;
@@ -97,14 +94,9 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
                   <button
                     key={baseTheme.id}
                     onClick={() => handleBaseThemeChange(baseTheme.id)}
-                    className={`
-                    flex flex-col items-center gap-3 p-4 rounded-xl border transition-all
-                    ${
-                      isActive
-                        ? "bg-primary/20 border-primary text-primary shadow-lg ring-2 ring-primary/30"
-                        : "bg-muted/30 border-border hover:bg-muted/50 hover:border-primary/50 text-muted-foreground hover:text-foreground"
-                    }
-                  `}
+                    className={`settings-theme-btn ${
+                      isActive ? "settings-theme-btn-active" : ""
+                    }`}
                   >
                     <div
                       className={`w-12 h-12 rounded-full border-2 ${preview} flex items-center justify-center`}
@@ -137,7 +129,7 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-border">
+        <div className="p-4 border-t border-border settings-footer">
           <div className="text-xs text-muted-foreground text-center">
             Settings Panel - Theme & More
           </div>

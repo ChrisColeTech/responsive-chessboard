@@ -18,12 +18,12 @@ export function CheckmateModal({ isOpen, winner, onReset }: CheckmateModalProps)
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-background border border-border rounded-xl p-8 shadow-2xl max-w-sm w-full mx-4">
+    <div className="modal-backdrop modal-backdrop-dark">
+      <div className="modal-content modal-content-sm">
         <div className="text-center space-y-6">
           {/* Winner Crown */}
           <div className="flex justify-center">
-            <div className="w-16 h-16 rounded-full bg-primary/10 border-2 border-primary/20 flex items-center justify-center">
+            <div className="modal-icon-container-lg">
               <Crown className="w-8 h-8 text-primary" />
             </div>
           </div>
