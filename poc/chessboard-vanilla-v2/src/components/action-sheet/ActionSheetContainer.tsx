@@ -113,7 +113,7 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         'go-to-branded': minimalSplashActions.goToBranded
       },
       animatedsplash: {
-        'test-spring-animation': animatedSplashActions.testSpringAnimation,
+        'test-spring-animation': animatedSplashActions.testAnimatedAssembly,
         'restart-animation': animatedSplashActions.restartAnimation,
         'toggle-fullscreen': animatedSplashActions.toggleFullscreen,
         'go-to-minimal': animatedSplashActions.goToMinimal,

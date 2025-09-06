@@ -2,124 +2,156 @@ import { useCallback, useState, useEffect, useMemo } from 'react'
 import { useSplashActions } from './useSplashActions'
 import { useAppStore } from '../stores/appStore'
 
-interface TrainingComponent {
+interface PieceGroup {
   id: string
   name: string
-  description: string
-  icon: string
-  targetProgress: number
-  color: string
+  symbol: string
+  progress: number
+  completed: boolean
   delay: number
   speed: number
 }
 
 /**
- * Hook for Chess Engine Loading Dashboard - Loading Progress Variant (CONCEPT 2)
+ * Hook for Progressive Piece Assembly - Loading Progress Variant (CONCEPT 3)
  * 
- * DESIGN INTENT: Multiple progress bars showing detailed preparation of chess training components.
- * Each component (lessons, puzzles, analysis, practice) has individual progress tracking.
- * Professional dashboard shows users exactly what's being prepared for their training.
+ * DESIGN INTENT: Dashboard showing systematic chess piece assembly with technical precision.
+ * Each piece group has individual progress tracking showing professional setup sequence.
+ * Status messages use proper chess terminology for educational training atmosphere.
  */
 export function useLoadingProgressActions() {
   const [animationKey, setAnimationKey] = useState(0)
-  const [componentProgress, setComponentProgress] = useState<Record<string, number>>({})
-  const [currentStatus, setCurrentStatus] = useState('Preparing your chess training...')
-  const [activeComponents, setActiveComponents] = useState<Set<string>>(new Set())
+  const [pieceGroups, setPieceGroups] = useState<PieceGroup[]>([])
+  const [currentStatus, setCurrentStatus] = useState('Preparing training board...')
   const { goToMinimal, goToAnimated, goToBranded } = useSplashActions()
   const openSplashModal = useAppStore((state) => state.openSplashModal)
 
-  // Memoize training components to prevent recreation
-  // TIMING: Slower delays so users can read what's being loaded
-  const engineComponents: TrainingComponent[] = useMemo(() => [
+  // Chess piece groups for progressive assembly
+  const initialPieceGroups: PieceGroup[] = useMemo(() => [
     {
-      id: 'lessons',
-      name: 'Chess Lessons',
-      description: 'Loading your personalized lessons',
-      icon: '♔',
-      targetProgress: 100,
-      color: 'rgb(59, 130, 246)', // Blue
-      delay: 500,
-      speed: 1500
+      id: 'king',
+      name: 'King',
+      symbol: '♔',
+      progress: 0,
+      completed: false,
+      delay: 200,
+      speed: 400
     },
     {
-      id: 'puzzles',
-      name: 'Practice Puzzles',
-      description: 'Preparing tactical puzzles',
-      icon: '♛',
-      targetProgress: 100,
-      color: 'rgb(34, 197, 94)', // Green
-      delay: 2000, // Increased from 200 - more time to read engine status
-      speed: 1500
+      id: 'queen',
+      name: 'Queen',
+      symbol: '♕',
+      progress: 0,
+      completed: false,
+      delay: 600,
+      speed: 400
     },
     {
-      id: 'analysis',
-      name: 'Game Analysis',
-      description: 'Setting up game analysis tools',
-      icon: '♜',
-      targetProgress: 100,
-      color: 'rgb(249, 115, 22)', // Orange
-      delay: 3500,
-      speed: 1500
+      id: 'rooks',
+      name: 'Rooks',
+      symbol: '♖',
+      progress: 0,
+      completed: false,
+      delay: 1000,
+      speed: 400
     },
     {
-      id: 'practice',
-      name: 'Training Games',
-      description: 'Preparing practice games',
-      icon: '♝',
-      targetProgress: 100,
-      color: 'rgb(168, 85, 247)', // Purple
-      delay: 5000,
-      speed: 1500
+      id: 'bishops',
+      name: 'Bishops',
+      symbol: '♗',
+      progress: 0,
+      completed: false,
+      delay: 1400,
+      speed: 400
+    },
+    {
+      id: 'knights',
+      name: 'Knights',
+      symbol: '♘',
+      progress: 0,
+      completed: false,
+      delay: 1800,
+      speed: 400
+    },
+    {
+      id: 'pawns',
+      name: 'Pawns',
+      symbol: '♙',
+      progress: 0,
+      completed: false,
+      delay: 2200,
+      speed: 400
     }
   ], [])
 
-  // Engine loading simulation
+  // Progressive piece assembly animation
   useEffect(() => {
-    setComponentProgress({})
-    setActiveComponents(new Set())
-    setCurrentStatus('Preparing your chess training...')
+    setPieceGroups(initialPieceGroups.map(group => ({
+      ...group,
+      progress: 0,
+      completed: false
+    })))
+    setCurrentStatus('Preparing training board...')
 
+    const timeouts: NodeJS.Timeout[] = []
     const intervals: NodeJS.Timeout[] = []
 
-    engineComponents.forEach((component) => {
-      const startTimeout = setTimeout(() => {
-        setActiveComponents(prev => new Set([...prev, component.id]))
-        setCurrentStatus(`Loading ${component.description}...`)
+    const statusMessages = [
+      'Placing the king...',
+      'Positioning the queen...',
+      'Setting up rooks...',
+      'Placing bishops...',
+      'Deploying knights...',
+      'Arranging pawns...',
+      'Board setup complete!'
+    ]
 
+    initialPieceGroups.forEach((group, index) => {
+      const startTimeout = setTimeout(() => {
+        setCurrentStatus(statusMessages[index])
+        
         const interval = setInterval(() => {
-          setComponentProgress(prev => {
-            const current = prev[component.id] || 0
-            if (current >= component.targetProgress) {
-              clearInterval(interval)
-              return prev
+          setPieceGroups(prev => prev.map(g => {
+            if (g.id === group.id && !g.completed && g.progress < 100) {
+              const increment = Math.random() * 12 + 8 // 8-20% increment for faster, more consistent filling
+              const newProgress = Math.min(g.progress + increment, 100)
+              return {
+                ...g,
+                progress: Math.round(newProgress),
+                completed: newProgress >= 100
+              }
             }
-            const increment = Math.random() * 5 + 2 // Random increment 2-7%
-            return {
-              ...prev,
-              [component.id]: Math.min(current + increment, component.targetProgress)
-            }
-          })
-        }, component.speed / 20) // Update frequency based on speed
+            return g
+          }))
+        }, group.speed / 30)
 
         intervals.push(interval)
-      }, component.delay)
-
-      intervals.push(startTimeout)
+        
+        // Stop interval when complete
+        const stopTimeout = setTimeout(() => {
+          clearInterval(interval)
+        }, group.speed + 200)
+        timeouts.push(stopTimeout)
+        
+      }, group.delay)
+      
+      timeouts.push(startTimeout)
     })
 
-    // Set final status when all complete - increased timing to match slower loading
+    // Final status
     const finalTimeout = setTimeout(() => {
-      setCurrentStatus('Ready to improve your chess!')
-    }, 7000) // Increased from 3000 to accommodate slower component loading
-    intervals.push(finalTimeout)
+      setCurrentStatus('Training session ready!')
+    }, 3000)
+    timeouts.push(finalTimeout)
 
     return () => {
+      timeouts.forEach(clearTimeout)
       intervals.forEach(clearInterval)
     }
-  }, [animationKey, engineComponents])
+  }, [animationKey, initialPieceGroups])
 
   const testProgressBar = useCallback(() => {
-    // No audio needed for engine loading test
+    // No audio needed for piece assembly test
   }, [])
 
   const restartAnimation = useCallback(() => {
@@ -131,20 +163,17 @@ export function useLoadingProgressActions() {
   }, [openSplashModal])
 
   const overallProgress = useMemo(() => {
-    const totalProgress = engineComponents.reduce((sum, component) => {
-      return sum + (componentProgress[component.id] || 0)
-    }, 0)
-    return Math.round(totalProgress / engineComponents.length)
-  }, [componentProgress, engineComponents])
+    if (pieceGroups.length === 0) return 0
+    const totalProgress = pieceGroups.reduce((sum, group) => sum + group.progress, 0)
+    return Math.round(totalProgress / pieceGroups.length)
+  }, [pieceGroups])
 
   return {
     testProgressBar,
     restartAnimation,
     toggleFullscreen,
-    engineComponents,
-    componentProgress,
+    pieceGroups,
     currentStatus,
-    activeComponents,
     overallProgress,
     // Cross-navigation
     goToMinimal,

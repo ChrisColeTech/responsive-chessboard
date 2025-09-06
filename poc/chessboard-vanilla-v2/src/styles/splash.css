@@ -2173,3 +2173,843 @@
     font-size: 1.2rem;
   }
 }
+
+/* ==========================================================================
+   CONCEPT 3 - Progressive Piece Assembly: Educational Chess Learning
+   ========================================================================== */
+
+/* Assembly splash variant styling */
+.splash-piece-assembly {
+  background: var(--background);
+}
+
+.splash-assembly-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.splash-assembly-subtitle {
+  font-size: 1.1rem;
+  color: var(--muted-foreground);
+  margin-bottom: 2rem;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Chess piece lineup */
+.splash-piece-lineup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.splash-chess-piece {
+  font-size: 3rem;
+  opacity: 0;
+  transform: translateY(20px) scale(0.8);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--muted-foreground);
+}
+
+.splash-chess-piece.splash-piece-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  color: var(--accent);
+  text-shadow: 0 2px 8px rgba(var(--accent-rgb, 59 130 246), 0.3);
+}
+
+/* Educational context */
+.splash-learning-context {
+  text-align: center;
+  margin: 1.5rem 0;
+  min-height: 2rem;
+}
+
+.splash-learning-text {
+  font-size: 1rem;
+  color: var(--foreground);
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+/* Assembly status */
+.splash-assembly-status {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  font-weight: 400;
+  margin-top: 1rem;
+}
+
+/* Responsive design for piece assembly */
+@media (min-width: 768px) {
+  .splash-assembly-title {
+    font-size: 3rem;
+  }
+  
+  .splash-assembly-subtitle {
+    font-size: 1.3rem;
+  }
+  
+  .splash-chess-piece {
+    font-size: 3.5rem;
+  }
+  
+  .splash-learning-text {
+    font-size: 1.1rem;
+  }
+  
+  .splash-assembly-status {
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .splash-assembly-title {
+    font-size: 3.5rem;
+  }
+  
+  .splash-assembly-subtitle {
+    font-size: 1.5rem;
+  }
+  
+  .splash-chess-piece {
+    font-size: 4rem;
+  }
+  
+  .splash-piece-lineup {
+    gap: 1.5rem;
+  }
+  
+  .splash-learning-text {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .splash-assembly-title {
+    font-size: 2rem;
+  }
+  
+  .splash-assembly-subtitle {
+    font-size: 1rem;
+  }
+  
+  .splash-chess-piece {
+    font-size: 2.5rem;
+  }
+  
+  .splash-piece-lineup {
+    gap: 0.75rem;
+  }
+  
+  .splash-learning-text {
+    font-size: 0.9rem;
+  }
+  
+  .splash-assembly-status {
+    font-size: 0.9rem;
+  }
+}
+
+/* ==========================================================================
+   CONCEPT 3 - Animated Assembly Variant: Orbital Chess Formation
+   ========================================================================== */
+
+/* Orbital assembly styling - completely different approach */
+.splash-orbit-assembly {
+  background: var(--background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash-orbit-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.splash-orbit-subtitle {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Orbital container - the heart of this design */
+.splash-orbit-container {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin: 0 auto;
+}
+
+/* Central crown that all pieces orbit around */
+.splash-central-crown {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.splash-crown-piece {
+  font-size: 4rem;
+  color: var(--accent);
+  text-shadow: 0 4px 12px rgba(var(--accent-rgb, 59 130 246), 0.5);
+  display: block;
+  animation: crownGlow 3s ease-in-out infinite;
+}
+
+@keyframes crownGlow {
+  0%, 100% { text-shadow: 0 4px 12px rgba(var(--accent-rgb, 59 130 246), 0.5); }
+  50% { text-shadow: 0 6px 20px rgba(var(--accent-rgb, 59 130 246), 0.8); }
+}
+
+/* Formation ring indicator */
+.splash-formation-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border: 2px dashed var(--accent);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: ringRotate 60s linear infinite;
+}
+
+@keyframes ringRotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Orbiting pieces container */
+.splash-orbit-pieces {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Individual orbiting piece */
+.splash-orbit-piece {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(-100px) rotate(calc(-1 * var(--orbit-angle)));
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.splash-orbit-piece.splash-orbit-active {
+  opacity: 1;
+  animation: orbitIn 2s ease-out forwards, orbitFloat 4s ease-in-out infinite;
+  animation-delay: var(--piece-delay), calc(var(--settle-delay) + 1s);
+}
+
+/* Orbit in animation */
+@keyframes orbitIn {
+  0% { 
+    transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(-200px) rotate(calc(-1 * var(--orbit-angle))) scale(0.3);
+  }
+  100% { 
+    transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(-100px) rotate(calc(-1 * var(--orbit-angle))) scale(1);
+  }
+}
+
+/* Floating animation after settling */
+@keyframes orbitFloat {
+  0%, 100% { 
+    transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(-100px) rotate(calc(-1 * var(--orbit-angle))) scale(1);
+  }
+  50% { 
+    transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(-105px) rotate(calc(-1 * var(--orbit-angle))) scale(1.1);
+  }
+}
+
+/* Chess symbols - no spinning per UX best practices */
+.splash-rotating-symbol {
+  font-size: 2.5rem;
+  color: var(--accent);
+  text-shadow: 0 2px 8px rgba(var(--accent-rgb, 59 130 246), 0.4);
+  display: block;
+}
+
+/* Responsive design for orbital assembly */
+@media (min-width: 768px) {
+  .splash-orbit-title {
+    font-size: 2.5rem;
+  }
+  
+  .splash-orbit-subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .splash-orbit-container {
+    width: 350px;
+    height: 350px;
+  }
+  
+  .splash-crown-piece {
+    font-size: 5rem;
+  }
+  
+  .splash-rotating-symbol {
+    font-size: 3rem;
+  }
+  
+  .splash-formation-ring {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .splash-orbit-title {
+    font-size: 3rem;
+  }
+  
+  .splash-orbit-subtitle {
+    font-size: 1.4rem;
+  }
+  
+  .splash-orbit-container {
+    width: 400px;
+    height: 400px;
+  }
+  
+  .splash-crown-piece {
+    font-size: 6rem;
+  }
+  
+  .splash-rotating-symbol {
+    font-size: 3.5rem;
+  }
+  
+  .splash-formation-ring {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .splash-orbit-title {
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .splash-orbit-subtitle {
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+  }
+  
+  .splash-orbit-container {
+    width: 240px;
+    height: 240px;
+  }
+  
+  .splash-crown-piece {
+    font-size: 3rem;
+  }
+  
+  .splash-rotating-symbol {
+    font-size: 2rem;
+  }
+  
+  .splash-formation-ring {
+    width: 170px;
+    height: 170px;
+  }
+  
+  .splash-orbit-piece {
+    transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(-85px) rotate(calc(-1 * var(--orbit-angle)));
+  }
+  
+  .splash-orbit-piece.splash-orbit-active {
+    animation: orbitInMobile 2s ease-out forwards, orbitFloatMobile 4s ease-in-out infinite;
+    animation-delay: var(--piece-delay), calc(var(--settle-delay) + 1s);
+  }
+}
+
+@keyframes orbitInMobile {
+  0% { 
+    transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(-170px) rotate(calc(-1 * var(--orbit-angle))) scale(0.3);
+  }
+  100% { 
+    transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(-85px) rotate(calc(-1 * var(--orbit-angle))) scale(1);
+  }
+}
+
+@keyframes orbitFloatMobile {
+  0%, 100% { 
+    transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(-85px) rotate(calc(-1 * var(--orbit-angle))) scale(1);
+  }
+  50% { 
+    transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(-90px) rotate(calc(-1 * var(--orbit-angle))) scale(1.1);
+  }
+}
+
+/* ========================================
+   CONCEPT 3: Progressive Piece Assembly - Loading Progress Dashboard
+   ======================================== */
+
+/* Main dashboard container */
+.splash-piece-dashboard {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.splash-dashboard-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+}
+
+.splash-dashboard-subtitle {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  margin-bottom: 0.75rem;
+}
+
+/* Dashboard section layout */
+.splash-dashboard-section {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Piece preview icons */
+.splash-piece-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.splash-piece-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: rgba(var(--card-rgb, 255 255 255), 0.05);
+  border: 1px solid rgba(var(--muted-foreground-rgb, 115 115 115), 0.2);
+  transition: all 0.4s ease;
+  opacity: 0.4;
+}
+
+.splash-piece-icon .splash-piece-symbol {
+  font-size: 1.8rem;
+  color: var(--muted-foreground);
+  transition: color 0.4s ease;
+}
+
+.splash-piece-icon.splash-piece-complete {
+  opacity: 1;
+  background: rgba(var(--accent-rgb, 59 130 246), 0.1);
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(var(--accent-rgb, 59 130 246), 0.2);
+}
+
+.splash-piece-icon.splash-piece-complete .splash-piece-symbol {
+  color: var(--accent);
+}
+
+/* Single progress bar section */
+.splash-single-progress {
+  background: rgba(var(--card-rgb, 255 255 255), 0.08);
+  border: 1px solid rgba(var(--accent-rgb, 59 130 246), 0.2);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.splash-single-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', monospace;
+}
+
+.splash-single-progress-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.splash-single-progress-percent {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.splash-single-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(var(--muted-foreground-rgb, 115 115 115), 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.splash-single-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), rgba(var(--accent-rgb, 59 130 246), 0.8));
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 0 12px rgba(var(--accent-rgb, 59 130 246), 0.4);
+}
+
+/* Status display */
+.splash-status-display {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.splash-status-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', monospace;
+  animation: statusFade 0.5s ease-in-out;
+}
+
+@keyframes statusFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 480px) {
+  .splash-piece-preview {
+    gap: 0.125rem;
+    margin: 0.5rem 0;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding: 0 0.5rem;
+  }
+  
+  .splash-piece-icon {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+  }
+  
+  .splash-piece-icon .splash-piece-symbol {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .splash-dashboard-title {
+    font-size: 3rem;
+  }
+  
+  .splash-dashboard-subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .splash-dashboard-section {
+    max-width: 700px;
+    padding: 0 2rem;
+  }
+  
+  .splash-piece-preview {
+    gap: 1.2rem;
+  }
+  
+  .splash-piece-icon {
+    width: 5rem;
+    height: 5rem;
+  }
+  
+  .splash-piece-icon .splash-piece-symbol {
+    font-size: 2.2rem;
+  }
+  
+  .splash-single-progress-bar {
+    height: 8px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .splash-dashboard-title {
+    font-size: 3.5rem;
+  }
+  
+  .splash-dashboard-subtitle {
+    font-size: 1.3rem;
+  }
+  
+  .splash-dashboard-section {
+    max-width: 800px;
+  }
+  
+  .splash-piece-icon {
+    width: 5.5rem;
+    height: 5.5rem;
+  }
+  
+  .splash-piece-icon .splash-piece-symbol {
+    font-size: 2.5rem;
+  }
+}
+
+/* ========================================
+   CONCEPT 3: Progressive Piece Assembly - Branded Academy
+   ======================================== */
+
+/* Academy luxury styling */
+.splash-academy-title {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, #D4AF37, #FFD700, #B8860B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 4px rgba(212, 175, 55, 0.3);
+  margin-bottom: 0.25rem;
+}
+
+.splash-academy-subtitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #1e3a8a;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+}
+
+/* Premium medallion gallery */
+.splash-medallion-gallery {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  flex-wrap: nowrap;
+}
+
+.splash-medallion {
+  width: 4rem;
+  height: 4rem;
+  position: relative;
+  opacity: 0.3;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.splash-medallion-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  border: 2px solid #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.splash-medallion-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #D4AF37, #FFD700, #B8860B);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.splash-medallion.splash-medallion-complete {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.splash-medallion.splash-medallion-complete .splash-medallion-inner {
+  border-color: #D4AF37;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+.splash-medallion.splash-medallion-complete .splash-medallion-inner::before {
+  opacity: 0.15;
+}
+
+.splash-medallion-piece {
+  font-size: 1.8rem;
+  color: #374151;
+  position: relative;
+  z-index: 1;
+  transition: color 0.6s ease;
+}
+
+.splash-medallion.splash-medallion-complete .splash-medallion-piece {
+  color: #92400e;
+}
+
+/* Academy credentials */
+.splash-academy-credentials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.splash-credential {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.splash-credential-divider {
+  color: #D4AF37;
+  font-weight: bold;
+}
+
+/* Rotating inspirational quotes */
+.splash-academy-quote {
+  margin: 1.5rem 0;
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash-quote-text {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--muted-foreground);
+  text-align: center;
+  line-height: 1.4;
+  animation: quoteFade 0.6s ease-in-out;
+  max-width: 24rem;
+}
+
+@keyframes quoteFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Elegant progress line */
+.splash-academy-progress-bar {
+  width: 100%;
+  height: 2px;
+  background: rgba(212, 175, 55, 0.2);
+  border-radius: 1px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.splash-academy-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #D4AF37, #FFD700);
+  border-radius: 1px;
+  transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .splash-academy-title {
+    font-size: 2rem;
+  }
+  
+  .splash-academy-subtitle {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .splash-medallion-gallery {
+    gap: 0.4rem;
+    margin: 1rem 0;
+  }
+  
+  .splash-medallion {
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  .splash-medallion-piece {
+    font-size: 1.4rem;
+  }
+  
+  .splash-academy-credentials {
+    gap: 0.5rem;
+  }
+  
+  .splash-credential {
+    font-size: 0.75rem;
+  }
+  
+  .splash-quote-text {
+    font-size: 0.8rem;
+    max-width: 20rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .splash-academy-title {
+    font-size: 3.5rem;
+  }
+  
+  .splash-academy-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .splash-medallion-gallery {
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+  
+  .splash-medallion {
+    width: 5rem;
+    height: 5rem;
+  }
+  
+  .splash-medallion-piece {
+    font-size: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .splash-academy-title {
+    font-size: 4rem;
+  }
+  
+  .splash-academy-subtitle {
+    font-size: 1.3rem;
+  }
+  
+  .splash-medallion {
+    width: 5.5rem;
+    height: 5.5rem;
+  }
+  
+  .splash-medallion-piece {
+    font-size: 2.8rem;
+  }
+}

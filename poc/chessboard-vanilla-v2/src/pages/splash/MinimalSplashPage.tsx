@@ -6,38 +6,41 @@ interface MinimalSplashPageProps {
 }
 
 export const MinimalSplashPage: React.FC<MinimalSplashPageProps> = ({ variant = 'in-app' }) => {
-  const { progress, status, animationKey } = useMinimalSplashActions();
+  const { status, animationKey, visiblePieces } = useMinimalSplashActions();
 
   return (
-    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-engine-minimal`}>
+    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-piece-assembly`}>
       {/* 
-        CONCEPT 2: Chess Engine Loading Dashboard - Minimal Variant
+        CONCEPT 3: Progressive Piece Assembly - Minimal Variant
         
-        DESIGN INTENT: Clean engine initialization display with technical credibility.
-        Shows sequential service loading with professional engine core branding.
-        Focus on transparency and trust through visible progress.
+        DESIGN INTENT: Educational chess piece assembly that teaches proper chess hierarchy.
+        Pieces appear in logical sequence showing board setup progress.
+        Transforms loading time into learning time about chess fundamentals.
       */}
       <div className="splash-brand-section">
         <div className="splash-logo-area">
-          {/* Engine core icon */}
-          <div className="splash-engine-core-icon">
-            <span className="splash-chess-engine-symbol">♔</span>
+          <h1 className="splash-title splash-assembly-title">Chess Training</h1>
+          <p className="splash-subtitle splash-assembly-subtitle">Master the Fundamentals</p>
+          
+          {/* Progressive piece assembly */}
+          <div className="splash-piece-lineup">
+            {visiblePieces.map((piece, index) => (
+              <div 
+                key={piece.id}
+                className={`splash-chess-piece splash-piece-${piece.id} ${piece.visible ? 'splash-piece-visible' : ''}`}
+                style={{ animationDelay: `${index * 0.3}s` }}
+              >
+                {piece.symbol}
+              </div>
+            ))}
           </div>
           
-          <h1 className="splash-title splash-engine-title">Chess Training</h1>
-          <p className="splash-subtitle splash-engine-subtitle">Master Your Game</p>
         </div>
       </div>
       
-      {/* Engine initialization progress */}
+      {/* Assembly progress */}
       <div className="splash-progress-section">
-        <div className="splash-progress-bar splash-engine-progress">
-          <div 
-            className="splash-progress-fill splash-engine-fill" 
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <div className="splash-status-text splash-engine-status">
+        <div className="splash-assembly-status">
           {status}
         </div>
       </div>

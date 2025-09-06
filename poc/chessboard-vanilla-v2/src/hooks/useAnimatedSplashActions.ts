@@ -2,71 +2,61 @@ import { useCallback, useState, useEffect, useMemo } from 'react'
 import { useSplashActions } from './useSplashActions'
 import { useAppStore } from '../stores/appStore'
 
-interface EngineComponent {
+interface OrbitingPiece {
   id: string
-  icon: string
-  label: string
-  name: string
+  symbol: string
+  angle: number
   delay: number
+  settleDelay: number
+  visible: boolean
 }
 
 /**
- * Hook for Chess Engine Loading Dashboard - Animated Variant (CONCEPT 2)
+ * Hook for Progressive Piece Assembly - Animated Variant (CONCEPT 3)
  * 
- * DESIGN INTENT: Engine components materialize sequentially with physics-based animations.
- * Shows visual assembly of engine system - core, database, tablebase, analysis tools.
- * Creates engaging technical process that builds anticipation for engine capabilities.
+ * DESIGN INTENT: Orbital piece assembly with rotating chess pieces around central crown.
+ * Pieces orbit in from different angles and settle into formation.
+ * Creates mesmerizing circular motion completely different from other variants.
  */
 export function useAnimatedSplashActions() {
   const [animationKey, setAnimationKey] = useState(0)
-  const [activeComponents, setActiveComponents] = useState<number>(0)
-  const [currentStatus, setCurrentStatus] = useState('Setting up your chess training...')
+  const [orbitingPieces, setOrbitingPieces] = useState<OrbitingPiece[]>([])
   const { goToMinimal, goToProgress, goToBranded } = useSplashActions()
   const openSplashModal = useAppStore((state) => state.openSplashModal)
 
-  // Memoize chess learning components to prevent recreating on every render
-  const engineComponents: EngineComponent[] = useMemo(() => [
-    { id: 'training', icon: '♔', label: 'Training', name: 'Setting up your training', delay: 800 },
-    { id: 'openings', icon: '♛', label: 'Openings', name: 'Loading opening lessons', delay: 900 },
-    { id: 'tactics', icon: '♜', label: 'Tactics', name: 'Preparing tactical puzzles', delay: 1000 },
-    { id: 'analysis', icon: '♝', label: 'Analysis', name: 'Getting analysis ready', delay: 800 }
+  // Chess pieces positioned in orbital formation
+  const initialOrbitPieces: OrbitingPiece[] = useMemo(() => [
+    { id: 'queen', symbol: '♕', angle: 0, delay: 800, settleDelay: 2500, visible: false },
+    { id: 'rook1', symbol: '♖', angle: 60, delay: 1000, settleDelay: 2700, visible: false },
+    { id: 'bishop1', symbol: '♗', angle: 120, delay: 1200, settleDelay: 2900, visible: false },
+    { id: 'knight1', symbol: '♘', angle: 180, delay: 1400, settleDelay: 3100, visible: false },
+    { id: 'bishop2', symbol: '♗', angle: 240, delay: 1600, settleDelay: 3300, visible: false },
+    { id: 'knight2', symbol: '♘', angle: 300, delay: 1800, settleDelay: 3500, visible: false }
   ], [])
 
-  // Progressive engine component assembly
+  // Orbital assembly animation sequence
   useEffect(() => {
-    setActiveComponents(0)
-    setCurrentStatus('Setting up your chess training...')
+    setOrbitingPieces(initialOrbitPieces)
 
-    let timeoutId: NodeJS.Timeout
+    const timeouts: NodeJS.Timeout[] = []
 
-    const assembleComponents = (index: number) => {
-      if (index >= engineComponents.length) {
-        setCurrentStatus('Ready to improve your chess!')
-        return
-      }
-
-      const { name, delay } = engineComponents[index]
-      
-      timeoutId = setTimeout(() => {
-        setActiveComponents(index + 1)
-        setCurrentStatus(`Loading ${name}... (${index + 1}/${engineComponents.length})`)
-        assembleComponents(index + 1)
-      }, delay)
-    }
-
-    // Start assembly after short delay
-    const initialTimeout = setTimeout(() => {
-      assembleComponents(0)
-    }, 500)
+    // Start orbital animation for each piece
+    initialOrbitPieces.forEach((piece) => {
+      const timeout = setTimeout(() => {
+        setOrbitingPieces(prev => prev.map(p => 
+          p.id === piece.id ? { ...p, visible: true } : p
+        ))
+      }, piece.delay)
+      timeouts.push(timeout)
+    })
 
     return () => {
-      clearTimeout(initialTimeout)
-      if (timeoutId) clearTimeout(timeoutId)
+      timeouts.forEach(clearTimeout)
     }
-  }, [animationKey, engineComponents])
+  }, [animationKey, initialOrbitPieces])
 
-  const testSpringAnimation = useCallback(() => {
-    // No audio needed for animation test
+  const testAnimatedAssembly = useCallback(() => {
+    // No audio needed for assembly test
   }, [])
 
   const restartAnimation = useCallback(() => {
@@ -77,16 +67,11 @@ export function useAnimatedSplashActions() {
     openSplashModal('animatedsplash')
   }, [openSplashModal])
 
-  const progress = (activeComponents / engineComponents.length) * 100
-
   return {
-    testSpringAnimation,
+    testAnimatedAssembly,
     restartAnimation,
     toggleFullscreen,
-    engineComponents,
-    activeComponents,
-    currentStatus,
-    progress,
+    orbitingPieces,
     // Cross-navigation
     goToMinimal,
     goToProgress,

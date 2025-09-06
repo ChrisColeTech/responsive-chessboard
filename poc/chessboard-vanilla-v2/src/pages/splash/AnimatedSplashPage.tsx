@@ -6,48 +6,51 @@ interface AnimatedSplashPageProps {
 }
 
 export const AnimatedSplashPage: React.FC<AnimatedSplashPageProps> = ({ variant = 'in-app' }) => {
-  const { engineComponents, activeComponents, currentStatus, progress, animationKey } = useAnimatedSplashActions();
+  const { animationKey, orbitingPieces } = useAnimatedSplashActions();
 
   return (
-    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-engine-animated`}>
+    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-orbit-assembly`}>
       {/* 
-        CONCEPT 2: Chess Engine Loading Dashboard - Animated Variant
+        CONCEPT 3: Progressive Piece Assembly - Animated Variant
         
-        DESIGN INTENT: Engine components materialize sequentially with physics-based animations.
-        Shows visual assembly of engine system - core, database, tablebase, analysis tools.
-        Creates engaging technical process that builds anticipation for engine capabilities.
+        DESIGN INTENT: Orbital piece assembly with rotating chess pieces around a central crown.
+        Pieces orbit in and settle into formation with unique radial positioning.
+        Creates mesmerizing circular motion that's completely different from other variants.
       */}
+      
       <div className="splash-brand-section">
         <div className="splash-logo-area">
-          {/* Engine component assembly area */}
-          <div className="splash-engine-components-container">
-            {engineComponents.map((component, index) => (
-              <div 
-                key={component.id} 
-                className={`splash-engine-component ${index < activeComponents ? 'splash-component-active' : ''}`}
-                style={{ animationDelay: `${index * 0.4}s` }}
-              >
-                <div className="splash-component-icon">{component.icon}</div>
-                <div className="splash-component-label">{component.label}</div>
-              </div>
-            ))}
+          <h1 className="splash-title splash-orbit-title">Chess Training</h1>
+          
+          {/* Orbital assembly animation */}
+          <div className="splash-orbit-container">
+            {/* Central crown that pieces orbit around */}
+            <div className="splash-central-crown">
+              <span className="splash-crown-piece">♔</span>
+            </div>
+            
+            {/* Orbiting pieces */}
+            <div className="splash-orbit-pieces">
+              {orbitingPieces.map((piece) => (
+                <div 
+                  key={piece.id}
+                  className={`splash-orbit-piece ${piece.visible ? 'splash-orbit-active' : ''}`}
+                  style={{ 
+                    '--orbit-angle': `${piece.angle}deg`,
+                    '--piece-delay': `${piece.delay}ms`,
+                    '--settle-delay': `${piece.settleDelay}ms`
+                  } as React.CSSProperties}
+                >
+                  <span className="splash-rotating-symbol">{piece.symbol}</span>
+                </div>
+              ))}
+            </div>
+            
+            {/* Formation indicator */}
+            <div className="splash-formation-ring"></div>
           </div>
           
-          <h1 className="splash-title splash-engine-animated-title">Chess Training</h1>
-          <p className="splash-subtitle splash-engine-animated-subtitle">Preparing Your Game</p>
-        </div>
-      </div>
-      
-      {/* Engine assembly progress */}
-      <div className="splash-progress-section">
-        <div className="splash-progress-bar splash-engine-animated-progress">
-          <div 
-            className="splash-progress-fill splash-engine-animated-fill" 
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <div className="splash-status-text splash-engine-animated-status">
-          {currentStatus}
+          <p className="splash-subtitle splash-orbit-subtitle">Master Advanced Strategies</p>
         </div>
       </div>
     </div>

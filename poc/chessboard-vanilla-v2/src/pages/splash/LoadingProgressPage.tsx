@@ -6,43 +6,45 @@ interface LoadingProgressPageProps {
 }
 
 export const LoadingProgressPage: React.FC<LoadingProgressPageProps> = ({ variant = 'in-app' }) => {
-  const { overallProgress, currentStatus, animationKey } = useLoadingProgressActions();
+  const { animationKey, pieceGroups, currentStatus, overallProgress } = useLoadingProgressActions();
 
   return (
-    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-training-dashboard`}>
+    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in`}>
       {/* 
-        CONCEPT 2: Chess Engine Loading Dashboard - Loading Progress Variant
+        CONCEPT 3: Progressive Piece Assembly - Loading Progress Variant
         
-        DESIGN INTENT: Multiple progress bars showing detailed preparation of chess training components.
-        Each component (lessons, puzzles, analysis, practice) has individual progress tracking.
-        Professional dashboard shows users exactly what's being prepared for their training.
+        DESIGN INTENT: Everything contained within centered brand section - NO bottom elements.
+        Piece assembly progress shown with single progress bar and piece icons.
+        Follows established splash page pattern with all content centered.
       */}
+      
       <div className="splash-brand-section">
         <div className="splash-logo-area">
-          <h1 className="splash-title splash-training-dashboard-title">Chess Training</h1>
-          <p className="splash-subtitle splash-training-dashboard-subtitle">Preparing Your Lessons</p>
-        </div>
-      </div>
-      
-      {/* Single Progress Bar Dashboard */}
-      <div className="splash-training-dashboard-section">
-        {/* Single Progress Bar */}
-        <div className="splash-single-progress">
-          <div className="splash-single-progress-header">
-            <span className="splash-single-progress-label">Loading Training Components</span>
-            <span className="splash-single-progress-percent">{overallProgress}%</span>
+          <h1 className="splash-title">Chess Training</h1>
+          <p className="splash-subtitle">{currentStatus}</p>
+          
+          {/* Piece Assembly Preview */}
+          <div className="splash-piece-preview">
+            {pieceGroups.map((group) => (
+              <div 
+                key={group.id} 
+                className={`splash-piece-icon ${group.completed ? 'splash-piece-complete' : ''}`}
+              >
+                <span className="splash-piece-symbol">{group.symbol}</span>
+              </div>
+            ))}
           </div>
-          <div className="splash-single-progress-bar">
-            <div 
-              className="splash-single-progress-fill" 
-              style={{ width: `${overallProgress}%` }}
-            />
-          </div>
-        </div>
 
-        {/* Current Service Status */}
-        <div className="splash-service-status">
-          <p className="splash-service-status-text">{currentStatus}</p>
+          {/* Single Progress Bar */}
+          <div className="splash-progress-section">
+            <div className="splash-progress-bar">
+              <div 
+                className="splash-progress-fill"
+                style={{ width: `${overallProgress}%` }}
+              />
+            </div>
+            <p className="splash-progress-text">{overallProgress}%</p>
+          </div>
         </div>
       </div>
     </div>

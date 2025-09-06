@@ -6,58 +6,60 @@ interface BrandedSplashPageProps {
 }
 
 export const BrandedSplashPage: React.FC<BrandedSplashPageProps> = ({ variant = 'in-app' }) => {
-  const { progress, status, animationKey } = useBrandedSplashActions();
+  const { animationKey, pieceGroups, currentQuote, overallProgress } = useBrandedSplashActions();
 
   return (
-    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-branded`}>
+    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-academy`}>
       {/* 
-        CONCEPT 2: Chess Engine Loading Dashboard - Branded Variant
+        CONCEPT 3: Progressive Piece Assembly - Branded Academy Variant
         
-        DESIGN INTENT: Simple branded splash screen with premium chess academy feel.
-        Clean typography with gold accent, minimal but elegant.
+        DESIGN INTENT: Luxury chess academy experience with prestigious branding.
+        Medallion piece assembly showing institutional authority and grandmaster quality.
+        All content contained within centered brand section.
       */}
       
       <div className="splash-brand-section">
         <div className="splash-logo-area">
-          {/* Premium branded logo section */}
-          <div className="splash-branded-logo">
-            <div className="splash-branded-emblem">
-              <span className="splash-chess-crown-branded">♔</span>
-            </div>
-            <div className="splash-branded-nameplate">
-              <h1 className="splash-title splash-branded-title">Master Chess Training</h1>
-              <div className="splash-branded-tagline">
-                <span className="splash-academy-text">Professional Academy</span>
-                <div className="splash-branded-divider"></div>
-                <span className="splash-founded-text">Est. 2024</span>
-              </div>
-            </div>
-          </div>
+          {/* Academy Header */}
+          <h1 className="splash-title splash-academy-title">Master Chess Training</h1>
+          <h2 className="splash-subtitle splash-academy-subtitle">Elite Academy</h2>
           
-          {/* Academy credentials */}
-          <div className="splash-credentials-line">
-            <span className="splash-credential-item">♕ Grandmaster Lessons</span>
-            <span className="splash-credential-separator">•</span>
-            <span className="splash-credential-item">♖ Tournament Prep</span>
+          {/* Premium Medallion Pieces */}
+          <div className="splash-medallion-gallery">
+            {pieceGroups.map((piece) => (
+              <div 
+                key={piece.id}
+                className={`splash-medallion ${piece.completed ? 'splash-medallion-complete' : ''}`}
+              >
+                <div className="splash-medallion-inner">
+                  <span className="splash-medallion-piece">{piece.symbol}</span>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      </div>
 
-      {/* Premium progress with branding */}
-      <div className="splash-progress-section">
-        <div className="splash-branded-progress-wrapper">
-          <div className="splash-progress-label">
-            <span>Preparing Elite Training</span>
-            <span className="splash-progress-percentage">{progress}%</span>
+          {/* Academy Credentials */}
+          <div className="splash-academy-credentials">
+            <span className="splash-credential">FIDE Approved Training</span>
+            <span className="splash-credential-divider">•</span>
+            <span className="splash-credential">GM Level Instruction</span>
           </div>
-          <div className="splash-progress-bar splash-branded-progress">
-            <div 
-              className="splash-progress-fill splash-branded-fill" 
-              style={{ width: `${progress}%` }}
-            />
+
+          {/* Rotating Inspirational Quote */}
+          <div className="splash-academy-quote">
+            <p className="splash-quote-text">"{currentQuote}"</p>
+          </div>
+
+          {/* Elegant Progress Line */}
+          <div className="splash-progress-section">
+            <div className="splash-academy-progress-bar">
+              <div 
+                className="splash-academy-progress-fill"
+                style={{ width: `${overallProgress}%` }}
+              />
+            </div>
           </div>
         </div>
-        <div className="splash-status-text splash-branded-status">{status}</div>
       </div>
     </div>
   );
