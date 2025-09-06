@@ -555,6 +555,55 @@ const toggleFullscreen = useCallback(() => {
 - Consistent behavior across all devices and browsers
 - Easy to close with multiple options (click backdrop, close button, ESC key)
 
+### Layout Context Overflow Issues ✅ Fixed
+
+**Problem**: Splash pages were causing scrollbars and overflow when displayed in app tabs
+
+**User Feedback**: *"scroll bars on these pages now, so the pages aren't resizing to fit the view port before popping out"*
+
+**Root Cause**: Splash pages were using full viewport dimensions (100vh/100vw) in constrained app layout contexts, causing them to exceed container boundaries
+
+**Solution - Context-Aware CSS Variants**: 
+Implemented variant prop system to handle different display contexts:
+
+```typescript
+// Same component, different contexts
+<MinimalSplashPage />              // In app tabs (variant="in-app")  
+<MinimalSplashPage variant="modal" /> // In fullscreen modal
+```
+
+**CSS Architecture Enhancement**:
+```css
+/* Fits within app layout - no overflow */
+.splash-container.splash-in-app {
+  width: 100%;
+  min-height: calc(100vh - 8rem);
+  padding: 1.5rem;
+}
+
+/* True full-screen takeover for modals */
+.splash-container.splash-modal {
+  width: 100vw;
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 2rem;
+}
+```
+
+**Code Quality Improvements**:
+- ✅ **Eliminated duplication**: Removed 4 duplicate modal-splash components
+- ✅ **Single source of truth**: One component handles both contexts via props
+- ✅ **DRY principle**: No code duplication, easier maintenance
+- ✅ **Build optimization**: Reduced from 2034 to 2030 modules
+
+**Lessons Learned**:
+- **Context awareness essential**: Components must adapt to their display context
+- **User feedback invaluable**: Layout issues not caught in isolated testing
+- **Avoid duplication**: Prop-based variants more maintainable than separate components
+- **CSS calc() useful**: Calculate available space accounting for app layout constraints
+
 ## Implementation Status & Next Steps
 
 ### ✅ Phase 1: Foundation Architecture (COMPLETE)
@@ -783,7 +832,25 @@ border: 1px solid var(--accent);   /* Theme accent colors */
 
 ### 🚀 Phase 2: UX Design Implementation (READY TO START)
 
-**Current State**: All 4 splash pages now follow modern UX best practices with full-screen layouts and centralized CSS architecture. No more centered boxes - true splash screen implementations.
+**Current State**: All 4 splash pages now follow modern UX best practices with context-aware layouts:
+
+✅ **Layout Architecture Complete**:
+- **In-app display**: Proper container fitting without overflow/scrollbars
+- **Modal display**: True full-screen takeover for demo purposes  
+- **Context-aware CSS**: Single components handle both display contexts via props
+- **No duplication**: DRY principle maintained across all splash variants
+
+✅ **Technical Foundation Solid**:
+- Clean build (2030 modules, no errors)
+- Centralized splash.css architecture 
+- Theme integration working
+- All actions functional (fullscreen, navigation, restart)
+
+✅ **UX Compliance Verified**:
+- No more centered box anti-patterns
+- Full viewport utilization in modal context
+- Proper app layout integration for tabs
+- Modern splash screen best practices followed
 
 **Next Priority Tasks:**
 
@@ -840,14 +907,20 @@ Each enhanced splash screen must demonstrate:
 4. **Mobile responsiveness** - Scales properly on all devices
 5. **Accessibility support** - Respects `prefers-reduced-motion`
 6. **Action integration** - Fullscreen, restart, and cross-navigation working
+7. **Context awareness** ✅ - Adapts layout based on display context (in-app vs modal)
+8. **No overflow issues** ✅ - Displays properly within app tabs without scrollbars
 
 ### 🎯 Development Workflow
 
 1. **Choose splash page** to enhance (recommend starting with Minimal)
 2. **Use existing CSS classes** from splash.css as foundation
-3. **Test across themes** using theme switcher in settings
-4. **Verify actions work** (fullscreen toggle, restart animation, navigation)
-5. **Mobile test** using browser developer tools responsive mode
-6. **Commit and push** changes when page is complete
+3. **Test both contexts**: 
+   - Navigate to splash tab (in-app variant) - verify no overflow/scrollbars
+   - Use fullscreen action (modal variant) - verify true full-screen takeover
+4. **Test across themes** using theme switcher in settings
+5. **Verify actions work** (fullscreen toggle, restart animation, navigation)
+6. **Mobile test** using browser developer tools responsive mode
+7. **Cross-browser test** layout context switching (Chrome, Firefox, Safari)
+8. **Commit and push** changes when page is complete
 
 The architectural foundation is solid - now ready to implement the research-backed UX designs!
