@@ -583,6 +583,56 @@
     transition: all 0.5s;
   }
 
+  .action-sheet {
+    backdrop-filter: blur(16px);
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 -8px 32px -8px rgb(0 0 0 / 0.15);
+    transition: all 0.3s;
+  }
+
+  .action-sheet:hover {
+    border-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .action-item {
+    @apply w-full text-left flex items-center transition-all duration-200 focus:outline-none rounded py-4 px-4 text-lg;
+  }
+
+  .action-item-default {
+    @apply text-foreground;
+  }
+
+  .action-item-default:hover {
+    background-color: color-mix(in srgb, var(--muted) 50%, transparent);
+  }
+
+  .action-item-secondary {
+    @apply text-muted-foreground;
+  }
+
+  .action-item-secondary:hover {
+    @apply text-foreground;
+    background-color: color-mix(in srgb, var(--muted) 50%, transparent);
+  }
+
+  .action-item-destructive {
+    @apply text-destructive;
+  }
+
+  .action-item-destructive:hover {
+    background-color: color-mix(in srgb, var(--destructive) 10%, transparent);
+  }
+
+  .action-item-icon {
+    @apply w-6 h-6 group-hover:scale-105 transition-transform;
+  }
+
+  .action-item-text {
+    @apply group-hover:translate-x-0.5 transition-transform ml-3;
+  }
+
   .input-gaming {
     background-color: rgb(0 0 0 / 0.3);
     border: 1px solid rgb(255 255 255 / 0.2);

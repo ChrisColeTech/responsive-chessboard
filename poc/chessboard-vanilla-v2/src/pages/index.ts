@@ -1,5 +1,4 @@
 export { UITestPage } from './UITestPage'
-export { UIAudioTestPage } from './UIAudioTestPage'
 export { LayoutTestPage } from './LayoutTestPage'
 export { WorkerTestPage } from './WorkerTestPage'
 export { SlotMachineTestPage } from './SlotMachineTestPage'

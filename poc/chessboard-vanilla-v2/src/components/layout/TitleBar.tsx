@@ -37,8 +37,8 @@ export function TitleBar({
       {/* Center - Spacer */}
       <div className="flex-1"></div>
 
-      {/* Right side - Window controls */}
-      <div className="flex items-center">
+      {/* Right side - Window controls (desktop only) */}
+      <div className="hidden md:flex items-center">
         <button
           onClick={onMinimize}
           className="w-12 h-10 flex items-center justify-center titlebar-btn hover:bg-titlebar-hover transition-colors duration-200 text-titlebar-foreground"

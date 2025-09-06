@@ -1,19 +1,26 @@
 import React from 'react'
-import { usePageInstructions } from '../hooks/usePageInstructions'
+import { useAppStore } from '../stores/appStore'
+import { UITestsMainPage } from '../components/UITestsMainPage'
+import { DragTestPageWrapper } from '../components/DragTestPageWrapper'
+import { UIAudioTestPageWrapper } from '../components/UIAudioTestPageWrapper'
 
 export const UITestPage: React.FC = () => {
-  usePageInstructions('uitests')
+  const currentChildPage = useAppStore((state) => state.currentChildPage)
+
+  // Determine which component to render
+  let CurrentPageComponent = UITestsMainPage
+  
+  if (currentChildPage === 'dragtest') {
+    CurrentPageComponent = DragTestPageWrapper
+  } else if (currentChildPage === 'uiaudiotest') {
+    CurrentPageComponent = UIAudioTestPageWrapper
+  }
 
   return (
-    <section className="space-y-4">
-      <div className="card-gaming p-8">
-        <p className="text-muted-foreground text-center">
-          UI Tests page - Central hub for UI testing and demonstration functionality.
-          This will contain interactive examples for Global UI Audio Service patterns,
-          chess drag testing environments, and educational implementation demos.
-        </p>
-      </div>
-    </section>
+    <div className="relative h-full">
+      {/* Current page content */}
+      <CurrentPageComponent />
+    </div>
   )
 }
 

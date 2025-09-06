@@ -4,12 +4,12 @@ import { TitleBar } from "./TitleBar";
 import { Header } from "./Header";
 import { TabBar } from "./TabBar";
 import { SettingsPanel } from "../SettingsPanel";
-import { MenuDropdown } from "./MenuDropdown";
+import { ActionSheetContainer } from "../action-sheet";
 import { InstructionsFAB } from "../InstructionsFAB";
 import { InstructionsModal } from "../InstructionsModal";
 import { useSettings } from "../../stores/appStore";
 import { useInstructions } from "../../contexts/InstructionsContext";
-import { useMenuDropdown } from "../../hooks/useMenuDropdown";
+import { useActionSheet } from "../../hooks";
 import type { TabId } from "./types";
 
 /**
@@ -54,10 +54,10 @@ export function AppLayout({
     close: closeSettings,
   } = useSettings();
   const {
-    isMenuOpen,
-    toggleMenu,
-    closeMenu,
-  } = useMenuDropdown();
+    isOpen: isMenuOpen,
+    toggleSheet: toggleMenu,
+    closeSheet: closeMenu,
+  } = useActionSheet();
   const {
     instructions,
     title,
@@ -129,10 +129,13 @@ export function AppLayout({
         </>
       </div>
 
-      {/* Menu Dropdown - positioned at layout level like settings panel */}
-      {isMenuOpen && (
-        <MenuDropdown onClose={closeMenu} />
-      )}
+      {/* ActionSheet - Always rendered, HeadlessUI manages show/hide */}
+      <ActionSheetContainer 
+        currentPage={currentTab}
+        onClose={closeMenu}
+        isOpen={isMenuOpen}
+        onOpenSettings={openSettings}
+      />
 
       {/* 
           TabBar - Fixed positioning for mobile compatibility  

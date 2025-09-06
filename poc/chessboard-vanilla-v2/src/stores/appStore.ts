@@ -7,6 +7,9 @@ interface AppState {
   // Navigation
   selectedTab: TabId
   
+  // Child page navigation
+  currentChildPage: string | null  // For pages like 'dragtest', 'uiaudiotest'
+  
   // Theme
   currentTheme: ThemeId
   isDarkMode: boolean
@@ -33,6 +36,7 @@ interface AppState {
 interface AppActions {
   // Navigation actions
   setSelectedTab: (tab: TabId) => void
+  setCurrentChildPage: (childPage: string | null) => void
   
   // Theme actions
   setTheme: (theme: ThemeId) => void
@@ -64,6 +68,7 @@ type AppStore = AppState & AppActions
 
 const initialState: AppState = {
   selectedTab: 'layout',
+  currentChildPage: null,
   currentTheme: 'dark',
   isDarkMode: true,
   selectedBaseTheme: 'default',
@@ -86,6 +91,7 @@ export const useAppStore = create<AppStore>()(
       
       // Navigation actions
       setSelectedTab: (tab) => set({ selectedTab: tab }),
+      setCurrentChildPage: (childPage) => set({ currentChildPage: childPage }),
       
       // Theme actions
       setTheme: (theme) => {
@@ -172,6 +178,7 @@ export const useAppStore = create<AppStore>()(
       name: 'chess-app-store',
       partialize: (state) => ({
         selectedTab: state.selectedTab,
+        currentChildPage: state.currentChildPage,
         currentTheme: state.currentTheme,
         isDarkMode: state.isDarkMode,
         selectedBaseTheme: state.selectedBaseTheme,

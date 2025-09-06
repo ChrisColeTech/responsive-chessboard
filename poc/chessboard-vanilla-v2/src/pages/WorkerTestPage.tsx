@@ -1,133 +1,24 @@
-import React, { useState, useCallback } from 'react'
+import React from 'react'
 import { CheckCircle, XCircle, Clock, Brain } from 'lucide-react'
 import { useStockfish } from '../hooks/useStockfish'
 import { usePageInstructions } from '../hooks/usePageInstructions'
-// import { useTheme } from '../stores/appStore'
+import { useWorkerTestStore } from '../stores/workerTestStore'
 
 export const WorkerTestPage: React.FC = () => {
-  const { isReady, isThinking, skillLevel, setSkillLevel, requestMove, evaluatePosition, error } = useStockfish()
-  // Theme store available if needed
-  // const { currentTheme, selectedBaseTheme } = useTheme()
-  const [testResults, setTestResults] = useState<string[]>([])
-  const [lastMove, setLastMove] = useState<string>('')
-  const [responseTime, setResponseTime] = useState<number>(0)
-  const [evaluation, setEvaluation] = useState<string>('')
-  const [isTestingReady, setIsTestingReady] = useState(false)
-  // Individual test states for UI feedback
-  const [, setIsTestingSpeed] = useState(false)
-  const [, setIsTestingPosition] = useState(false)
-  const [isRunningAllTests, setIsRunningAllTests] = useState(false)
+  const { isReady, isThinking, skillLevel, setSkillLevel, error } = useStockfish()
+  
+  // Use Zustand store for reactive state updates
+  const {
+    testResults,
+    lastMove,
+    responseTime,
+    evaluation,
+    // Note: Action functions moved to useWorkerActions hook for action sheet system
+  } = useWorkerTestStore()
 
   usePageInstructions('worker')
 
-  const addTestResult = (message: string) => {
-    setTestResults(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`])
-  }
-
-  const testWorkerReady = useCallback(async () => {
-    setIsTestingReady(true)
-    addTestResult("🔍 Testing if worker is ready...")
-    
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500)) // Visual delay for feedback
-      if (isReady) {
-        addTestResult("✅ Worker is ready and responsive!")
-      } else {
-        addTestResult("❌ Worker not ready yet")
-      }
-    } catch (err) {
-      addTestResult("❌ Worker readiness test failed")
-    } finally {
-      setIsTestingReady(false)
-    }
-  }, [isReady])
-
-  const testGoodMove = useCallback(async () => {
-    setIsTestingPosition(true)
-    addTestResult("🎯 Asking chess computer for a good opening move...")
-    const startTime = Date.now()
-    
-    try {
-      // Starting position FEN
-      const move = await requestMove("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
-      const time = Date.now() - startTime
-      
-      if (move) {
-        setLastMove(move)
-        setResponseTime(time)
-        addTestResult(`✅ Computer suggests: ${move} (${time}ms)`)
-      } else {
-        addTestResult("❌ Computer couldn't suggest a move")
-      }
-    } catch (err) {
-      addTestResult("❌ Error asking for move")
-    } finally {
-      setIsTestingPosition(false)
-    }
-  }, [requestMove])
-
-  const testSpeed = useCallback(async () => {
-    setIsTestingSpeed(true)
-    addTestResult("⚡ Testing response speed with 500ms limit...")
-    const startTime = Date.now()
-    
-    try {
-      await requestMove("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1", 500)
-      const time = Date.now() - startTime
-      setResponseTime(time)
-      const speedRating = time < 700 ? "Fast ⚡" : time < 1500 ? "Good ⭐" : "Slow 🐌"
-      addTestResult(`✅ Response: ${time}ms (${speedRating})`)
-    } catch (err) {
-      addTestResult("❌ Speed test failed")
-    } finally {
-      setIsTestingSpeed(false)
-    }
-  }, [requestMove])
-
-  const testPosition = useCallback(async () => {
-    setIsTestingPosition(true)
-    addTestResult("📊 Evaluating starting chess position...")
-    
-    try {
-      // Starting position
-      const score = await evaluatePosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
-      const evaluation = score > 0 ? `White advantage (+${score.toFixed(1)})` : 
-                        score < 0 ? `Black advantage (${score.toFixed(1)})` : 
-                        "Equal position (0.0)"
-      
-      setEvaluation(evaluation)
-      addTestResult(`✅ ${evaluation}`)
-    } catch (err) {
-      addTestResult("❌ Position evaluation failed")
-    } finally {
-      setIsTestingPosition(false)
-    }
-  }, [evaluatePosition])
-
-  const clearResults = useCallback(() => {
-    setTestResults([])
-    setLastMove('')
-    setResponseTime(0)
-    setEvaluation('')
-    addTestResult("🧹 Results cleared")
-  }, [])
-
-  const runAllTests = useCallback(async () => {
-    setIsRunningAllTests(true)
-    addTestResult("🚀 Running all tests...")
-    try {
-      await testWorkerReady()
-      await new Promise(resolve => setTimeout(resolve, 1000)) // Delay between tests
-      await testGoodMove()
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      await testSpeed()
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      await testPosition()
-      addTestResult("🎉 All tests completed!")
-    } finally {
-      setIsRunningAllTests(false)
-    }
-  }, [testWorkerReady, testGoodMove, testSpeed, testPosition])
+  // All test actions moved to useWorkerActions hook for action sheet integration
 
   const getSkillDescription = (level: number) => {
     if (level <= 2) return "Beginner (learning the rules)"
@@ -136,7 +27,6 @@ export const WorkerTestPage: React.FC = () => {
     if (level <= 8) return "Strong club player (quite good)"
     return "Expert level (very strong)"
   }
-
 
   return (
     <div className="relative space-y-8">
@@ -148,7 +38,7 @@ export const WorkerTestPage: React.FC = () => {
             {isReady ? (
               <>
                 <CheckCircle className="w-6 h-6 text-green-500" />
-                <span className="text-lg text-foreground">✅ Ready to play chess!</span>
+                <span className="text-lg text-foreground">✅ Chess computer is ready!</span>
               </>
             ) : error ? (
               <>
@@ -190,54 +80,6 @@ export const WorkerTestPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Test Controls */}
-          <div className="grid-control grid-control-1-4">
-            <button
-              onClick={testWorkerReady}
-              disabled={isTestingReady || isRunningAllTests}
-              className="btn-secondary"
-            >
-              {isTestingReady ? "Testing..." : "Test Ready"}
-            </button>
-            <button
-              onClick={testGoodMove}
-              disabled={!isReady || isThinking || isRunningAllTests}
-              className="btn-secondary"
-            >
-              Chess Move
-            </button>
-            <button
-              onClick={testSpeed}
-              disabled={!isReady || isThinking || isRunningAllTests}
-              className="btn-secondary"
-            >
-              Speed Test
-            </button>
-            <button
-              onClick={testPosition}
-              disabled={!isReady || isThinking || isRunningAllTests}
-              className="btn-secondary"
-            >
-              Position Test
-            </button>
-          </div>
-          
-          {/* Control buttons */}
-          <div className="control-buttons-row">
-            <button
-              onClick={runAllTests}
-              disabled={!isReady || isThinking || isRunningAllTests}
-              className="flex-1 btn-primary"
-            >
-              Run All Tests
-            </button>
-            <button
-              onClick={clearResults}
-              className="flex-1 btn-muted"
-            >
-              Clear Results
-            </button>
-          </div>
 
           {/* Results Display */}
           <div className="status-card">
@@ -252,24 +94,39 @@ export const WorkerTestPage: React.FC = () => {
                 → Answered in <span className="font-mono bg-muted px-1 rounded">{responseTime}ms</span>
               </div>
             )}
-            {evaluation && (
+            {evaluation !== null && evaluation !== undefined && (
               <div className="mb-2 text-foreground">
-                → <span className="font-mono bg-muted px-1 rounded">{evaluation}</span>
+                → Position: <span className="font-mono bg-muted px-1 rounded">
+                  {typeof evaluation === 'number' 
+                    ? (evaluation === 0 
+                        ? "equal" 
+                        : evaluation > 0 
+                          ? `+${evaluation} (white advantage)` 
+                          : `${evaluation} (black advantage)`)
+                    : String(evaluation)}
+                </span>
               </div>
             )}
             
-            {testResults.length > 0 && (
-              <div className="mt-4">
-                <div className="text-xs text-muted-foreground mb-2">Recent Activity:</div>
-                <div className="max-h-32 overflow-y-auto space-y-1">
-                  {testResults.slice(-5).map((result, i) => (
-                    <div key={i} className="text-xs text-muted-foreground font-mono">
-                      {result}
-                    </div>
-                  ))}
+            {/* Test Results Log - Scrollable */}
+            <div className="max-h-64 overflow-y-auto border border-border rounded bg-card/50 p-3 font-mono text-sm">
+              {testResults.length === 0 ? (
+                <div className="text-muted-foreground italic">
+                  No test results yet. Use the action sheet menu to run tests.
                 </div>
-              </div>
-            )}
+              ) : (
+                testResults.map((result, i) => (
+                  <div key={i} className={`
+                    ${result.type === 'success' ? 'text-green-400' : 
+                      result.type === 'error' ? 'text-red-400' : 
+                      result.type === 'warning' ? 'text-yellow-400' : 'text-foreground'}
+                    ${i === testResults.length - 1 ? '' : 'border-b border-border/50 pb-1 mb-1'}
+                  `}>
+                    {result.message}
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
     </div>

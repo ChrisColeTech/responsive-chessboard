@@ -2,6 +2,7 @@ import { Layout, Settings, Target, Coins, Loader } from "lucide-react";
 import { MenuButton } from "./MenuButton";
 import type { TabId } from "./types";
 import { useUIClickSound } from "../../hooks/useUIClickSound";
+import { useAppStore } from "../../stores/appStore";
 
 interface TabBarProps {
   currentTab: TabId;
@@ -58,6 +59,7 @@ const tabs: Tab[] = [
 
 export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: TabBarProps) {
   const { playUIClick } = useUIClickSound();
+  const setCurrentChildPage = useAppStore((state) => state.setCurrentChildPage);
   const handleKeyDown = (event: React.KeyboardEvent, tabId: TabId) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
@@ -103,6 +105,11 @@ export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: Ta
 
               // Play click sound
               playUIClick(`Tab: ${tab.label}`);
+
+              // If clicking on UI Tests tab, clear any child page
+              if (tab.id === 'uitests') {
+                setCurrentChildPage(null);
+              }
 
               onTabChange(tab.id);
               console.log(`🔄 [TAB BAR] Tab change function called`);
