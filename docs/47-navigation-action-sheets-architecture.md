@@ -480,6 +480,192 @@ const instructionsMap: Record<string, InstructionsConfig> = {
 3. **Action execution** - Verify all actions work correctly
 4. **Edge cases** - Test rapid navigation, back button, etc.
 
+## Lessons Learned
+
+### Research Insights
+
+During the development of this navigation system, we explored several approaches and learned valuable lessons about implementing hierarchical navigation in React SPAs.
+
+#### Navigation Patterns Research
+
+**What We Discovered:**
+- **Navigation Stack Pattern**: Mobile-style push/pop navigation is ideal for drill-down experiences
+- **Drill-down Navigation**: Best suited for 2-3 levels max, users should spend time at leaf nodes
+- **State Management**: Navigation state must be properly persisted to survive reloads
+- **Context Switching**: Instructions and actions need to automatically update with navigation
+
+**Key Research Sources:**
+- React Navigation patterns for mobile-first applications
+- PatternFly navigation design guidelines  
+- HTML5 History API for web-based navigation stacks
+- Expo Router and Ionic navigation implementation patterns
+
+#### What Didn't Work
+
+**❌ View Swapping Hack:**
+```typescript
+// Initial flawed approach
+const [currentView, setCurrentView] = useState('main')
+if (currentView === 'dragtest') return <DragTestPage />
+```
+**Problems:** No persistence, breaks instructions, inconsistent with app architecture.
+
+**❌ Window Global Variables:**
+```typescript
+// Bypassing the store - BAD
+(window as any).currentActionSheetPage = 'dragtest'
+```  
+**Problems:** No persistence, bypasses store, breaks on reload, not reactive.
+
+**❌ Adding More Tabs:**
+Adding 8-9 tabs would completely break the UI grid layout and create navigation clutter.
+
+**❌ URL-based Routing:**
+While React Router would work, it was overkill for this use case and would complicate the existing tab-based system.
+
+#### What Worked
+
+**✅ Store-Integrated Navigation:**
+```typescript
+interface AppState {
+  selectedTab: TabId           // Main navigation
+  currentChildPage: string | null  // Child page state
+}
+```
+**Benefits:** Persistent, reactive, consistent with existing architecture.
+
+**✅ Hook-Based Context:**
+```typescript
+usePageInstructions('dragtest')  // Auto-loads instructions
+usePageActions('dragtest')       // Auto-loads actions
+```
+**Benefits:** Automatic context switching, cleanup on unmount, consistent pattern.
+
+**✅ Wrapper Component Pattern:**
+```typescript
+export const DragTestPageWrapper: React.FC = () => {
+  usePageInstructions('dragtest')
+  usePageActions('dragtest')
+  return <DragTestPage />
+}
+```
+**Benefits:** Separation of concerns, reusable, clean composition.
+
+### Implementation Lessons
+
+#### Store Design Principles
+
+1. **Never Bypass the Store**: All navigation state must go through Zustand
+2. **Persistence is Critical**: Child page state must survive reloads
+3. **Reactivity First**: Use store subscriptions, not manual updates
+4. **Type Safety**: Leverage TypeScript for navigation state
+
+#### Component Architecture Insights
+
+1. **Wrapper Pattern**: Child pages need context wrappers for instructions/actions
+2. **Conditional Rendering**: Simple `if/else` beats complex routing for child pages
+3. **Effect Cleanup**: Always clean up navigation state on unmount
+4. **Single Responsibility**: Each hook should have one clear purpose
+
+#### UX Design Learnings
+
+1. **Clear Mental Model**: Users need to understand they're still "within" a tab
+2. **Easy Back Navigation**: Tab click should always return to main page
+3. **Audio Feedback**: Sound cues help users understand navigation actions
+4. **Context Preservation**: Don't lose user's place in navigation hierarchy
+
+#### Development Process Insights
+
+1. **Research First**: Understanding existing patterns saved significant refactoring
+2. **Prototype Early**: The "view swapping" approach revealed fundamental issues quickly  
+3. **Store Integration**: Fighting the architecture is always harder than working with it
+4. **Documentation Matters**: Complex navigation systems need thorough documentation
+
+### Common Pitfalls to Avoid
+
+#### State Management Antipatterns
+
+```typescript
+// ❌ DON'T: Bypass store with globals
+(window as any).navigationState = 'child'
+
+// ✅ DO: Use store actions
+setCurrentChildPage('child')
+```
+
+#### Navigation Antipatterns
+
+```typescript
+// ❌ DON'T: Complex view swapping
+const [views, setViews] = useState(['main'])
+const currentView = views[views.length - 1]
+
+// ✅ DO: Simple state-based rendering  
+const currentChild = useAppStore(state => state.currentChildPage)
+```
+
+#### Context Switching Antipatterns
+
+```typescript
+// ❌ DON'T: Manual context management
+useEffect(() => {
+  setInstructions(getInstructions(pageId))
+  setActions(getActions(pageId))
+}, [pageId])
+
+// ✅ DO: Dedicated hooks
+usePageInstructions(pageId)
+usePageActions(pageId)
+```
+
+### Performance Considerations
+
+#### What We Learned
+
+1. **Conditional Rendering**: More efficient than maintaining multiple component instances
+2. **Store Subscriptions**: Zustand's selector pattern prevents unnecessary re-renders
+3. **Effect Dependencies**: Proper dependencies prevent infinite render loops
+4. **Component Keys**: Not needed for conditional rendering, saves React work
+
+#### Optimization Strategies
+
+1. **Minimal State**: Only store essential navigation state in the store
+2. **Selector Specificity**: Use specific selectors to minimize re-renders
+3. **Effect Cleanup**: Always clean up effects to prevent memory leaks
+4. **Lazy Loading**: Child pages could be lazy-loaded if they become heavy
+
+### Scalability Insights
+
+#### Adding New Navigation Levels
+
+The current system easily supports:
+- **Main Tabs** (6 current, could handle 8-10)
+- **Child Pages** (unlimited per tab)  
+- **Grandchild Pages** (would need additional store state)
+
+#### Extension Points
+
+1. **Navigation History**: Could add navigation history stack
+2. **Deep Linking**: Could integrate with URL fragments
+3. **Animation**: Could add page transition animations
+4. **Breadcrumbs**: Could show navigation path
+
+### Testing Insights
+
+#### What to Test
+
+1. **State Persistence**: Navigation state survives reload
+2. **Context Switching**: Instructions and actions update correctly
+3. **Cleanup**: No memory leaks from unmounted components
+4. **Edge Cases**: Rapid navigation, back button, deep links
+
+#### Testing Strategies
+
+1. **Integration Tests**: Test full navigation flows
+2. **Store Tests**: Test state transitions and persistence
+3. **Component Tests**: Test context hook integration
+4. **Manual Testing**: Test actual user workflows
+
 ## Architecture Benefits
 
 This navigation system provides:
