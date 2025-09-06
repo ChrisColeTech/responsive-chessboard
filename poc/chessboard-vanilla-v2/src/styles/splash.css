@@ -31,15 +31,18 @@
   padding: 1.5rem;
 }
 
-/* Modal variant - true full-screen takeover */
+/* CRITICAL BUG FIX: Modal variant positioning and visibility
+   - Changed from position: fixed to position: relative
+   - Removes conflicting z-index with SplashModal wrapper
+   - Allows proper backdrop and close button layering
+   - Solid background ensures no transparency issues */
 .splash-container.splash-modal {
   min-height: 100vh;
   width: 100vw;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  padding: 2rem;
+  position: relative; /* ✅ CRITICAL: Fixed conflicts with modal wrapper */
+  padding: 3rem 2rem 2rem 2rem; /* ✅ CRITICAL: Extra top padding for close button space */
+  z-index: 1; /* ✅ CRITICAL: Below close button (z-100) but above backdrop */
+  background: var(--background); /* ✅ CRITICAL: Solid background prevents transparency */
 }
 
 /* Layout sections for full-screen splash architecture */
@@ -57,9 +60,14 @@
   max-width: 800px;
 }
 
+/* CRITICAL BUG FIX: Progress section positioning
+   - Removed margin-top: auto to prevent bottom-sticking
+   - Position progress naturally below content, not at page bottom
+   - Better visual hierarchy and user experience */
 .splash-progress-section {
-  padding: 2rem 0;
+  padding: 3rem 0 2rem 0; /* ✅ CRITICAL: Natural spacing below content */
   text-align: center;
+  /* ✅ CRITICAL: Removed margin-top: auto - progress follows content naturally */
 }
 
 .splash-status-section {
@@ -332,7 +340,223 @@
 }
 
 /* ==========================================================================
-   MINIMAL CONCEPT VARIANTS - 4 variations of "Minimal Tournament Professional"
+   CONCEPT 1: MINIMAL TOURNAMENT PROFESSIONAL - 4 Variants
+   Modern, elegant, precise - representing chess mastery and focused mind
+   ========================================================================== */
+
+/* CONCEPT 1 - VARIANT 1: Minimal Professional Design */
+.splash-minimal-professional {
+  background: linear-gradient(135deg, var(--background), rgba(0, 0, 0, 0.01));
+}
+
+/* CONCEPT 1 - VARIANT 2: Progressive Piece Assembly */
+.splash-assembly-professional {
+  background: linear-gradient(135deg, var(--background), rgba(99, 102, 241, 0.03));
+  position: relative;
+  overflow: hidden;
+}
+
+.splash-assembly-professional::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.06) 0%, transparent 50%);
+  z-index: 1;
+}
+
+.splash-assembly-professional > * {
+  position: relative;
+  z-index: 2;
+}
+
+.splash-piece-assembly-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 3rem;
+  min-height: 5rem;
+  flex-wrap: wrap;
+}
+
+.splash-chess-piece-assembly {
+  font-size: 3.5rem;
+  opacity: 0;
+  transform: translateY(-40px) rotate(15deg) scale(0.8);
+  transition: none;
+  color: var(--foreground);
+}
+
+.splash-chess-piece-assembly.splash-piece-active {
+  opacity: 1;
+  transform: translateY(0) rotate(0deg) scale(1);
+  animation: splash-piece-drop-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes splash-piece-drop-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-40px) rotate(15deg) scale(0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(5px) rotate(-2deg) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+}
+
+.splash-assembly-title {
+  font-weight: 400;
+  font-size: 3.2rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.splash-assembly-subtitle {
+  font-weight: 300;
+  opacity: 0.75;
+  font-size: 1.1rem;
+  margin-bottom: 4rem;
+  letter-spacing: 0.02em;
+  color: var(--muted-foreground);
+}
+
+.splash-assembly-progress {
+  height: 3px;
+  background: rgba(99, 102, 241, 0.1);
+  margin-top: 0;
+  border-radius: 1.5px;
+  overflow: hidden;
+}
+
+.splash-assembly-fill {
+  background: linear-gradient(90deg, rgb(99, 102, 241), rgb(168, 85, 247));
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.splash-assembly-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -10px;
+  width: 15px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: splash-assembly-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes splash-assembly-shimmer {
+  0% { transform: translateX(-100%); opacity: 0; }
+  50% { transform: translateX(0%); opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+.splash-assembly-status {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-top: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  transition: opacity 0.3s ease;
+  color: var(--muted-foreground);
+}
+
+.splash-king-container {
+  margin-bottom: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.splash-chess-king-professional {
+  font-size: 4rem;
+  color: var(--foreground);
+  opacity: 0.85;
+  animation: splash-professional-breathe 4s ease-in-out infinite;
+}
+
+@keyframes splash-professional-breathe {
+  0%, 100% { 
+    transform: scale(1) translateY(0px); 
+    opacity: 0.85; 
+  }
+  50% { 
+    transform: scale(1.02) translateY(-2px); 
+    opacity: 1; 
+  }
+}
+
+.splash-professional-title {
+  font-weight: 300;
+  font-size: 3.5rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+  color: var(--foreground);
+}
+
+.splash-professional-subtitle {
+  font-weight: 400;
+  opacity: 0.7;
+  font-size: 1.1rem;
+  margin-bottom: 4rem;
+  letter-spacing: 0.02em;
+  color: var(--muted-foreground);
+}
+
+/* CRITICAL BUG FIX: Progress bar visibility
+   - Increased height from 1px to 2px for mobile visibility
+   - Added fallback gray color (128 128 128) for undefined CSS vars
+   - Increased opacity from 0.1 to 0.2 for better contrast */
+.splash-hairline-professional {
+  height: 2px; /* ✅ CRITICAL: Increased from 1px for visibility */
+  background: rgba(var(--foreground-rgb, 128 128 128), 0.2); /* ✅ CRITICAL: Better contrast + fallback */
+  margin-top: 0;
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.splash-professional-fill {
+  background: var(--accent);
+  opacity: 0.8;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.splash-professional-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2));
+  animation: splash-professional-shimmer 2s ease-in-out infinite;
+}
+
+@keyframes splash-professional-shimmer {
+  0% { transform: translateX(-100%); opacity: 0; }
+  50% { transform: translateX(0%); opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+.splash-professional-status {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-top: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  transition: opacity 0.3s ease;
+}
+
+/* ==========================================================================
+   MINIMAL CONCEPT VARIANTS - Legacy variants (1A-1D) for comparison
    ========================================================================== */
 
 /* VARIANT 1A: Ultra-minimal king focus */
@@ -581,6 +805,16 @@
   .splash-container {
     padding: 1.5rem;
   }
+
+  /* CRITICAL BUG FIX: Modal container mobile spacing */
+  .splash-container.splash-modal {
+    padding: 2rem 1.5rem 1rem 1.5rem; /* ✅ CRITICAL: Reduced padding for mobile */
+  }
+
+  /* CRITICAL BUG FIX: Progress section mobile spacing */
+  .splash-progress-section {
+    padding: 2rem 0 1.5rem 0; /* ✅ CRITICAL: Natural spacing below content on mobile */
+  }
   
   .splash-title {
     font-size: 2.5rem; /* 40px */
@@ -605,11 +839,45 @@
   .splash-brand-decoration {
     font-size: 2.5rem;
   }
+
+  /* CRITICAL BUG FIX: Mobile responsiveness for tablet screens */
+  .splash-professional-title {
+    font-size: 2.8rem; /* ✅ CRITICAL: Scaled down from 3.5rem for tablets */
+  }
+  
+  .splash-chess-king-professional {
+    font-size: 3rem; /* ✅ CRITICAL: Scaled down from 4rem for tablets */
+  }
+  
+  /* Assembly variant mobile */
+  .splash-assembly-title {
+    font-size: 2.5rem; /* ✅ CRITICAL: Scaled down from 3.2rem for tablets */
+  }
+  
+  .splash-piece-assembly-container {
+    gap: 0.8rem; /* ✅ CRITICAL: Reduced from 1.2rem for tighter mobile layout */
+    flex-wrap: wrap; /* ✅ CRITICAL: Allows pieces to wrap on narrow screens */
+    justify-content: center;
+  }
+  
+  .splash-chess-piece-assembly {
+    font-size: 2.5rem; /* ✅ CRITICAL: Scaled down from 3.5rem for tablets */
+  }
 }
 
 @media (max-width: 480px) {
   .splash-container {
     padding: 1rem;
+  }
+
+  /* CRITICAL BUG FIX: Modal container small mobile spacing */
+  .splash-container.splash-modal {
+    padding: 1.5rem 1rem 0.5rem 1rem; /* ✅ CRITICAL: Minimal padding for small screens */
+  }
+
+  /* CRITICAL BUG FIX: Progress section small mobile spacing */
+  .splash-progress-section {
+    padding: 1.5rem 0 1rem 0; /* ✅ CRITICAL: Natural spacing below content on small screens */
   }
   
   .splash-title {
@@ -640,5 +908,480 @@
   .splash-bottom-left {
     bottom: 1rem;
     left: 1rem;
+  }
+
+  /* CRITICAL BUG FIX: Mobile responsiveness for phone screens (480px and below) */
+  .splash-professional-title {
+    font-size: 2.2rem; /* ✅ CRITICAL: Further scaled down from 2.8rem for phones */
+    margin-bottom: 0.5rem; /* ✅ CRITICAL: Reduced spacing for compact mobile */
+  }
+  
+  .splash-professional-subtitle {
+    font-size: 1rem; /* ✅ CRITICAL: Readable size on small screens */
+    margin-bottom: 2rem; /* ✅ CRITICAL: Reduced from 4rem for mobile compactness */
+  }
+  
+  .splash-chess-king-professional {
+    font-size: 2.5rem; /* ✅ CRITICAL: Final scale down from 4rem → 3rem → 2.5rem */
+  }
+
+  /* Assembly variant small mobile */
+  .splash-assembly-title {
+    font-size: 2rem; /* ✅ CRITICAL: Final scale down from 3.2rem → 2.5rem → 2rem */
+  }
+  
+  .splash-piece-assembly-container {
+    gap: 0.5rem; /* ✅ CRITICAL: Minimum gap for very small screens */
+    margin-bottom: 2rem; /* ✅ CRITICAL: Compact spacing for mobile */
+    min-height: 3rem; /* ✅ CRITICAL: Prevent layout collapse on small screens */
+  }
+  
+  .splash-chess-piece-assembly {
+    font-size: 2rem; /* ✅ CRITICAL: Final scale down from 3.5rem → 2.5rem → 2rem */
+  }
+  
+  .splash-assembly-subtitle {
+    margin-bottom: 2rem; /* ✅ CRITICAL: Compact spacing for mobile */
+  }
+
+  /* Progress section spacing handled by main responsive rules above */
+}
+
+/* ========================================
+   VARIANT 1D: Engine Loading Dashboard
+   
+   DESIGN INTENT: Single progress bar (NOT multiple bars) that shows 
+   overall system initialization progress. Progress advances in chunks 
+   as each service completes: 0% → 25% → 50% → 75% → 100%
+   
+   Components load sequentially:
+   1. Engine Core (0% → 25%)
+   2. Opening Database (25% → 50%) 
+   3. Tablebase (50% → 75%)
+   4. Analysis Tools (75% → 100%)
+   
+   Status text shows current service being initialized.
+   ======================================== */
+
+/* Engine Dashboard Container */
+.splash-engine-dashboard {
+  --dashboard-primary: #1e293b;
+  --dashboard-accent: #3b82f6;
+  --dashboard-success: #22c55e;
+  --dashboard-warning: #f59e0b;
+  --dashboard-error: #ef4444;
+}
+
+/* Professional engine branding */
+.splash-engine-icon {
+  margin-bottom: 1rem;
+}
+
+.splash-chess-king-dashboard {
+  font-size: 4rem;
+  color: var(--dashboard-primary);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  animation: dashboardPulse 3s ease-in-out infinite;
+}
+
+@keyframes dashboardPulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+.splash-dashboard-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--dashboard-primary);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.splash-dashboard-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 3rem;
+}
+
+/* Engine Dashboard Section */
+.splash-engine-dashboard-section {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+/* Single Progress Bar */
+.splash-single-progress {
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.splash-single-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.splash-single-progress-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.splash-single-progress-percent {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--dashboard-accent);
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+}
+
+.splash-single-progress-bar {
+  height: 8px;
+  background: var(--background-alt);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.splash-single-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--dashboard-accent), #60a5fa);
+  border-radius: 6px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.splash-single-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: progressShimmer 2s infinite;
+}
+
+@keyframes progressShimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Service Status */
+.splash-service-status {
+  text-align: center;
+  padding: 1rem 1.5rem;
+  background: var(--surface);
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+}
+
+.splash-service-status-text {
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin: 0;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+}
+
+/* ========================================
+   Engine Dashboard Responsive Design
+   ======================================== */
+
+@media (max-width: 768px) {
+  .splash-dashboard-title {
+    font-size: 2.8rem;
+  }
+  
+  .splash-chess-king-dashboard {
+    font-size: 3rem;
+  }
+  
+  .splash-engine-dashboard-section {
+    max-width: 100%;
+    padding: 1.5rem 0;
+  }
+  
+  .splash-single-progress {
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .splash-dashboard-title {
+    font-size: 2.2rem;
+  }
+  
+  .splash-dashboard-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .splash-chess-king-dashboard {
+    font-size: 2.5rem;
+  }
+  
+  .splash-single-progress {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .splash-single-progress-label,
+  .splash-single-progress-percent {
+    font-size: 1rem;
+  }
+  
+  .splash-service-status-text {
+    font-size: 0.9rem;
+  }
+}
+
+/* ========================================
+   VARIANT 1E: Professional Branding - Premium Chess Academy
+   
+   DESIGN INTENT: Create prestigious chess academy entrance feeling.
+   Premium gold/bronze accents, elegant typography, authority indicators.
+   Makes users feel they're accessing elite-level chess training.
+   
+   ❌ CRITICAL SPACING RULE: NEVER ADD EXCESSIVE MARGINS/PADDING!
+   - Splash screens must fit in viewport without pushing elements off screen
+   - Progress bars must NEVER be pushed to bottom edge or cut off
+   - Use minimal spacing (0.5rem-0.75rem) between brand elements
+   - Total brand section spacing should be <3rem to leave room for progress
+   - Test on mobile (480px width) to ensure nothing gets cut off
+   - Remember: Users prefer cramped over cut-off content
+   ======================================== */
+
+/* Premium Chess Academy Container */
+.splash-professional-branding {
+  background: var(--background);
+}
+
+/* Premium Academy Emblem */
+.splash-academy-emblem {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0.75rem; /* ✅ CRITICAL: Reduced from 1.5rem to prevent pushing progress down */
+}
+
+.splash-chess-crown-premium {
+  font-size: 5rem;
+  color: var(--accent);
+  text-shadow: 0 4px 12px rgba(var(--accent-rgb, 59 130 246), 0.3);
+  animation: crownGlow 4s ease-in-out infinite;
+  filter: drop-shadow(0 2px 8px rgba(var(--accent-rgb, 59 130 246), 0.2));
+}
+
+.splash-premium-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: ringPulse 3s ease-in-out infinite;
+}
+
+@keyframes crownGlow {
+  0%, 100% { 
+    filter: drop-shadow(0 2px 8px rgba(var(--accent-rgb, 59 130 246), 0.2));
+    transform: scale(1);
+  }
+  50% { 
+    filter: drop-shadow(0 4px 16px rgba(var(--accent-rgb, 59 130 246), 0.4));
+    transform: scale(1.02);
+  }
+}
+
+@keyframes ringPulse {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+/* Academy Typography */
+.splash-academy-title {
+  font-size: 4rem;
+  font-weight: 700;
+  font-family: 'Times New Roman', 'Georgia', serif;
+  color: var(--foreground);
+  text-shadow: 0 2px 8px rgba(var(--accent-rgb, 59 130 246), 0.2);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.splash-academy-subtitle {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  margin-bottom: 0.75rem; /* ✅ CRITICAL: Reduced from 1.25rem to tighten spacing */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: 0.02em;
+}
+
+/* Premium Credentials 
+   CRITICAL: Minimal margin-bottom to prevent pushing progress bar too far down.
+   Progress section must follow content naturally, not be pushed to page bottom. */
+.splash-credentials {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem; /* ✅ CRITICAL: Further reduced from 1.5rem to 0.75rem */
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.splash-credential {
+  color: var(--accent);
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.splash-credential-separator {
+  color: var(--muted-foreground);
+  opacity: 0.6;
+  font-weight: 300;
+}
+
+/* Premium Progress Bar */
+.splash-premium-progress {
+  height: 6px;
+  background: var(--background-alt);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.splash-premium-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 6px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  box-shadow: 0 1px 6px rgba(var(--accent-rgb, 59 130 246), 0.3);
+}
+
+.splash-premium-shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.4), 
+    transparent
+  );
+  animation: premiumShimmer 2.5s infinite;
+}
+
+@keyframes premiumShimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Academy Status Text */
+.splash-academy-status {
+  font-size: 1.1rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+  margin: 1.5rem 0 2rem 0; /* ✅ CRITICAL: Added bottom margin to prevent cutting off at screen edge */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: 0.01em;
+}
+
+/* ========================================
+   Professional Branding Responsive Design
+   ======================================== */
+
+@media (max-width: 768px) {
+  .splash-academy-title {
+    font-size: 3rem;
+  }
+  
+  .splash-academy-subtitle {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .splash-chess-crown-premium {
+    font-size: 4rem;
+  }
+  
+  .splash-premium-ring {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .splash-credentials {
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .splash-credential-separator {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  /* ✅ CRITICAL: Dramatically smaller mobile sizing to prevent cutoff */
+  .splash-academy-title {
+    font-size: 2rem; /* ✅ Further reduced from 2.5rem to 2rem */
+    margin-bottom: 0.5rem;
+  }
+  
+  .splash-academy-subtitle {
+    font-size: 1rem; /* ✅ Reduced from 1.2rem to 1rem */
+    margin-bottom: 1rem; /* ✅ Tighter spacing */
+  }
+  
+  .splash-chess-crown-premium {
+    font-size: 2.5rem; /* ✅ Further reduced from 3.5rem to 2.5rem */
+  }
+  
+  .splash-premium-ring {
+    width: 70px; /* ✅ Smaller ring from 90px to 70px */
+    height: 70px;
+  }
+  
+  .splash-academy-emblem {
+    margin-bottom: 0.5rem; /* ✅ CRITICAL: Very tight emblem spacing on mobile */
+  }
+  
+  .splash-credentials {
+    margin-bottom: 0.5rem; /* ✅ CRITICAL: Very tight credentials spacing on mobile */
+    font-size: 0.85rem; /* ✅ Smaller credential text */
+  }
+  
+  .splash-academy-status {
+    font-size: 0.9rem; /* ✅ Smaller status text */
+    margin-bottom: 4rem; /* ✅ CRITICAL: Even more bottom margin on mobile (4rem) */
+  }
+  
+  /* ✅ CRITICAL: Add container padding for mobile to prevent edge cutoff */
+  .splash-professional-branding .splash-progress-section {
+    padding-bottom: 2rem; /* ✅ Extra bottom padding on progress section */
   }
 }

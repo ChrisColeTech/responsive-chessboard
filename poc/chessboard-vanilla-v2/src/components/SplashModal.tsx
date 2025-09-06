@@ -36,17 +36,31 @@ export const SplashModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-[99999]">
-      {/* Close button overlay */}
-      <button
+      {/* Dark backdrop with blur */}
+      <div 
+        className="absolute inset-0 bg-black backdrop-blur-sm"
         onClick={closeSplashModal}
-        className="absolute top-6 right-6 z-[99999] p-2 rounded-full bg-black/20 hover:bg-black/40 text-white transition-colors backdrop-blur-sm"
-        aria-label="Close splash modal"
-      >
-        <X className="w-6 h-6" />
-      </button>
+        aria-label="Close modal backdrop"
+      />
       
-      {/* Full-screen splash content */}
-      {splashContent}
+      {/* Modal content container - full screen, no transparency */}
+      <div className="relative w-full h-full">
+        {/* Close button */}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            closeSplashModal();
+          }}
+          className="absolute top-6 right-6 z-[100] p-3 rounded-full bg-black/80 hover:bg-black/90 text-white transition-all duration-200 backdrop-blur-sm border border-white/40 cursor-pointer shadow-lg"
+          aria-label="Close splash modal"
+        >
+          <X className="w-6 h-6" />
+        </button>
+        
+        {/* Full-screen splash content */}
+        {splashContent}
+      </div>
     </div>
   )
 }

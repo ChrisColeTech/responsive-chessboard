@@ -72,7 +72,7 @@ export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: Ta
     <div
       className="
         w-full h-[84px] 
-        grid grid-cols-7 
+        grid grid-cols-6 
       "
       role="tablist"
       aria-label="Main navigation"

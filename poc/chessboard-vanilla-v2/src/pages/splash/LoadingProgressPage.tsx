@@ -1,33 +1,58 @@
 import React from "react";
+import { useLoadingProgressActions } from "../../hooks/useLoadingProgressActions";
 
 interface LoadingProgressPageProps {
   variant?: 'in-app' | 'modal';
 }
 
 export const LoadingProgressPage: React.FC<LoadingProgressPageProps> = ({ variant = 'in-app' }) => {
+  const { overallProgress, currentStatus } = useLoadingProgressActions();
+
   return (
-    <div className={`splash-container splash-${variant} splash-fade-in splash-minimal-1c`}>
-      {/* VARIANT 1C: Subtle progress animation focus */}
+    <div className={`splash-container splash-${variant} splash-fade-in splash-engine-dashboard`}>
+      {/* 
+        VARIANT 1D: Engine Loading Dashboard
+        
+        DESIGN INTENT: Single progress bar that advances in chunks (0% → 25% → 50% → 75% → 100%) 
+        as each service initializes sequentially. NOT multiple progress bars.
+        
+        Shows:
+        - One unified progress indicator representing overall system initialization
+        - Current service being initialized (e.g. "Loading Stockfish evaluation engine...")
+        - Progress advances when each service completes initialization
+      */}
       <div className="splash-brand-section">
         <div className="splash-logo-area">
-          {/* Minimal king with subtle movement */}
-          <div className="splash-king-progress">
-            <span className="splash-chess-king-1c">♔</span>
+          {/* Professional chess engine icon */}
+          <div className="splash-engine-icon">
+            <span className="splash-chess-king-dashboard">♔</span>
           </div>
           
-          <h1 className="splash-title splash-progress-title-1c">Chess Master</h1>
-          <p className="splash-subtitle splash-progress-subtitle-1c">Professional Training</p>
+          <h1 className="splash-title splash-dashboard-title">Master Chess Training</h1>
+          <p className="splash-subtitle splash-dashboard-subtitle">Engine Initialization</p>
         </div>
       </div>
       
-      {/* Animated progress with subtle effects */}
-      <div className="splash-progress-section">
-        <div className="splash-progress-bar splash-animated-1c">
-          <div className="splash-progress-fill splash-smooth-animation-1c" style={{ width: '82%' }}>
-            <div className="splash-progress-shimmer"></div>
+      {/* Single Progress Bar Dashboard */}
+      <div className="splash-engine-dashboard-section">
+        {/* Single Progress Bar */}
+        <div className="splash-single-progress">
+          <div className="splash-single-progress-header">
+            <span className="splash-single-progress-label">Loading System Components</span>
+            <span className="splash-single-progress-percent">{overallProgress}%</span>
+          </div>
+          <div className="splash-single-progress-bar">
+            <div 
+              className="splash-single-progress-fill" 
+              style={{ width: `${overallProgress}%` }}
+            />
           </div>
         </div>
-        <p className="splash-status-text splash-progress-status-1c">Loading chess mastery...</p>
+
+        {/* Current Service Status */}
+        <div className="splash-service-status">
+          <p className="splash-service-status-text">{currentStatus}</p>
+        </div>
       </div>
     </div>
   );

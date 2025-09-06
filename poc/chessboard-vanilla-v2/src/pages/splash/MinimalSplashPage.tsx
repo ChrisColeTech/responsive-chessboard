@@ -1,29 +1,38 @@
 import React from "react";
+import { useMinimalSplashActions } from "../../hooks/useMinimalSplashActions";
 
 interface MinimalSplashPageProps {
   variant?: 'in-app' | 'modal';
 }
 
 export const MinimalSplashPage: React.FC<MinimalSplashPageProps> = ({ variant = 'in-app' }) => {
+  const { progress, status, animationKey } = useMinimalSplashActions();
+
   return (
-    <div className={`splash-container splash-${variant} splash-fade-in splash-minimal-1a`}>
-      {/* VARIANT 1A: Ultra-minimal king focus */}
+    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-minimal-professional`}>
+      {/* Minimal Professional Design - Concept 1 */}
       <div className="splash-brand-section">
         <div className="splash-logo-area">
-          {/* Single floating king - ultimate minimal */}
-          <div className="splash-king-minimal">
-            <span className="splash-chess-king-1a">♔</span>
+          {/* Single floating king representing mastery */}
+          <div className="splash-king-container">
+            <span className="splash-chess-king-professional">♚</span>
           </div>
           
-          <h1 className="splash-title splash-minimal-title-1a">Chess Master</h1>
-          <p className="splash-subtitle splash-minimal-subtitle-1a">Professional Training</p>
+          <h1 className="splash-title splash-professional-title">Chess Master</h1>
+          <p className="splash-subtitle splash-professional-subtitle">Tournament Ready</p>
         </div>
       </div>
       
-      {/* Ultra-thin progress */}
+      {/* Precision progress indicator */}
       <div className="splash-progress-section">
-        <div className="splash-progress-bar splash-hairline-1a">
-          <div className="splash-progress-fill splash-minimal-fill-1a" style={{ width: '75%' }}></div>
+        <div className="splash-progress-bar splash-hairline-professional">
+          <div 
+            className="splash-progress-fill splash-professional-fill" 
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        <div className="splash-status-text splash-professional-status">
+          {status}
         </div>
       </div>
     </div>

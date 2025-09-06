@@ -2,7 +2,9 @@
 
 ## Overview
 
-This document presents comprehensive research findings on modern splash screen design standards for 2024-2025 and documents the implementation of 4 chess-themed splash screen examples in our Master Chess Training application. The research focuses on replacing outdated patterns (like spinners) with modern UX approaches.
+This document presents comprehensive research findings on modern splash screen design standards for 2024-2025 and documents the implementation of 4 chess-themed splash screen examples in our **Master Chess Training** application. The research focuses on replacing outdated patterns (like spinners) with modern UX approaches.
+
+**APPLICATION NAME**: **Master Chess Training** - This is the official application name that should be used consistently across all splash screens and branding elements.
 
 ## Table of Contents
 
@@ -70,10 +72,11 @@ Based on research findings, here are 12 modern splash screen concepts for chess 
 - No distracting elements
 
 ### 2. **Chess Engine Loading Dashboard**
-- Real progress feedback for engine initialization  
-- Multiple progress bars (Opening DB, Tablebases, Analysis)
-- Percentage counters with smooth animation
-- Technical but user-friendly messaging
+- **DESIGN INTENT**: Single progress bar that advances in chunks (0% → 25% → 50% → 75% → 100%) as each service completes initialization
+- Real progress feedback for engine initialization sequence
+- Shows current service being initialized (not multiple simultaneous progress bars)
+- Technical but user-friendly status messages with readable timing
+- Professional dashboard styling
 
 ### 3. **Progressive Piece Assembly**
 - Chess pieces appear in logical sequence
@@ -455,6 +458,38 @@ From existing architecture:
 - **Hook composition**: Cross-page navigation works by importing useSplashActions in each page hook
 - **Function naming consistency**: Action IDs must match exactly between constants and hook exports
 
+### From Critical Bug Fixes (December 2024)
+
+**Modal System Layering:**
+- **Z-index conflicts**: Modal content must use `position: relative` not `position: fixed` to avoid conflicts with modal wrapper
+- **Event propagation**: Close buttons need `preventDefault()` and `stopPropagation()` for reliable functionality
+- **Layering hierarchy**: Backdrop (z-0) < Content (z-1) < Close button (z-100) ensures proper interaction
+
+**Progress Bar Visibility:**
+- **Mobile visibility**: 1px progress bars invisible on mobile - minimum 2px height required
+- **CSS variable fallbacks**: Always provide fallback colors `rgba(var(--css-var, 128 128 128), 0.2)` for undefined theme variables
+- **Contrast ratios**: Increase opacity from 0.1 to 0.2 for better visibility across themes
+
+**Responsive Layout Issues:**
+- **Flexbox positioning**: `margin-top: auto` on progress sections prevents "too far down" positioning issues
+- **Mobile scaling**: Progressive font-size reduction: Desktop → Tablet (768px) → Phone (480px)
+- **Layout collapse prevention**: Use `min-height` on containers to prevent collapse on small screens
+- **Touch targets**: Minimum 44px (3rem padding) for clickable elements on mobile
+
+**❌ CRITICAL SPACING RULE: EXCESSIVE MARGINS/PADDING FORBIDDEN**
+- **Never add excessive spacing** that pushes elements off screen or cuts off progress bars
+- **Splash screens must fit in viewport**: All content visible without scrolling
+- **Progress bars must never be cut off**: They must appear in natural content flow, not at screen edge
+- **Use minimal spacing**: 0.5rem-0.75rem between brand elements maximum
+- **Total brand section spacing**: Should be <3rem to leave room for progress section
+- **Test on mobile**: Always verify 480px width doesn't cut off content
+- **User preference**: Users prefer cramped layout over cut-off content
+- **Golden rule**: If you can't see the progress bar clearly on mobile, reduce spacing immediately
+
+**Audio Integration Mistakes:**
+- **Splash screens shouldn't have audio**: Remove all audio hooks from loading screens - they're initialization moments, not interactive experiences
+- **Performance issues**: Audio calls in useEffect loops can cause infinite re-renders and sound spam
+
 ### Common Pitfalls Avoided
 
 **State Management:**
@@ -464,10 +499,20 @@ From existing architecture:
 **Performance:**
 - ❌ Don't animate width/height/color properties
 - ✅ Use transform/opacity with React Spring
+- ❌ Don't add audio to splash screens
+- ✅ Keep splash screens silent and focused on visual feedback
 
 **User Experience:**
 - ❌ Don't create splash screens longer than 3 seconds
 - ✅ Provide skip functionality and real progress feedback
+- ❌ Don't use 1px progress bars on mobile
+- ✅ Use minimum 2px height with proper contrast
+
+**CSS Architecture:**
+- ❌ Don't rely on CSS variables without fallbacks
+- ✅ Always provide fallback colors for theme variables
+- ❌ Don't use `position: fixed` on modal content
+- ✅ Use `position: relative` with proper z-index layering
 
 ## Bug Fixes & Technical Resolution
 

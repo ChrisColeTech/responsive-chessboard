@@ -1,30 +1,46 @@
 import React from "react";
+import { useAnimatedSplashActions } from "../../hooks/useAnimatedSplashActions";
 
 interface AnimatedSplashPageProps {
   variant?: 'in-app' | 'modal';
 }
 
 export const AnimatedSplashPage: React.FC<AnimatedSplashPageProps> = ({ variant = 'in-app' }) => {
+  const { pieces, activePieces, currentStatus, progress, animationKey } = useAnimatedSplashActions();
+
   return (
-    <div className={`splash-container splash-${variant} splash-fade-in splash-minimal-1b`}>
-      {/* VARIANT 1B: Clean typography emphasis */}
+    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-assembly-professional`}>
+      {/* Progressive Piece Assembly - Concept 1 Variant 2 */}
       <div className="splash-brand-section">
         <div className="splash-logo-area">
-          {/* Typography-focused with subtle king accent */}
-          <div className="splash-king-typography">
-            <span className="splash-chess-king-1b">♔</span>
+          {/* Chess piece assembly area */}
+          <div className="splash-piece-assembly-container">
+            {pieces.map((pieceData, index) => (
+              <div 
+                key={index} 
+                className={`splash-chess-piece-assembly ${index < activePieces ? 'splash-piece-active' : ''}`}
+                style={{ animationDelay: `${index * 0.3}s` }}
+              >
+                {pieceData.piece}
+              </div>
+            ))}
           </div>
           
-          <h1 className="splash-title splash-typography-title-1b">CHESS MASTER</h1>
-          <p className="splash-subtitle splash-typography-subtitle-1b">Tournament Professional</p>
-          <div className="splash-typography-tagline-1b">Elite Training • Precision Play</div>
+          <h1 className="splash-title splash-assembly-title">Chess Master</h1>
+          <p className="splash-subtitle splash-assembly-subtitle">Building Excellence</p>
         </div>
       </div>
       
-      {/* Clean minimal progress */}
+      {/* Assembly progress indicator */}
       <div className="splash-progress-section">
-        <div className="splash-progress-bar splash-clean-1b">
-          <div className="splash-progress-fill splash-typography-fill-1b" style={{ width: '68%' }}></div>
+        <div className="splash-progress-bar splash-assembly-progress">
+          <div 
+            className="splash-progress-fill splash-assembly-fill" 
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        <div className="splash-status-text splash-assembly-status">
+          {currentStatus}
         </div>
       </div>
     </div>
