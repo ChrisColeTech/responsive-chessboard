@@ -34,4 +34,4 @@ export const BrandedSplashPage: React.FC = () => {
       </div>
     </div>
   );
-};}
+};

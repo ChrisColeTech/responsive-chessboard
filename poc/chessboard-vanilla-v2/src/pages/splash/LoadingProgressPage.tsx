@@ -50,4 +50,4 @@ export const LoadingProgressPage: React.FC = () => {
       </div>
     </div>
   );
-};}
+};

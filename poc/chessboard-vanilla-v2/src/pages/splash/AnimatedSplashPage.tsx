@@ -36,4 +36,4 @@ export const AnimatedSplashPage: React.FC = () => {
       </div>
     </div>
   );
-};}
+};

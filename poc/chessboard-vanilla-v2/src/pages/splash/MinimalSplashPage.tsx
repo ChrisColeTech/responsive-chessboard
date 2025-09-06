@@ -20,4 +20,4 @@ export const MinimalSplashPage: React.FC = () => {
       </div>
     </div>
   );
-};}
+};
