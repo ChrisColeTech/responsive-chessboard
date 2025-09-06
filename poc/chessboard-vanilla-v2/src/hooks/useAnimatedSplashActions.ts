@@ -2,61 +2,68 @@ import { useCallback, useState, useEffect, useMemo } from 'react'
 import { useSplashActions } from './useSplashActions'
 import { useAppStore } from '../stores/appStore'
 
-interface PieceAssembly {
-  piece: string
+interface EngineComponent {
+  id: string
+  icon: string
+  label: string
   name: string
   delay: number
 }
 
+/**
+ * Hook for Chess Engine Loading Dashboard - Animated Variant (CONCEPT 2)
+ * 
+ * DESIGN INTENT: Engine components materialize sequentially with physics-based animations.
+ * Shows visual assembly of engine system - core, database, tablebase, analysis tools.
+ * Creates engaging technical process that builds anticipation for engine capabilities.
+ */
 export function useAnimatedSplashActions() {
   const [animationKey, setAnimationKey] = useState(0)
-  const [activePieces, setActivePieces] = useState<number>(0)
-  const [currentStatus, setCurrentStatus] = useState('Preparing chess mastery...')
+  const [activeComponents, setActiveComponents] = useState<number>(0)
+  const [currentStatus, setCurrentStatus] = useState('Setting up your chess training...')
   const { goToMinimal, goToProgress, goToBranded } = useSplashActions()
   const openSplashModal = useAppStore((state) => state.openSplashModal)
 
-  // Memoize pieces array to prevent recreating on every render
-  const pieces: PieceAssembly[] = useMemo(() => [
-    { piece: '♚', name: 'King', delay: 300 },
-    { piece: '♛', name: 'Queen', delay: 300 },
-    { piece: '♜', name: 'Rook', delay: 300 },
-    { piece: '♗', name: 'Bishop', delay: 300 },
-    { piece: '♞', name: 'Knight', delay: 300 },
-    { piece: '♟', name: 'Pawn', delay: 200 }
+  // Memoize chess learning components to prevent recreating on every render
+  const engineComponents: EngineComponent[] = useMemo(() => [
+    { id: 'training', icon: '♔', label: 'Training', name: 'Setting up your training', delay: 800 },
+    { id: 'openings', icon: '♛', label: 'Openings', name: 'Loading opening lessons', delay: 900 },
+    { id: 'tactics', icon: '♜', label: 'Tactics', name: 'Preparing tactical puzzles', delay: 1000 },
+    { id: 'analysis', icon: '♝', label: 'Analysis', name: 'Getting analysis ready', delay: 800 }
   ], [])
 
-  // Progressive piece assembly simulation
+  // Progressive engine component assembly
   useEffect(() => {
-    setActivePieces(0)
-    setCurrentStatus('Preparing chess mastery...')
+    setActiveComponents(0)
+    setCurrentStatus('Setting up your chess training...')
 
     let timeoutId: NodeJS.Timeout
 
-    const assemblePieces = (index: number) => {
-      if (index >= pieces.length) {
-        setCurrentStatus('Assembly complete - Ready to play')
+    const assembleComponents = (index: number) => {
+      if (index >= engineComponents.length) {
+        setCurrentStatus('Ready to improve your chess!')
         return
       }
 
-      const { name, delay } = pieces[index]
+      const { name, delay } = engineComponents[index]
       
       timeoutId = setTimeout(() => {
-        setActivePieces(index + 1)
-        setCurrentStatus(`${name} positioned... (${index + 1}/${pieces.length})`)
-        assemblePieces(index + 1)
+        setActiveComponents(index + 1)
+        setCurrentStatus(`Loading ${name}... (${index + 1}/${engineComponents.length})`)
+        assembleComponents(index + 1)
       }, delay)
     }
 
     // Start assembly after short delay
     const initialTimeout = setTimeout(() => {
-      assemblePieces(0)
-    }, 200)
+      assembleComponents(0)
+    }, 500)
 
     return () => {
       clearTimeout(initialTimeout)
       if (timeoutId) clearTimeout(timeoutId)
     }
-  }, [animationKey, pieces])
+  }, [animationKey, engineComponents])
 
   const testSpringAnimation = useCallback(() => {
     // No audio needed for animation test
@@ -70,14 +77,14 @@ export function useAnimatedSplashActions() {
     openSplashModal('animatedsplash')
   }, [openSplashModal])
 
-  const progress = (activePieces / pieces.length) * 100
+  const progress = (activeComponents / engineComponents.length) * 100
 
   return {
     testSpringAnimation,
     restartAnimation,
     toggleFullscreen,
-    pieces,
-    activePieces,
+    engineComponents,
+    activeComponents,
     currentStatus,
     progress,
     // Cross-navigation

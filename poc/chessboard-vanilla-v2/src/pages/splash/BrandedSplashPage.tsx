@@ -9,42 +9,55 @@ export const BrandedSplashPage: React.FC<BrandedSplashPageProps> = ({ variant = 
   const { progress, status, animationKey } = useBrandedSplashActions();
 
   return (
-    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-professional-branding`}>
+    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-branded`}>
       {/* 
-        VARIANT 1E: Professional Branding - Premium Chess Academy
+        CONCEPT 2: Chess Engine Loading Dashboard - Branded Variant
         
-        DESIGN INTENT: Create prestigious chess academy entrance feeling.
-        Premium gold/bronze accents, elegant typography, authority indicators.
-        Makes users feel they're accessing elite-level chess training.
+        DESIGN INTENT: Simple branded splash screen with premium chess academy feel.
+        Clean typography with gold accent, minimal but elegant.
       */}
+      
       <div className="splash-brand-section">
         <div className="splash-logo-area">
-          {/* Premium academy emblem */}
-          <div className="splash-academy-emblem">
-            <span className="splash-chess-crown-premium">♔</span>
-            <div className="splash-premium-ring"></div>
+          {/* Premium branded logo section */}
+          <div className="splash-branded-logo">
+            <div className="splash-branded-emblem">
+              <span className="splash-chess-crown-branded">♔</span>
+            </div>
+            <div className="splash-branded-nameplate">
+              <h1 className="splash-title splash-branded-title">Master Chess Training</h1>
+              <div className="splash-branded-tagline">
+                <span className="splash-academy-text">Professional Academy</span>
+                <div className="splash-branded-divider"></div>
+                <span className="splash-founded-text">Est. 2024</span>
+              </div>
+            </div>
           </div>
           
-          <h1 className="splash-title splash-academy-title">Chess Training</h1>
-          <p className="splash-subtitle splash-academy-subtitle">Elite Chess Academy</p>
-          <div className="splash-credentials">
-            <span className="splash-credential">FIDE Certified</span>
+          {/* Academy credentials */}
+          <div className="splash-credentials-line">
+            <span className="splash-credential-item">♕ Grandmaster Lessons</span>
             <span className="splash-credential-separator">•</span>
-            <span className="splash-credential">Grandmaster Instruction</span>
-            <span className="splash-credential-separator">•</span>
-            <span className="splash-credential">Tournament Preparation</span>
+            <span className="splash-credential-item">♖ Tournament Prep</span>
           </div>
         </div>
       </div>
-      
-      {/* Premium progress indicator */}
+
+      {/* Premium progress with branding */}
       <div className="splash-progress-section">
-        <div className="splash-progress-bar splash-premium-progress">
-          <div className="splash-progress-fill splash-premium-fill" style={{ width: `${progress}%` }}>
-            <div className="splash-premium-shimmer"></div>
+        <div className="splash-branded-progress-wrapper">
+          <div className="splash-progress-label">
+            <span>Preparing Elite Training</span>
+            <span className="splash-progress-percentage">{progress}%</span>
+          </div>
+          <div className="splash-progress-bar splash-branded-progress">
+            <div 
+              className="splash-progress-fill splash-branded-fill" 
+              style={{ width: `${progress}%` }}
+            />
           </div>
         </div>
-        <p className="splash-status-text splash-academy-status">{status}</p>
+        <div className="splash-status-text splash-branded-status">{status}</div>
       </div>
     </div>
   );

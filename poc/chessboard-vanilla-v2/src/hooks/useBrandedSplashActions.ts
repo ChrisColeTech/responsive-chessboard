@@ -3,29 +3,29 @@ import { useSplashActions } from './useSplashActions'
 import { useAppStore } from '../stores/appStore'
 
 /**
- * Hook for Professional Branding (Variant 1E)
+ * Hook for Chess Engine Loading Dashboard - Branded Variant (CONCEPT 2)
  * 
- * DESIGN INTENT: Premium chess academy entrance with sophisticated loading progression.
- * Shows academy credentials loading sequence with elegant timing and premium messaging.
+ * DESIGN INTENT: Professional chess academy branding with luxury educational institution feel.
+ * Premium educational positioning showing academy-level chess training preparation.
  */
 export function useBrandedSplashActions() {
   const [animationKey, setAnimationKey] = useState(0)
   const [progress, setProgress] = useState(0)
-  const [status, setStatus] = useState('Accessing Chess Training Academy...')
+  const [status, setStatus] = useState('Preparing your chess mastery journey...')
   const { goToMinimal, goToAnimated, goToProgress } = useSplashActions()
   const openSplashModal = useAppStore((state) => state.openSplashModal)
 
-  // Premium academy loading sequence
+  // Professional academy training setup sequence
   useEffect(() => {
     setProgress(0)
-    setStatus('Accessing Chess Training Academy...')
+    setStatus('Preparing your chess mastery journey...')
 
     const loadingSequence = [
-      { progress: 20, status: 'Verifying premium credentials...', delay: 400 },
-      { progress: 45, status: 'Loading GM instruction modules...', delay: 800 },
-      { progress: 70, status: 'Preparing tournament environment...', delay: 600 },
-      { progress: 90, status: 'Finalizing academy access...', delay: 500 },
-      { progress: 100, status: 'Welcome to Elite Chess Training', delay: 300 }
+      { progress: 20, status: 'Setting up your personalized curriculum...', delay: 400 },
+      { progress: 45, status: 'Loading advanced training modules...', delay: 800 },
+      { progress: 70, status: 'Preparing professional lessons...', delay: 600 },
+      { progress: 90, status: 'Finalizing your learning path...', delay: 500 },
+      { progress: 100, status: 'Ready to master chess!', delay: 300 }
     ]
 
     const timeouts: NodeJS.Timeout[] = []

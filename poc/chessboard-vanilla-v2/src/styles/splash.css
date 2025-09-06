@@ -1385,3 +1385,791 @@
     padding-bottom: 2rem; /* ✅ Extra bottom padding on progress section */
   }
 }
+
+/* ========================================
+   CONCEPT 2: Chess Engine Loading Dashboard - All Variants
+   
+   DESIGN INTENT: Shows real engine initialization sequences with technical 
+   credibility. Sequential service loading (engine core, opening database, 
+   tablebase, analysis tools) with readable timing and professional styling.
+   Focus on transparency and trust through visible progress.
+   ======================================== */
+
+/* Engine Loading Container Base */
+.splash-engine-minimal {
+  background: var(--background);
+}
+
+/* Engine Core Icon */
+.splash-engine-core-icon {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.splash-chess-engine-symbol {
+  font-size: 4.5rem;
+  color: rgb(59, 130, 246); /* Blue - representing processing/computation */
+  text-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  animation: enginePulse 3s ease-in-out infinite;
+}
+
+@keyframes enginePulse {
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 0.9;
+    text-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  }
+  50% { 
+    transform: scale(1.03); 
+    opacity: 1;
+    text-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  }
+}
+
+/* Engine Typography */
+.splash-engine-title {
+  font-size: 3.5rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.splash-engine-subtitle {
+  font-size: 1.2rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+}
+
+/* Engine Progress Bar - Clean and Technical */
+.splash-engine-progress {
+  height: 4px;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.splash-engine-fill {
+  height: 100%;
+  background: linear-gradient(90deg, rgb(59, 130, 246), rgb(37, 99, 235));
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.splash-engine-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: engineShimmer 2s infinite;
+}
+
+@keyframes engineShimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Engine Status Text */
+.splash-engine-status {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+  margin-top: 1.5rem;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+  letter-spacing: 0.01em;
+  opacity: 0.9;
+}
+
+/* ========================================
+   CONCEPT 2 Engine Loading Responsive Design
+   ======================================== */
+
+@media (max-width: 768px) {
+  .splash-engine-title {
+    font-size: 2.8rem;
+  }
+  
+  .splash-engine-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .splash-chess-engine-symbol {
+    font-size: 3.5rem;
+  }
+  
+  .splash-engine-core-icon {
+    margin-bottom: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .splash-engine-title {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .splash-engine-subtitle {
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .splash-chess-engine-symbol {
+    font-size: 2.8rem;
+  }
+  
+  .splash-engine-core-icon {
+    margin-bottom: 1rem;
+  }
+  
+  .splash-engine-status {
+    font-size: 0.9rem;
+    margin-top: 1.25rem;
+  }
+}
+
+/* ========================================
+   CONCEPT 2: Chess Engine Loading Dashboard - Animated Variant
+   
+   DESIGN INTENT: Engine components materialize sequentially with physics-based
+   animations. Shows visual assembly of engine system with staggered entrances.
+   Creates engaging technical process building anticipation for engine capabilities.
+   ======================================== */
+
+/* Engine Animated Container */
+.splash-engine-animated {
+  background: var(--background);
+}
+
+/* Engine Components Container */
+.splash-engine-components-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  min-height: 180px;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Individual Engine Component */
+.splash-engine-component {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(40px) scale(0.8);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.splash-engine-component.splash-component-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  animation: engineComponentEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes engineComponentEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.8) rotate(10deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.05) rotate(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+/* Component Icons */
+.splash-component-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.2));
+}
+
+/* Different colors for each component type */
+.splash-engine-component:nth-child(1) .splash-component-icon {
+  color: rgb(59, 130, 246); /* Core - Blue */
+}
+
+.splash-engine-component:nth-child(2) .splash-component-icon {
+  color: rgb(34, 197, 94); /* Database - Green */
+}
+
+.splash-engine-component:nth-child(3) .splash-component-icon {
+  color: rgb(249, 115, 22); /* Tablebase - Orange */
+}
+
+.splash-engine-component:nth-child(4) .splash-component-icon {
+  color: rgb(168, 85, 247); /* Analysis - Purple */
+}
+
+/* Component Labels */
+.splash-component-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+  letter-spacing: 0.02em;
+  opacity: 0.9;
+}
+
+/* Animated Variant Typography */
+.splash-engine-animated-title {
+  font-size: 3.2rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.splash-engine-animated-subtitle {
+  font-size: 1.2rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+}
+
+/* Animated Progress Bar */
+.splash-engine-animated-progress {
+  height: 5px;
+  background: rgba(59, 130, 246, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.splash-engine-animated-fill {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    rgb(59, 130, 246), 
+    rgb(34, 197, 94), 
+    rgb(249, 115, 22), 
+    rgb(168, 85, 247)
+  );
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.splash-engine-animated-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  animation: animatedShimmer 2.5s infinite;
+}
+
+@keyframes animatedShimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Animated Status Text */
+.splash-engine-animated-status {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+  margin-top: 1.5rem;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+  letter-spacing: 0.01em;
+  opacity: 0.9;
+}
+
+/* ========================================
+   CONCEPT 2 Engine Animated Responsive Design
+   ======================================== */
+
+@media (max-width: 768px) {
+  .splash-engine-components-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    min-height: 140px;
+  }
+  
+  .splash-component-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .splash-component-label {
+    font-size: 0.8rem;
+  }
+  
+  .splash-engine-animated-title {
+    font-size: 2.5rem;
+  }
+  
+  .splash-engine-animated-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .splash-engine-components-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    min-height: 100px;
+    padding: 0.5rem;
+  }
+  
+  .splash-component-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.4rem;
+  }
+  
+  .splash-component-label {
+    font-size: 0.7rem;
+  }
+  
+  .splash-engine-animated-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .splash-engine-animated-subtitle {
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .splash-engine-animated-status {
+    font-size: 0.9rem;
+    margin-top: 1.25rem;
+  }
+}
+
+/* ========================================
+   CONCEPT 2: Chess Engine Loading Dashboard - Loading Progress Variant
+   
+   DESIGN INTENT: Multiple progress bars showing detailed preparation of chess 
+   training components. Professional dashboard shows users exactly what's being 
+   prepared for their training with individual progress tracking per component.
+   ======================================== */
+
+/* Training Dashboard Container */
+.splash-training-dashboard {
+  background: var(--background);
+}
+
+/* Training Dashboard Typography */
+.splash-training-dashboard-title {
+  font-size: 3.5rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.splash-training-dashboard-subtitle {
+  font-size: 1.3rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+  margin-bottom: 2.5rem;
+  opacity: 0.9;
+}
+
+/* Multiple Progress Bars Section */
+.splash-training-dashboard-section {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.splash-multiple-progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Individual Component Progress Card */
+.splash-component-progress-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.splash-component-progress-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Component Progress Header */
+.splash-component-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.splash-component-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.splash-component-icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.splash-component-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.splash-component-percent {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--muted-foreground);
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+  min-width: 3rem;
+  text-align: right;
+}
+
+/* Component Progress Bar */
+.splash-component-progress-bar {
+  height: 6px;
+  background: var(--background);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.splash-component-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.splash-component-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: componentShimmer 2s infinite;
+}
+
+@keyframes componentShimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Training Status */
+.splash-training-status {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  margin-top: 1rem;
+}
+
+.splash-training-status-text {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ========================================
+   CONCEPT 2 Training Dashboard Responsive Design
+   ======================================== */
+
+@media (max-width: 768px) {
+  .splash-training-dashboard-title {
+    font-size: 2.8rem;
+  }
+  
+  .splash-training-dashboard-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .splash-multiple-progress-container {
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .splash-component-progress-card {
+    padding: 1rem;
+  }
+  
+  .splash-component-icon {
+    font-size: 1.3rem;
+  }
+  
+  .splash-component-name {
+    font-size: 1rem;
+  }
+  
+  .splash-component-percent {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .splash-training-dashboard-title {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .splash-training-dashboard-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .splash-multiple-progress-container {
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .splash-component-progress-card {
+    padding: 0.875rem;
+  }
+  
+  .splash-component-info {
+    gap: 0.5rem;
+  }
+  
+  .splash-component-icon {
+    font-size: 1.2rem;
+  }
+  
+  .splash-component-name {
+    font-size: 0.95rem;
+  }
+  
+  .splash-component-percent {
+    font-size: 0.95rem;
+    min-width: 2.5rem;
+  }
+  
+  .splash-training-status {
+    padding: 1.25rem;
+  }
+  
+  .splash-training-status-text {
+    font-size: 0.9rem;
+  }
+}
+
+/* ==========================================================================
+   CONCEPT 2 - Branded Variant: Simple Premium Chess Academy
+   ========================================================================== */
+
+/* Premium branded logo section */
+.splash-branded-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.splash-branded-emblem {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: rgba(var(--accent-rgb, 59 130 246), 0.1);
+}
+
+.splash-chess-crown-branded {
+  font-size: 3rem;
+  color: var(--accent);
+  text-shadow: 0 2px 8px rgba(var(--accent-rgb, 59 130 246), 0.4);
+  display: inline-block;
+}
+
+.splash-branded-nameplate {
+  text-align: center;
+}
+
+/* Premium typography - mobile first */
+.splash-branded-title {
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: 'Times New Roman', 'Georgia', serif;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.splash-branded-tagline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.splash-academy-text {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.splash-branded-divider {
+  width: 1px;
+  height: 1rem;
+  background: var(--muted-foreground);
+  opacity: 0.3;
+}
+
+.splash-founded-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+/* Academy credentials line */
+.splash-credentials-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.splash-credential-item {
+  font-size: 0.875rem;
+  color: var(--foreground);
+  font-weight: 500;
+}
+
+.splash-credential-separator {
+  color: var(--muted-foreground);
+  opacity: 0.5;
+}
+
+/* Progress with percentage display */
+.splash-branded-progress-wrapper {
+  margin-bottom: 1rem;
+}
+
+.splash-progress-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.splash-progress-percentage {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Premium progress bar */
+.splash-branded-progress {
+  height: 4px;
+  background: rgba(var(--muted-foreground-rgb, 128 128 128), 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.splash-branded-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.splash-branded-status {
+  font-size: 0.95rem;
+  color: var(--muted-foreground);
+  font-weight: 400;
+  text-align: center;
+}
+
+/* Responsive scaling */
+@media (min-width: 768px) {
+  .splash-chess-crown-branded {
+    font-size: 4rem;
+  }
+  
+  .splash-branded-title {
+    font-size: 2.8rem;
+  }
+  
+  .splash-academy-text {
+    font-size: 1.1rem;
+  }
+  
+  .splash-credential-item {
+    font-size: 1rem;
+  }
+  
+  .splash-progress-label {
+    font-size: 1rem;
+  }
+  
+  .splash-branded-status {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .splash-branded-logo {
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  .splash-branded-emblem {
+    margin-bottom: 0;
+  }
+  
+  .splash-branded-nameplate {
+    text-align: left;
+  }
+  
+  .splash-chess-crown-branded {
+    font-size: 4.5rem;
+  }
+  
+  .splash-branded-title {
+    font-size: 3.2rem;
+  }
+  
+  .splash-academy-text {
+    font-size: 1.2rem;
+  }
+}

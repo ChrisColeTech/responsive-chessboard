@@ -9,29 +9,35 @@ export const MinimalSplashPage: React.FC<MinimalSplashPageProps> = ({ variant = 
   const { progress, status, animationKey } = useMinimalSplashActions();
 
   return (
-    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-minimal-professional`}>
-      {/* Minimal Professional Design - Concept 1 */}
+    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-engine-minimal`}>
+      {/* 
+        CONCEPT 2: Chess Engine Loading Dashboard - Minimal Variant
+        
+        DESIGN INTENT: Clean engine initialization display with technical credibility.
+        Shows sequential service loading with professional engine core branding.
+        Focus on transparency and trust through visible progress.
+      */}
       <div className="splash-brand-section">
         <div className="splash-logo-area">
-          {/* Single floating king representing mastery */}
-          <div className="splash-king-container">
-            <span className="splash-chess-king-professional">♚</span>
+          {/* Engine core icon */}
+          <div className="splash-engine-core-icon">
+            <span className="splash-chess-engine-symbol">♔</span>
           </div>
           
-          <h1 className="splash-title splash-professional-title">Chess Training</h1>
-          <p className="splash-subtitle splash-professional-subtitle">Tournament Ready</p>
+          <h1 className="splash-title splash-engine-title">Chess Training</h1>
+          <p className="splash-subtitle splash-engine-subtitle">Master Your Game</p>
         </div>
       </div>
       
-      {/* Precision progress indicator */}
+      {/* Engine initialization progress */}
       <div className="splash-progress-section">
-        <div className="splash-progress-bar splash-hairline-professional">
+        <div className="splash-progress-bar splash-engine-progress">
           <div 
-            className="splash-progress-fill splash-professional-fill" 
+            className="splash-progress-fill splash-engine-fill" 
             style={{ width: `${progress}%` }}
           />
         </div>
-        <div className="splash-status-text splash-professional-status">
+        <div className="splash-status-text splash-engine-status">
           {status}
         </div>
       </div>

@@ -6,39 +6,30 @@ interface LoadingProgressPageProps {
 }
 
 export const LoadingProgressPage: React.FC<LoadingProgressPageProps> = ({ variant = 'in-app' }) => {
-  const { overallProgress, currentStatus } = useLoadingProgressActions();
+  const { overallProgress, currentStatus, animationKey } = useLoadingProgressActions();
 
   return (
-    <div className={`splash-container splash-${variant} splash-fade-in splash-engine-dashboard`}>
+    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-training-dashboard`}>
       {/* 
-        VARIANT 1D: Engine Loading Dashboard
+        CONCEPT 2: Chess Engine Loading Dashboard - Loading Progress Variant
         
-        DESIGN INTENT: Single progress bar that advances in chunks (0% → 25% → 50% → 75% → 100%) 
-        as each service initializes sequentially. NOT multiple progress bars.
-        
-        Shows:
-        - One unified progress indicator representing overall system initialization
-        - Current service being initialized (e.g. "Loading Stockfish evaluation engine...")
-        - Progress advances when each service completes initialization
+        DESIGN INTENT: Multiple progress bars showing detailed preparation of chess training components.
+        Each component (lessons, puzzles, analysis, practice) has individual progress tracking.
+        Professional dashboard shows users exactly what's being prepared for their training.
       */}
       <div className="splash-brand-section">
         <div className="splash-logo-area">
-          {/* Professional chess engine icon */}
-          <div className="splash-engine-icon">
-            <span className="splash-chess-king-dashboard">♔</span>
-          </div>
-          
-          <h1 className="splash-title splash-dashboard-title">Chess Training</h1>
-          <p className="splash-subtitle splash-dashboard-subtitle">Engine Initialization</p>
+          <h1 className="splash-title splash-training-dashboard-title">Chess Training</h1>
+          <p className="splash-subtitle splash-training-dashboard-subtitle">Preparing Your Lessons</p>
         </div>
       </div>
       
       {/* Single Progress Bar Dashboard */}
-      <div className="splash-engine-dashboard-section">
+      <div className="splash-training-dashboard-section">
         {/* Single Progress Bar */}
         <div className="splash-single-progress">
           <div className="splash-single-progress-header">
-            <span className="splash-single-progress-label">Loading System Components</span>
+            <span className="splash-single-progress-label">Loading Training Components</span>
             <span className="splash-single-progress-percent">{overallProgress}%</span>
           </div>
           <div className="splash-single-progress-bar">

@@ -2,10 +2,11 @@ import { useCallback, useState, useEffect, useMemo } from 'react'
 import { useSplashActions } from './useSplashActions'
 import { useAppStore } from '../stores/appStore'
 
-interface EngineComponent {
+interface TrainingComponent {
   id: string
   name: string
   description: string
+  icon: string
   targetProgress: number
   color: string
   delay: number
@@ -13,60 +14,61 @@ interface EngineComponent {
 }
 
 /**
- * Hook for Engine Loading Dashboard (Variant 1D)
+ * Hook for Chess Engine Loading Dashboard - Loading Progress Variant (CONCEPT 2)
  * 
- * DESIGN INTENT: Simulates sequential service initialization for a SINGLE progress bar.
- * Overall progress advances in chunks (0% → 25% → 50% → 75% → 100%) as each 
- * service completes initialization. NOT for multiple individual progress bars.
- * 
- * The overallProgress value drives the single progress bar in LoadingProgressPage.
- * The currentStatus shows which service is currently being initialized.
+ * DESIGN INTENT: Multiple progress bars showing detailed preparation of chess training components.
+ * Each component (lessons, puzzles, analysis, practice) has individual progress tracking.
+ * Professional dashboard shows users exactly what's being prepared for their training.
  */
 export function useLoadingProgressActions() {
   const [animationKey, setAnimationKey] = useState(0)
   const [componentProgress, setComponentProgress] = useState<Record<string, number>>({})
-  const [currentStatus, setCurrentStatus] = useState('Starting Chess Training...')
+  const [currentStatus, setCurrentStatus] = useState('Preparing your chess training...')
   const [activeComponents, setActiveComponents] = useState<Set<string>>(new Set())
   const { goToMinimal, goToAnimated, goToBranded } = useSplashActions()
   const openSplashModal = useAppStore((state) => state.openSplashModal)
 
-  // Memoize engine components to prevent recreation
+  // Memoize training components to prevent recreation
   // TIMING: Slower delays so users can read what's being loaded
-  const engineComponents: EngineComponent[] = useMemo(() => [
+  const engineComponents: TrainingComponent[] = useMemo(() => [
     {
-      id: 'engine',
-      name: 'Engine Core',
-      description: 'Initializing chess analysis engine',
+      id: 'lessons',
+      name: 'Chess Lessons',
+      description: 'Loading your personalized lessons',
+      icon: '♔',
       targetProgress: 100,
       color: 'rgb(59, 130, 246)', // Blue
-      delay: 500, // Increased from 0 to give initial pause
-      speed: 1500 // Slower loading per component
+      delay: 500,
+      speed: 1500
     },
     {
-      id: 'database',
-      name: 'Opening Database',
-      description: 'Loading master chess openings',
+      id: 'puzzles',
+      name: 'Practice Puzzles',
+      description: 'Preparing tactical puzzles',
+      icon: '♛',
       targetProgress: 100,
       color: 'rgb(34, 197, 94)', // Green
       delay: 2000, // Increased from 200 - more time to read engine status
       speed: 1500
     },
     {
-      id: 'tablebase',
-      name: 'Tablebase',
-      description: 'Loading endgame databases',
+      id: 'analysis',
+      name: 'Game Analysis',
+      description: 'Setting up game analysis tools',
+      icon: '♜',
       targetProgress: 100,
       color: 'rgb(249, 115, 22)', // Orange
-      delay: 3500, // Increased from 600 - more time to read database status
+      delay: 3500,
       speed: 1500
     },
     {
-      id: 'analysis',
-      name: 'Analysis Tools',
-      description: 'Preparing position evaluation',
+      id: 'practice',
+      name: 'Training Games',
+      description: 'Preparing practice games',
+      icon: '♝',
       targetProgress: 100,
       color: 'rgb(168, 85, 247)', // Purple
-      delay: 5000, // Increased from 1000 - more time to read tablebase status
+      delay: 5000,
       speed: 1500
     }
   ], [])
@@ -75,7 +77,7 @@ export function useLoadingProgressActions() {
   useEffect(() => {
     setComponentProgress({})
     setActiveComponents(new Set())
-    setCurrentStatus('Starting Master Chess Training...')
+    setCurrentStatus('Preparing your chess training...')
 
     const intervals: NodeJS.Timeout[] = []
 
@@ -107,7 +109,7 @@ export function useLoadingProgressActions() {
 
     // Set final status when all complete - increased timing to match slower loading
     const finalTimeout = setTimeout(() => {
-      setCurrentStatus('Chess Training ready for analysis')
+      setCurrentStatus('Ready to improve your chess!')
     }, 7000) // Increased from 3000 to accommodate slower component loading
     intervals.push(finalTimeout)
 
