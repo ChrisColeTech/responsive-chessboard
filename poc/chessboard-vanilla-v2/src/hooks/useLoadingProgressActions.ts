@@ -1,11 +1,13 @@
 import { useCallback, useState } from 'react'
 import { useChessAudio } from '../services/audioService'
 import { useSplashActions } from './useSplashActions'
+import { useAppStore } from '../stores/appStore'
 
 export function useLoadingProgressActions() {
   const { playMove } = useChessAudio()
   const [animationKey, setAnimationKey] = useState(0)
   const { goToMinimal, goToAnimated, goToBranded } = useSplashActions()
+  const openSplashModal = useAppStore((state) => state.openSplashModal)
 
   const testProgressBar = useCallback(() => {
     playMove(false)
@@ -16,18 +18,10 @@ export function useLoadingProgressActions() {
     playMove(false)
   }, [playMove])
 
-  const toggleFullscreen = useCallback(async () => {
-    try {
-      if (!document.fullscreenElement) {
-        await document.documentElement.requestFullscreen()
-      } else {
-        await document.exitFullscreen()
-      }
-      playMove(false)
-    } catch (error) {
-      console.error('Fullscreen error:', error)
-    }
-  }, [playMove])
+  const toggleFullscreen = useCallback(() => {
+    openSplashModal('loadingprogress')
+    playMove(false)
+  }, [openSplashModal, playMove])
 
   return {
     testProgressBar,

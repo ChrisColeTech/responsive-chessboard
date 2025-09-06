@@ -4,6 +4,7 @@ import { AppLayout } from "./components/layout";
 import { DragProvider, useDrag } from "./providers/DragProvider";
 import { InstructionsProvider } from "./contexts/InstructionsContext";
 import { DraggedPiece } from "./components/DraggedPiece";
+import { SplashModal } from "./components/SplashModal";
 import { useSelectedTab, useAppStore } from "./stores/appStore";
 import { useChessAudio } from "./services/audioService";
 import {
@@ -88,6 +89,8 @@ function App() {
     <InstructionsProvider>
       <DragProvider>
         <AppContent />
+        {/* Global splash modal overlay - outside AppLayout for proper positioning */}
+        <SplashModal />
       </DragProvider>
     </InstructionsProvider>
   );

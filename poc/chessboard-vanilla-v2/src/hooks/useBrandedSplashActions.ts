@@ -1,11 +1,13 @@
 import { useCallback, useState } from 'react'
 import { useChessAudio } from '../services/audioService'
 import { useSplashActions } from './useSplashActions'
+import { useAppStore } from '../stores/appStore'
 
 export function useBrandedSplashActions() {
   const { playMove } = useChessAudio()
   const [animationKey, setAnimationKey] = useState(0)
   const { goToMinimal, goToAnimated, goToProgress } = useSplashActions()
+  const openSplashModal = useAppStore((state) => state.openSplashModal)
 
   const testBrandAnimation = useCallback(() => {
     playMove(false)
@@ -16,18 +18,10 @@ export function useBrandedSplashActions() {
     playMove(false)
   }, [playMove])
 
-  const toggleFullscreen = useCallback(async () => {
-    try {
-      if (!document.fullscreenElement) {
-        await document.documentElement.requestFullscreen()
-      } else {
-        await document.exitFullscreen()
-      }
-      playMove(false)
-    } catch (error) {
-      console.error('Fullscreen error:', error)
-    }
-  }, [playMove])
+  const toggleFullscreen = useCallback(() => {
+    openSplashModal('brandedsplash')
+    playMove(false)
+  }, [openSplashModal, playMove])
 
   return {
     testBrandAnimation,

@@ -33,6 +33,10 @@ interface AppState {
   // UI State
   lastVisited: Date
   
+  // Splash Modal State
+  splashModalOpen: boolean
+  splashModalPage: string | null  // Which splash page to show in modal
+  
   // Game State
   coinBalance: number
 }
@@ -64,6 +68,10 @@ interface AppActions {
   // Visual actions
   setBackgroundEffectVariant: (variant: BackgroundEffectVariant) => void
   
+  // Splash modal actions
+  openSplashModal: (page: string) => void
+  closeSplashModal: () => void
+  
   // Utility actions
   reset: () => void
   
@@ -88,6 +96,8 @@ const initialState: AppState = {
   uiSounds: true,
   backgroundEffectVariant: 'gaming',
   lastVisited: new Date(),
+  splashModalOpen: false,
+  splashModalPage: null,
   coinBalance: 350,
 }
 
@@ -178,6 +188,10 @@ export const useAppStore = create<AppStore>()(
       
       // Visual actions
       setBackgroundEffectVariant: (variant) => set({ backgroundEffectVariant: variant }),
+      
+      // Splash modal actions
+      openSplashModal: (page) => set({ splashModalOpen: true, splashModalPage: page }),
+      closeSplashModal: () => set({ splashModalOpen: false, splashModalPage: null }),
       
       // Utility actions
       reset: () => set(initialState),
