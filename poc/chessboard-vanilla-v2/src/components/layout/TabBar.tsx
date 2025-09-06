@@ -106,8 +106,8 @@ export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: Ta
               // Play click sound
               playUIClick(`Tab: ${tab.label}`);
 
-              // If clicking on UI Tests tab, clear any child page
-              if (tab.id === 'uitests') {
+              // If clicking on UI Tests or Splash tab, clear any child page
+              if (tab.id === 'uitests' || tab.id === 'splash') {
                 setCurrentChildPage(null);
               }
 

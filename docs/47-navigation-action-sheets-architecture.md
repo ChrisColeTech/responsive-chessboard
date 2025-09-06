@@ -61,10 +61,16 @@ User Click → TabBar → onTabChange → setSelectedTab (store) → App re-rend
 
 **Code Path:**
 1. `TabBar.tsx` - User clicks tab button
-2. `onTabChange(tab.id)` - Callback to App.tsx
-3. `setSelectedTab()` - Updates Zustand store
-4. `App.tsx` - Re-renders with new selectedTab
-5. Page routing renders appropriate component
+2. **Child page clearing** - If tab supports child pages (`uitests` or `splash`), clear child page state
+3. `onTabChange(tab.id)` - Callback to App.tsx
+4. `setSelectedTab()` - Updates Zustand store
+5. `App.tsx` - Re-renders with new selectedTab
+6. Page routing renders appropriate component
+
+**Critical Tab Behavior:**
+- Clicking **UI Tests** or **Splash** tabs always returns to main page and clears child navigation
+- This ensures consistent "back to home" behavior for hierarchical navigation
+- Implementation: `if (tab.id === 'uitests' || tab.id === 'splash') { setCurrentChildPage(null) }`
 
 ### Tab State Management
 

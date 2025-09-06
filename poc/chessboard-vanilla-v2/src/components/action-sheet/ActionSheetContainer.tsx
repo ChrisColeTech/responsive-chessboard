@@ -11,6 +11,11 @@ import { useUITestsActions } from '../../hooks/useUITestsActions'
 import { useLayoutActions } from '../../hooks/useLayoutActions'
 import { useDragTestActions } from '../../hooks/useDragTestActions'
 import { useUIAudioTestActions } from '../../hooks/useUIAudioTestActions'
+import { useSplashActions } from '../../hooks/useSplashActions'
+import { useMinimalSplashActions } from '../../hooks/useMinimalSplashActions'
+import { useAnimatedSplashActions } from '../../hooks/useAnimatedSplashActions'
+import { useLoadingProgressActions } from '../../hooks/useLoadingProgressActions'
+import { useBrandedSplashActions } from '../../hooks/useBrandedSplashActions'
 import { useUIClickSound } from '../../hooks/useUIClickSound'
 import { useAppStore } from '../../stores/appStore'
 import type { ActionSheetContainerProps } from '../../types/action-sheet.types'
@@ -22,8 +27,8 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
   const currentChildPage = useAppStore((state) => state.currentChildPage)
   const actionSheetPage = currentChildPage || currentPage
   
-  // Get actions for current page - exclude splash page from having actions
-  const actions = actionSheetPage === 'splash' ? [] : (PAGE_ACTIONS[actionSheetPage] || [])
+  // Get actions for current page
+  const actions = PAGE_ACTIONS[actionSheetPage] || []
   
   // Get page-specific action handlers
   const playActions = usePlayActions()
@@ -33,6 +38,11 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
   const layoutActions = useLayoutActions()
   const dragTestActions = useDragTestActions()
   const uiAudioTestActions = useUIAudioTestActions()
+  const splashActions = useSplashActions()
+  const minimalSplashActions = useMinimalSplashActions()
+  const animatedSplashActions = useAnimatedSplashActions()
+  const loadingProgressActions = useLoadingProgressActions()
+  const brandedSplashActions = useBrandedSplashActions()
   
   // Audio for action clicks
   const { playUIClick } = useUIClickSound()
@@ -89,6 +99,24 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         'test-ui-sound': uiAudioTestActions.testUISound,
         'test-audio-system': uiAudioTestActions.testAudioSystem,
         'reset-audio-settings': uiAudioTestActions.resetAudioSettings
+      },
+      splash: {
+        'go-to-minimal': splashActions.goToMinimal,
+        'go-to-animated': splashActions.goToAnimated,
+        'go-to-progress': splashActions.goToProgress,
+        'go-to-branded': splashActions.goToBranded
+      },
+      minimalsplash: {
+        'test-minimal-load': minimalSplashActions.testMinimalLoad
+      },
+      animatedsplash: {
+        'test-spring-animation': animatedSplashActions.testSpringAnimation
+      },
+      loadingprogress: {
+        'test-progress-bar': loadingProgressActions.testProgressBar
+      },
+      brandedsplash: {
+        'test-brand-animation': brandedSplashActions.testBrandAnimation
       }
     }
     
@@ -113,7 +141,7 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
     // Use HeadlessUI's close callback AND our onClose
     closeCallback()
     onClose()
-  }, [currentPage, playUIClick, playActions, slotsActions, workerActions, uiTestsActions, layoutActions, dragTestActions, uiAudioTestActions, onClose])
+  }, [currentPage, playUIClick, playActions, slotsActions, workerActions, uiTestsActions, layoutActions, dragTestActions, uiAudioTestActions, splashActions, minimalSplashActions, animatedSplashActions, loadingProgressActions, brandedSplashActions, onClose])
 
   const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {

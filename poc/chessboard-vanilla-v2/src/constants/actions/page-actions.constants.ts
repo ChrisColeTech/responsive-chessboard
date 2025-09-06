@@ -135,22 +135,60 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
   layout: [],
   splash: [
     {
-      id: 'skip-animation',
-      label: 'Skip Animation',
-      icon: SkipForward,
-      variant: 'secondary'
+      id: 'go-to-minimal',
+      label: 'Minimal Design',
+      icon: Navigation,
+      variant: 'default'
     },
     {
-      id: 'test-loading',
-      label: 'Test Loading',
+      id: 'go-to-animated',
+      label: 'Animated Examples',
+      icon: SkipForward,
+      variant: 'default'
+    },
+    {
+      id: 'go-to-progress',
+      label: 'Loading Progress',
       icon: Clock,
       variant: 'default'
     },
     {
-      id: 'reset-preferences',
-      label: 'Reset Preferences',
-      icon: RefreshCw,
-      variant: 'destructive'
+      id: 'go-to-branded',
+      label: 'Branded Design',
+      icon: Target,
+      variant: 'default'
+    }
+  ],
+  minimalsplash: [
+    {
+      id: 'test-minimal-load',
+      label: 'Test Load Animation',
+      icon: SkipForward,
+      variant: 'default'
+    }
+  ],
+  animatedsplash: [
+    {
+      id: 'test-spring-animation',
+      label: 'Test Spring Animation',
+      icon: SkipForward,
+      variant: 'default'
+    }
+  ],
+  loadingprogress: [
+    {
+      id: 'test-progress-bar',
+      label: 'Test Progress Bar',
+      icon: Clock,
+      variant: 'default'
+    }
+  ],
+  brandedsplash: [
+    {
+      id: 'test-brand-animation',
+      label: 'Test Brand Animation',
+      icon: Target,
+      variant: 'default'
     }
   ],
   dragtest: [
