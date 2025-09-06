@@ -2,7 +2,7 @@
 import { 
   RotateCcw, Eye, Pause, Undo, Coins, RefreshCw, Volume2, 
   Trash2, TestTube, SkipForward, Navigation, VolumeX,
-  Brain, Clock, CheckCircle, Download, Target, Sword
+  Brain, Clock, CheckCircle, Target, Sword
 } from 'lucide-react'
 import type { ActionSheetAction } from '../../types/action-sheet.types'
 
@@ -96,30 +96,6 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
   ],
   uitests: [
     {
-      id: 'run-ui-tests',
-      label: 'Run UI Tests',
-      icon: TestTube,
-      variant: 'default'
-    },
-    {
-      id: 'clear-ui-results',
-      label: 'Clear Results',
-      icon: Trash2,
-      variant: 'secondary'
-    },
-    {
-      id: 'export-results',
-      label: 'Export Results',
-      icon: Download,
-      variant: 'default'
-    },
-    {
-      id: 'reset-ui-tests',
-      label: 'Reset Tests',
-      icon: RefreshCw,
-      variant: 'destructive'
-    },
-    {
       id: 'go-to-drag-test',
       label: 'Go to Drag Test',
       icon: Navigation,
@@ -130,9 +106,15 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       label: 'Go to Audio Test',
       icon: VolumeX,
       variant: 'secondary'
+    },
+    {
+      id: 'go-to-layout-test',
+      label: 'Go to Layout Test',
+      icon: Eye,
+      variant: 'secondary'
     }
   ],
-  layout: [],
+  layouttest: [],
   splash: [
     {
       id: 'go-to-minimal',

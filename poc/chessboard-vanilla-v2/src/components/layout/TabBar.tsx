@@ -1,4 +1,4 @@
-import { Layout, Settings, Target, Coins, Loader } from "lucide-react";
+import { Settings, Target, Coins, Loader } from "lucide-react";
 import { MenuButton } from "./MenuButton";
 import type { TabId } from "./types";
 import { useUIClickSound } from "../../hooks/useUIClickSound";
@@ -19,12 +19,6 @@ interface Tab {
 }
 
 const tabs: Tab[] = [
-  {
-    id: "layout",
-    label: "Layout",
-    icon: Layout,
-    description: "Background Test",
-  },
   {
     id: "worker",
     label: "Stockfish",

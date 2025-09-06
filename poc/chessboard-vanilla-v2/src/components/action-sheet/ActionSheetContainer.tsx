@@ -76,12 +76,9 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         'clear-test-results': workerActions.clearTestResults
       },
       uitests: {
-        'run-ui-tests': uiTestsActions.runUITests,
-        'clear-ui-results': uiTestsActions.clearUIResults,
-        'export-results': uiTestsActions.exportResults,
-        'reset-ui-tests': uiTestsActions.resetUITests,
         'go-to-drag-test': uiTestsActions.goToDragTest,
-        'go-to-audio-test': uiTestsActions.goToAudioTest
+        'go-to-audio-test': uiTestsActions.goToAudioTest,
+        'go-to-layout-test': uiTestsActions.goToLayoutTest
       },
       layout: {
         'change-background': layoutActions.changeBackground,
@@ -117,7 +114,8 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
       },
       brandedsplash: {
         'test-brand-animation': brandedSplashActions.testBrandAnimation
-      }
+      },
+      layouttest: {}
     }
     
     // Handle global settings action

@@ -3,6 +3,7 @@ import { useAppStore } from "../../stores/appStore";
 import { UITestsMainPage } from "../../components/UITestsMainPage";
 import { DragTestPageWrapper } from "../../components/DragTestPageWrapper";
 import { UIAudioTestPageWrapper } from "../../components/UIAudioTestPageWrapper";
+import { LayoutTestPageWrapper } from "../../components/LayoutTestPageWrapper";
 
 export const UITestPage: React.FC = () => {
   const currentChildPage = useAppStore((state) => state.currentChildPage);
@@ -14,6 +15,8 @@ export const UITestPage: React.FC = () => {
     CurrentPageComponent = DragTestPageWrapper;
   } else if (currentChildPage === "uiaudiotest") {
     CurrentPageComponent = UIAudioTestPageWrapper;
+  } else if (currentChildPage === "layouttest") {
+    CurrentPageComponent = LayoutTestPageWrapper;
   }
 
   return (

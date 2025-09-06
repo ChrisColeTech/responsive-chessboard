@@ -74,7 +74,7 @@ interface AppActions {
 type AppStore = AppState & AppActions
 
 const initialState: AppState = {
-  selectedTab: 'layout',
+  selectedTab: 'worker',
   currentChildPage: null,
   currentTheme: 'dark',
   isDarkMode: true,

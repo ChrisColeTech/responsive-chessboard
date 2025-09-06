@@ -63,6 +63,11 @@ export function useUITestsActions() {
     playMove(false)
   }, [setCurrentChildPage, playMove])
 
+  const goToLayoutTest = useCallback(() => {
+    setCurrentChildPage('layouttest')
+    playMove(false)
+  }, [setCurrentChildPage, playMove])
+
   return {
     runUITests,
     clearUIResults,
@@ -70,6 +75,7 @@ export function useUITestsActions() {
     resetUITests,
     goToDragTest,
     goToAudioTest,
+    goToLayoutTest,
     testResults
   }
 }

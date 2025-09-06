@@ -7,7 +7,6 @@ import { DraggedPiece } from "./components/DraggedPiece";
 import { useSelectedTab, useAppStore } from "./stores/appStore";
 import { useChessAudio } from "./services/audioService";
 import {
-  LayoutTestPage,
   WorkerTestPage,
   UITestPage,
   SlotMachineTestPage,
@@ -75,7 +74,6 @@ function AppContent() {
       coinBalance={coinBalance}
     >
       {/* Page routing */}
-      {selectedTab === "layout" && <LayoutTestPage />}
       {selectedTab === "worker" && <WorkerTestPage />}
       {selectedTab === "uitests" && <UITestPage />}
       {selectedTab === "slots" && <SlotMachineTestPage />}
