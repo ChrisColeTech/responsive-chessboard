@@ -1,8 +1,12 @@
 import React from "react";
 
-export const MinimalSplashPage: React.FC = () => {
+interface MinimalSplashPageProps {
+  variant?: 'in-app' | 'modal';
+}
+
+export const MinimalSplashPage: React.FC<MinimalSplashPageProps> = ({ variant = 'in-app' }) => {
   return (
-    <div className="splash-container splash-fade-in">
+    <div className={`splash-container splash-${variant} splash-fade-in`}>
       {/* Full-screen minimal splash - no centered boxes */}
       <div className="splash-brand-section">
         <div className="splash-logo-area">

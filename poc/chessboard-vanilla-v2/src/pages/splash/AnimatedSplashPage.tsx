@@ -1,8 +1,12 @@
 import React from "react";
 
-export const AnimatedSplashPage: React.FC = () => {
+interface AnimatedSplashPageProps {
+  variant?: 'in-app' | 'modal';
+}
+
+export const AnimatedSplashPage: React.FC<AnimatedSplashPageProps> = ({ variant = 'in-app' }) => {
   return (
-    <div className="splash-container splash-fade-in splash-animated">
+    <div className={`splash-container splash-${variant} splash-fade-in splash-animated`}>
       {/* Background effect */}
       <div className="splash-background-pattern"></div>
       

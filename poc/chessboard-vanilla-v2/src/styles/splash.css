@@ -10,7 +10,7 @@
    - Mobile-first responsive design
    ========================================================================== */
 
-/* Base splash container - Full viewport takeover */
+/* Base splash container - Responsive for context */
 .splash-container {
   min-height: 100vh;
   width: 100vw;
@@ -21,6 +21,25 @@
   overflow: hidden;
   padding: 2rem;
   box-sizing: border-box;
+}
+
+/* In-app variant - fits within app layout */
+.splash-container.splash-in-app {
+  min-height: calc(100vh - 8rem); /* Account for app header/footer */
+  width: 100%;
+  max-width: none;
+  padding: 1.5rem;
+}
+
+/* Modal variant - true full-screen takeover */
+.splash-container.splash-modal {
+  min-height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  padding: 2rem;
 }
 
 /* Layout sections for full-screen splash architecture */

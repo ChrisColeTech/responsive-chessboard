@@ -1,8 +1,12 @@
 import React from "react";
 
-export const LoadingProgressPage: React.FC = () => {
+interface LoadingProgressPageProps {
+  variant?: 'in-app' | 'modal';
+}
+
+export const LoadingProgressPage: React.FC<LoadingProgressPageProps> = ({ variant = 'in-app' }) => {
   return (
-    <div className="splash-container splash-fade-in splash-progress">
+    <div className={`splash-container splash-${variant} splash-fade-in splash-progress`}>
       {/* Header area */}
       <div className="splash-brand-section">
         <div className="splash-logo-area">

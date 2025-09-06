@@ -1,8 +1,12 @@
 import React from "react";
 
-export const BrandedSplashPage: React.FC = () => {
+interface BrandedSplashPageProps {
+  variant?: 'in-app' | 'modal';
+}
+
+export const BrandedSplashPage: React.FC<BrandedSplashPageProps> = ({ variant = 'in-app' }) => {
   return (
-    <div className="splash-container splash-fade-in splash-branded">
+    <div className={`splash-container splash-${variant} splash-fade-in splash-branded`}>
       {/* Background decorative elements */}
       <div className="splash-brand-decoration splash-top-right">♔</div>
       <div className="splash-brand-decoration splash-bottom-left">♕</div>
