@@ -3,7 +3,7 @@
  * Extracted from SettingsPanel for Single Responsibility Principle
  */
 
-import { ChevronDown, Settings } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useTheme } from "../../stores/appStore";
 import { useUIClickSound } from "../../hooks/useUIClickSound";
 import { useThemePagination } from "../../hooks/useThemePagination";
@@ -23,7 +23,7 @@ export function ThemeSelector() {
   return (
     <div>
       <h3 className="text-base font-semibold text-foreground mb-3 flex items-center gap-2">
-        <Settings className="w-4 h-4" />
+        <SETTINGS_SECTIONS.THEME.icon className="w-4 h-4" />
         {SETTINGS_SECTIONS.THEME.title}
       </h3>
       

@@ -46,7 +46,7 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
           {/* Light/Dark Mode Toggle */}
           <div>
             <h3 className="text-base font-semibold text-foreground mb-3 flex items-center gap-2">
-              <Settings className="w-4 h-4" />
+              <SETTINGS_SECTIONS.BRIGHTNESS.icon className="w-4 h-4" />
               {SETTINGS_SECTIONS.BRIGHTNESS.title}
             </h3>
             <div className="settings-toggle-container">

@@ -3,7 +3,7 @@
  * Extracted from SettingsPanel for Single Responsibility Principle
  */
 
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Palette, Lightbulb } from "lucide-react";
 
 /**
  * Chess-themed descriptions for background effects
@@ -30,17 +30,20 @@ export const THEME_PAGINATION_CONFIG = {
 export const SETTINGS_SECTIONS = {
   BACKGROUND_EFFECTS: {
     title: "Background Effects",
+    icon: undefined, // Icon handled by BackgroundEffectsSelector component
     fallbackDescription: "Activate background effects to enhance your chess experience with immersive visual atmospheres."
   },
   BRIGHTNESS: {
     title: "Brightness",
+    icon: Lightbulb,
     modes: {
       light: { icon: Sun, label: "Light" },
       dark: { icon: Moon, label: "Dark" }
     }
   },
   THEME: {
-    title: "Theme"
+    title: "Theme",
+    icon: Palette
   }
 } as const;
 
