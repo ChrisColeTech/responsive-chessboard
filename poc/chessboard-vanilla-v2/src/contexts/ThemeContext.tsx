@@ -25,20 +25,27 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [currentTheme, setCurrentTheme] = useState<ThemeId>('dark')
-  const [isDarkMode, setIsDarkMode] = useState(true)
-  const [selectedBaseTheme, setSelectedBaseTheme] = useState<BaseTheme>('default')
+  const [currentTheme, setCurrentTheme] = useState<ThemeId>('theme-onyx')
+  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [selectedBaseTheme, setSelectedBaseTheme] = useState<BaseTheme>('onyx')
 
   // Load theme from localStorage on mount
   useEffect(() => {
-    const savedTheme = localStorage.getItem('chess-app-theme') as ThemeId || 'dark'
+    const savedTheme = localStorage.getItem('chess-app-theme') as ThemeId || 'theme-onyx'
     setCurrentTheme(savedTheme)
     
     // Determine base theme and mode from saved theme
     if (savedTheme === 'light' || savedTheme === 'dark') {
       setSelectedBaseTheme('default')
       setIsDarkMode(savedTheme === 'dark')
+    } else if (savedTheme.startsWith('theme-')) {
+      // New theme system - extract base name
+      const withoutPrefix = savedTheme.replace('theme-', '')
+      const baseThemeId = withoutPrefix.replace('-light', '') as BaseTheme
+      setSelectedBaseTheme(baseThemeId)
+      setIsDarkMode(!savedTheme.endsWith('-light'))
     } else {
+      // Legacy theme handling
       const baseThemeId = savedTheme.replace('-light', '') as BaseTheme
       setSelectedBaseTheme(baseThemeId)
       setIsDarkMode(!savedTheme.endsWith('-light'))
@@ -49,24 +56,59 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   useEffect(() => {
     const html = document.documentElement
     
+    console.log('🎨 [THEME] ===========================================')
     console.log('🎨 [THEME] Applying theme:', currentTheme)
+    console.log('🎨 [THEME] isDarkMode:', isDarkMode)
+    console.log('🎨 [THEME] selectedBaseTheme:', selectedBaseTheme)
+    console.log('🎨 [THEME] Classes before removal:', Array.from(html.classList).join(', '))
     
-    // Remove all theme classes
-    const themeClasses = ['dark', 'theme-cyber-neon', 'theme-cyber-neon-light', 'theme-dragon-gold', 'theme-dragon-gold-light', 'theme-shadow-knight', 'theme-shadow-knight-light', 'theme-forest-mystique', 'theme-forest-mystique-light', 'theme-royal-purple', 'theme-royal-purple-light']
-    themeClasses.forEach(cls => html.classList.remove(cls))
+    // Remove all theme classes (old and new)
+    const themeClasses = [
+      'dark', 
+      // Old gaming themes
+      'theme-cyber-neon', 'theme-cyber-neon-light', 'theme-dragon-gold', 'theme-dragon-gold-light', 
+      'theme-shadow-knight', 'theme-shadow-knight-light', 'theme-forest-mystique', 'theme-forest-mystique-light', 
+      'theme-royal-purple', 'theme-royal-purple-light',
+      // Professional themes  
+      'theme-onyx', 'theme-sage', 'theme-amber', 'theme-crimson', 'theme-gold', 'theme-copper', 
+      'theme-violet', 'theme-matrix', 'theme-neon', 'theme-scarlet', 'theme-azure', 'theme-bronze', 'theme-teal'
+    ]
+    
+    console.log('🎨 [THEME] Removing classes:', themeClasses.join(', '))
+    themeClasses.forEach(cls => {
+      if (html.classList.contains(cls)) {
+        console.log('🎨 [THEME] Removing existing class:', cls)
+        html.classList.remove(cls)
+      }
+    })
+    
+    console.log('🎨 [THEME] Classes after removal:', Array.from(html.classList).join(', '))
     
     // Add current theme class
+    let classesToAdd = []
     if (currentTheme === 'dark') {
-      html.classList.add('dark')
+      classesToAdd.push('dark')
     } else if (currentTheme !== 'light') {
-      html.classList.add(`theme-${currentTheme}`)
+      const themeClass = currentTheme.startsWith('theme-') ? currentTheme : `theme-${currentTheme}`
+      classesToAdd.push(themeClass)
     }
     
-    console.log('🎨 [THEME] Document classes:', Array.from(html.classList).join(', '))
+    // For professional themes, also add dark class if needed
+    if (currentTheme.startsWith('theme-') && isDarkMode) {
+      if (!classesToAdd.includes('dark')) {
+        classesToAdd.push('dark')
+      }
+    }
+    
+    console.log('🎨 [THEME] Adding classes:', classesToAdd.join(', '))
+    classesToAdd.forEach(cls => html.classList.add(cls))
+    
+    console.log('🎨 [THEME] Final document classes:', Array.from(html.classList).join(', '))
+    console.log('🎨 [THEME] ===========================================')
     
     // Save to localStorage
     localStorage.setItem('chess-app-theme', currentTheme)
-  }, [currentTheme])
+  }, [currentTheme, isDarkMode, selectedBaseTheme])
 
   const setTheme = (themeId: ThemeId) => {
     setCurrentTheme(themeId)
@@ -90,7 +132,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     if (baseTheme === 'default') {
       actualThemeId = isDarkMode ? 'dark' : 'light'
     } else {
-      actualThemeId = isDarkMode ? baseTheme : `${baseTheme}-light` as ThemeId
+      actualThemeId = isDarkMode ? `theme-${baseTheme}` as ThemeId : `theme-${baseTheme}-light` as ThemeId
     }
     
     setCurrentTheme(actualThemeId)
@@ -105,7 +147,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     if (selectedBaseTheme === 'default') {
       actualThemeId = newIsDarkMode ? 'dark' : 'light'
     } else {
-      actualThemeId = newIsDarkMode ? selectedBaseTheme : `${selectedBaseTheme}-light` as ThemeId
+      actualThemeId = newIsDarkMode ? `theme-${selectedBaseTheme}` as ThemeId : `theme-${selectedBaseTheme}-light` as ThemeId
     }
     
     setCurrentTheme(actualThemeId)

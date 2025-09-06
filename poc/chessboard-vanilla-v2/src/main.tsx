@@ -3,6 +3,13 @@
 // StrictMode causes double-mounting in development, destroying workers before init
 import { createRoot } from 'react-dom/client'
 import './index.css'
+// Import theme CSS files directly
+import './styles/organized_themes/themes-base.css'
+import './styles/organized_themes/themes-professional.css'
+import './styles/organized_themes/themes-gaming.css'
+import './styles/organized_themes/themes-effects.css'
+// Import background effects registry to initialize effects
+import './services/backgroundEffectsRegistry'
 import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(

@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist, subscribeWithSelector } from 'zustand/middleware'
 import type { TabId } from '../components/layout/types'
 import type { ThemeId, BaseTheme } from '../components/ThemeSwitcher'
+import type { BackgroundEffectVariant } from '../types/backgroundEffects'
 
 interface AppState {
   // Navigation
@@ -25,6 +26,9 @@ interface AppState {
   captureSound: boolean
   checkSound: boolean
   uiSounds: boolean
+  
+  // Visual settings
+  backgroundEffectVariant: BackgroundEffectVariant
   
   // UI State
   lastVisited: Date
@@ -57,6 +61,9 @@ interface AppActions {
   setUiSounds: (enabled: boolean) => void
   toggleAudio: () => void
   
+  // Visual actions
+  setBackgroundEffectVariant: (variant: BackgroundEffectVariant) => void
+  
   // Utility actions
   reset: () => void
   
@@ -79,6 +86,7 @@ const initialState: AppState = {
   captureSound: true,
   checkSound: true,
   uiSounds: true,
+  backgroundEffectVariant: 'gaming',
   lastVisited: new Date(),
   coinBalance: 350,
 }
@@ -124,7 +132,7 @@ export const useAppStore = create<AppStore>()(
         if (baseTheme === 'default') {
           actualTheme = isDarkMode ? 'dark' : 'light'
         } else {
-          actualTheme = isDarkMode ? baseTheme : `${baseTheme}-light` as ThemeId
+          actualTheme = isDarkMode ? `theme-${baseTheme}` as ThemeId : `theme-${baseTheme}-light` as ThemeId
         }
         
         set({ 
@@ -143,7 +151,7 @@ export const useAppStore = create<AppStore>()(
         if (selectedBaseTheme === 'default') {
           actualTheme = newIsDarkMode ? 'dark' : 'light'
         } else {
-          actualTheme = newIsDarkMode ? selectedBaseTheme : `${selectedBaseTheme}-light` as ThemeId
+          actualTheme = newIsDarkMode ? `theme-${selectedBaseTheme}` as ThemeId : `theme-${selectedBaseTheme}-light` as ThemeId
         }
         
         set({ 
@@ -168,6 +176,9 @@ export const useAppStore = create<AppStore>()(
       setUiSounds: (enabled) => set({ uiSounds: enabled }),
       toggleAudio: () => set((state) => ({ audioEnabled: !state.audioEnabled })),
       
+      // Visual actions
+      setBackgroundEffectVariant: (variant) => set({ backgroundEffectVariant: variant }),
+      
       // Utility actions
       reset: () => set(initialState),
       
@@ -188,6 +199,7 @@ export const useAppStore = create<AppStore>()(
         captureSound: state.captureSound,
         checkSound: state.checkSound,
         uiSounds: state.uiSounds,
+        backgroundEffectVariant: state.backgroundEffectVariant,
         lastVisited: new Date(),
         coinBalance: state.coinBalance,
       }),
@@ -205,28 +217,56 @@ export const useAppStore = create<AppStore>()(
 function applyThemeToDocument(theme: ThemeId) {
   const html = document.documentElement
   
-  // Remove all theme classes
+  // Remove all theme classes (old and new)
   const themeClasses = [
     'dark', 
-    'theme-cyber-neon', 
-    'theme-cyber-neon-light', 
-    'theme-dragon-gold', 
-    'theme-dragon-gold-light', 
-    'theme-shadow-knight', 
-    'theme-shadow-knight-light', 
-    'theme-forest-mystique', 
-    'theme-forest-mystique-light', 
-    'theme-royal-purple', 
-    'theme-royal-purple-light'
+    // Old gaming themes
+    'theme-cyber-neon', 'theme-cyber-neon-light', 'theme-dragon-gold', 'theme-dragon-gold-light', 
+    'theme-shadow-knight', 'theme-shadow-knight-light', 'theme-forest-mystique', 'theme-forest-mystique-light', 
+    'theme-royal-purple', 'theme-royal-purple-light',
+    // Professional themes  
+    'theme-onyx', 'theme-sage', 'theme-amber', 'theme-crimson', 'theme-gold', 'theme-copper', 
+    'theme-violet', 'theme-matrix', 'theme-neon', 'theme-scarlet', 'theme-azure', 'theme-bronze', 'theme-teal',
+    // Professional light themes  
+    'theme-onyx-light', 'theme-sage-light', 'theme-amber-light', 'theme-crimson-light', 'theme-gold-light', 'theme-copper-light', 
+    'theme-violet-light', 'theme-matrix-light', 'theme-neon-light', 'theme-scarlet-light', 'theme-azure-light', 'theme-bronze-light', 'theme-teal-light'
   ]
-  themeClasses.forEach(cls => html.classList.remove(cls))
+  
+  // Also remove any double-prefixed classes from previous bugs
+  const currentClasses = Array.from(html.classList)
+  currentClasses.forEach(cls => {
+    if (cls.startsWith('theme-theme-')) {
+      themeClasses.push(cls)
+    }
+  })
+  
+  themeClasses.forEach(cls => {
+    if (html.classList.contains(cls)) {
+      html.classList.remove(cls)
+    }
+  })
   
   // Add current theme class
+  let classesToAdd = []
   if (theme === 'dark') {
-    html.classList.add('dark')
+    classesToAdd.push('dark')
   } else if (theme !== 'light') {
-    html.classList.add(`theme-${theme}`)
+    // Handle professional themes properly
+    if (theme.endsWith('-light')) {
+      // For light variants like 'theme-onyx-light', apply just 'theme-onyx'
+      const baseTheme = theme.replace('-light', '')
+      classesToAdd.push(baseTheme)
+    } else if (theme.startsWith('theme-')) {
+      // For dark variants like 'theme-onyx', apply 'theme-onyx' + 'dark'
+      classesToAdd.push(theme)
+      classesToAdd.push('dark')
+    } else {
+      // Fallback for any other themes
+      classesToAdd.push(theme)
+    }
   }
+  
+  classesToAdd.forEach(cls => html.classList.add(cls))
 }
 
 // Convenience selectors for common state
@@ -295,5 +335,29 @@ export const useAudio = () => {
     setCheckSound,
     setUiSounds,
     toggleAudio,
+  }
+}
+
+export const useVisual = () => {
+  const backgroundEffectVariant = useAppStore((state) => state.backgroundEffectVariant)
+  const setBackgroundEffectVariant = useAppStore((state) => state.setBackgroundEffectVariant)
+  
+  // Backward compatibility - convert variant to boolean
+  const backgroundEffectsEnabled = backgroundEffectVariant !== 'off'
+  const setBackgroundEffectsEnabled = (enabled: boolean) => {
+    setBackgroundEffectVariant(enabled ? 'gaming' : 'off')
+  }
+  const toggleBackgroundEffects = () => {
+    setBackgroundEffectVariant(backgroundEffectVariant === 'off' ? 'gaming' : 'off')
+  }
+
+  return {
+    // New interface
+    backgroundEffectVariant,
+    setBackgroundEffectVariant,
+    // Backward compatibility
+    backgroundEffectsEnabled,
+    setBackgroundEffectsEnabled,
+    toggleBackgroundEffects,
   }
 }
