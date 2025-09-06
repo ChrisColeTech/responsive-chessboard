@@ -6,51 +6,28 @@ interface LoadingProgressPageProps {
 
 export const LoadingProgressPage: React.FC<LoadingProgressPageProps> = ({ variant = 'in-app' }) => {
   return (
-    <div className={`splash-container splash-${variant} splash-fade-in splash-progress`}>
-      {/* Header area */}
+    <div className={`splash-container splash-${variant} splash-fade-in splash-minimal-1c`}>
+      {/* VARIANT 1C: Subtle progress animation focus */}
       <div className="splash-brand-section">
         <div className="splash-logo-area">
-          <h1 className="splash-title splash-engine-title">⚡ Chess Engine</h1>
-          <p className="splash-subtitle">Loading Progress Dashboard</p>
+          {/* Minimal king with subtle movement */}
+          <div className="splash-king-progress">
+            <span className="splash-chess-king-1c">♔</span>
+          </div>
+          
+          <h1 className="splash-title splash-progress-title-1c">Chess Master</h1>
+          <p className="splash-subtitle splash-progress-subtitle-1c">Professional Training</p>
         </div>
       </div>
       
-      {/* Progress dashboard area */}
-      <div className="splash-dashboard-section">
-        <div className="splash-progress-item">
-          <div className="splash-progress-label">
-            <span>Opening Database</span>
-            <span>87%</span>
-          </div>
-          <div className="splash-progress-bar splash-thick">
-            <div className="splash-progress-fill" style={{ width: '87%' }}></div>
+      {/* Animated progress with subtle effects */}
+      <div className="splash-progress-section">
+        <div className="splash-progress-bar splash-animated-1c">
+          <div className="splash-progress-fill splash-smooth-animation-1c" style={{ width: '82%' }}>
+            <div className="splash-progress-shimmer"></div>
           </div>
         </div>
-        
-        <div className="splash-progress-item">
-          <div className="splash-progress-label">
-            <span>Analysis Engine</span>
-            <span>94%</span>
-          </div>
-          <div className="splash-progress-bar splash-thick">
-            <div className="splash-progress-fill splash-pulse" style={{ width: '94%' }}></div>
-          </div>
-        </div>
-        
-        <div className="splash-progress-item">
-          <div className="splash-progress-label">
-            <span>Tablebase Files</span>
-            <span>73%</span>
-          </div>
-          <div className="splash-progress-bar splash-thick">
-            <div className="splash-progress-fill" style={{ width: '73%' }}></div>
-          </div>
-        </div>
-      </div>
-      
-      {/* Status area */}
-      <div className="splash-status-section">
-        <p className="splash-status-text">Initializing chess engine components...</p>
+        <p className="splash-status-text splash-progress-status-1c">Loading chess mastery...</p>
       </div>
     </div>
   );
