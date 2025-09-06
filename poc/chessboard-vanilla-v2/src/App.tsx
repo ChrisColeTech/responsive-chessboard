@@ -1,16 +1,23 @@
-import { useEffect } from 'react'
-import { AppLayout } from './components/layout'
-import { UITestPage, LayoutTestPage, WorkerTestPage, SlotMachineTestPage, PlayPage } from './pages'
-import { DragProvider, useDrag } from './providers/DragProvider'
-import { InstructionsProvider } from './contexts/InstructionsContext'
-import { DraggedPiece } from './components/DraggedPiece'
-import { useSelectedTab, useAppStore } from './stores/appStore'
-import { useChessAudio } from './services/audioService'
-import SplashPage from './pages/SplashPage'
+import { useEffect } from "react";
+import { AppLayout } from "./components/layout";
+
+import { DragProvider, useDrag } from "./providers/DragProvider";
+import { InstructionsProvider } from "./contexts/InstructionsContext";
+import { DraggedPiece } from "./components/DraggedPiece";
+import { useSelectedTab, useAppStore } from "./stores/appStore";
+import { useChessAudio } from "./services/audioService";
+import {
+  LayoutTestPage,
+  WorkerTestPage,
+  UITestPage,
+  SlotMachineTestPage,
+  PlayPage,
+  SplashPage,
+} from "./pages";
 
 /*
  * To add a new route/page:
- * 
+ *
  * 1. Create your page component in ./pages/YourPage.tsx
  * 2. Export it from ./pages/index.ts
  * 3. Add the new tab ID to TabId type in ./components/layout/types.ts
@@ -21,54 +28,60 @@ import SplashPage from './pages/SplashPage'
  */
 
 function AppContent() {
-  const selectedTab = useSelectedTab()
-  const setSelectedTab = useAppStore((state) => state.setSelectedTab)
-  const coinBalance = useAppStore((state) => state.coinBalance)
-  const { draggedPiece, cursorPosition, draggedPieceSize } = useDrag()
-  const { preloadSounds, playGameStart } = useChessAudio()
-  
+  const selectedTab = useSelectedTab();
+  const setSelectedTab = useAppStore((state) => state.setSelectedTab);
+  const coinBalance = useAppStore((state) => state.coinBalance);
+  const { draggedPiece, cursorPosition, draggedPieceSize } = useDrag();
+  const { preloadSounds, playGameStart } = useChessAudio();
+
   // Use use-sound library for simple, reliable UI click sounds
 
   // Initialize audio system on first user interaction (application-wide)
   useEffect(() => {
     const handleFirstInteraction = () => {
-      console.log('🎵 [APP] First user interaction - initializing audio system');
-      console.log('🎵 [APP] About to preload sounds...');
+      console.log(
+        "🎵 [APP] First user interaction - initializing audio system"
+      );
+      console.log("🎵 [APP] About to preload sounds...");
       preloadSounds();
-      console.log('🎵 [APP] About to play welcome sound...');
+      console.log("🎵 [APP] About to play welcome sound...");
       playGameStart(); // Welcome sound
-      console.log('🎵 [APP] Welcome sound playGameStart() called');
-      
+      console.log("🎵 [APP] Welcome sound playGameStart() called");
+
       // Remove listeners after first interaction
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('keydown', handleFirstInteraction);
-      console.log('🎵 [APP] Event listeners removed - welcome sound setup complete');
+      document.removeEventListener("click", handleFirstInteraction);
+      document.removeEventListener("keydown", handleFirstInteraction);
+      console.log(
+        "🎵 [APP] Event listeners removed - welcome sound setup complete"
+      );
     };
 
     // Listen for first user interaction to enable audio
-    document.addEventListener('click', handleFirstInteraction, { once: true });
-    document.addEventListener('keydown', handleFirstInteraction, { once: true });
+    document.addEventListener("click", handleFirstInteraction, { once: true });
+    document.addEventListener("keydown", handleFirstInteraction, {
+      once: true,
+    });
 
     return () => {
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('keydown', handleFirstInteraction);
+      document.removeEventListener("click", handleFirstInteraction);
+      document.removeEventListener("keydown", handleFirstInteraction);
     };
-  }, []) // Empty dependency array - run only on mount
+  }, []); // Empty dependency array - run only on mount
 
   return (
-    <AppLayout 
-      currentTab={selectedTab} 
+    <AppLayout
+      currentTab={selectedTab}
       onTabChange={setSelectedTab}
       coinBalance={coinBalance}
     >
       {/* Page routing */}
-      {selectedTab === 'layout' && <LayoutTestPage />}
-      {selectedTab === 'worker' && <WorkerTestPage />}
-      {selectedTab === 'uitests' && <UITestPage />}
-      {selectedTab === 'slots' && <SlotMachineTestPage />}
-      {selectedTab === 'play' && <PlayPage />}
-      {selectedTab === 'splash' && <SplashPage />}
-      
+      {selectedTab === "layout" && <LayoutTestPage />}
+      {selectedTab === "worker" && <WorkerTestPage />}
+      {selectedTab === "uitests" && <UITestPage />}
+      {selectedTab === "slots" && <SlotMachineTestPage />}
+      {selectedTab === "play" && <PlayPage />}
+      {selectedTab === "splash" && <SplashPage />}
+
       {/* Global drag overlay */}
       {draggedPiece && (
         <DraggedPiece
@@ -78,7 +91,7 @@ function AppContent() {
         />
       )}
     </AppLayout>
-  )
+  );
 }
 
 function App() {
@@ -88,7 +101,7 @@ function App() {
         <AppContent />
       </DragProvider>
     </InstructionsProvider>
-  )
+  );
 }
 
-export default App
+export default App;

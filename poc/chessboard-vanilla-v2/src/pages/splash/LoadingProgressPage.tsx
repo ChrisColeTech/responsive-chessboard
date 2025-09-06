@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react";
 
-const LoadingProgressPage: React.FC = () => {
+export const LoadingProgressPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
       <div className="text-center card-gaming p-12">
@@ -13,7 +13,5 @@ const LoadingProgressPage: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
-
-export default LoadingProgressPage
+  );
+};

@@ -1,22 +1,22 @@
-import React from 'react';
-import { useAppStore } from '../stores/appStore';
-import { MinimalSplashPageWrapper } from '../components/MinimalSplashPageWrapper';
-import { AnimatedSplashPageWrapper } from '../components/AnimatedSplashPageWrapper';
-import { LoadingProgressPageWrapper } from '../components/LoadingProgressPageWrapper';
-import { BrandedSplashPageWrapper } from '../components/BrandedSplashPageWrapper';
+import React from "react";
+import { useAppStore } from "../../stores/appStore";
+import { MinimalSplashPageWrapper } from "../../components/MinimalSplashPageWrapper";
+import { AnimatedSplashPageWrapper } from "../../components/AnimatedSplashPageWrapper";
+import { LoadingProgressPageWrapper } from "../../components/LoadingProgressPageWrapper";
+import { BrandedSplashPageWrapper } from "../../components/BrandedSplashPageWrapper";
 
-const SplashPage: React.FC = () => {
+export const SplashPage: React.FC = () => {
   const currentChildPage = useAppStore((state) => state.currentChildPage);
 
   let CurrentPageComponent = SplashMainPage;
-  
-  if (currentChildPage === 'minimalsplash') {
+
+  if (currentChildPage === "minimalsplash") {
     CurrentPageComponent = MinimalSplashPageWrapper;
-  } else if (currentChildPage === 'animatedsplash') {
+  } else if (currentChildPage === "animatedsplash") {
     CurrentPageComponent = AnimatedSplashPageWrapper;
-  } else if (currentChildPage === 'loadingprogress') {
+  } else if (currentChildPage === "loadingprogress") {
     CurrentPageComponent = LoadingProgressPageWrapper;
-  } else if (currentChildPage === 'brandedsplash') {
+  } else if (currentChildPage === "brandedsplash") {
     CurrentPageComponent = BrandedSplashPageWrapper;
   }
 
@@ -42,5 +42,3 @@ const SplashMainPage: React.FC = () => {
     </div>
   );
 };
-
-export default SplashPage;

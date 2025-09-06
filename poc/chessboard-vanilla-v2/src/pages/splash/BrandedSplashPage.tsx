@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react";
 
-const BrandedSplashPage: React.FC = () => {
+export const BrandedSplashPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
       <div className="text-center card-gaming p-12">
@@ -13,7 +13,5 @@ const BrandedSplashPage: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
-
-export default BrandedSplashPage
+  );
+};

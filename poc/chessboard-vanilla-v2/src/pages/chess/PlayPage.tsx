@@ -1,9 +1,9 @@
 // /src/pages/PlayPage.tsx - SIMPLE PLACEHOLDER FOR PHASE 3
-import React from 'react';
-import { usePageInstructions } from '../hooks/usePageInstructions';
+import React from "react";
+import { usePageInstructions } from "../../hooks/usePageInstructions";
 
 export const PlayPage: React.FC = () => {
-  usePageInstructions('play');
+  usePageInstructions("play");
 
   return (
     <div className="flex items-center justify-center min-h-[400px]">

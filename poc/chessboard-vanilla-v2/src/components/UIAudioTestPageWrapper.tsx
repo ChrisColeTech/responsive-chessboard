@@ -1,11 +1,11 @@
-import React from 'react'
-import { usePageInstructions } from '../hooks/usePageInstructions'
-import { usePageActions } from '../hooks/usePageActions'
-import { UIAudioTestPage } from '../pages/UIAudioTestPage'
+import React from "react";
+import { usePageInstructions } from "../hooks/usePageInstructions";
+import { usePageActions } from "../hooks/usePageActions";
+import { UIAudioTestPage } from "../pages/uitests/UIAudioTestPage";
 
 export const UIAudioTestPageWrapper: React.FC = () => {
-  usePageInstructions('uiaudiotest')
-  usePageActions('uiaudiotest')
-  
-  return <UIAudioTestPage />
-}
+  usePageInstructions("uiaudiotest");
+  usePageActions("uiaudiotest");
+
+  return <UIAudioTestPage />;
+};

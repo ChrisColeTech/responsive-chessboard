@@ -1,5 +1,12 @@
-export { UITestPage } from './UITestPage'
-export { LayoutTestPage } from './LayoutTestPage'
-export { WorkerTestPage } from './WorkerTestPage'
-export { SlotMachineTestPage } from './SlotMachineTestPage'
-export { PlayPage } from './PlayPage'
+export { UITestPage } from "./uitests/UITestPage";
+export { DragTestPage } from "./uitests/DragTestPage";
+export { UIAudioTestPage } from "./uitests/UIAudioTestPage";
+export { LayoutTestPage } from "./uitests/LayoutTestPage";
+export { WorkerTestPage } from "./chess/WorkerTestPage";
+export { SlotMachineTestPage } from "./casino/SlotMachineTestPage";
+export { PlayPage } from "./chess/PlayPage";
+export { SplashPage } from "./splash/SplashPage";
+export { AnimatedSplashPage } from "./splash/AnimatedSplashPage";
+export { BrandedSplashPage } from "./splash/BrandedSplashPage";
+export { LoadingProgressPage } from "./splash/LoadingProgressPage";
+export { MinimalSplashPage } from "./splash/MinimalSplashPage";
