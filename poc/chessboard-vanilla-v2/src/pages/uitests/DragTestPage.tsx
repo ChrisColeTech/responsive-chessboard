@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TestBoard } from "../../components/TestBoard";
 import { CapturedPieces } from "../../components/CapturedPieces";
 import { usePageInstructions } from "../../hooks/usePageInstructions";
+import { useDragTestActions } from "../../hooks/useDragTestActions";
 import type { ChessPosition, ChessPiece } from "../../types";
 
 export const DragTestPage: React.FC = () => {
@@ -13,7 +14,22 @@ export const DragTestPage: React.FC = () => {
   const [moveHandler, setMoveHandler] = useState<
     ((from: ChessPosition, to: ChessPosition) => Promise<boolean>) | null
   >(null);
+  const [piecesPosition, setPiecesPosition] = useState<'top-bottom' | 'left-right'>('top-bottom');
   usePageInstructions("uitests.drag-test");
+
+  // Expose toggle function globally for actions to use
+  React.useEffect(() => {
+    (window as any).__togglePiecesPosition = () => {
+      setPiecesPosition(prev => {
+        const newPosition = prev === 'top-bottom' ? 'left-right' : 'top-bottom'
+        console.log(`🔄 [DRAG TEST PAGE] Toggling pieces position: ${prev} → ${newPosition}`)
+        return newPosition
+      })
+    }
+    return () => {
+      delete (window as any).__togglePiecesPosition
+    }
+  }, [])
 
   const handleSquareClick = (position: ChessPosition) => {
     console.log(`🎯 [DRAG TEST PAGE] Square clicked: ${position}`);
@@ -46,7 +62,7 @@ export const DragTestPage: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-full pb-12">
+    <div className="relative min-h-full">
       {/* Enhanced gaming background effects */}
       <div className="bg-overlay">
         {/* Floating Particles */}
@@ -60,64 +76,135 @@ export const DragTestPage: React.FC = () => {
       </div>
 
       <section className="relative z-10 space-y-8">
-        {/* White Captured Pieces - Above Board */}
-        <CapturedPieces
-          pieces={capturedPieces.filter((p) => p.color === "white")}
-          className="mb-4"
-        />
-
-        {/* Resizable container for testing - 100% width by default */}
-        <div
-          className="test-container"
-          style={{
-            resize: "both",
-            overflow: "hidden",
-            minWidth: "200px",
-            minHeight: "200px",
-            width: "100%", // Start at 100% width
-            height: "clamp(300px, 50vh, 600px)", // Reduced default height for better mobile experience
-            display: "flex",
-            flexDirection: "column",
-            containerType: "size", // Modern CSS container queries
-          }}
-        >
-          {/* TestBoard with clean container query approach */}
-          <div
-            style={{
+        {/* Chess Board Layout Wrapper with proper spacing */}
+        <div>
+          
+          {/* Top-Bottom Mode: Traditional layout */}
+          {piecesPosition === 'top-bottom' && (
+            <div className="test-container" style={{
+              resize: "both",
+              overflow: "hidden", 
+              minWidth: "200px",
+              minHeight: "200px",
               width: "100%",
-              flex: "1",
+              height: "clamp(400px, 60vh, 700px)", // Slightly taller to accommodate pieces
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              minHeight: "0",
-            }}
-          >
-            <div
-              style={{
-                width: "min(100cqw, 100cqh)", // Use container query units
-                height: "min(100cqw, 100cqh)", // Same size for square
-                aspectRatio: "1", // Force square
-              }}
-            >
-              <TestBoard
-                onSquareClick={handleSquareClick}
-                selectedSquare={selectedSquare}
-                validDropTargets={validDropTargets}
-                onCapturedPiecesChange={setCapturedPieces}
-                onMoveHandlerReady={(handler) => {
-                  console.log("🎯 [DRAG TEST PAGE] Move handler ready");
-                  setMoveHandler(() => handler);
-                }}
-              />
-            </div>
-          </div>
-        </div>
+              flexDirection: "column",
+              containerType: "size",
+              gap: "1rem"
+            }}>
+              {/* White Captured Pieces - Above board */}
+              <div className="flex-shrink-0">
+                <CapturedPieces
+                  pieces={capturedPieces.filter((p) => p.color === "white")}
+                  position="normal"
+                />
+              </div>
 
-        {/* Black Captured Pieces - Below Board */}
-        <CapturedPieces
-          pieces={capturedPieces.filter((p) => p.color === "black")}
-          className="mt-4"
-        />
+              {/* Chess Board - Centered and square */}
+              <div style={{
+                flex: "1",
+                display: "flex", 
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: "0"
+              }}>
+                <div style={{
+                  width: "min(100cqw, calc(100cqh - 200px))", // Account for captured pieces height
+                  height: "min(100cqw, calc(100cqh - 200px))",
+                  aspectRatio: "1",
+                }}>
+                  <TestBoard
+                    onSquareClick={handleSquareClick}
+                    selectedSquare={selectedSquare}
+                    validDropTargets={validDropTargets}
+                    onCapturedPiecesChange={setCapturedPieces}
+                    onMoveHandlerReady={(handler) => {
+                      console.log("🎯 [DRAG TEST PAGE] Move handler ready");
+                      setMoveHandler(() => handler);
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Black Captured Pieces - Below board */}
+              <div className="flex-shrink-0">
+                <CapturedPieces
+                  pieces={capturedPieces.filter((p) => p.color === "black")}
+                  position="normal"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Left-Right Mode: Side layout */}
+          {piecesPosition === 'left-right' && (
+            <div className="flex items-center gap-8 w-full">
+              {/* White Captured Pieces - Left side */}
+              <div className="w-32 flex-shrink-0">
+                <CapturedPieces
+                  pieces={capturedPieces.filter((p) => p.color === "white")}
+                  position="normal"
+                  className="h-96 overflow-y-auto"
+                />
+              </div>
+
+              {/* Chess Board Container */}
+              <div
+                className="test-container flex-1"
+                style={{
+                  resize: "both",
+                  overflow: "hidden",
+                  minWidth: "200px",
+                  minHeight: "200px",
+                  height: "clamp(300px, 50vh, 600px)",
+                  display: "flex",
+                  flexDirection: "column",
+                  containerType: "size",
+                }}
+              >
+                <div
+                  style={{
+                    width: "100%",
+                    flex: "1",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: "0",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "min(100cqw, 100cqh)",
+                      height: "min(100cqw, 100cqh)",
+                      aspectRatio: "1",
+                    }}
+                  >
+                    <TestBoard
+                      onSquareClick={handleSquareClick}
+                      selectedSquare={selectedSquare}
+                      validDropTargets={validDropTargets}
+                      onCapturedPiecesChange={setCapturedPieces}
+                      onMoveHandlerReady={(handler) => {
+                        console.log("🎯 [DRAG TEST PAGE] Move handler ready");
+                        setMoveHandler(() => handler);
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Black Captured Pieces - Right side */}
+              <div className="w-32 flex-shrink-0">
+                <CapturedPieces
+                  pieces={capturedPieces.filter((p) => p.color === "black")}
+                  position="normal"
+                  className="h-96 overflow-y-auto"
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </section>
     </div>
   );

@@ -90,7 +90,8 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         'reset-board': dragTestActions.resetBoard,
         'test-move-sound': dragTestActions.testMoveSound,
         'test-capture-sound': dragTestActions.testCaptureSound,
-        'test-error-sound': dragTestActions.testErrorSound
+        'test-error-sound': dragTestActions.testErrorSound,
+        'toggle-pieces-position': dragTestActions.togglePiecesPosition
       },
       uiaudiotest: {
         'test-ui-sound': uiAudioTestActions.testUISound,

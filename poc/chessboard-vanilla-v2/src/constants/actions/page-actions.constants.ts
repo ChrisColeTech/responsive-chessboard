@@ -2,7 +2,7 @@
 import { 
   RotateCcw, Eye, Pause, Undo, Coins, RefreshCw, Volume2, 
   Trash2, TestTube, SkipForward, Navigation, VolumeX,
-  Brain, Clock, CheckCircle, Target, Sword
+  Brain, Clock, CheckCircle, Target, Sword, Move
 } from 'lucide-react'
 import type { ActionSheetAction } from '../../types/action-sheet.types'
 
@@ -197,6 +197,12 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       label: 'Test Error Sound',
       icon: Sword,
       variant: 'destructive'
+    },
+    {
+      id: 'toggle-pieces-position',
+      label: 'Toggle Pieces Position',
+      icon: Move,
+      variant: 'secondary'
     }
   ],
   uiaudiotest: [

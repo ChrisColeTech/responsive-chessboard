@@ -29,10 +29,19 @@ export function useDragTestActions() {
     playError()
   }, [playError])
 
+  const togglePiecesPosition = useCallback(() => {
+    console.log('🔄 [DRAG TEST ACTIONS] Toggle pieces position requested')
+    if (typeof window !== 'undefined' && (window as any).__togglePiecesPosition) {
+      (window as any).__togglePiecesPosition()
+      playMove(false)
+    }
+  }, [playMove])
+
   return {
     resetBoard,
     testMoveSound,
     testCaptureSound,
-    testErrorSound
+    testErrorSound,
+    togglePiecesPosition
   }
 }
