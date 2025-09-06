@@ -34,7 +34,6 @@ export function useUITestsActions() {
   }, [])
 
   const exportResults = useCallback(() => {
-    console.log('📥 [UI TESTS ACTIONS] Exporting test results')
     const results = testResults.join('\n')
     const blob = new Blob([results], { type: 'text/plain' })
     const url = URL.createObjectURL(blob)

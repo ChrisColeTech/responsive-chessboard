@@ -105,16 +105,36 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         'go-to-branded': splashActions.goToBranded
       },
       minimalsplash: {
-        'test-minimal-load': minimalSplashActions.testMinimalLoad
+        'test-minimal-load': minimalSplashActions.testMinimalLoad,
+        'restart-animation': minimalSplashActions.restartAnimation,
+        'toggle-fullscreen': minimalSplashActions.toggleFullscreen,
+        'go-to-animated': minimalSplashActions.goToAnimated,
+        'go-to-progress': minimalSplashActions.goToProgress,
+        'go-to-branded': minimalSplashActions.goToBranded
       },
       animatedsplash: {
-        'test-spring-animation': animatedSplashActions.testSpringAnimation
+        'test-spring-animation': animatedSplashActions.testSpringAnimation,
+        'restart-animation': animatedSplashActions.restartAnimation,
+        'toggle-fullscreen': animatedSplashActions.toggleFullscreen,
+        'go-to-minimal': animatedSplashActions.goToMinimal,
+        'go-to-progress': animatedSplashActions.goToProgress,
+        'go-to-branded': animatedSplashActions.goToBranded
       },
       loadingprogress: {
-        'test-progress-bar': loadingProgressActions.testProgressBar
+        'test-progress-bar': loadingProgressActions.testProgressBar,
+        'restart-animation': loadingProgressActions.restartAnimation,
+        'toggle-fullscreen': loadingProgressActions.toggleFullscreen,
+        'go-to-minimal': loadingProgressActions.goToMinimal,
+        'go-to-animated': loadingProgressActions.goToAnimated,
+        'go-to-branded': loadingProgressActions.goToBranded
       },
       brandedsplash: {
-        'test-brand-animation': brandedSplashActions.testBrandAnimation
+        'test-brand-animation': brandedSplashActions.testBrandAnimation,
+        'restart-animation': brandedSplashActions.restartAnimation,
+        'toggle-fullscreen': brandedSplashActions.toggleFullscreen,
+        'go-to-minimal': brandedSplashActions.goToMinimal,
+        'go-to-animated': brandedSplashActions.goToAnimated,
+        'go-to-progress': brandedSplashActions.goToProgress
       },
       layouttest: {}
     }

@@ -57,9 +57,7 @@ export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: Ta
   const handleKeyDown = (event: React.KeyboardEvent, tabId: TabId) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      console.log(`⌨️ [TAB BAR] Keyboard activation: ${event.key} on ${tabId}`);
       onTabChange(tabId);
-      console.log(`⌨️ [TAB BAR] Keyboard tab change called`);
     }
 
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
@@ -67,11 +65,7 @@ export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: Ta
       const currentIndex = tabs.findIndex((tab) => tab.id === currentTab);
       const direction = event.key === "ArrowLeft" ? -1 : 1;
       const nextIndex = (currentIndex + direction + tabs.length) % tabs.length;
-      console.log(
-        `⌨️ [TAB BAR] Arrow key navigation: ${event.key} from ${currentTab} to ${tabs[nextIndex].id}`
-      );
       onTabChange(tabs[nextIndex].id);
-      console.log(`⌨️ [TAB BAR] Arrow navigation tab change called`);
     }
   };
   return (
@@ -94,9 +88,6 @@ export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: Ta
           <button
             key={tab.id}
             onClick={() => {
-              console.log(`🔄 [TAB BAR] Tab clicked: ${tab.id} (${tab.label})`);
-              console.log(`🔄 [TAB BAR] Previous tab was: ${currentTab}`);
-
               // Play click sound
               playUIClick(`Tab: ${tab.label}`);
 
@@ -106,7 +97,6 @@ export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: Ta
               }
 
               onTabChange(tab.id);
-              console.log(`🔄 [TAB BAR] Tab change function called`);
             }}
             onKeyDown={(e) => handleKeyDown(e, tab.id)}
             role="tab"

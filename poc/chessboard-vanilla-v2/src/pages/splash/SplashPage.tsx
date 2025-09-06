@@ -20,22 +20,18 @@ export const SplashPage: React.FC = () => {
     CurrentPageComponent = BrandedSplashPageWrapper;
   }
 
-  return (
-    <div className="relative h-full">
-      <CurrentPageComponent />
-    </div>
-  );
+  return <CurrentPageComponent />;
 };
 
 const SplashMainPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <div className="text-center card-gaming p-12">
-        <h1 className="text-6xl font-bold mb-6">Chess Master</h1>
-        <p className="text-xl text-muted-foreground mb-8">
+    <div className="splash-container">
+      <div className="splash-content splash-test-border splash-fade-in">
+        <h1 className="splash-title">Chess Master</h1>
+        <p className="splash-subtitle">
           Splash Screen Examples Hub
         </p>
-        <div className="text-sm text-muted-foreground">
+        <div className="splash-description">
           Use the action sheet to navigate to different splash screen examples
         </div>
       </div>

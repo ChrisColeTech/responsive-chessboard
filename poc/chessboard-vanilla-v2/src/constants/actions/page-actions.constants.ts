@@ -2,7 +2,7 @@
 import { 
   RotateCcw, Eye, Pause, Undo, Coins, RefreshCw, Volume2, 
   Trash2, TestTube, SkipForward, Navigation, VolumeX,
-  Brain, Clock, CheckCircle, Target, Sword, Move
+  Brain, Clock, CheckCircle, Target, Sword, Move, Maximize2
 } from 'lucide-react'
 import type { ActionSheetAction } from '../../types/action-sheet.types'
 
@@ -147,6 +147,37 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       label: 'Test Load Animation',
       icon: SkipForward,
       variant: 'default'
+    },
+    {
+      id: 'restart-animation',
+      label: 'Restart Animation',
+      icon: RotateCcw,
+      variant: 'secondary'
+    },
+    {
+      id: 'toggle-fullscreen',
+      label: 'Toggle Fullscreen',
+      icon: Maximize2,
+      variant: 'default',
+      shortcut: 'F11'
+    },
+    {
+      id: 'go-to-animated',
+      label: '→ Animated',
+      icon: SkipForward,
+      variant: 'secondary'
+    },
+    {
+      id: 'go-to-progress',
+      label: '→ Progress',
+      icon: Clock,
+      variant: 'secondary'
+    },
+    {
+      id: 'go-to-branded',
+      label: '→ Branded',
+      icon: Target,
+      variant: 'secondary'
     }
   ],
   animatedsplash: [
@@ -155,6 +186,37 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       label: 'Test Spring Animation',
       icon: SkipForward,
       variant: 'default'
+    },
+    {
+      id: 'restart-animation',
+      label: 'Restart Animation',
+      icon: RotateCcw,
+      variant: 'secondary'
+    },
+    {
+      id: 'toggle-fullscreen',
+      label: 'Toggle Fullscreen',
+      icon: Maximize2,
+      variant: 'default',
+      shortcut: 'F11'
+    },
+    {
+      id: 'go-to-minimal',
+      label: '→ Minimal',
+      icon: Navigation,
+      variant: 'secondary'
+    },
+    {
+      id: 'go-to-progress',
+      label: '→ Progress',
+      icon: Clock,
+      variant: 'secondary'
+    },
+    {
+      id: 'go-to-branded',
+      label: '→ Branded',
+      icon: Target,
+      variant: 'secondary'
     }
   ],
   loadingprogress: [
@@ -163,6 +225,37 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       label: 'Test Progress Bar',
       icon: Clock,
       variant: 'default'
+    },
+    {
+      id: 'restart-animation',
+      label: 'Restart Animation',
+      icon: RotateCcw,
+      variant: 'secondary'
+    },
+    {
+      id: 'toggle-fullscreen',
+      label: 'Toggle Fullscreen',
+      icon: Maximize2,
+      variant: 'default',
+      shortcut: 'F11'
+    },
+    {
+      id: 'go-to-minimal',
+      label: '→ Minimal',
+      icon: Navigation,
+      variant: 'secondary'
+    },
+    {
+      id: 'go-to-animated',
+      label: '→ Animated',
+      icon: SkipForward,
+      variant: 'secondary'
+    },
+    {
+      id: 'go-to-branded',
+      label: '→ Branded',
+      icon: Target,
+      variant: 'secondary'
     }
   ],
   brandedsplash: [
@@ -171,6 +264,37 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       label: 'Test Brand Animation',
       icon: Target,
       variant: 'default'
+    },
+    {
+      id: 'restart-animation',
+      label: 'Restart Animation',
+      icon: RotateCcw,
+      variant: 'secondary'
+    },
+    {
+      id: 'toggle-fullscreen',
+      label: 'Toggle Fullscreen',
+      icon: Maximize2,
+      variant: 'default',
+      shortcut: 'F11'
+    },
+    {
+      id: 'go-to-minimal',
+      label: '→ Minimal',
+      icon: Navigation,
+      variant: 'secondary'
+    },
+    {
+      id: 'go-to-animated',
+      label: '→ Animated',
+      icon: SkipForward,
+      variant: 'secondary'
+    },
+    {
+      id: 'go-to-progress',
+      label: '→ Progress',
+      icon: Clock,
+      variant: 'secondary'
     }
   ],
   dragtest: [

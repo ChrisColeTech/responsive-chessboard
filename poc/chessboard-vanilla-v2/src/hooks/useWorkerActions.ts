@@ -21,7 +21,6 @@ export function useWorkerActions() {
   } = useWorkerTestStore()
 
   const testWorkerReady = useCallback(async () => {
-    console.log('✅ [WORKER ACTIONS] Testing worker ready')
     setIsTestingReady(true)
     addTestResult("🔍 Testing if worker is ready...")
     
@@ -40,7 +39,6 @@ export function useWorkerActions() {
   }, [isReady, addTestResult, setIsTestingReady])
 
   const testGoodMove = useCallback(async () => {
-    console.log('🧠 [WORKER ACTIONS] Testing chess move')
     setIsTestingPosition(true)
     addTestResult("🎯 Asking chess computer for a good opening move...")
     const startTime = Date.now()
@@ -64,7 +62,6 @@ export function useWorkerActions() {
   }, [requestMove, addTestResult, setLastMove, setResponseTime, setIsTestingPosition])
 
   const testSpeed = useCallback(async () => {
-    console.log('⚡ [WORKER ACTIONS] Testing response speed')
     setIsTestingSpeed(true)
     addTestResult("⚡ Testing response speed with 500ms limit...")
     const startTime = Date.now()
@@ -83,7 +80,6 @@ export function useWorkerActions() {
   }, [requestMove, addTestResult, setResponseTime, setIsTestingSpeed])
 
   const runAllTests = useCallback(async () => {
-    console.log('🧪 [WORKER ACTIONS] Running all tests')
     setIsRunningAllTests(true)
     addTestResult("🚀 Running all tests...")
     
@@ -100,7 +96,6 @@ export function useWorkerActions() {
   }, [testWorkerReady, testGoodMove, testSpeed, addTestResult, setIsRunningAllTests])
 
   const clearTestResults = useCallback(() => {
-    console.log('🗑️ [WORKER ACTIONS] Clearing test results')
     clearResults()
     addTestResult("🧹 Results cleared", 'info')
   }, [clearResults, addTestResult])

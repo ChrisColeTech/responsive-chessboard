@@ -38,21 +38,12 @@ function AppContent() {
   // Initialize audio system on first user interaction (application-wide)
   useEffect(() => {
     const handleFirstInteraction = () => {
-      console.log(
-        "🎵 [APP] First user interaction - initializing audio system"
-      );
-      console.log("🎵 [APP] About to preload sounds...");
       preloadSounds();
-      console.log("🎵 [APP] About to play welcome sound...");
       playGameStart(); // Welcome sound
-      console.log("🎵 [APP] Welcome sound playGameStart() called");
 
       // Remove listeners after first interaction
       document.removeEventListener("click", handleFirstInteraction);
       document.removeEventListener("keydown", handleFirstInteraction);
-      console.log(
-        "🎵 [APP] Event listeners removed - welcome sound setup complete"
-      );
     };
 
     // Listen for first user interaction to enable audio

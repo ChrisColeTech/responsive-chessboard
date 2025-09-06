@@ -43,7 +43,6 @@ export const DragProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const moveHandlerRef = useRef<((move: { from: ChessPosition; to: ChessPosition }) => Promise<boolean>) | null>(null);
 
   const startDrag = useCallback((piece: ChessPiece, from: ChessPosition, moves: ChessPosition[], pieceSize = 80) => {
-    console.log('🎯 [DRAG] Starting drag:', piece.type, 'from', from, 'valid moves:', moves, 'size:', pieceSize);
     
     // Update UI state
     setDraggedPiece(piece);
@@ -73,7 +72,6 @@ export const DragProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return false;
     }
 
-    console.log('🎯 [DRAG] Attempting to drop', piece.type, 'from', from, 'to', to);
 
     // Validate move using ref data
     if (!validMoves.includes(to)) {
@@ -86,7 +84,6 @@ export const DragProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (moveHandlerRef.current) {
       try {
         const success = await moveHandlerRef.current({ from, to });
-        console.log('🎯 [DRAG] Move result:', success ? 'SUCCESS' : 'FAILED');
         clearDrag();
         return success;
       } catch (error) {
@@ -102,7 +99,6 @@ export const DragProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const clearDrag = useCallback(() => {
-    console.log('🎯 [DRAG] Clearing drag state');
     
     // Clear UI state
     setDraggedPiece(null);
@@ -120,7 +116,6 @@ export const DragProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const setMoveHandler = useCallback((handler: (move: { from: ChessPosition; to: ChessPosition }) => Promise<boolean>) => {
-    console.log('🎯 [DRAG] Move handler set');
     moveHandlerRef.current = handler;
   }, []);
 

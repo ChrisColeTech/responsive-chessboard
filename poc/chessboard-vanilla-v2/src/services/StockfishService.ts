@@ -32,18 +32,11 @@ export class StockfishService {
 
   private initializeEngine(): void {
     try {
-      console.log('🚀 [STOCKFISH] Initializing Stockfish Web Worker service...');
-      
       // Use improved Stockfish worker with proper error handling (copied from working v1)
       const workerUrl = new URL('../workers/stockfish-worker.js', import.meta.url);
-      console.log('🔧 [STOCKFISH] Worker URL:', workerUrl.href);
       
       // Use classic worker (not ES module) to support importScripts()
       this.stockfish = new Worker(workerUrl);
-      
-      console.log('🔗 [STOCKFISH] Worker created, setting up event listeners...');
-      
-      console.log('🔧 [STOCKFISH] Worker created, adding listeners...');
       this.stockfish.addEventListener('message', this.handleMessage.bind(this));
       this.stockfish.addEventListener('error', this.handleError.bind(this));
 
@@ -55,16 +48,12 @@ export class StockfishService {
       
       const checkReadiness = () => {
         if (!uciInitialized) {
-          console.log('⏳ [STOCKFISH] Waiting for UCI initialization...');
           return;
         }
-        
-        console.log('🔍 [STOCKFISH] UCI initialized, checking engine readiness...');
         this.sendCommand('isready').then(() => {
           clearTimeout(initTimeout);
           this.engineReady = true;
           this.workerState = 'ready';
-          console.log('🚀 [STOCKFISH] Engine ready for commands');
           this.processMessageQueue();
         }).catch(error => {
           clearTimeout(initTimeout);
@@ -76,7 +65,6 @@ export class StockfishService {
       // Set up a flag to track UCI initialization - v1 pattern
       this.pendingCommands.set('uci_init', (response: string) => {
         if (response === 'uciok') {
-          console.log('✅ [STOCKFISH] UCI initialization complete');
           uciInitialized = true;
           this.pendingCommands.delete('uci_init');
           // Small delay to ensure engine is fully ready
@@ -103,7 +91,6 @@ export class StockfishService {
     while (this.messageQueue.length > 0 && this.workerState === 'ready') {
       const command = this.messageQueue.shift();
       if (command && this.stockfish) {
-        console.log('📤 [STOCKFISH] Processing queued:', command);
         this.stockfish.postMessage(command);
       }
     }

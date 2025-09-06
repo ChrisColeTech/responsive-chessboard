@@ -9,10 +9,9 @@ export function useUIClickSound() {
     volume: 0.3, // Consistent volume for all UI interactions
   })
   
-  const playUIClick = (context?: string) => {
+  const playUIClick = (_context?: string) => {
     try {
       playClick()
-      console.log(`🔊 [UI CLICK] ${context || 'Button'} click sound played`)
     } catch (error) {
       console.warn(`🔊 [UI CLICK] Failed to play click sound:`, error)
     }

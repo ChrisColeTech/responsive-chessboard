@@ -4,19 +4,13 @@ export function useMenuDropdown() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const openMenu = () => {
-    console.log('🔍 [MENU HOOK] openMenu called')
     setIsMenuOpen(true)
   }
   const closeMenu = () => {
-    console.log('🔍 [MENU HOOK] closeMenu called')
     setIsMenuOpen(false)
   }
   const toggleMenu = () => {
-    console.log('🔍 [MENU HOOK] toggleMenu called, current state:', isMenuOpen)
-    setIsMenuOpen(prev => {
-      console.log('🔍 [MENU HOOK] toggling from', prev, 'to', !prev)
-      return !prev
-    })
+    setIsMenuOpen(prev => !prev)
   }
 
   // Close menu when clicking outside

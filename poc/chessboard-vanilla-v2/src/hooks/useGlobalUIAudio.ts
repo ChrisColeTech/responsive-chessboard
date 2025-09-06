@@ -119,21 +119,18 @@ export function useGlobalUIAudio(options: UseGlobalUIAudioOptions = {}): UseGlob
   const initialize = useCallback((): void => {
     const service = getService();
     service.initialize();
-    console.log('🔊 [USE GLOBAL UI AUDIO] Service initialized via hook');
   }, [getService]);
   
   // Destroy the service
   const destroy = useCallback((): void => {
     const service = getService();
     service.destroy();
-    console.log('🔊 [USE GLOBAL UI AUDIO] Service destroyed via hook');
   }, [getService]);
   
   // Configure the service
   const configure = useCallback((config: GlobalUIAudioConfigUpdate): void => {
     const service = getService();
     service.configure(config);
-    console.log('🔊 [USE GLOBAL UI AUDIO] Service configured via hook:', config);
   }, [getService]);
   
   // Add custom selector
@@ -163,17 +160,13 @@ export function useGlobalUIAudio(options: UseGlobalUIAudioOptions = {}): UseGlob
   // Effect for auto-initialization and cleanup
   useEffect(() => {
     if (autoInitialize) {
-      console.log('🔊 [USE GLOBAL UI AUDIO] Auto-initializing service...');
       initialize();
     }
     
     // Cleanup function
     return () => {
       if (destroyOnUnmount) {
-        console.log('🔊 [USE GLOBAL UI AUDIO] Component unmounting, destroying service...');
         destroy();
-      } else {
-        console.log('🔊 [USE GLOBAL UI AUDIO] Component unmounting, keeping service alive (HMR-safe)');
       }
     };
   }, [autoInitialize, destroyOnUnmount, initialize, destroy]);

@@ -56,11 +56,6 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   useEffect(() => {
     const html = document.documentElement
     
-    console.log('🎨 [THEME] ===========================================')
-    console.log('🎨 [THEME] Applying theme:', currentTheme)
-    console.log('🎨 [THEME] isDarkMode:', isDarkMode)
-    console.log('🎨 [THEME] selectedBaseTheme:', selectedBaseTheme)
-    console.log('🎨 [THEME] Classes before removal:', Array.from(html.classList).join(', '))
     
     // Remove all theme classes (old and new)
     const themeClasses = [
@@ -74,15 +69,12 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       'theme-violet', 'theme-matrix', 'theme-neon', 'theme-scarlet', 'theme-azure', 'theme-bronze', 'theme-teal'
     ]
     
-    console.log('🎨 [THEME] Removing classes:', themeClasses.join(', '))
     themeClasses.forEach(cls => {
       if (html.classList.contains(cls)) {
-        console.log('🎨 [THEME] Removing existing class:', cls)
         html.classList.remove(cls)
       }
     })
     
-    console.log('🎨 [THEME] Classes after removal:', Array.from(html.classList).join(', '))
     
     // Add current theme class
     let classesToAdd = []
@@ -100,11 +92,8 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       }
     }
     
-    console.log('🎨 [THEME] Adding classes:', classesToAdd.join(', '))
     classesToAdd.forEach(cls => html.classList.add(cls))
     
-    console.log('🎨 [THEME] Final document classes:', Array.from(html.classList).join(', '))
-    console.log('🎨 [THEME] ===========================================')
     
     // Save to localStorage
     localStorage.setItem('chess-app-theme', currentTheme)

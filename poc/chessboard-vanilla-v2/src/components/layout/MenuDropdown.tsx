@@ -9,7 +9,6 @@ interface MenuDropdownProps {
 }
 
 export function MenuDropdown({ onClose }: MenuDropdownProps) {
-  console.log("🔍 [MENU DEBUG] MenuDropdown component rendered!");
   const { open: openSettings } = useSettings();
   const { openInstructions } = useInstructions();
   const { playMove } = useChessAudio();

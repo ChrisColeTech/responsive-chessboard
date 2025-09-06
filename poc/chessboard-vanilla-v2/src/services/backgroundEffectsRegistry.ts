@@ -69,9 +69,7 @@ const registerEffects = async () => {
 }
 
 // Register effects immediately
-registerEffects().then(() => {
-  console.log('🎨 [BackgroundEffects] All effects registered successfully')
-}).catch((error) => {
+registerEffects().catch((error) => {
   console.error('🎨 [BackgroundEffects] Failed to register effects:', error)
 })
 

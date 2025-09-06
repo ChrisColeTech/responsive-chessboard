@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { TestBoard } from "../../components/TestBoard";
 import { CapturedPieces } from "../../components/CapturedPieces";
 import { usePageInstructions } from "../../hooks/usePageInstructions";
-import { useDragTestActions } from "../../hooks/useDragTestActions";
 import type { ChessPosition, ChessPiece } from "../../types";
 
 export const DragTestPage: React.FC = () => {
@@ -22,7 +21,6 @@ export const DragTestPage: React.FC = () => {
     (window as any).__togglePiecesPosition = () => {
       setPiecesPosition(prev => {
         const newPosition = prev === 'top-bottom' ? 'left-right' : 'top-bottom'
-        console.log(`🔄 [DRAG TEST PAGE] Toggling pieces position: ${prev} → ${newPosition}`)
         return newPosition
       })
     }
@@ -32,7 +30,6 @@ export const DragTestPage: React.FC = () => {
   }, [])
 
   const handleSquareClick = (position: ChessPosition) => {
-    console.log(`🎯 [DRAG TEST PAGE] Square clicked: ${position}`);
 
     if (selectedSquare === null) {
       // First click - select a square (TestBoard will provide valid moves via drag system)
@@ -46,13 +43,8 @@ export const DragTestPage: React.FC = () => {
     } else {
       // Second click - attempt move using TestBoard's move handler
       if (moveHandler) {
-        console.log(
-          `🎯 [DRAG TEST PAGE] Executing move: ${selectedSquare} → ${position}`
-        );
-        moveHandler(selectedSquare, position).then((success) => {
-          console.log(
-            `🎯 [DRAG TEST PAGE] Move result: ${success ? "SUCCESS" : "FAILED"}`
-          );
+        moveHandler(selectedSquare, position).then((_success) => {
+          // Move completed
         });
       }
       // Clear selection after move attempt
@@ -120,7 +112,6 @@ export const DragTestPage: React.FC = () => {
                     validDropTargets={validDropTargets}
                     onCapturedPiecesChange={setCapturedPieces}
                     onMoveHandlerReady={(handler) => {
-                      console.log("🎯 [DRAG TEST PAGE] Move handler ready");
                       setMoveHandler(() => handler);
                     }}
                   />
@@ -186,8 +177,7 @@ export const DragTestPage: React.FC = () => {
                       validDropTargets={validDropTargets}
                       onCapturedPiecesChange={setCapturedPieces}
                       onMoveHandlerReady={(handler) => {
-                        console.log("🎯 [DRAG TEST PAGE] Move handler ready");
-                        setMoveHandler(() => handler);
+                          setMoveHandler(() => handler);
                       }}
                     />
                   </div>

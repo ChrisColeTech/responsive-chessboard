@@ -80,7 +80,6 @@ export const TestBoard = ({
   // Set up TestBoard's move handler using game service
   useEffect(() => {
     const handleTestMove = async (move: { from: ChessPosition, to: ChessPosition }) => {
-      console.log(`🧪 [TEST BOARD] Handling move: ${move.from} → ${move.to}`);
       
       // Check if game is over
       if (gameStatus === 'checkmate') {
@@ -94,7 +93,6 @@ export const TestBoard = ({
       
       if (result.needsPromotion) {
         // Show promotion modal dialog - defer state updates
-        console.log(`🎉 [TEST BOARD] Pawn promotion needed at ${result.promotionSquare}`);
         const piece = gameService.getGameState().pieces[move.from];
         
         setTimeout(() => {
@@ -107,7 +105,6 @@ export const TestBoard = ({
       }
       
       if (result.success && result.newGameState) {
-        console.log(`🧪 [TEST BOARD] Move successful: ${move.from} → ${move.to}`);
         
         // Defer all state updates to avoid render-time updates
         setTimeout(() => {
@@ -124,7 +121,6 @@ export const TestBoard = ({
               setTimeout(() => onCapturedPiecesChange?.(newCaptured), 0);
               return newCaptured;
             });
-            console.log(`🧪 [TEST BOARD] Piece captured: ${result.capturedPiece.color} ${result.capturedPiece.type}`);
           }
         }, 0);
         
@@ -149,13 +145,11 @@ export const TestBoard = ({
 
     // Create a simplified move handler for tap-to-move
     const tapMoveHandler = async (from: ChessPosition, to: ChessPosition): Promise<boolean> => {
-      console.log(`🎯 [TAP-TO-MOVE] Executing move: ${from} → ${to}`);
       return await handleTestMove({ from, to });
     };
     
     // Use setTimeout to ensure TestBoard handler is set after main app handler
     const timer = setTimeout(() => {
-      console.log('🧪 [TEST BOARD] Setting TestBoard move handler (overriding main app)');
       setMoveHandler(handleTestMove);
       
       // Provide tap-to-move handler to parent
@@ -172,7 +166,6 @@ export const TestBoard = ({
   const handlePromotionSelect = async (promotionPiece: 'queen' | 'rook' | 'bishop' | 'knight') => {
     if (!promotionMove) return;
     
-    console.log(`🎉 [TEST BOARD] Promotion selected: ${promotionPiece}`);
     
     // Execute the move with promotion
     const result = gameService.makeMove(promotionMove.from, promotionMove.to, promotionPiece);
