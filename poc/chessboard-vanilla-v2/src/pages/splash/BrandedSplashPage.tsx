@@ -1,65 +1,80 @@
 import React from "react";
-import { useBrandedSplashActions } from "../../hooks/useBrandedSplashActions";
 
 interface BrandedSplashPageProps {
   variant?: 'in-app' | 'modal';
 }
 
 export const BrandedSplashPage: React.FC<BrandedSplashPageProps> = ({ variant = 'in-app' }) => {
-  const { animationKey, pieceGroups, currentQuote, overallProgress } = useBrandedSplashActions();
-
   return (
-    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-academy`}>
+    <div className={`splash-container splash-${variant} splash-fade-in splash-academy-branded`}>
       {/* 
-        CONCEPT 3: Progressive Piece Assembly - Branded Academy Variant
+        CONCEPT 4: Chess Academy Branding - Branded Variant
         
-        DESIGN INTENT: Luxury chess academy experience with prestigious branding.
-        Medallion piece assembly showing institutional authority and grandmaster quality.
-        All content contained within centered brand section.
+        DESIGN INTENT: Grand chess academy with sophisticated animations and chess-themed elements.
+        Premium institutional presentation with chess piece choreography and elegant branding.
+        Maximum visual impact while maintaining splash screen focus.
       */}
       
       <div className="splash-brand-section">
-        <div className="splash-logo-area">
-          {/* Academy Header */}
-          <h1 className="splash-title splash-academy-title">Master Chess Training</h1>
-          <h2 className="splash-subtitle splash-academy-subtitle">Elite Academy</h2>
-          
-          {/* Premium Medallion Pieces */}
-          <div className="splash-medallion-gallery">
-            {pieceGroups.map((piece) => (
-              <div 
-                key={piece.id}
-                className={`splash-medallion ${piece.completed ? 'splash-medallion-complete' : ''}`}
-              >
-                <div className="splash-medallion-inner">
-                  <span className="splash-medallion-piece">{piece.symbol}</span>
-                </div>
+        {/* Academy Identity with Grand Chess Presentation */}
+        <div className="splash-academy-identity">
+          {/* Grand Chess Academy Emblem */}
+          <div className="splash-grand-emblem">
+            {/* Chess Piece Formation */}
+            <div className="splash-chess-formation">
+              <div className="splash-formation-row splash-formation-top">
+                <span className="splash-piece-emblem splash-piece-1">♜</span>
+                <span className="splash-piece-emblem splash-piece-2">♞</span>
+                <span className="splash-piece-emblem splash-piece-3">♝</span>
               </div>
-            ))}
-          </div>
-
-          {/* Academy Credentials */}
-          <div className="splash-academy-credentials">
-            <span className="splash-credential">FIDE Approved Training</span>
-            <span className="splash-credential-divider">•</span>
-            <span className="splash-credential">GM Level Instruction</span>
-          </div>
-
-          {/* Rotating Inspirational Quote */}
-          <div className="splash-academy-quote">
-            <p className="splash-quote-text">"{currentQuote}"</p>
-          </div>
-
-          {/* Elegant Progress Line */}
-          <div className="splash-progress-section">
-            <div className="splash-academy-progress-bar">
-              <div 
-                className="splash-academy-progress-fill"
-                style={{ width: `${overallProgress}%` }}
-              />
+              
+              {/* Central Crown */}
+              <div className="splash-central-crown">
+                <span className="splash-crown-grand">♔</span>
+              </div>
+              
+              <div className="splash-formation-row splash-formation-bottom">
+                <span className="splash-piece-emblem splash-piece-4">♗</span>
+                <span className="splash-piece-emblem splash-piece-5">♘</span>
+                <span className="splash-piece-emblem splash-piece-6">♖</span>
+              </div>
+            </div>
+            
+            {/* Floating Queen Accents */}
+            <div className="splash-queen-accents">
+              <span className="splash-queen-left">♕</span>
+              <span className="splash-queen-right">♕</span>
             </div>
           </div>
+          
+          {/* Grand Academy Title with Typewriter Effect */}
+          <h1 className="splash-title splash-academy-title splash-grand-title">Master Chess Training</h1>
+          
+          {/* Prestigious Institution Subtitle */}
+          <h2 className="splash-subtitle splash-academy-subtitle splash-grand-subtitle">Grand Chess Academy</h2>
+          
+          {/* Academy Philosophy */}
+          <div className="splash-academy-philosophy">
+            <span className="splash-philosophy-text">Where Masters Are Made</span>
+          </div>
+          
+          {/* Elegant Academy Establishment */}
+          <div className="splash-academy-establishment">
+            <div className="splash-establishment-line"></div>
+            <span className="splash-establishment-text">Established 2024</span>
+            <div className="splash-establishment-line"></div>
+          </div>
         </div>
+      </div>
+      
+      {/* Chess Piece Particles */}
+      <div className="splash-chess-atmosphere">
+        <div className="splash-floating-piece splash-float-1">♟</div>
+        <div className="splash-floating-piece splash-float-2">♙</div>
+        <div className="splash-floating-piece splash-float-3">♟</div>
+        <div className="splash-floating-piece splash-float-4">♙</div>
+        <div className="splash-floating-piece splash-float-5">♟</div>
+        <div className="splash-floating-piece splash-float-6">♙</div>
       </div>
     </div>
   );

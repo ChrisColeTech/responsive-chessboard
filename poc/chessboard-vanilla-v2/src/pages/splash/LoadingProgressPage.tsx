@@ -1,49 +1,60 @@
 import React from "react";
-import { useLoadingProgressActions } from "../../hooks/useLoadingProgressActions";
 
 interface LoadingProgressPageProps {
   variant?: 'in-app' | 'modal';
 }
 
 export const LoadingProgressPage: React.FC<LoadingProgressPageProps> = ({ variant = 'in-app' }) => {
-  const { animationKey, pieceGroups, currentStatus, overallProgress } = useLoadingProgressActions();
-
   return (
-    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in`}>
+    <div className={`splash-container splash-${variant} splash-fade-in splash-academy-progress`}>
       {/* 
-        CONCEPT 3: Progressive Piece Assembly - Loading Progress Variant
+        CONCEPT 4: Chess Academy Branding - Loading Progress Variant
         
-        DESIGN INTENT: Everything contained within centered brand section - NO bottom elements.
-        Piece assembly progress shown with single progress bar and piece icons.
-        Follows established splash page pattern with all content centered.
+        DESIGN INTENT: Chess Academy with integrated progress as part of crown design.
+        Progress ring surrounds the crown, making loading feel institutional and elegant.
+        No bottom progress bars - progress is part of the academy's visual identity.
       */}
       
       <div className="splash-brand-section">
-        <div className="splash-logo-area">
-          <h1 className="splash-title">Chess Training</h1>
-          <p className="splash-subtitle">{currentStatus}</p>
-          
-          {/* Piece Assembly Preview */}
-          <div className="splash-piece-preview">
-            {pieceGroups.map((group) => (
-              <div 
-                key={group.id} 
-                className={`splash-piece-icon ${group.completed ? 'splash-piece-complete' : ''}`}
-              >
-                <span className="splash-piece-symbol">{group.symbol}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Single Progress Bar */}
-          <div className="splash-progress-section">
-            <div className="splash-progress-bar">
-              <div 
-                className="splash-progress-fill"
-                style={{ width: `${overallProgress}%` }}
-              />
+        {/* Academy Identity with Integrated Progress */}
+        <div className="splash-academy-identity">
+          {/* Crown with Progress Ring */}
+          <div className="splash-academy-crown splash-crown-with-progress">
+            <div className="splash-progress-ring">
+              <svg className="splash-progress-circle" viewBox="0 0 120 120">
+                <circle 
+                  className="splash-progress-track" 
+                  cx="60" 
+                  cy="60" 
+                  r="54" 
+                />
+                <circle 
+                  className="splash-progress-fill-circle" 
+                  cx="60" 
+                  cy="60" 
+                  r="54"
+                />
+              </svg>
+              <span className="splash-crown-symbol">♔</span>
             </div>
-            <p className="splash-progress-text">{overallProgress}%</p>
+          </div>
+          
+          {/* Academy Title with Loading State */}
+          <h1 className="splash-title splash-academy-title">Master Chess Training</h1>
+          
+          {/* Institution Subtitle */}
+          <h2 className="splash-subtitle splash-academy-subtitle">Chess Academy</h2>
+          
+          {/* Loading Status integrated into credentials */}
+          <div className="splash-academy-credentials">
+            <span className="splash-credential">Preparing Academy</span>
+            <span className="splash-credential-divider">•</span>
+            <span className="splash-credential">Premium Training</span>
+          </div>
+          
+          {/* Academy Year */}
+          <div className="splash-academy-year">
+            <span className="splash-year-text">Est. 2024</span>
           </div>
         </div>
       </div>

@@ -1,47 +1,40 @@
 import React from "react";
-import { useMinimalSplashActions } from "../../hooks/useMinimalSplashActions";
 
 interface MinimalSplashPageProps {
   variant?: 'in-app' | 'modal';
 }
 
 export const MinimalSplashPage: React.FC<MinimalSplashPageProps> = ({ variant = 'in-app' }) => {
-  const { status, animationKey, visiblePieces } = useMinimalSplashActions();
-
   return (
-    <div key={animationKey} className={`splash-container splash-${variant} splash-fade-in splash-piece-assembly`}>
+    <div className={`splash-container splash-${variant} splash-fade-in splash-academy-minimal`}>
       {/* 
-        CONCEPT 3: Progressive Piece Assembly - Minimal Variant
+        CONCEPT 4: Chess Academy Branding - Minimal Variant
         
-        DESIGN INTENT: Educational chess piece assembly that teaches proper chess hierarchy.
-        Pieces appear in logical sequence showing board setup progress.
-        Transforms loading time into learning time about chess fundamentals.
+        DESIGN INTENT: Sophisticated chess academy presenting institutional authority.
+        Clean, professional approach establishing credibility and inspiring confidence.
+        Minimal elements with maximum impact - premium educational experience.
       */}
+      
       <div className="splash-brand-section">
-        <div className="splash-logo-area">
-          <h1 className="splash-title splash-assembly-title">Chess Training</h1>
-          <p className="splash-subtitle splash-assembly-subtitle">Master the Fundamentals</p>
-          
-          {/* Progressive piece assembly */}
-          <div className="splash-piece-lineup">
-            {visiblePieces.map((piece, index) => (
-              <div 
-                key={piece.id}
-                className={`splash-chess-piece splash-piece-${piece.id} ${piece.visible ? 'splash-piece-visible' : ''}`}
-                style={{ animationDelay: `${index * 0.3}s` }}
-              >
-                {piece.symbol}
-              </div>
-            ))}
+        {/* Academy Identity */}
+        <div className="splash-academy-identity">
+          {/* Crown Symbol */}
+          <div className="splash-academy-crown">
+            <span className="splash-crown-symbol">♔</span>
           </div>
           
-        </div>
-      </div>
-      
-      {/* Assembly progress */}
-      <div className="splash-progress-section">
-        <div className="splash-assembly-status">
-          {status}
+          {/* Main Title */}
+          <h1 className="splash-title splash-academy-title">Master Chess Training</h1>
+          
+          {/* Institution Subtitle */}
+          <h2 className="splash-subtitle splash-academy-subtitle">Chess Academy</h2>
+          
+          {/* Credentials */}
+          <div className="splash-academy-credentials">
+            <span className="splash-credential">Premium Training</span>
+            <span className="splash-credential-divider">•</span>
+            <span className="splash-credential">Est. 2024</span>
+          </div>
         </div>
       </div>
     </div>
