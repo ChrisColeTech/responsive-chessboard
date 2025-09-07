@@ -12,6 +12,7 @@ export interface ActionSheetAction {
 export interface ActionSheetProps {
   actions: ActionSheetAction[]
   onActionClick: (actionId: string, actionLabel: string, close: () => void) => void
+  onActionHover?: (actionLabel: string) => void
   onKeyDown: (event: React.KeyboardEvent) => void
   onClose: () => void
   isOpen: boolean

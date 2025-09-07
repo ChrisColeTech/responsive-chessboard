@@ -1,5 +1,6 @@
 import { Menu } from "lucide-react";
 import { useChessAudio } from "../../services/audioService";
+import { useUIHoverSound } from "../../hooks/useUIHoverSound";
 
 interface MenuButtonProps {
   isMenuOpen: boolean;
@@ -8,15 +9,24 @@ interface MenuButtonProps {
 
 export function MenuButton({ isMenuOpen, onToggleMenu }: MenuButtonProps) {
   const { playMove } = useChessAudio();
+  const { playUIHover } = useUIHoverSound();
 
   const handleMenuClick = () => {
     playMove(false); // Play UI interaction sound
     onToggleMenu();
   };
 
+  const handleMenuHover = () => {
+    // Play hover sound only when menu is closed
+    if (!isMenuOpen) {
+      playUIHover('Menu Button');
+    }
+  };
+
   return (
     <button
       onClick={handleMenuClick}
+      onMouseEnter={handleMenuHover}
       data-menu-button
       aria-expanded={isMenuOpen}
       aria-haspopup="menu"

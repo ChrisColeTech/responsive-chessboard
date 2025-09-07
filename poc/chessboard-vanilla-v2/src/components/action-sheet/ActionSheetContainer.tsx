@@ -17,6 +17,7 @@ import { useAnimatedSplashActions } from '../../hooks/useAnimatedSplashActions'
 import { useLoadingProgressActions } from '../../hooks/useLoadingProgressActions'
 import { useBrandedSplashActions } from '../../hooks/useBrandedSplashActions'
 import { useUIClickSound } from '../../hooks/useUIClickSound'
+import { useUIHoverSound } from '../../hooks/useUIHoverSound'
 import { useAppStore } from '../../stores/appStore'
 import type { ActionSheetContainerProps } from '../../types/action-sheet.types'
 import { PAGE_ACTIONS } from '../../constants/actions/page-actions.constants'
@@ -44,8 +45,9 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
   const loadingProgressActions = useLoadingProgressActions()
   const brandedSplashActions = useBrandedSplashActions()
   
-  // Audio for action clicks
+  // Audio for action clicks and hovers
   const { playUIClick } = useUIClickSound()
+  const { playUIHover } = useUIHoverSound()
 
   // HeadlessUI action handler - fixed typing for string indexing
   const handleAction = useCallback((actionId: string, actionLabel: string, closeCallback: () => void) => {
@@ -162,6 +164,10 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
     onClose()
   }, [currentPage, playUIClick, playActions, slotsActions, workerActions, uiTestsActions, layoutActions, dragTestActions, uiAudioTestActions, splashActions, minimalSplashActions, animatedSplashActions, loadingProgressActions, brandedSplashActions, onClose])
 
+  const handleHover = useCallback((actionLabel: string) => {
+    playUIHover(`Action: ${actionLabel}`)
+  }, [playUIHover])
+
   const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
       onClose()
@@ -174,6 +180,7 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
     <ActionSheet
       actions={actions}
       onActionClick={handleAction}
+      onActionHover={handleHover}
       onKeyDown={handleKeyDown}
       onClose={onClose}
       isOpen={isOpen}

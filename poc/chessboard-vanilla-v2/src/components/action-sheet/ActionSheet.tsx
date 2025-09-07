@@ -12,6 +12,7 @@ import { useRef, useState } from 'react'
 export function ActionSheet({ 
   actions,
   onActionClick,
+  onActionHover,
   onKeyDown,
   className,
   onClose,
@@ -104,6 +105,7 @@ export function ActionSheet({
                   onActionClick(action.id, action.label, handleClose)
                   handleClose()
                 }}
+                onHover={() => onActionHover?.(action.label)}
               />
             ))}
           </div>
@@ -121,6 +123,7 @@ export function ActionSheet({
               onActionClick('open-settings', 'Settings', handleClose)
               handleClose()
             }}
+            onHover={() => onActionHover?.('Settings')}
           />
         </DialogPanel>
       </div>

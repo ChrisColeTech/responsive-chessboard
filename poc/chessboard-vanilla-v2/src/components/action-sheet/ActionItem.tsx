@@ -8,9 +8,10 @@ import type { ActionSheetAction } from '../../types/action-sheet.types'
 interface ActionItemProps {
   action: ActionSheetAction
   onSelect: () => void
+  onHover?: () => void
 }
 
-export function ActionItem({ action, onSelect }: ActionItemProps) {
+export function ActionItem({ action, onSelect, onHover }: ActionItemProps) {
   const IconComponent = action.icon
 
   const getVariantClass = (variant: ActionSheetAction['variant']) => {
@@ -33,6 +34,7 @@ export function ActionItem({ action, onSelect }: ActionItemProps) {
   return (
     <button
       onClick={onSelect}
+      onMouseEnter={onHover}
       disabled={action.disabled}
       className={className}
       role="menuitem"
