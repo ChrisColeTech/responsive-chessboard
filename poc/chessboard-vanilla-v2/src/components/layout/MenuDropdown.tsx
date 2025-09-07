@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Settings, HelpCircle, BarChart, Palette } from "lucide-react";
 import { useSettings } from "../../stores/appStore";
 import { useInstructions } from "../../contexts/InstructionsContext";
-import { useChessAudio } from "../../services/audioService";
+import { useUIClickSound } from "../../hooks/useUIClickSound";
 
 interface MenuDropdownProps {
   onClose: () => void;
@@ -11,7 +11,7 @@ interface MenuDropdownProps {
 export function MenuDropdown({ onClose }: MenuDropdownProps) {
   const { open: openSettings } = useSettings();
   const { openInstructions } = useInstructions();
-  const { playMove } = useChessAudio();
+  const { playUIClick } = useUIClickSound();
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export function MenuDropdown({ onClose }: MenuDropdownProps) {
       <div className="space-y-1">
         <button
           onClick={() => {
-            playMove(false);
+            playUIClick('Settings Menu Item');
             openSettings();
             onClose();
           }}
@@ -65,7 +65,7 @@ export function MenuDropdown({ onClose }: MenuDropdownProps) {
         </button>
         <button
           onClick={() => {
-            playMove(false);
+            playUIClick('Help Menu Item');
             openInstructions();
             onClose();
           }}
@@ -77,7 +77,7 @@ export function MenuDropdown({ onClose }: MenuDropdownProps) {
         </button>
         <button
           onClick={() => {
-            playMove(false);
+            playUIClick('Stats Menu Item');
             onClose();
           }}
           role="menuitem"
@@ -88,7 +88,7 @@ export function MenuDropdown({ onClose }: MenuDropdownProps) {
         </button>
         <button
           onClick={() => {
-            playMove(false);
+            playUIClick('Themes Menu Item');
             onClose();
           }}
           role="menuitem"
