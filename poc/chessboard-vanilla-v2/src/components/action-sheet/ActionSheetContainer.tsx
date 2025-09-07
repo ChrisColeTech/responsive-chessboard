@@ -16,6 +16,8 @@ import { useMinimalSplashActions } from '../../hooks/useMinimalSplashActions'
 import { useAnimatedSplashActions } from '../../hooks/useAnimatedSplashActions'
 import { useLoadingProgressActions } from '../../hooks/useLoadingProgressActions'
 import { useBrandedSplashActions } from '../../hooks/useBrandedSplashActions'
+import { useLuxurysplashActions } from '../../hooks/useLuxurysplashActions'
+import { useMobileDragTestActions } from '../../hooks/useMobileDragTestActions'
 import { useUIClickSound } from '../../hooks/useUIClickSound'
 import { useUIHoverSound } from '../../hooks/useUIHoverSound'
 import { useAppStore } from '../../stores/appStore'
@@ -44,6 +46,8 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
   const animatedSplashActions = useAnimatedSplashActions()
   const loadingProgressActions = useLoadingProgressActions()
   const brandedSplashActions = useBrandedSplashActions()
+  const luxurysplashActions = useLuxurysplashActions()
+  const mobileDragTestActions = useMobileDragTestActions()
   
   // Audio for action clicks and hovers
   const { playUIClick } = useUIClickSound()
@@ -51,11 +55,7 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
 
   // HeadlessUI action handler - fixed typing for string indexing
   const handleAction = useCallback((action: ActionSheetAction, closeCallback: () => void) => {
-    
-    // Play UI click sound only if action doesn't handle its own audio
-    if (!action.hasOwnAudio) {
-      playUIClick(`Action: ${action.label}`)
-    }
+    // Note: UI click sound is handled automatically by Global UI Audio System
     
     // Map actions to the right page hook functions with proper typing
     type Fn = () => void | Promise<void>
@@ -82,7 +82,8 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
       uitests: {
         'go-to-drag-test': uiTestsActions.goToDragTest,
         'go-to-audio-test': uiTestsActions.goToAudioTest,
-        'go-to-layout-test': uiTestsActions.goToLayoutTest
+        'go-to-layout-test': uiTestsActions.goToLayoutTest,
+        'go-to-mobile-drag-test': uiTestsActions.goToMobileDragTest
       },
       layout: {
         'change-background': layoutActions.changeBackground,
@@ -106,7 +107,8 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         'go-to-minimal': splashActions.goToMinimal,
         'go-to-animated': splashActions.goToAnimated,
         'go-to-progress': splashActions.goToProgress,
-        'go-to-branded': splashActions.goToBranded
+        'go-to-branded': splashActions.goToBranded,
+        'go-to-luxurysplash': splashActions.goToLuxurysplash
       },
       minimalsplash: {
         'test-minimal-load': minimalSplashActions.testMinimalLoad,
@@ -140,7 +142,15 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         'go-to-animated': brandedSplashActions.goToAnimated,
         'go-to-progress': brandedSplashActions.goToProgress
       },
-      layouttest: {}
+      luxurysplash: {
+        'test-luxury': luxurysplashActions.testLuxury,
+        'restart-demo': luxurysplashActions.restartDemo
+      },
+      layouttest: {},
+      mobiledragtest: {
+        'mobile-board-action': mobileDragTestActions.mobileBoardAction,
+        'mobile-test-sound': mobileDragTestActions.mobileTestSound
+      }
     }
     
     // Handle global settings action
@@ -164,7 +174,7 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
     // Use HeadlessUI's close callback AND our onClose
     closeCallback()
     onClose()
-  }, [currentPage, playUIClick, playActions, slotsActions, workerActions, uiTestsActions, layoutActions, dragTestActions, uiAudioTestActions, splashActions, minimalSplashActions, animatedSplashActions, loadingProgressActions, brandedSplashActions, onClose])
+  }, [currentPage, playUIClick, playActions, slotsActions, workerActions, uiTestsActions, layoutActions, dragTestActions, uiAudioTestActions, splashActions, minimalSplashActions, animatedSplashActions, loadingProgressActions, brandedSplashActions, luxurysplashActions, mobileDragTestActions, onClose])
 
   const handleHover = useCallback((actionLabel: string) => {
     playUIHover(`Action: ${actionLabel}`)

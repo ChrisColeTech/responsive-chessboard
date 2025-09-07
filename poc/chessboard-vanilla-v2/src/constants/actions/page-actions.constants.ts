@@ -2,7 +2,7 @@
 import { 
   RotateCcw, Eye, Pause, Undo, Coins, RefreshCw, Volume2, 
   Trash2, TestTube, SkipForward, Navigation, VolumeX,
-  Brain, Clock, CheckCircle, Target, Sword, Move, Maximize2
+  Brain, Clock, CheckCircle, Target, Sword, Move, Maximize2, Crown
 } from 'lucide-react'
 import type { ActionSheetAction } from '../../types/action-sheet.types'
 
@@ -115,6 +115,12 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       label: 'Go to Layout Test',
       icon: Eye,
       variant: 'secondary'
+    },
+    {
+      id: 'go-to-mobile-drag-test',
+      label: 'Go to Mobile Drag Test',
+      icon: Move,
+      variant: 'secondary'
     }
   ],
   layouttest: [],
@@ -142,6 +148,13 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       label: 'Branded Design',
       icon: Target,
       variant: 'default'
+    }
+  ,
+    {
+      id: 'go-to-luxurysplash',
+      label: 'Go to Luxurysplash',
+      icon: Navigation,
+      variant: 'secondary'
     }
   ],
   minimalsplash: [
@@ -356,5 +369,34 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       icon: RefreshCw,
       variant: 'destructive'
     }
-  ]
+  ],
+  luxurysplash: [
+    {
+      id: 'test-luxury',
+      label: 'Test Luxury',
+      icon: Crown,
+      variant: 'default'
+    },
+    {
+      id: 'restart-demo',
+      label: 'Restart Demo',
+      icon: RotateCcw,
+      variant: 'secondary'
+    }
+  ],
+  mobiledragtest: [
+    {
+      id: 'mobile-board-action',
+      label: 'Mobile Board Action',
+      icon: Target,
+      variant: 'default'
+    },
+    {
+      id: 'mobile-test-sound',
+      label: 'Mobile Test Sound',
+      icon: Volume2,
+      variant: 'secondary',
+      hasOwnAudio: true
+    }
+  ],
 }

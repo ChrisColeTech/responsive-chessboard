@@ -13,10 +13,14 @@ import './styles/splash.css'
 // Import background effects registry to initialize effects
 import './services/backgroundEffectsRegistry'
 import App from './App.tsx'
+import withSplashScreen from './components/withSplashScreen'
+
+// Wrap App with splash screen HOC
+const AppWithSplash = withSplashScreen(App);
 
 createRoot(document.getElementById('root')!).render(
   // Temporarily disable StrictMode for Stockfish worker compatibility
   // <StrictMode>
-    <App />
+    <AppWithSplash />
   // </StrictMode>
 )

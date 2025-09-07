@@ -29,13 +29,9 @@ export const CapturedPieces: React.FC<CapturedPiecesProps> = ({
   const getPositionClasses = () => {
     switch (position) {
       case 'top':
-        return 'absolute -top-12 left-0 right-0 z-20'
       case 'bottom':
-        return 'absolute -bottom-16 left-0 right-0 z-20'
       case 'left':
-        return 'absolute -left-32 top-0 bottom-0 z-20 w-28'
       case 'right':
-        return 'absolute -right-32 top-0 bottom-0 z-20 w-28'
       case 'normal':
       default:
         return ''
@@ -72,7 +68,7 @@ export const CapturedPieces: React.FC<CapturedPiecesProps> = ({
 
   return (
     <div 
-      className={`card-gaming p-4 ${getPositionClasses()} ${getLayoutClasses()} ${className}`} 
+      className={`card-gaming px-4 pt-2 h-full ${getPositionClasses()} ${getLayoutClasses()} ${className}`} 
       style={{ 
         scrollBehavior: 'auto', 
         scrollMargin: '0px',

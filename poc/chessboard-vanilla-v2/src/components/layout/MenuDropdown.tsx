@@ -53,7 +53,7 @@ export function MenuDropdown({ onClose }: MenuDropdownProps) {
       <div className="space-y-1">
         <button
           onClick={() => {
-            playUIClick('Settings Menu Item');
+            // Note: UI click sound is handled automatically by Global UI Audio System
             openSettings();
             onClose();
           }}
@@ -65,7 +65,7 @@ export function MenuDropdown({ onClose }: MenuDropdownProps) {
         </button>
         <button
           onClick={() => {
-            playUIClick('Help Menu Item');
+            // Note: UI click sound is handled automatically by Global UI Audio System
             openInstructions();
             onClose();
           }}
@@ -77,7 +77,7 @@ export function MenuDropdown({ onClose }: MenuDropdownProps) {
         </button>
         <button
           onClick={() => {
-            playUIClick('Stats Menu Item');
+            // Note: UI click sound is handled automatically by Global UI Audio System
             onClose();
           }}
           role="menuitem"
@@ -88,7 +88,7 @@ export function MenuDropdown({ onClose }: MenuDropdownProps) {
         </button>
         <button
           onClick={() => {
-            playUIClick('Themes Menu Item');
+            // Note: UI click sound is handled automatically by Global UI Audio System
             onClose();
           }}
           role="menuitem"

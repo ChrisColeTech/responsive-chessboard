@@ -4,6 +4,7 @@ import { UITestsMainPage } from "../../components/UITestsMainPage";
 import { DragTestPageWrapper } from "../../components/DragTestPageWrapper";
 import { UIAudioTestPageWrapper } from "../../components/UIAudioTestPageWrapper";
 import { LayoutTestPageWrapper } from "../../components/LayoutTestPageWrapper";
+import { MobileDragTestPageWrapper } from "../../components/MobileDragTestPageWrapper";
 
 export const UITestPage: React.FC = () => {
   const currentChildPage = useAppStore((state) => state.currentChildPage);
@@ -17,6 +18,8 @@ export const UITestPage: React.FC = () => {
     CurrentPageComponent = UIAudioTestPageWrapper;
   } else if (currentChildPage === "layouttest") {
     CurrentPageComponent = LayoutTestPageWrapper;
+  } else if (currentChildPage === "mobiledragtest") {
+    CurrentPageComponent = MobileDragTestPageWrapper;
   }
 
   return (

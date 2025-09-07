@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "lsof -ti:5173 | xargs -r kill -9 2>/dev/null; concurrently --kill-others --prefix \"{name}\" --names \"VITE,TUNNEL\" \"npm run dev:local\" \"npm run dev:ngrok\"",
+    "dev:web": "lsof -ti:5173 | xargs -r kill -9 2>/dev/null; concurrently --kill-others --prefix \"{name}\" --names \"VITE,TUNNEL\" \"npm run dev:web:local\" \"npm run dev:ngrok\"",
     "dev:local": "vite",
+    "dev:web:local": "vite --config vite.config.web.ts",
     "dev:ngrok": "sleep 3 && ngrok http 5173 --domain=eager-terrier-especially.ngrok-free.app",
     "build": "tsc -b && vite build",
     "lint": "eslint .",

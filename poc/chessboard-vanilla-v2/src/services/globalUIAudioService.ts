@@ -175,14 +175,18 @@ export class GlobalUIAudioService implements IGlobalUIAudioService {
    * Global click event handler - the core of the audio detection system
    */
   private handleGlobalClick(event: Event): void {
-    console.log('🔊 [GLOBAL UI AUDIO] Click detected:', event.target);
+    const target = event.target as HTMLElement;
+    console.log('🔊 [GLOBAL UI AUDIO] Click detected:', {
+      tagName: target?.tagName,
+      className: target?.className || '',
+      id: target?.id || ''
+    });
     
     if (!this.config.enabled || !this.config.autoDetection) {
       console.log('🔊 [GLOBAL UI AUDIO] Disabled - enabled:', this.config.enabled, 'autoDetection:', this.config.autoDetection);
       return;
     }
 
-    const target = event.target as Element;
     if (!target) {
       console.log('🔊 [GLOBAL UI AUDIO] No target');
       return;
@@ -191,7 +195,12 @@ export class GlobalUIAudioService implements IGlobalUIAudioService {
     try {
       // Detect if this click should trigger audio
       const detectionResult = this.detectClickableElement(target);
-      console.log('🔊 [GLOBAL UI AUDIO] Detection result:', detectionResult);
+      console.log('🔊 [GLOBAL UI AUDIO] Detection result:', {
+        shouldPlaySound: detectionResult.shouldPlaySound,
+        elementTag: detectionResult.element?.tagName,
+        matchedSelector: detectionResult.matchedSelector,
+        priority: detectionResult.priority
+      });
       
       if (detectionResult.shouldPlaySound) {
         console.log(
@@ -206,7 +215,11 @@ export class GlobalUIAudioService implements IGlobalUIAudioService {
         console.log('🔊 [GLOBAL UI AUDIO] Not playing sound - element excluded or not clickable');
       }
     } catch (error) {
-      console.error('🔊 [GLOBAL UI AUDIO] Error in click handler:', error);
+      console.error('🔊 [GLOBAL UI AUDIO] Error in click handler:', {
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        target: target ? { tagName: target.tagName, className: target.className, id: target.id } : null
+      });
     }
   }
 

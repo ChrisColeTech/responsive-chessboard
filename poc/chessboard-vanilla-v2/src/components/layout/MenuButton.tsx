@@ -12,7 +12,7 @@ export function MenuButton({ isMenuOpen, onToggleMenu }: MenuButtonProps) {
   const { playUIHover } = useUIHoverSound();
 
   const handleMenuClick = () => {
-    playUIClick('Menu Button'); // Use consistent UI click sound
+    // Note: UI click sound is handled automatically by Global UI Audio System
     onToggleMenu();
   };
 

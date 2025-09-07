@@ -17,7 +17,6 @@ export function useUITestsActions() {
   const runUITests = useCallback(() => {
     console.log('🧪 [UI TESTS ACTIONS] Running UI tests')
     addTestResult("🧪 Starting UI component tests...")
-    playMove(false)
     
     // Simulate test execution
     setTimeout(() => {
@@ -26,7 +25,7 @@ export function useUITestsActions() {
       addTestResult("✅ Color themes: PASS")
       addTestResult("🎉 All UI tests completed!")
     }, 1000)
-  }, [playMove])
+  }, [])
 
   const clearUIResults = useCallback(() => {
     console.log('🗑️ [UI TESTS ACTIONS] Clearing UI test results')
@@ -42,8 +41,7 @@ export function useUITestsActions() {
     link.download = 'ui-test-results.txt'
     link.click()
     URL.revokeObjectURL(url)
-    playMove(false)
-  }, [testResults, playMove])
+  }, [testResults])
 
   const resetUITests = useCallback(() => {
     console.log('🔄 [UI TESTS ACTIONS] Resetting UI tests')
@@ -53,19 +51,32 @@ export function useUITestsActions() {
   }, [playError])
 
   const goToDragTest = useCallback(() => {
-    setCurrentChildPage('dragtest')
-    playMove(false)
-  }, [setCurrentChildPage, playMove])
+    // Small delay to prevent hover sound from triggering after menu transition
+    setTimeout(() => {
+      setCurrentChildPage('dragtest')
+    }, 100)
+  }, [setCurrentChildPage])
 
   const goToAudioTest = useCallback(() => {
-    setCurrentChildPage('uiaudiotest')
-    playMove(false)
-  }, [setCurrentChildPage, playMove])
+    // Small delay to prevent hover sound from triggering after menu transition
+    setTimeout(() => {
+      setCurrentChildPage('uiaudiotest')
+    }, 100)
+  }, [setCurrentChildPage])
 
   const goToLayoutTest = useCallback(() => {
-    setCurrentChildPage('layouttest')
-    playMove(false)
-  }, [setCurrentChildPage, playMove])
+    // Small delay to prevent hover sound from triggering after menu transition
+    setTimeout(() => {
+      setCurrentChildPage('layouttest')
+    }, 100)
+  }, [setCurrentChildPage])
+
+  const goToMobileDragTest = useCallback(() => {
+    // Small delay to prevent hover sound from triggering after menu transition
+    setTimeout(() => {
+      setCurrentChildPage('mobiledragtest')
+    }, 100)
+  }, [setCurrentChildPage])
 
   return {
     runUITests,
@@ -75,6 +86,7 @@ export function useUITestsActions() {
     goToDragTest,
     goToAudioTest,
     goToLayoutTest,
+    goToMobileDragTest,
     testResults
   }
 }

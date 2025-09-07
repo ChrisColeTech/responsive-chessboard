@@ -13,7 +13,7 @@ export function Header({ coinBalance }: HeaderProps) {
   const { playUIClick } = useUIClickSound()
   
   const handleCoinClick = () => {
-    playUIClick('Coin Balance')
+    // Note: UI click sound is handled automatically by Global UI Audio System
     openCoinsModal()
   }
   return (

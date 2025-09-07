@@ -346,12 +346,16 @@ export const TestBoard = ({
       display: 'grid', 
       gridTemplateColumns: 'repeat(3, 1fr)', 
       gridTemplateRows: 'repeat(3, 1fr)',
-      width: '100%', // Fill parent container
-      height: '100%', // Fill parent container
+      aspectRatio: '1', // Force square shape
       border: '2px solid #8B4513', 
       borderRadius: '4px',
       boxSizing: 'border-box',
-      gap: '0'
+      gap: '0',
+      minWidth: '200px',
+      minHeight: '200px',
+      maxWidth: '100%',
+      maxHeight: '100%',
+      margin: 'auto' // Center the TestBoard
     }}>
       {squares.map((square) => {
         const piece = testPieces[square];
@@ -365,7 +369,8 @@ export const TestBoard = ({
             data-square={square} // Essential for drop detection
             onClick={() => onSquareClick(square as ChessPosition)}
             onTouchEnd={(e) => {
-              e.preventDefault(); // Prevent double-firing with onClick
+              e.preventDefault(); // Prevent default touch behavior
+              e.stopPropagation(); // Stop event from bubbling
               onSquareClick(square as ChessPosition);
             }}
             style={{

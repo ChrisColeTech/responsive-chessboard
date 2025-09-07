@@ -1,4 +1,4 @@
-import { Settings, Target, Coins, Loader } from "lucide-react";
+import { Settings, Target, Coins } from "lucide-react";
 import { MenuButton } from "./MenuButton";
 import type { TabId } from "./types";
 import { useUIClickSound } from "../../hooks/useUIClickSound";
@@ -44,12 +44,6 @@ const tabs: Tab[] = [
     icon: Target,
     description: "vs Computer",
   },
-  {
-    id: "splash",
-    label: "Splash",
-    icon: Loader,
-    description: "Loading Screens",
-  },
 ];
 
 export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: TabBarProps) {
@@ -74,7 +68,7 @@ export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: Ta
     <div
       className="
         w-full h-[84px] 
-        grid grid-cols-6 
+        grid grid-cols-5 
       "
       role="tablist"
       aria-label="Main navigation"
@@ -90,11 +84,10 @@ export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: Ta
           <button
             key={tab.id}
             onClick={() => {
-              // Play click sound
-              playUIClick(`Tab: ${tab.label}`);
+              // Note: UI click sound is handled automatically by Global UI Audio System
 
-              // If clicking on UI Tests or Splash tab, clear any child page
-              if (tab.id === 'uitests' || tab.id === 'splash') {
+              // If clicking on UI Tests tab, clear any child page
+              if (tab.id === 'uitests') {
                 setCurrentChildPage(null);
               }
 

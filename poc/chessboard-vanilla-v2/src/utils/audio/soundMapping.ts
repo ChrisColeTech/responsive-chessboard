@@ -19,9 +19,9 @@ export const UI_SOUND_MAPPING: Record<UIInteractionType, UISoundType> = {
  * This bridges the gap between UI-specific sound types and the audio service
  */
 export const SOUND_TYPE_TO_AUDIO_SERVICE: Record<UISoundType, SoundEffect> = {
-  uiClick: 'uiClick',
-  uiHover: 'uiClick', // Fallback to uiClick for now
-  uiSelect: 'uiClick', // Fallback to uiClick for now
+  uiClick: 'capture', // Use capture sound for clicks (pronounced feedback)
+  uiHover: 'move', // Use move sound for hover (subtle feedback)
+  uiSelect: 'capture', // Use capture sound for selection
   uiError: 'error' // Map to existing error sound
 };
 
