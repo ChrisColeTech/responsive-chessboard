@@ -20,7 +20,6 @@ export const MobileChessboardLayout: React.FC<MobileChessboardLayoutProps> = ({
       style={{
         display: 'grid',
         gridTemplateRows: '80px auto 80px',
-        paddingTop: '80px',
         boxSizing: 'border-box'
       }}
     >

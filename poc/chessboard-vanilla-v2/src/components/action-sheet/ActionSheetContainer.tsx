@@ -2,7 +2,7 @@
  * Container component that wires up page-specific actions with HeadlessUI Popover
  * Works with external MenuButton trigger in TabBar for proper HeadlessUI integration
  */
-import { useCallback } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { ActionSheet } from './ActionSheet'
 import { usePlayActions } from '../../hooks/usePlayActions'
 import { useSlotsActions } from '../../hooks/useSlotsActions'
@@ -30,8 +30,19 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
   const currentChildPage = useAppStore((state) => state.currentChildPage)
   const actionSheetPage = currentChildPage || currentPage
   
-  // Get actions for current page
-  const actions = PAGE_ACTIONS[actionSheetPage] || []
+  // Add delay when switching action menus
+  const [delayedActionSheetPage, setDelayedActionSheetPage] = useState(actionSheetPage)
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDelayedActionSheetPage(actionSheetPage)
+    }, 1000) // 1000ms delay when switching action menus
+    
+    return () => clearTimeout(timer)
+  }, [actionSheetPage])
+  
+  // Get actions for current page (with delay)
+  const actions = PAGE_ACTIONS[delayedActionSheetPage] || []
   
   // Get page-specific action handlers
   const playActions = usePlayActions()
@@ -160,7 +171,7 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
     }
 
     // Call the action function with proper typing
-    const pageActions = actionMap[actionSheetPage]          // Record<string, Fn> | undefined
+    const pageActions = actionMap[delayedActionSheetPage]          // Record<string, Fn> | undefined
     const actionFunction = pageActions?.[action.id]      // Fn | undefined
     
     if (actionFunction) {
@@ -168,7 +179,7 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         console.error(`❌ [ACTION SHEET] Action ${action.id} failed:`, error)
       })
     } else {
-      console.warn(`⚠️ [ACTION SHEET] No handler found for action: ${action.id} on page: ${actionSheetPage}`)
+      console.warn(`⚠️ [ACTION SHEET] No handler found for action: ${action.id} on page: ${delayedActionSheetPage}`)
     }
     
     // Use HeadlessUI's close callback AND our onClose
