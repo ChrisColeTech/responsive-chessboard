@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { useStockfish } from './useStockfish'
 import { useWorkerTestStore } from '../stores/workerTestStore'
+import { useChessAudio } from '../services/audioService'
 
 /**
  * Worker page actions - uses Zustand store for real-time reactive updates
@@ -9,6 +10,7 @@ import { useWorkerTestStore } from '../stores/workerTestStore'
  */
 export function useWorkerActions() {
   const { isReady, requestMove } = useStockfish()
+  const { playGameStart } = useChessAudio()
   const { 
     addTestResult, 
     setLastMove, 
@@ -97,8 +99,9 @@ export function useWorkerActions() {
 
   const clearTestResults = useCallback(() => {
     clearResults()
+    playGameStart() // Play welcome/new game sound when clearing results
     addTestResult("🧹 Results cleared", 'info')
-  }, [clearResults, addTestResult])
+  }, [clearResults, addTestResult, playGameStart])
 
   return {
     testWorkerReady,

@@ -5,13 +5,14 @@ import { useChessAudio } from '../services/audioService'
  * Drag Test page actions - extracted from DragTestPage controls
  */
 export function useDragTestActions() {
-  const { playMove, playError } = useChessAudio()
+  const { playMove, playError, playGameStart } = useChessAudio()
 
   const resetBoard = useCallback(() => {
     if (typeof window !== 'undefined' && (window as any).__testBoardReset) {
       (window as any).__testBoardReset()
+      playGameStart() // Play welcome/new game sound when resetting board
     }
-  }, [])
+  }, [playGameStart])
 
   const testMoveSound = useCallback(() => {
     playMove(false)

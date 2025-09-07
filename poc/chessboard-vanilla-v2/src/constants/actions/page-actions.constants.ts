@@ -94,7 +94,8 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       id: 'clear-test-results',
       label: 'Clear Results',
       icon: Trash2,
-      variant: 'secondary'
+      variant: 'secondary',
+      hasOwnAudio: true
     }
   ],
   uitests: [
@@ -318,7 +319,8 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       id: 'reset-board',
       label: 'Reset Board',
       icon: RotateCcw,
-      variant: 'secondary'
+      variant: 'secondary',
+      hasOwnAudio: true
     },
     {
       id: 'test-move-sound',
