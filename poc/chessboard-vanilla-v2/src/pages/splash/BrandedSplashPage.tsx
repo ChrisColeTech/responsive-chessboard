@@ -1,47 +1,57 @@
 import React from "react";
+import { useSpring, animated } from '@react-spring/web';
+import { useBrandedSplashActions } from '../../hooks/useBrandedSplashActions';
 
 interface BrandedSplashPageProps {
   variant?: 'in-app' | 'modal';
 }
 
 const BrandedSplashPage: React.FC<BrandedSplashPageProps> = ({ variant = 'in-app' }) => {
+  const { animationKey } = useBrandedSplashActions();
+  
   const containerClass = variant === 'modal' 
     ? 'splash-container splash-modal splash-fade-in'
     : 'splash-container splash-in-app splash-fade-in';
 
+  // Dignified crown animation - slower, more refined
+  const floatingCrown = useSpring({
+    from: { transform: 'translateY(-2px)' },
+    to: async (next) => {
+      while (true) {
+        await next({ transform: 'translateY(2px)' });
+        await next({ transform: 'translateY(-2px)' });
+      }
+    },
+    config: { tension: 80, friction: 30 }, // Slower, more dignified
+    reset: animationKey > 0
+  });
+
   return (
     <div className={containerClass}>
       <div className="splash-center-content">
-        {/* Premium brand treatment */}
-        <div className="space-y-4">
-          <div className="text-8xl text-accent crown-glow animate-card-entrance">
-            ♔
-          </div>
-          <div className="h-px w-24 bg-accent mx-auto animate-card-entrance animation-delay-200"></div>
+        {/* Professional Crown - Primary institutional symbol */}
+        <animated.div 
+          style={floatingCrown}
+          className="floating-crown floating-crown-glow"
+        >
+          ♔
+        </animated.div>
+        
+        {/* Institutional Branding */}
+        <div className="professional-branding">
+          <h1 className="splash-title">Master Chess Training</h1>
+          <div className="brand-divider"></div>
+          <p className="splash-subtitle professional-tagline">Excellence in Chess Education</p>
         </div>
         
-        {/* Premium typography */}
-        <div className="space-y-4 animate-card-entrance animation-delay-500">
-          <h1 className="splash-title tracking-wide">
-            Master Chess Training
-          </h1>
-          <p className="text-xl text-muted-foreground font-light">
-            Excellence in Chess Education
-          </p>
-        </div>
-        
-        {/* Branded tagline */}
-        <p className="splash-subtitle animate-card-entrance animation-delay-800">
-          Premium Branded Concept
-        </p>
-        
-        {/* Subtle brand indicator */}
-        <div className="flex justify-center animate-card-entrance animation-delay-1000">
-          <div className="w-12 h-1 bg-accent rounded-full"></div>
+        {/* Credibility Indicators */}
+        <div className="credibility-section">
+          <p className="credibility-text">Professional Training Since 2020</p>
+          <p className="credibility-text">Structured Learning Methods</p>
         </div>
       </div>
     </div>
   );
 };
 
-export default BrandedSplashPage;
+export { BrandedSplashPage };

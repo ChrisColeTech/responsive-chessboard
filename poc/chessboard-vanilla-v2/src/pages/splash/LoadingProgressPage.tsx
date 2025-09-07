@@ -1,45 +1,60 @@
 import React from "react";
+import { useSpring, animated } from '@react-spring/web';
+import { useLoadingProgressActions } from '../../hooks/useLoadingProgressActions';
 
 interface LoadingProgressPageProps {
   variant?: 'in-app' | 'modal';
 }
 
 const LoadingProgressPage: React.FC<LoadingProgressPageProps> = ({ variant = 'in-app' }) => {
+  const { animationKey, overallProgress, currentStatus } = useLoadingProgressActions();
+  
   const containerClass = variant === 'modal' 
     ? 'splash-container splash-modal splash-fade-in'
     : 'splash-container splash-in-app splash-fade-in';
 
+  // Floating crown animation
+  const floatingCrown = useSpring({
+    from: { transform: 'translateY(-3px)' },
+    to: async (next) => {
+      while (true) {
+        await next({ transform: 'translateY(3px)' });
+        await next({ transform: 'translateY(-3px)' });
+      }
+    },
+    config: { tension: 140, friction: 22 },
+    reset: animationKey > 0
+  });
+
   return (
     <div className={containerClass}>
       <div className="splash-center-content">
-        {/* Brand symbol */}
-        <div className="text-7xl text-secondary animate-card-entrance">
-          ♖
+        {/* Floating Crown - Primary focal element */}
+        <animated.div 
+          style={floatingCrown}
+          className="floating-crown floating-crown-glow"
+        >
+          ♔
+        </animated.div>
+        
+        {/* App Title - Below crown */}
+        <h1 className="splash-title">Master Chess Training</h1>
+        
+        {/* Loading Status */}
+        <div className="loading-status">
+          {currentStatus}
         </div>
         
-        {/* App title */}
-        <h1 className="splash-title animate-card-entrance animation-delay-200">
-          Master Chess Training
-        </h1>
-        
-        {/* Progress description */}
-        <p className="splash-subtitle animate-card-entrance animation-delay-500">
-          Loading Progress Concept
-        </p>
-        
-        {/* Simple progress bar using theme classes */}
-        <div className="w-full max-w-xs animate-card-entrance animation-delay-700">
-          <div className="h-1 bg-muted rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-primary rounded-full animate-pulse"
-              style={{ width: '60%' }}
-            ></div>
-          </div>
-          <p className="text-sm text-muted-foreground mt-2">Initializing...</p>
+        {/* Single Progress Bar */}
+        <div className="progress-container">
+          <div 
+            className="progress-bar"
+            style={{ width: `${overallProgress}%` }}
+          />
         </div>
       </div>
     </div>
   );
 };
 
-export default LoadingProgressPage;
+export { LoadingProgressPage };
