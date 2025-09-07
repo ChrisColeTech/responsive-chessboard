@@ -75,6 +75,10 @@ interface AppActions {
   openSplashModal: (page: string) => void
   closeSplashModal: () => void
   
+  // Coins modal actions
+  openCoinsModal: () => void
+  closeCoinsModal: () => void
+  
   // Utility actions
   reset: () => void
   
@@ -101,6 +105,7 @@ const initialState: AppState = {
   lastVisited: new Date(),
   splashModalOpen: false,
   splashModalPage: null,
+  coinsModalOpen: false,
   coinBalance: 350,
 }
 
@@ -195,6 +200,10 @@ export const useAppStore = create<AppStore>()(
       // Splash modal actions
       openSplashModal: (page) => set({ splashModalOpen: true, splashModalPage: page }),
       closeSplashModal: () => set({ splashModalOpen: false, splashModalPage: null }),
+      
+      // Coins modal actions
+      openCoinsModal: () => set({ coinsModalOpen: true }),
+      closeCoinsModal: () => set({ coinsModalOpen: false }),
       
       // Utility actions
       reset: () => set(initialState),
@@ -376,5 +385,21 @@ export const useVisual = () => {
     backgroundEffectsEnabled,
     setBackgroundEffectsEnabled,
     toggleBackgroundEffects,
+  }
+}
+
+export const useCoinsModal = () => {
+  const isOpen = useAppStore((state) => state.coinsModalOpen)
+  const open = useAppStore((state) => state.openCoinsModal)
+  const close = useAppStore((state) => state.closeCoinsModal)
+  const coinBalance = useAppStore((state) => state.coinBalance)
+  const setCoinBalance = useAppStore((state) => state.setCoinBalance)
+  
+  return {
+    isOpen,
+    open,
+    close,
+    coinBalance,
+    setCoinBalance,
   }
 }

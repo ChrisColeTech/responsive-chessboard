@@ -7,7 +7,8 @@ import { SettingsPanel } from "../SettingsPanel";
 import { ActionSheetContainer } from "../action-sheet";
 import { InstructionsFAB } from "../InstructionsFAB";
 import { InstructionsModal } from "../InstructionsModal";
-import { useSettings } from "../../stores/appStore";
+import { CoinsModal } from "../CoinsModal";
+import { useSettings, useCoinsModal } from "../../stores/appStore";
 import { useInstructions } from "../../contexts/InstructionsContext";
 import { useActionSheet } from "../../hooks";
 import type { TabId } from "./types";
@@ -65,6 +66,11 @@ export function AppLayout({
     openInstructions,
     closeInstructions,
   } = useInstructions();
+  const {
+    isOpen: isCoinsModalOpen,
+    close: closeCoinsModal,
+    coinBalance: currentCoinBalance,
+  } = useCoinsModal();
 
   return (
     <div className="relative min-h-screen min-h-[100dvh] bg-background text-foreground">
@@ -156,6 +162,13 @@ export function AppLayout({
         onClose={closeInstructions}
         title={title}
         instructions={instructions}
+      />
+
+      {/* Global Coins Modal */}
+      <CoinsModal
+        isOpen={isCoinsModalOpen}
+        onClose={closeCoinsModal}
+        coinBalance={currentCoinBalance}
       />
     </div>
   );

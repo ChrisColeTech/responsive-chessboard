@@ -1,4 +1,6 @@
 import { Coins } from 'lucide-react'
+import { useCoinsModal } from '../../stores/appStore'
+import { useUIClickSound } from '../../hooks/useUIClickSound'
 
 interface HeaderProps {
   onOpenSettings: () => void
@@ -7,6 +9,13 @@ interface HeaderProps {
 }
 
 export function Header({ coinBalance }: HeaderProps) {
+  const { open: openCoinsModal } = useCoinsModal()
+  const { playUIClick } = useUIClickSound()
+  
+  const handleCoinClick = () => {
+    playUIClick('Coin Balance')
+    openCoinsModal()
+  }
   return (
     <div className="w-full h-16">
       <div className="container mx-auto px-6 h-full">
@@ -17,11 +26,15 @@ export function Header({ coinBalance }: HeaderProps) {
           
           <div className="flex items-center gap-4">
             {coinBalance !== undefined && (
-              <div className="flex items-center gap-2 bg-background/50 px-3 py-1 rounded-lg border border-border">
-                <Coins className="w-4 h-4 text-accent animate-pulse" />
+              <button
+                onClick={handleCoinClick}
+                className="flex items-center gap-2 bg-background/50 px-3 py-1 rounded-lg border border-border hover:bg-background/70 hover:border-accent/50 transition-all duration-200 cursor-pointer group"
+                aria-label="View coin balance details"
+              >
+                <Coins className="w-4 h-4 text-accent animate-pulse group-hover:scale-110 transition-transform duration-200" />
                 <span className="text-sm font-bold text-foreground">{coinBalance.toLocaleString()}</span>
                 <span className="text-xs text-muted-foreground">coins</span>
-              </div>
+              </button>
             )}
           </div>
         </div>
