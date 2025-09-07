@@ -94,7 +94,7 @@ export function AppLayout({
       <div className="absolute top-10 bottom-[84px] left-0 right-0 z-10">
         {/* Primary Content - scrollable within the constrained area */}
         <main className="w-full h-full overflow-auto">
-          <div className="w-full px-20 py-16">{children}</div>
+          <div className="w-full px-20">{children}</div>
         </main>
 
         {/* Instructions FAB - positioned within main content area */}

@@ -1,40 +1,41 @@
-import React from "react";
+import React from 'react';
 
 interface MinimalSplashPageProps {
   variant?: 'in-app' | 'modal';
 }
 
 export const MinimalSplashPage: React.FC<MinimalSplashPageProps> = ({ variant = 'in-app' }) => {
+  const containerClass = variant === 'modal' 
+    ? 'splash-container splash-modal splash-fade-in'
+    : 'splash-container splash-in-app splash-fade-in';
+
   return (
-    <div className={`splash-container splash-${variant} splash-fade-in splash-academy-minimal`}>
-      {/* 
-        CONCEPT 4: Chess Academy Branding - Minimal Variant
-        
-        DESIGN INTENT: Sophisticated chess academy presenting institutional authority.
-        Clean, professional approach establishing credibility and inspiring confidence.
-        Minimal elements with maximum impact - premium educational experience.
-      */}
-      
-      <div className="splash-brand-section">
-        {/* Academy Identity */}
-        <div className="splash-academy-identity">
-          {/* Crown Symbol */}
-          <div className="splash-academy-crown">
-            <span className="splash-crown-symbol">♔</span>
-          </div>
-          
-          {/* Main Title */}
-          <h1 className="splash-title splash-academy-title">Master Chess Training</h1>
-          
-          {/* Institution Subtitle */}
-          <h2 className="splash-subtitle splash-academy-subtitle">Chess Academy</h2>
-          
-          {/* Credentials */}
-          <div className="splash-academy-credentials">
-            <span className="splash-credential">Premium Training</span>
-            <span className="splash-credential-divider">•</span>
-            <span className="splash-credential">Est. 2024</span>
-          </div>
+    <div className={containerClass}>
+      <div className="splash-center-content">
+        <div style={{ fontSize: '48px', marginBottom: '1rem' }}>♔</div>
+        <h1 className="splash-title">Master Chess Training</h1>
+        <p className="splash-subtitle">
+          Learn strategic thinking through chess
+        </p>
+        <div style={{
+          display: 'flex',
+          gap: '4px',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {[0, 1, 2, 3].map((index) => (
+            <div 
+              key={index}
+              style={{
+                width: '8px',
+                height: '8px',
+                background: '#6b7280',
+                borderRadius: '1px',
+                animation: `skeletonPulse 1.5s ease-in-out infinite`,
+                animationDelay: `${index * 0.2}s`
+              }}
+            />
+          ))}
         </div>
       </div>
     </div>
