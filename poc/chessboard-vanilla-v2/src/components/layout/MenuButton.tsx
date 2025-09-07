@@ -1,5 +1,5 @@
 import { Menu } from "lucide-react";
-import { useChessAudio } from "../../services/audioService";
+import { useUIClickSound } from "../../hooks/useUIClickSound";
 import { useUIHoverSound } from "../../hooks/useUIHoverSound";
 
 interface MenuButtonProps {
@@ -8,11 +8,11 @@ interface MenuButtonProps {
 }
 
 export function MenuButton({ isMenuOpen, onToggleMenu }: MenuButtonProps) {
-  const { playMove } = useChessAudio();
+  const { playUIClick } = useUIClickSound();
   const { playUIHover } = useUIHoverSound();
 
   const handleMenuClick = () => {
-    playMove(false); // Play UI interaction sound
+    playUIClick('Menu Button'); // Use consistent UI click sound
     onToggleMenu();
   };
 

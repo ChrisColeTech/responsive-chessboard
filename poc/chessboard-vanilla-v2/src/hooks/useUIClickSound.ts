@@ -1,17 +1,16 @@
-import useSound from 'use-sound'
+import { useChessAudio } from '../services/audioService'
 
 /**
- * Reusable hook for UI click sounds
- * Provides consistent click sound across all components
+ * Chess-themed click sound hook
+ * Uses chess capture sound for UI click feedback
  */
 export function useUIClickSound() {
-  const [playClick] = useSound('/sounds/move.mp3', {
-    volume: 0.3, // Consistent volume for all UI interactions
-  })
+  const { playMove } = useChessAudio()
   
   const playUIClick = (_context?: string) => {
     try {
-      playClick()
+      // Play chess capture sound for UI click feedback
+      playMove(true) // true = capture sound for pronounced click feedback
     } catch (error) {
       console.warn(`🔊 [UI CLICK] Failed to play click sound:`, error)
     }

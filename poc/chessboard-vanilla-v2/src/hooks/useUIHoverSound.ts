@@ -1,18 +1,16 @@
-import useSound from 'use-sound'
+import { useChessAudio } from '../services/audioService'
 
 /**
- * Reusable hook for UI hover sounds
- * Provides subtle hover sound feedback across all interactive components
+ * Chess-themed hover sound hook
+ * Uses chess move sound for UI hover feedback
  */
 export function useUIHoverSound() {
-  const [playHover] = useSound('/sounds/move.mp3', {
-    volume: 0.15, // Lower volume than clicks for subtle hover feedback
-    playbackRate: 1.2, // Slightly higher pitch to differentiate from clicks
-  })
+  const { playMove } = useChessAudio()
   
   const playUIHover = (_context?: string) => {
     try {
-      playHover()
+      // Play chess move sound for hover feedback
+      playMove(false) // false = move sound (not capture)
     } catch (error) {
       console.warn(`🔊 [UI HOVER] Failed to play hover sound:`, error)
     }
