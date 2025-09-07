@@ -9,7 +9,7 @@ import { useUIClickSound } from './useUIClickSound'
 export function useActionSheetAudio() {
   const { playUIClick } = useUIClickSound()
 
-  const playActionSound = useCallback((actionId: string, actionLabel: string) => {
+  const playActionSound = useCallback((actionLabel: string) => {
     // All action sheet items use consistent UI click sound (chess capture sound)
     playUIClick(`Action: ${actionLabel}`)
   }, [playUIClick])

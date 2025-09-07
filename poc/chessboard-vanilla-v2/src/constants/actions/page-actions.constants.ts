@@ -41,19 +41,22 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       id: 'test-spin',
       label: 'Test Spin',
       icon: RotateCcw,
-      variant: 'default'
+      variant: 'default',
+      hasOwnAudio: true
     },
     {
       id: 'test-win',
       label: 'Test Win Sound',
       icon: Coins,
-      variant: 'secondary'
+      variant: 'secondary',
+      hasOwnAudio: true
     },
     {
       id: 'test-lose',
       label: 'Test Lose Sound',
       icon: Volume2,
-      variant: 'destructive'
+      variant: 'destructive',
+      hasOwnAudio: true
     },
     {
       id: 'reset-coins',
@@ -308,19 +311,22 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       id: 'test-move-sound',
       label: 'Test Move Sound',
       icon: Volume2,
-      variant: 'default'
+      variant: 'default',
+      hasOwnAudio: true
     },
     {
       id: 'test-capture-sound',
       label: 'Test Capture Sound',
       icon: Target,
-      variant: 'default'
+      variant: 'default',
+      hasOwnAudio: true
     },
     {
       id: 'test-error-sound',
       label: 'Test Error Sound',
       icon: Sword,
-      variant: 'destructive'
+      variant: 'destructive',
+      hasOwnAudio: true
     },
     {
       id: 'toggle-pieces-position',
@@ -334,13 +340,15 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       id: 'test-ui-sound',
       label: 'Test UI Sound',
       icon: Volume2,
-      variant: 'default'
+      variant: 'default',
+      hasOwnAudio: true
     },
     {
       id: 'test-audio-system',
       label: 'Test Audio System',
       icon: TestTube,
-      variant: 'default'
+      variant: 'default',
+      hasOwnAudio: true
     },
     {
       id: 'reset-audio-settings',

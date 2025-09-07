@@ -102,7 +102,7 @@ export function ActionSheet({
                 key={action.id}
                 action={action}
                 onSelect={() => {
-                  onActionClick(action.id, action.label, handleClose)
+                  onActionClick(action, handleClose)
                   handleClose()
                 }}
                 onHover={() => onActionHover?.(action.label)}
@@ -120,7 +120,12 @@ export function ActionSheet({
               variant: 'secondary'
             }}
             onSelect={() => {
-              onActionClick('open-settings', 'Settings', handleClose)
+              onActionClick({
+                id: 'open-settings',
+                label: 'Settings',
+                icon: Settings,
+                variant: 'secondary'
+              }, handleClose)
               handleClose()
             }}
             onHover={() => onActionHover?.('Settings')}

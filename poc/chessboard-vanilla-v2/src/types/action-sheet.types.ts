@@ -7,11 +7,12 @@ export interface ActionSheetAction {
   disabled?: boolean
   badge?: string | number
   shortcut?: string
+  hasOwnAudio?: boolean // If true, action plays its own sound and doesn't need UI click sound
 }
 
 export interface ActionSheetProps {
   actions: ActionSheetAction[]
-  onActionClick: (actionId: string, actionLabel: string, close: () => void) => void
+  onActionClick: (action: ActionSheetAction, close: () => void) => void
   onActionHover?: (actionLabel: string) => void
   onKeyDown: (event: React.KeyboardEvent) => void
   onClose: () => void

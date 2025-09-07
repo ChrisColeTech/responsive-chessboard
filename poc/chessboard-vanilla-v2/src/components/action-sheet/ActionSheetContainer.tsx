@@ -19,7 +19,7 @@ import { useBrandedSplashActions } from '../../hooks/useBrandedSplashActions'
 import { useUIClickSound } from '../../hooks/useUIClickSound'
 import { useUIHoverSound } from '../../hooks/useUIHoverSound'
 import { useAppStore } from '../../stores/appStore'
-import type { ActionSheetContainerProps } from '../../types/action-sheet.types'
+import type { ActionSheetContainerProps, ActionSheetAction } from '../../types/action-sheet.types'
 import { PAGE_ACTIONS } from '../../constants/actions/page-actions.constants'
 
 export function ActionSheetContainer({ currentPage, className, onClose, isOpen, onOpenSettings }: ActionSheetContainerProps) {
@@ -50,10 +50,12 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
   const { playUIHover } = useUIHoverSound()
 
   // HeadlessUI action handler - fixed typing for string indexing
-  const handleAction = useCallback((actionId: string, actionLabel: string, closeCallback: () => void) => {
+  const handleAction = useCallback((action: ActionSheetAction, closeCallback: () => void) => {
     
-    // Play click sound
-    playUIClick(`Action: ${actionLabel}`)
+    // Play UI click sound only if action doesn't handle its own audio
+    if (!action.hasOwnAudio) {
+      playUIClick(`Action: ${action.label}`)
+    }
     
     // Map actions to the right page hook functions with proper typing
     type Fn = () => void | Promise<void>
@@ -142,21 +144,21 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
     }
     
     // Handle global settings action
-    if (actionId === 'open-settings') {
+    if (action.id === 'open-settings') {
       onOpenSettings()
       return
     }
 
     // Call the action function with proper typing
     const pageActions = actionMap[actionSheetPage]          // Record<string, Fn> | undefined
-    const actionFunction = pageActions?.[actionId]      // Fn | undefined
+    const actionFunction = pageActions?.[action.id]      // Fn | undefined
     
     if (actionFunction) {
       Promise.resolve(actionFunction()).catch(error => {
-        console.error(`❌ [ACTION SHEET] Action ${actionId} failed:`, error)
+        console.error(`❌ [ACTION SHEET] Action ${action.id} failed:`, error)
       })
     } else {
-      console.warn(`⚠️ [ACTION SHEET] No handler found for action: ${actionId} on page: ${actionSheetPage}`)
+      console.warn(`⚠️ [ACTION SHEET] No handler found for action: ${action.id} on page: ${actionSheetPage}`)
     }
     
     // Use HeadlessUI's close callback AND our onClose
