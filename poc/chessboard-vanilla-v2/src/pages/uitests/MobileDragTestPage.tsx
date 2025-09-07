@@ -16,7 +16,7 @@ export const MobileDragTestPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/30 relative overflow-hidden">
+    <div className="h-screen bg-gradient-to-br from-background via-background/95 to-muted/30 relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="bg-sparkle bg-sparkle-lg bg-orb-foreground-30 top-1/4 left-1/4 animation-delay-300"></div>
@@ -24,32 +24,57 @@ export const MobileDragTestPage: React.FC = () => {
         <div className="bg-sparkle bg-sparkle-md bg-orb-foreground-50 top-2/3 right-1/3 animation-delay-1200"></div>
       </div>
 
-      <section className="relative z-10 space-y-8">
-        {/* Mobile Layout */}
-        <div 
-          className="test-container w-full"
-          style={{
-            height: "calc(100vh - 100px)", // Account for mobile browser UI
-            minWidth: "300px",
-            minHeight: "400px",
-            maxHeight: "600px", // Limit height for better mobile UX
-            border: "2px solid #666",
-            borderRadius: "8px"
-          }}
-        >
-          <MobileChessboardLayout
+      {/* Mobile Layout fills entire page */}
+      <MobileChessboardLayout
             topPieces={
-              <div>Top Pieces Placeholder</div>
+              <div style={{ 
+                width: '100%', 
+                height: '100%', 
+                overflow: 'hidden',
+                boxSizing: 'border-box',
+                margin: 0,
+                padding: 0,
+                fontSize: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                Top
+              </div>
             }
             center={
-              <div>Mobile Board Placeholder</div>
+              <div style={{ 
+                width: '100%', 
+                height: '100%', 
+                overflow: 'hidden',
+                boxSizing: 'border-box',
+                margin: 0,
+                padding: 0,
+                fontSize: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                Board
+              </div>
             }
             bottomPieces={
-              <div>Bottom Pieces Placeholder</div>
+              <div style={{ 
+                width: '100%', 
+                height: '100%', 
+                overflow: 'hidden',
+                boxSizing: 'border-box',
+                margin: 0,
+                padding: 0,
+                fontSize: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                Bottom
+              </div>
             }
-          />
-        </div>
-      </section>
+      />
     </div>
   );
 };

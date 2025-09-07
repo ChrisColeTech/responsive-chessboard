@@ -71,21 +71,9 @@ export const DragTestPage: React.FC = () => {
         <div className="bg-sparkle bg-sparkle-md bg-orb-foreground-50 top-2/3 right-1/3 animation-delay-1200"></div>
       </div>
 
-      <section className="relative z-10 space-y-8">
-        {/* Mobile Layout */}
-        {isMobile ? (
-          <div 
-            className="test-container w-full"
-            style={{
-              height: "calc(100vh - 100px)", // Account for mobile browser UI
-              minWidth: "300px",
-              minHeight: "400px",
-              maxHeight: "600px", // Limit height for better mobile UX
-              border: "2px solid #666",
-              borderRadius: "8px"
-            }}
-          >
-            <MobileChessboardLayout
+      {/* Mobile Layout fills entire page when on mobile */}
+      {isMobile ? (
+        <MobileChessboardLayout
               topPieces={
                 <CapturedPieces
                   pieces={capturedPieces.filter((p) => p.color === "white")}
@@ -109,25 +97,10 @@ export const DragTestPage: React.FC = () => {
                   position="normal"
                 />
               }
-            />
-          </div>
-        ) : (
-          /* Desktop Layout - 3x3 Grid */
-          <div 
-            className="test-container"
-            style={{
-              resize: "both",
-              overflow: "hidden",
-              minWidth: "400px",
-              minHeight: "400px",
-              width: "800px",
-              height: "600px",
-              containerType: "size",
-              border: "2px solid #666",
-              borderRadius: "8px"
-            }}
-          >
-            <ChessboardLayout
+        />
+      ) : (
+        /* Desktop Layout - 3x3 Grid fills entire page */
+        <ChessboardLayout
               top={
                 <CapturedPieces
                   pieces={capturedPieces.filter((p) => p.color === "white")}
@@ -181,10 +154,8 @@ export const DragTestPage: React.FC = () => {
                 />
               }
               className="h-full"
-            />
-          </div>
-        )}
-      </section>
+        />
+      )}
     </div>
   );
 };

@@ -16,25 +16,27 @@ export const MobileChessboardLayout: React.FC<MobileChessboardLayoutProps> = ({
 }) => {
   return (
     <div 
-      className={`w-full h-full border-2 border-border rounded-lg ${className}`}
+      className={`w-full h-full ${className}`}
       style={{
         display: 'grid',
-        gridTemplateRows: '80px 1fr 80px',
-        gap: '12px',
-        padding: '12px',
+        gridTemplateRows: '80px auto 80px',
+        paddingTop: '80px',
         boxSizing: 'border-box'
       }}
     >
       {/* Top captured pieces - compact horizontal layout */}
       {topPieces && (
         <div 
-          className="flex items-center justify-center flex-shrink-0 w-full border border-border/50 rounded p-2"
           style={{
-            minHeight: '60px',
-            maxHeight: '80px'
+            display: 'flex',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%',
+            boxSizing: 'border-box',
+            overflow: 'hidden'
           }}
         >
-          <div className="w-full h-full">
+          <div style={{ flex: 1, width: '100%', height: '100%' }}>
             {topPieces}
           </div>
         </div>
@@ -42,34 +44,33 @@ export const MobileChessboardLayout: React.FC<MobileChessboardLayoutProps> = ({
       
       {/* Center chessboard - takes remaining space but maintains aspect ratio */}
       <div 
-        className="flex items-center justify-center border border-border/50 rounded p-2"
-        style={{ minHeight: '0' }}
+        style={{ 
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          height: '100%',
+          minHeight: '0',
+          boxSizing: 'border-box',
+          overflow: 'hidden'
+        }}
       >
-        <div
-          style={{
-            width: '100%',
-            height: '100%',
-            aspectRatio: '1',
-            maxWidth: '400px',
-            maxHeight: '400px',
-            minWidth: '240px',
-            minHeight: '240px'
-          }}
-        >
-          {center}
-        </div>
+        {center}
       </div>
       
       {/* Bottom captured pieces - compact horizontal layout */}
       {bottomPieces && (
         <div 
-          className="flex items-center justify-center flex-shrink-0 w-full border border-border/50 rounded p-2"
           style={{
-            minHeight: '60px',
-            maxHeight: '80px'
+            display: 'flex',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%',
+            boxSizing: 'border-box',
+            overflow: 'hidden'
           }}
         >
-          <div className="w-full h-full">
+          <div style={{ flex: 1, width: '100%', height: '100%' }}>
             {bottomPieces}
           </div>
         </div>
