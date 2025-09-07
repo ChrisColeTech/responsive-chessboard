@@ -37,6 +37,9 @@ interface AppState {
   splashModalOpen: boolean
   splashModalPage: string | null  // Which splash page to show in modal
   
+  // Coins Modal State
+  coinsModalOpen: boolean
+  
   // Game State
   coinBalance: number
 }
