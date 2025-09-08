@@ -32,23 +32,18 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   // Load theme from localStorage on mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('chess-app-theme') as ThemeId || 'theme-onyx'
-    setCurrentTheme(savedTheme)
+    const savedDarkMode = localStorage.getItem('chess-app-dark-mode') === 'true'
     
-    // Determine base theme and mode from saved theme
+    setCurrentTheme(savedTheme)
+    setIsDarkMode(savedDarkMode)
+    
+    // Determine base theme from saved theme
     if (savedTheme === 'light' || savedTheme === 'dark') {
       setSelectedBaseTheme('default')
-      setIsDarkMode(savedTheme === 'dark')
     } else if (savedTheme.startsWith('theme-')) {
-      // New theme system - extract base name
-      const withoutPrefix = savedTheme.replace('theme-', '')
-      const baseThemeId = withoutPrefix.replace('-light', '') as BaseTheme
+      // Extract base theme name (e.g., 'theme-bronze' -> 'bronze')
+      const baseThemeId = savedTheme.replace('theme-', '') as BaseTheme
       setSelectedBaseTheme(baseThemeId)
-      setIsDarkMode(!savedTheme.endsWith('-light'))
-    } else {
-      // Legacy theme handling
-      const baseThemeId = savedTheme.replace('-light', '') as BaseTheme
-      setSelectedBaseTheme(baseThemeId)
-      setIsDarkMode(!savedTheme.endsWith('-light'))
     }
   }, [])
 
@@ -97,6 +92,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     
     // Save to localStorage
     localStorage.setItem('chess-app-theme', currentTheme)
+    localStorage.setItem('chess-app-dark-mode', isDarkMode.toString())
   }, [currentTheme, isDarkMode, selectedBaseTheme])
 
   const setTheme = (themeId: ThemeId) => {
@@ -136,7 +132,8 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     if (selectedBaseTheme === 'default') {
       actualThemeId = newIsDarkMode ? 'dark' : 'light'
     } else {
-      actualThemeId = newIsDarkMode ? `theme-${selectedBaseTheme}` as ThemeId : `theme-${selectedBaseTheme}-light` as ThemeId
+      // For professional themes, the theme ID stays the same, only isDarkMode changes
+      actualThemeId = `theme-${selectedBaseTheme}` as ThemeId
     }
     
     setCurrentTheme(actualThemeId)

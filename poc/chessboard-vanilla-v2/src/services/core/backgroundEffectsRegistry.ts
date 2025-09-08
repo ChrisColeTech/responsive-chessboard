@@ -1,17 +1,15 @@
 import { Sparkles, Shapes, Atom, Infinity, Zap } from 'lucide-react'
 import { BackgroundEffectsService } from './BackgroundEffectsService'
+import { GamingEffects } from '../../components/background-effects/effects/GamingEffects'
+import { MinimalEffects } from '../../components/background-effects/effects/MinimalEffects'
+import { ParticleEffects } from '../../components/background-effects/effects/ParticleEffects'
+import { AbstractEffects } from '../../components/background-effects/effects/AbstractEffects'
+import { CasinoEffects } from '../../components/background-effects/effects/CasinoEffects'
 
-// Dynamic imports for components to avoid import issues
-const registerEffects = async () => {
+// Synchronous registration function for immediate effect availability
+const registerEffects = () => {
   const service = BackgroundEffectsService.getInstance()
   
-  // Import components dynamically
-  const { GamingEffects } = await import('../../components/background-effects/effects/GamingEffects')
-  const { MinimalEffects } = await import('../../components/background-effects/effects/MinimalEffects')
-  const { ParticleEffects } = await import('../../components/background-effects/effects/ParticleEffects') 
-  const { AbstractEffects } = await import('../../components/background-effects/effects/AbstractEffects')
-  const { CasinoEffects } = await import('../../components/background-effects/effects/CasinoEffects')
-
   // Register Gaming Effects
   service.registerEffect({
     id: 'gaming',
@@ -68,9 +66,7 @@ const registerEffects = async () => {
   return service
 }
 
-// Register effects immediately
-registerEffects().catch((error) => {
-  console.error('🎨 [BackgroundEffects] Failed to register effects:', error)
-})
+// Register effects immediately and synchronously
+registerEffects()
 
 export { BackgroundEffectsService as backgroundEffectsService }

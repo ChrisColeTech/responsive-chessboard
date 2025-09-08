@@ -148,7 +148,7 @@ export const useAppStore = create<AppStore>()(
         })
         
         // Apply theme to document
-        applyThemeToDocument(theme)
+        applyThemeToDocument(theme, isDark)
       },
       
       setBaseTheme: (baseTheme) => {
@@ -158,7 +158,8 @@ export const useAppStore = create<AppStore>()(
         if (baseTheme === 'default') {
           actualTheme = isDarkMode ? 'dark' : 'light'
         } else {
-          actualTheme = isDarkMode ? `theme-${baseTheme}` as ThemeId : `theme-${baseTheme}-light` as ThemeId
+          // For professional themes, the theme ID stays the same, only isDarkMode matters
+          actualTheme = `theme-${baseTheme}` as ThemeId
         }
         
         set({ 
@@ -166,7 +167,7 @@ export const useAppStore = create<AppStore>()(
           currentTheme: actualTheme 
         })
         
-        applyThemeToDocument(actualTheme)
+        applyThemeToDocument(actualTheme, isDarkMode)
       },
       
       toggleMode: () => {
@@ -177,7 +178,8 @@ export const useAppStore = create<AppStore>()(
         if (selectedBaseTheme === 'default') {
           actualTheme = newIsDarkMode ? 'dark' : 'light'
         } else {
-          actualTheme = newIsDarkMode ? `theme-${selectedBaseTheme}` as ThemeId : `theme-${selectedBaseTheme}-light` as ThemeId
+          // For professional themes, the theme ID stays the same, only isDarkMode changes
+          actualTheme = `theme-${selectedBaseTheme}` as ThemeId
         }
         
         set({ 
@@ -185,7 +187,7 @@ export const useAppStore = create<AppStore>()(
           currentTheme: actualTheme 
         })
         
-        applyThemeToDocument(actualTheme)
+        applyThemeToDocument(actualTheme, newIsDarkMode)
       },
       
       // Settings actions
@@ -244,7 +246,7 @@ export const useAppStore = create<AppStore>()(
       onRehydrateStorage: () => (state) => {
         if (state?.currentTheme) {
           // Apply persisted theme to document on load
-          applyThemeToDocument(state.currentTheme)
+          applyThemeToDocument(state.currentTheme, state.isDarkMode)
         }
       },
     })
@@ -252,7 +254,7 @@ export const useAppStore = create<AppStore>()(
 )
 
 // Helper function to apply theme to document
-function applyThemeToDocument(theme: ThemeId) {
+function applyThemeToDocument(theme: ThemeId, isDarkMode?: boolean) {
   const html = document.documentElement
   
   // Remove all theme classes (old and new)
@@ -289,15 +291,14 @@ function applyThemeToDocument(theme: ThemeId) {
   if (theme === 'dark') {
     classesToAdd.push('dark')
   } else if (theme !== 'light') {
-    // Handle professional themes properly
-    if (theme.endsWith('-light')) {
-      // For light variants like 'theme-onyx-light', apply just 'theme-onyx'
-      const baseTheme = theme.replace('-light', '')
-      classesToAdd.push(baseTheme)
-    } else if (theme.startsWith('theme-')) {
-      // For dark variants like 'theme-onyx', apply 'theme-onyx' + 'dark'
+    // For professional themes, apply theme class and dark class if needed
+    if (theme.startsWith('theme-')) {
       classesToAdd.push(theme)
-      classesToAdd.push('dark')
+      // Add dark class if isDarkMode is true (from parameter or infer from store)
+      const shouldBeDark = isDarkMode !== undefined ? isDarkMode : !theme.endsWith('-light')
+      if (shouldBeDark) {
+        classesToAdd.push('dark')
+      }
     } else {
       // Fallback for any other themes
       classesToAdd.push(theme)

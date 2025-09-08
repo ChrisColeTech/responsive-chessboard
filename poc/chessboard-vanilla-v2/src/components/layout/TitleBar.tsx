@@ -1,7 +1,7 @@
 import { HiOutlineMenu } from 'react-icons/hi';
 import { VscChromeMinimize, VscChromeMaximize, VscChromeClose } from 'react-icons/vsc';
 import { Crown, Sun, Moon } from 'lucide-react';
-import { useTheme } from '../../contexts/ThemeContext';
+import { useTheme } from '../../stores/appStore';
 
 interface TitleBarProps {
   onMenuClick?: () => void;
@@ -17,6 +17,7 @@ export function TitleBar({
   onClose 
 }: TitleBarProps) {
   const { isDarkMode, toggleMode } = useTheme();
+  // Force Tailwind to regenerate titlebar classes
   return (
     <div className="w-full h-10 bg-titlebar flex items-center justify-between select-none" style={{ WebkitAppRegion: 'drag' }}>
       {/* Left side - Hamburger menu + App title */}

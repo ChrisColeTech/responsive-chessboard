@@ -4,7 +4,7 @@ import {
   generateChessGridCells,
   type GridCell,
 } from "../../utils/grid-generator.utils";
-import { useTheme } from "../../contexts/ThemeContext";
+import { useTheme } from "../../stores/appStore";
 import { useChessBoardAudio } from "../../hooks/audio/useChessBoardAudio";
 
 interface MobileChessBoardProps {
