@@ -77,15 +77,13 @@ export const MobileChessboardLayout: React.FC<MobileChessboardLayoutProps> = ({
       <div 
         className="transition-all duration-300 ease-out"
         style={{ 
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           width: '100%',
           height: '100%',
           minHeight: '0',
           boxSizing: 'border-box',
           overflow: 'hidden',
-          transform: 'translateZ(0)' // Hardware acceleration
+          transform: 'translateZ(0)', // Hardware acceleration
+          border: '2px solid var(--border)'
         }}
       >
         {center}

@@ -9,6 +9,7 @@ import './styles/organized_themes/themes-professional.css'
 import './styles/organized_themes/themes-gaming.css'
 import './styles/organized_themes/themes-effects.css'
 import './styles/organized_themes/chess-filters.css'
+import './styles/organized_themes/chess-piece-colors.css'
 // Import splash screen styles
 import './styles/splash.css'
 // Import background effects registry to initialize effects
