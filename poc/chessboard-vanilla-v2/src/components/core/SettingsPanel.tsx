@@ -3,6 +3,7 @@ import { useTheme, useAppStore } from "../../stores/appStore";
 import { useUIClickSound } from "../../hooks/audio/useUIClickSound";
 import { BackgroundEffectsSelector } from "../settings/BackgroundEffectsSelector";
 import { ThemeSelector } from "../settings/ThemeSelector";
+import { PieceSetSelector } from "../settings/PieceSetSelector";
 import { SETTINGS_SECTIONS } from "../../data/themeConfig";
 import { useGlobalUIAudio } from "../../hooks/audio/useGlobalUIAudio";
 import { useChessAudio } from "../../services/audio/audioService";
@@ -80,6 +81,9 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
 
         {/* Settings Content */}
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
+          {/* Piece Set Selector */}
+          <PieceSetSelector />
+
           {/* Audio Toggle */}
           <div>
             <h3 className="text-base font-semibold text-foreground mb-3 flex items-center gap-2">

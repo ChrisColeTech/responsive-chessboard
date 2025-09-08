@@ -21,8 +21,8 @@ export const DEFAULT_PIECE_SET = 'classic' as const;
 export const getPieceFileName = (
   color: 'white' | 'black',
   type: 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn',
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _pieceSet: keyof typeof PIECE_SETS = DEFAULT_PIECE_SET
+  pieceSet: keyof typeof PIECE_SETS = DEFAULT_PIECE_SET,
+  position?: string
 ): string => {
   const colorPrefix = color === 'white' ? 'w' : 'b';
   const typeMap = {
@@ -35,15 +35,25 @@ export const getPieceFileName = (
   };
   
   const typeCode = typeMap[type];
+  
+  // Handle knight orientation for sets with -left/-right versions
+  if (type === 'knight' && pieceSet !== 'classic' && position) {
+    const file = position[0]; // Extract file (a-h)
+    // Queenside knights (a-file, b-file) face left, Kingside knights (g-file, h-file) face right
+    const orientation = (file === 'a' || file === 'b') ? 'left' : 'right';
+    return `${colorPrefix}${typeCode}-${orientation}.svg`;
+  }
+  
   return `${colorPrefix}${typeCode}.svg`;
 };
 
 export const getPieceImagePath = (
   color: 'white' | 'black',
   type: 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn',
-  pieceSet: keyof typeof PIECE_SETS = DEFAULT_PIECE_SET
+  pieceSet: keyof typeof PIECE_SETS = DEFAULT_PIECE_SET,
+  position?: string
 ): string => {
-  const fileName = getPieceFileName(color, type, pieceSet);
+  const fileName = getPieceFileName(color, type, pieceSet, position);
   return `/pieces/${pieceSet}/${fileName}`;
 };
 

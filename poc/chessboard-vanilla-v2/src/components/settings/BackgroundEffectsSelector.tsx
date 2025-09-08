@@ -3,7 +3,7 @@
  * Extracted from SettingsPanel for Single Responsibility Principle
  */
 
-import { Sparkles } from "lucide-react";
+import { Sparkles, Wand2 } from "lucide-react";
 import { useBackgroundEffectsManager } from "../../hooks/core/useBackgroundEffectsManager";
 import { SegmentedControl } from "../ui/SegmentedControl";
 import { BACKGROUND_EFFECTS_TOGGLE_BUTTONS } from "../../data/backgroundEffectsConfig";
@@ -62,7 +62,10 @@ export function BackgroundEffectsSelector() {
       {effectsOptions.length > 0 && (
         <div className="mt-4">
           <div className="flex items-center gap-2 mb-3">
-            <h4 className="text-sm font-medium text-foreground">Effect Style</h4>
+            <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
+              <Wand2 className="w-3 h-3" />
+              Effect Style
+            </h4>
             {selectedEffect && isEffectsEnabled && (
               <div className="flex items-center gap-1 text-xs text-muted-foreground">
                 <selectedEffect.icon className="w-3 h-3" />

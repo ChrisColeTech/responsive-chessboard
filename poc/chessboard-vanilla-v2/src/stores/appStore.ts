@@ -3,6 +3,7 @@ import { persist, subscribeWithSelector } from 'zustand/middleware'
 import type { TabId } from '../components/layout/types'
 import type { ThemeId, BaseTheme } from '../components/core/ThemeSwitcher'
 import type { BackgroundEffectVariant } from '../types/core/backgroundEffects'
+import type { PIECE_SETS } from '../constants/pieces.constants'
 
 interface AppState {
   // Navigation
@@ -29,6 +30,9 @@ interface AppState {
   
   // Visual settings
   backgroundEffectVariant: BackgroundEffectVariant
+  
+  // Chess settings
+  selectedPieceSet: keyof typeof PIECE_SETS
   
   // UI State
   lastVisited: Date
@@ -71,6 +75,9 @@ interface AppActions {
   // Visual actions
   setBackgroundEffectVariant: (variant: BackgroundEffectVariant) => void
   
+  // Chess actions
+  setPieceSet: (pieceSet: keyof typeof PIECE_SETS) => void
+  
   // Splash modal actions
   openSplashModal: (page: string) => void
   closeSplashModal: () => void
@@ -102,6 +109,7 @@ const initialState: AppState = {
   checkSound: true,
   uiSounds: true,
   backgroundEffectVariant: 'gaming',
+  selectedPieceSet: 'classic',
   lastVisited: new Date(),
   splashModalOpen: false,
   splashModalPage: null,
@@ -197,6 +205,9 @@ export const useAppStore = create<AppStore>()(
       // Visual actions
       setBackgroundEffectVariant: (variant) => set({ backgroundEffectVariant: variant }),
       
+      // Chess actions
+      setPieceSet: (pieceSet) => set({ selectedPieceSet: pieceSet }),
+      
       // Splash modal actions
       openSplashModal: (page) => set({ splashModalOpen: true, splashModalPage: page }),
       closeSplashModal: () => set({ splashModalOpen: false, splashModalPage: null }),
@@ -226,6 +237,7 @@ export const useAppStore = create<AppStore>()(
         checkSound: state.checkSound,
         uiSounds: state.uiSounds,
         backgroundEffectVariant: state.backgroundEffectVariant,
+        selectedPieceSet: state.selectedPieceSet,
         lastVisited: new Date(),
         coinBalance: state.coinBalance,
       }),

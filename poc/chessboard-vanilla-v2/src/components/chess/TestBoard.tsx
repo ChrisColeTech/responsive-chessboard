@@ -1,9 +1,10 @@
 // TestBoard.tsx - 3x3 chess board with game logic validation
 import React, { useState, useEffect } from 'react';
 import type { ChessPiece, ChessPosition } from '../../types';
-import { PIECE_SETS, getPieceImagePath } from '../../constants/pieces.constants';
+import { getPieceImagePath } from '../../constants/pieces.constants';
 import { useDrag } from '../../providers';
 import { useChessAudio } from '../../services/audio/audioService';
+import { useAppStore } from '../../stores/appStore';
 import { TestBoardGameService, type GameStatus } from '../../services/chess/TestBoardGameService';
 import { CheckmateModal } from './CheckmateModal';
 import { PromotionModal } from './PromotionModal';
@@ -16,9 +17,7 @@ interface TestBoardProps {
   onMoveHandlerReady?: (moveHandler: (from: ChessPosition, to: ChessPosition) => Promise<boolean>) => void;
 }
 
-// Stable piece set selection
-const pieceSetKeys = Object.keys(PIECE_SETS) as Array<keyof typeof PIECE_SETS>;
-const STABLE_PIECE_SET = pieceSetKeys[0]; // Use first piece set consistently
+// Remove static piece set - will use selected piece set from store
 
 // Initial test pieces for 3x3 board - with check/checkmate testing
 const initialTestPieces: Record<string, ChessPiece> = {
@@ -59,6 +58,9 @@ export const TestBoard = ({
 }: TestBoardProps) => {
   const { startDrag, updateCursor, endDrag, clearDrag, setMoveHandler } = useDrag();
   const { playMove, playError, playGameStart, playCheck, preloadSounds: _preloadSounds } = useChessAudio();
+  
+  // Get selected piece set from app store
+  const selectedPieceSet = useAppStore((state) => state.selectedPieceSet);
   
   // Game service and state
   const [gameService] = useState(() => new TestBoardGameService(initialTestPieces));
@@ -412,7 +414,7 @@ export const TestBoard = ({
           >
             {piece && (
               <img
-                src={getPieceImagePath(piece.color, piece.type, STABLE_PIECE_SET)}
+                src={getPieceImagePath(piece.color, piece.type, selectedPieceSet, square)}
                 alt={`${piece.color} ${piece.type}`}
                 draggable={false} // No HTML5 drag - use mouse events only
                 onMouseDown={(e) => handleMouseDown(e, piece, square)}
@@ -424,7 +426,7 @@ export const TestBoard = ({
                   pointerEvents: 'auto'
                 }}
                 onError={(e) => {
-                  console.log(`Failed to load piece image: ${getPieceImagePath(piece.color, piece.type, STABLE_PIECE_SET)}`);
+                  console.log(`Failed to load piece image: ${getPieceImagePath(piece.color, piece.type, selectedPieceSet, square)}`);
                   // Fallback to Unicode if SVG fails to load
                   (e.target as HTMLImageElement).style.display = 'none';
                 }}
