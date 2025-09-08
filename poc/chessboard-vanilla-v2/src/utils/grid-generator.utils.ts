@@ -68,8 +68,8 @@ export function generateGridCells(
  */
 export function generateChessGridCells(
   numCells: number,
-  lightColor?: string,
-  darkColor?: string,
+  _lightColor?: string, // eslint-disable-line @typescript-eslint/no-unused-vars
+  _darkColor?: string,  // eslint-disable-line @typescript-eslint/no-unused-vars
   config: ChessGridConfig = {}
 ): GridCell[] {
   const cells: GridCell[] = [];

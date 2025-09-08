@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { generateChessGridCells, type GridCell } from "../../utils/grid-generator.utils";
 import { useTheme } from "../../contexts/ThemeContext";
+import { useChessBoardAudio } from "../../hooks/audio/useChessBoardAudio";
 
 interface MobileChessBoardProps {
   onGameStateChange?: (gameState: any) => void;
@@ -10,17 +11,29 @@ interface MobileChessBoardProps {
 
 export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
   const { currentTheme, isDarkMode } = useTheme();
+  const { 
+    playPieceSelection, 
+    playPieceDeselection, 
+    playPieceMove, 
+    playInvalidMove 
+  } = useChessBoardAudio();
   
   console.log('🎨 [DEBUG] MobileChessBoard render start with theme:', currentTheme, isDarkMode);
   console.log('🎨 [DEBUG] Current document classes at render:', document.documentElement.className);
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
-  const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null);
+  // const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null); // TODO: Re-enable for move highlighting
   const [animatingPiece, setAnimatingPiece] = useState<{
     piece: { symbol: string; color: string; type: string };
     from: string;
     to: string;
   } | null>(null);
   const [animationStep, setAnimationStep] = useState<'start' | 'end'>('start');
+  const [capturedPieces, setCapturedPieces] = useState<{
+    cellId: string;
+    piece: { symbol: string; color: string; type: string };
+    id: string;
+    isAnimating: boolean;
+  }[]>([]);
   
   // Generate 16 cells (4x4 grid) with chess-style alternating colors using CSS classes
   const [gridCells, setGridCells] = useState<GridCell[]>([]);
@@ -70,25 +83,62 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
       // First click - select cell only if it has a piece
       if (pieceAtCell) {
         setSelectedCell(cellId);
+        playPieceSelection(); // 🔊 Audio feedback
         console.log(`Selected ${pieceAtCell.color} ${pieceAtCell.type} at: ${cellId}`);
       } else {
+        playInvalidMove(); // 🔊 Audio feedback for empty cell
         console.log(`Clicked empty cell: ${cellId}`);
       }
     } else if (selectedCell === cellId) {
       // Clicking same cell - deselect
       setSelectedCell(null);
+      playPieceDeselection(); // 🔊 Audio feedback
       console.log(`Deselected piece at: ${cellId}`);
     } else {
       // Second click - move piece to new cell
       const move = { from: selectedCell, to: cellId };
-      setLastMove(move);
+      // setLastMove(move); // TODO: Re-enable for move highlighting
       
       const movingPiece = pieces[selectedCell];
       if (movingPiece) {
-        // Remove piece from current position and start animation
+        // Check if this move captures an enemy piece
+        const targetPiece = pieces[cellId];
+        const wasCapture = !!targetPiece;
+        
+        // If capturing, add the captured piece to capture animation list
+        if (wasCapture && targetPiece) {
+          const captureId = `capture-${cellId}-${Date.now()}`;
+          setCapturedPieces(prev => [...prev, {
+            cellId,
+            piece: targetPiece,
+            id: captureId,
+            isAnimating: false
+          }]);
+          
+          // Start the capture animation after a small delay
+          setTimeout(() => {
+            setCapturedPieces(prev => 
+              prev.map(cp => cp.id === captureId ? { ...cp, isAnimating: true } : cp)
+            );
+          }, 10);
+          
+          // Remove captured piece after animation completes
+          setTimeout(() => {
+            setCapturedPieces(prev => prev.filter(cp => cp.id !== captureId));
+          }, 410); // Reduced from 610ms to 410ms
+        }
+        
+        // Play move audio feedback
+        playPieceMove(wasCapture); // 🔊 Audio feedback
+        
+        // Remove both moving piece and captured piece from current positions
         setPieces(prev => {
           const newPieces = { ...prev };
           delete newPieces[selectedCell];
+          // Also remove captured piece immediately
+          if (wasCapture) {
+            delete newPieces[cellId];
+          }
           return newPieces;
         });
         
@@ -217,6 +267,37 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
           {animatingPiece.piece.symbol}
         </div>
       )}
+
+      {/* Captured Pieces (shrinking animation) */}
+      {capturedPieces.map((capturedPiece) => {
+        const position = cellToPixelPosition(capturedPiece.cellId);
+        
+        return (
+          <div 
+            key={capturedPiece.id}
+            style={{ 
+              position: "absolute",
+              left: position.left,
+              top: position.top,
+              transform: capturedPiece.isAnimating 
+                ? "translate(-50%, -50%) scale(0)" 
+                : "translate(-50%, -50%) scale(1)",
+              fontSize: "min(20vw, 20vh)",
+              opacity: capturedPiece.isAnimating ? 0 : 1,
+              transition: capturedPiece.isAnimating 
+                ? "transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease-out" 
+                : "none",
+              zIndex: 15, // Above static pieces, below moving piece
+              pointerEvents: "none",
+              userSelect: "none",
+              filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))",
+              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)"
+            }}
+          >
+            {capturedPiece.piece.symbol}
+          </div>
+        );
+      })}
     </div>
   );
 };

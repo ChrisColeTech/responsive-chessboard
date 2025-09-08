@@ -124,3 +124,31 @@ export type {
   MoveHandler,
   DragTestingHook
 } from './ui';
+
+// Phase 4: Chess Board Audio types
+export type {
+  ChessBoardAudioEvents,
+  MoveAudioContext,
+  ChessBoardInteractionType,
+  ChessBoardAudioConfig
+} from './audio/chess-board-audio.types';
+
+export {
+  DEFAULT_CHESS_BOARD_AUDIO_CONFIG,
+  CHESS_BOARD_AUDIO_PROFILES
+} from './audio/chess-board-audio.types';
+
+// Phase 4: Audio Feedback types
+export type {
+  AudioFeedbackTiming,
+  AudioFeedbackIntensity,
+  AudioFeedbackPattern,
+  AudioFeedbackContext,
+  AudioFeedbackDecision,
+  ComponentAudioConfig
+} from './audio/audio-feedback.types';
+
+export {
+  DEFAULT_AUDIO_TIMING,
+  AUDIO_FEEDBACK_PATTERNS
+} from './audio/audio-feedback.types';
