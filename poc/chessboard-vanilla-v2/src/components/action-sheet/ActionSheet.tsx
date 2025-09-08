@@ -6,7 +6,7 @@
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Settings } from 'lucide-react'
 import { ActionItem } from './ActionItem'
-import type { ActionSheetProps } from '../../types/action-sheet.types'
+import type { ActionSheetProps } from '../../types/core/action-sheet.types'
 import { useRef, useState } from 'react'
 
 export function ActionSheet({ 

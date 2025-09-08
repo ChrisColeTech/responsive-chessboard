@@ -1,4 +1,4 @@
-import type { BackgroundEffectProps } from '../../../types/backgroundEffects'
+import type { BackgroundEffectProps } from '../../../types/core/backgroundEffects'
 
 const symbols = ['∞', '◊', '※', '⟡', '⬟', '⬢', '⬣', '⬡']
 const rotations = ['rotate-0', 'rotate-45', 'rotate-90', 'rotate-180']

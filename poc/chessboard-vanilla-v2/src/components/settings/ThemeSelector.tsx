@@ -5,18 +5,16 @@
 
 import { ChevronDown } from "lucide-react";
 import { useTheme } from "../../stores/appStore";
-import { useUIClickSound } from "../../hooks/useUIClickSound";
-import { useThemePagination } from "../../hooks/useThemePagination";
-import { type BaseTheme } from "../ThemeSwitcher";
+import { useThemePagination } from "../../hooks/core/useThemePagination";
+import { type BaseTheme } from "../core/ThemeSwitcher";
 import { SETTINGS_SECTIONS } from "../../data/themeConfig";
 
 export function ThemeSelector() {
   const { isDarkMode, selectedBaseTheme, setBaseTheme } = useTheme();
-  const { playUIClick } = useUIClickSound();
   const { visibleThemes, hasMoreThemes, handleLoadMoreThemes } = useThemePagination();
 
   const handleBaseThemeChange = (baseThemeId: BaseTheme) => {
-    playUIClick(`Theme: ${baseThemeId}`);
+    // Note: UI click sound is handled automatically by Global UI Audio System
     setBaseTheme(baseThemeId);
   };
 

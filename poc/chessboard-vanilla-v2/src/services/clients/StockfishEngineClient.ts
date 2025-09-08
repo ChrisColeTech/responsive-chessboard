@@ -1,7 +1,7 @@
 // StockfishEngineClient.ts - Stockfish engine communication layer  
 // Phase 6: External Communication - Clean interface for computer opponent
-import { StockfishService } from '../StockfishService';
-import { getStockfishService } from '../stockfish-singleton';
+import { StockfishService } from '../chess/StockfishService';
+import { getStockfishService } from '../chess/stockfish-singleton';
 import type { 
   ComputerMoveRequest, 
   ComputerMoveResult,

@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { PlayGameService } from '../../services/chess/PlayGameService';
 import { StockfishEngineClient } from '../../services/clients/StockfishEngineClient';
-import { useChessAudio } from '../../services/audioService';
+import { useChessAudio } from '../../services/audio/audioService';
 import type { 
   ChessGameState,
   PieceType,

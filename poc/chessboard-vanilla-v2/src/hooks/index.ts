@@ -1,33 +1,33 @@
 // index.ts - Hooks exports barrel
 
 // Core chess hooks
-export { useChessGame } from './useChessGame';
-export { useDragAndDrop } from './useDragAndDrop';
-export { useResponsiveBoard } from './useResponsiveBoard';
+export { useChessGame } from './chess/useChessGame';
+export { useDragAndDrop } from './chess/useDragAndDrop';
+export { useResponsiveBoard } from './chess/useResponsiveBoard';
 
 // Audio hooks
-export { useGlobalUIAudio } from './useGlobalUIAudio';
+export { useGlobalUIAudio } from './audio/useGlobalUIAudio';
 
 // Stockfish hooks
-export { useStockfish } from './useStockfish';
+export { useStockfish } from './chess/useStockfish';
 
 // Menu hooks
-export { useMenuDropdown } from './useMenuDropdown';
+export { useMenuDropdown } from './core/useMenuDropdown';
 
 // Action Sheet hooks
-export { useActionSheet } from './useActionSheet';
+export { useActionSheet } from './core/useActionSheet';
 
 // Page Action hooks
-export { usePlayActions } from './usePlayActions';
-export { useSlotsActions } from './useSlotsActions';
-export { useWorkerActions } from './useWorkerActions';
-export { useUITestsActions } from './useUITestsActions';
-export { useLayoutActions } from './useLayoutActions';
-export { useDragTestActions } from './useDragTestActions';
-export { useUIAudioTestActions } from './useUIAudioTestActions';
+export { usePlayActions } from './chess/usePlayActions';
+export { useSlotsActions } from './casino/useSlotsActions';
+export { useWorkerActions } from './chess/useWorkerActions';
+export { useUITestsActions } from './uitests/useUITestsActions';
+export { useLayoutActions } from './core/useLayoutActions';
+export { useDragTestActions } from './uitests/useDragTestActions';
+export { useUIAudioTestActions } from './uitests/useUIAudioTestActions';
 
 // Chess subdomain hooks
 export { useComputerOpponent, usePlayGame } from './chess';
 
 // Phase 5: UI Tests hooks
-export { useUITestNavigation, useAudioDemo, useDragTesting } from './ui-tests';
+export { useUITestNavigation, useAudioDemo, useDragTesting } from './uitests';

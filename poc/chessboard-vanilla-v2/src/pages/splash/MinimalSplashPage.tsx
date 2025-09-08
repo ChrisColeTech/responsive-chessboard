@@ -1,6 +1,6 @@
 import React from "react";
 import { useSpring, animated, useTrail } from '@react-spring/web';
-import { useMinimalSplashActions } from '../../hooks/useMinimalSplashActions';
+import { useMinimalSplashActions } from '../../hooks/splash/useMinimalSplashActions';
 
 interface MinimalSplashPageProps {
   variant?: 'in-app' | 'modal';

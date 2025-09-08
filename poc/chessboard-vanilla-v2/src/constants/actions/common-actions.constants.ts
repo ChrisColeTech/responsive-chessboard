@@ -1,36 +1,141 @@
-// Global actions available on all pages
-import { Settings, HelpCircle, BarChart, Palette } from 'lucide-react'
-import type { ActionSheetAction } from '../../types/action-sheet.types'
-import { COMMON_ACTION_HANDLERS } from './common-actions-handlers'
+// Common action configurations that can be reused across different page groups
+import { 
+  Navigation, SkipForward, Clock, Target, Maximize2, RotateCcw,
+  Eye, Move, VolumeX
+} from 'lucide-react'
+import type { ActionSheetAction } from '../../types/core/action-sheet.types'
 
-export const COMMON_ACTIONS: ActionSheetAction[] = [
-  {
-    id: 'settings',
-    label: 'Settings',
-    icon: Settings,
-    variant: 'default',
-    shortcut: 'S'
-  },
-  {
-    id: 'help',
-    label: 'Help',
-    icon: HelpCircle,
-    variant: 'default',
-    shortcut: 'H'
-  },
-  {
-    id: 'stats',
-    label: 'Statistics',
-    icon: BarChart,
+/**
+ * Common action types that can be shared across different page groups
+ */
+export interface CommonActionConfig {
+  /** Navigation actions to sibling pages */
+  siblingNavigation?: string[]
+  /** Common utility actions (fullscreen, restart, etc.) */
+  utilities?: string[]
+  /** Test-specific actions */
+  tests?: string[]
+}
+
+/**
+ * Predefined common actions that can be referenced by name
+ */
+export const COMMON_ACTIONS: Record<string, ActionSheetAction> = {
+  // Navigation actions
+  'go-to-minimal': {
+    id: 'go-to-minimal',
+    label: '→ Minimal',
+    icon: Navigation,
     variant: 'secondary'
   },
-  {
-    id: 'themes',
-    label: 'Themes',
-    icon: Palette,
+  'go-to-animated': {
+    id: 'go-to-animated', 
+    label: '→ Animated',
+    icon: SkipForward,
+    variant: 'secondary'
+  },
+  'go-to-progress': {
+    id: 'go-to-progress',
+    label: '→ Progress', 
+    icon: Clock,
+    variant: 'secondary'
+  },
+  'go-to-branded': {
+    id: 'go-to-branded',
+    label: '→ Branded',
+    icon: Target,
+    variant: 'secondary'
+  },
+  'go-to-luxurysplash': {
+    id: 'go-to-luxurysplash',
+    label: 'Go to Luxurysplash',
+    icon: Navigation,
+    variant: 'secondary'
+  },
+  'go-to-drag-test': {
+    id: 'go-to-drag-test',
+    label: 'Go to Drag Test',
+    icon: Navigation,
+    variant: 'secondary'
+  },
+  'go-to-audio-test': {
+    id: 'go-to-audio-test',
+    label: 'Go to Audio Test',
+    icon: VolumeX,
+    variant: 'secondary'
+  },
+  'go-to-layout-test': {
+    id: 'go-to-layout-test',
+    label: 'Go to Layout Test',
+    icon: Eye,
+    variant: 'secondary'
+  },
+  'go-to-mobile-drag-test': {
+    id: 'go-to-mobile-drag-test',
+    label: 'Go to Mobile Drag Test',
+    icon: Move,
+    variant: 'secondary'
+  },
+  
+  // Utility actions
+  'toggle-fullscreen': {
+    id: 'toggle-fullscreen',
+    label: 'Toggle Fullscreen',
+    icon: Maximize2,
+    variant: 'default',
+    shortcut: 'F11'
+  },
+  'restart-animation': {
+    id: 'restart-animation',
+    label: 'Restart Animation',
+    icon: RotateCcw,
     variant: 'secondary'
   }
-]
+}
 
-// Export handlers for registration
-export { COMMON_ACTION_HANDLERS }
+/**
+ * Predefined action groups for common page types
+ */
+export const COMMON_ACTION_GROUPS = {
+  // Splash page siblings (child pages)
+  splashSiblings: [
+    'go-to-minimal',
+    'go-to-animated', 
+    'go-to-progress',
+    'go-to-branded'
+  ],
+  
+  // UI test siblings (child pages)
+  uitestSiblings: [
+    'go-to-drag-test',
+    'go-to-audio-test',
+    'go-to-layout-test',
+    'go-to-mobile-drag-test'
+  ],
+  
+  // Common utilities for demo/test pages
+  demoUtilities: [
+    'toggle-fullscreen',
+    'restart-animation'
+  ]
+}
+
+/**
+ * Helper function to build actions from common action names
+ */
+export function buildCommonActions(actionNames: string[]): ActionSheetAction[] {
+  return actionNames
+    .map(name => COMMON_ACTIONS[name])
+    .filter(Boolean) // Remove any undefined actions
+}
+
+/**
+ * Helper function to merge page-specific actions with common actions
+ */
+export function mergeWithCommonActions(
+  pageActions: ActionSheetAction[],
+  commonActionNames: string[]
+): ActionSheetAction[] {
+  const commonActions = buildCommonActions(commonActionNames)
+  return [...pageActions, ...commonActions]
+}

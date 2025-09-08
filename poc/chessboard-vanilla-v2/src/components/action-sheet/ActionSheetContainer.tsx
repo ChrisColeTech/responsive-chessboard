@@ -4,24 +4,24 @@
  */
 import { useCallback, useState, useEffect } from 'react'
 import { ActionSheet } from './ActionSheet'
-import { usePlayActions } from '../../hooks/usePlayActions'
-import { useSlotsActions } from '../../hooks/useSlotsActions'
-import { useWorkerActions } from '../../hooks/useWorkerActions'
-import { useUITestsActions } from '../../hooks/useUITestsActions'
-import { useLayoutActions } from '../../hooks/useLayoutActions'
-import { useDragTestActions } from '../../hooks/useDragTestActions'
-import { useUIAudioTestActions } from '../../hooks/useUIAudioTestActions'
-import { useSplashActions } from '../../hooks/useSplashActions'
-import { useMinimalSplashActions } from '../../hooks/useMinimalSplashActions'
-import { useAnimatedSplashActions } from '../../hooks/useAnimatedSplashActions'
-import { useLoadingProgressActions } from '../../hooks/useLoadingProgressActions'
-import { useBrandedSplashActions } from '../../hooks/useBrandedSplashActions'
-import { useLuxurysplashActions } from '../../hooks/useLuxurysplashActions'
-import { useMobileDragTestActions } from '../../hooks/useMobileDragTestActions'
-import { useUIClickSound } from '../../hooks/useUIClickSound'
-import { useUIHoverSound } from '../../hooks/useUIHoverSound'
+import { usePlayActions } from '../../hooks/chess/usePlayActions'
+import { useSlotsActions } from '../../hooks/casino/useSlotsActions'
+import { useWorkerActions } from '../../hooks/chess/useWorkerActions'
+import { useUITestsActions } from '../../hooks/uitests/useUITestsActions'
+import { useLayoutActions } from '../../hooks/core/useLayoutActions'
+import { useDragTestActions } from '../../hooks/uitests/useDragTestActions'
+import { useUIAudioTestActions } from '../../hooks/uitests/useUIAudioTestActions'
+import { useSplashActions } from '../../hooks/splash/useSplashActions'
+import { useMinimalSplashActions } from '../../hooks/splash/useMinimalSplashActions'
+import { useAnimatedSplashActions } from '../../hooks/splash/useAnimatedSplashActions'
+import { useLoadingProgressActions } from '../../hooks/splash/useLoadingProgressActions'
+import { useBrandedSplashActions } from '../../hooks/splash/useBrandedSplashActions'
+import { useLuxurysplashActions } from '../../hooks/splash/useLuxurysplashActions'
+import { useMobileDragTestActions } from '../../hooks/uitests/useMobileDragTestActions'
+import { useUIClickSound } from '../../hooks/audio/useUIClickSound'
+import { useUIHoverSound } from '../../hooks/audio/useUIHoverSound'
 import { useAppStore } from '../../stores/appStore'
-import type { ActionSheetContainerProps, ActionSheetAction } from '../../types/action-sheet.types'
+import type { ActionSheetContainerProps, ActionSheetAction } from '../../types/core/action-sheet.types'
 import { PAGE_ACTIONS } from '../../constants/actions/page-actions.constants'
 
 export function ActionSheetContainer({ currentPage, className, onClose, isOpen, onOpenSettings }: ActionSheetContainerProps) {
@@ -107,12 +107,20 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         'test-move-sound': dragTestActions.testMoveSound,
         'test-capture-sound': dragTestActions.testCaptureSound,
         'test-error-sound': dragTestActions.testErrorSound,
-        'toggle-pieces-position': dragTestActions.togglePiecesPosition
+        'toggle-pieces-position': dragTestActions.togglePiecesPosition,
+        // Navigation actions
+        'go-to-audio-test': uiTestsActions.goToAudioTest,
+        'go-to-layout-test': uiTestsActions.goToLayoutTest,
+        'go-to-mobile-drag-test': uiTestsActions.goToMobileDragTest
       },
       uiaudiotest: {
         'test-ui-sound': uiAudioTestActions.testUISound,
         'test-audio-system': uiAudioTestActions.testAudioSystem,
-        'reset-audio-settings': uiAudioTestActions.resetAudioSettings
+        'reset-audio-settings': uiAudioTestActions.resetAudioSettings,
+        // Navigation actions
+        'go-to-drag-test': uiTestsActions.goToDragTest,
+        'go-to-layout-test': uiTestsActions.goToLayoutTest,
+        'go-to-mobile-drag-test': uiTestsActions.goToMobileDragTest
       },
       splash: {
         'go-to-minimal': splashActions.goToMinimal,
@@ -157,10 +165,19 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         'test-luxury': luxurysplashActions.testLuxury,
         'restart-demo': luxurysplashActions.restartDemo
       },
-      layouttest: {},
+      layouttest: {
+        // Navigation actions only
+        'go-to-drag-test': uiTestsActions.goToDragTest,
+        'go-to-audio-test': uiTestsActions.goToAudioTest,
+        'go-to-mobile-drag-test': uiTestsActions.goToMobileDragTest
+      },
       mobiledragtest: {
         'mobile-board-action': mobileDragTestActions.mobileBoardAction,
-        'mobile-test-sound': mobileDragTestActions.mobileTestSound
+        'mobile-test-sound': mobileDragTestActions.mobileTestSound,
+        // Navigation actions
+        'go-to-drag-test': uiTestsActions.goToDragTest,
+        'go-to-audio-test': uiTestsActions.goToAudioTest,
+        'go-to-layout-test': uiTestsActions.goToLayoutTest
       }
     }
     

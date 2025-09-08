@@ -1,5 +1,5 @@
 import React from "react";
-import { usePageInstructions } from "../../hooks/usePageInstructions";
+import { usePageInstructions } from "../../hooks/core/usePageInstructions";
 
 export const LayoutTestPage: React.FC = () => {
   usePageInstructions("layout");

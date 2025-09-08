@@ -1,4 +1,4 @@
-import type { ActionSheetAction } from '../../types/action-sheet.types'
+import type { ActionSheetAction } from '../../types/core/action-sheet.types'
 
 /**
  * Pure action item component - NO BUSINESS LOGIC

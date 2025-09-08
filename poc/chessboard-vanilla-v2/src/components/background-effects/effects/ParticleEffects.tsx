@@ -1,4 +1,4 @@
-import type { BackgroundEffectProps } from '../../../types/backgroundEffects'
+import type { BackgroundEffectProps } from '../../../types/core/backgroundEffects'
 
 const particles = ['●', '◦', '▪', '▫', '•', '∘', '▴', '▾']
 const sizes = ['text-xs', 'text-sm', 'text-base', 'text-lg']

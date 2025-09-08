@@ -1,5 +1,5 @@
 // chess.utils.ts - Core chess utilities
-import type { ChessPosition, ChessPositionObject, File, Rank, PieceColor } from '../types/chess.types';
+import type { ChessPosition, ChessPositionObject, File, Rank, PieceColor } from '../types/chess/chess.types';
 
 export const fileToIndex = (file: File): number => {
   return file.charCodeAt(0) - 'a'.charCodeAt(0);

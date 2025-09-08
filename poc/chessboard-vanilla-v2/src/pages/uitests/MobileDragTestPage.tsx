@@ -1,19 +1,14 @@
-import React, { useState } from "react";
-import { MobileChessboardLayout } from "../../components/MobileChessboardLayout";
-import { usePageInstructions } from "../../hooks/usePageInstructions";
-import type { ChessPosition, ChessPiece } from "../../types";
+import React from "react";
+import { MobileChessboardLayout } from "../../components/chess/MobileChessboardLayout";
+import { usePageInstructions } from "../../hooks/core/usePageInstructions";
+// Removed unused type imports - can be added back when needed
 
 export const MobileDragTestPage: React.FC = () => {
-  const [selectedSquare, setSelectedSquare] = useState<ChessPosition | null>(null);
-  const [validDropTargets, setValidDropTargets] = useState<ChessPosition[]>([]);
-  const [capturedPieces, setCapturedPieces] = useState<ChessPiece[]>([]);
+  // Removed unused state variables for now - can be added back when needed
   
   usePageInstructions("uitests.mobile-drag-test");
 
-  const handleSquareClick = (position: ChessPosition) => {
-    // TODO: Implement mobile-specific chess logic
-    console.log('Mobile square clicked:', position);
-  };
+  // Removed unused handler - can be added back when needed
 
   return (
     <div className="h-screen bg-gradient-to-br from-background via-background/95 to-muted/30 relative overflow-hidden">

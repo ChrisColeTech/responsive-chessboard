@@ -1,7 +1,7 @@
 // soundMapping.ts - Maps UI interaction types to specific sounds
 
 import type { UIInteractionType, UISoundType, UIInteractionConfig } from '../../types/audio/ui-audio.types';
-import type { SoundEffect } from '../../services/audioService';
+import type { SoundEffect } from '../../services/audio/audioService';
 
 /**
  * Default mapping from UI interactions to sound types

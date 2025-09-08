@@ -1,10 +1,11 @@
 // Define all page-specific actions based on current page controls
 import { 
   RotateCcw, Eye, Pause, Undo, Coins, RefreshCw, Volume2, 
-  Trash2, TestTube, SkipForward, Navigation, VolumeX,
-  Brain, Clock, CheckCircle, Target, Sword, Move, Maximize2, Crown
+  Trash2, TestTube, SkipForward, Navigation,
+  Brain, Clock, CheckCircle, Target, Sword, Move, Crown
 } from 'lucide-react'
-import type { ActionSheetAction } from '../../types/action-sheet.types'
+import type { ActionSheetAction } from '../../types/core/action-sheet.types'
+import { mergeWithCommonActions, COMMON_ACTION_GROUPS, COMMON_ACTIONS, buildCommonActions } from './common-actions.constants'
 
 export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
   play: [
@@ -98,33 +99,11 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       hasOwnAudio: true
     }
   ],
-  uitests: [
-    {
-      id: 'go-to-drag-test',
-      label: 'Go to Drag Test',
-      icon: Navigation,
-      variant: 'secondary'
-    },
-    {
-      id: 'go-to-audio-test',
-      label: 'Go to Audio Test',
-      icon: VolumeX,
-      variant: 'secondary'
-    },
-    {
-      id: 'go-to-layout-test',
-      label: 'Go to Layout Test',
-      icon: Eye,
-      variant: 'secondary'
-    },
-    {
-      id: 'go-to-mobile-drag-test',
-      label: 'Go to Mobile Drag Test',
-      icon: Move,
-      variant: 'secondary'
-    }
-  ],
-  layouttest: [],
+  uitests: [...COMMON_ACTION_GROUPS.uitestSiblings.map(name => ({
+    ...COMMON_ACTIONS[name],
+    variant: 'secondary' as const
+  }))],
+  layouttest: [...buildCommonActions(['go-to-drag-test', 'go-to-audio-test', 'go-to-mobile-drag-test'])],
   splash: [
     {
       id: 'go-to-minimal',
@@ -149,8 +128,7 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       label: 'Branded Design',
       icon: Target,
       variant: 'default'
-    }
-  ,
+    },
     {
       id: 'go-to-luxurysplash',
       label: 'Go to Luxurysplash',
@@ -158,163 +136,39 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       variant: 'secondary'
     }
   ],
-  minimalsplash: [
+  minimalsplash: mergeWithCommonActions([
     {
       id: 'test-minimal-load',
       label: 'Test Load Animation',
       icon: SkipForward,
       variant: 'default'
-    },
-    {
-      id: 'restart-animation',
-      label: 'Restart Animation',
-      icon: RotateCcw,
-      variant: 'secondary'
-    },
-    {
-      id: 'toggle-fullscreen',
-      label: 'Toggle Fullscreen',
-      icon: Maximize2,
-      variant: 'default',
-      shortcut: 'F11'
-    },
-    {
-      id: 'go-to-animated',
-      label: '→ Animated',
-      icon: SkipForward,
-      variant: 'secondary'
-    },
-    {
-      id: 'go-to-progress',
-      label: '→ Progress',
-      icon: Clock,
-      variant: 'secondary'
-    },
-    {
-      id: 'go-to-branded',
-      label: '→ Branded',
-      icon: Target,
-      variant: 'secondary'
     }
-  ],
-  animatedsplash: [
+  ], [...COMMON_ACTION_GROUPS.demoUtilities, 'go-to-animated', 'go-to-progress', 'go-to-branded']),
+  animatedsplash: mergeWithCommonActions([
     {
       id: 'test-spring-animation',
       label: 'Test Spring Animation',
       icon: SkipForward,
       variant: 'default'
-    },
-    {
-      id: 'restart-animation',
-      label: 'Restart Animation',
-      icon: RotateCcw,
-      variant: 'secondary'
-    },
-    {
-      id: 'toggle-fullscreen',
-      label: 'Toggle Fullscreen',
-      icon: Maximize2,
-      variant: 'default',
-      shortcut: 'F11'
-    },
-    {
-      id: 'go-to-minimal',
-      label: '→ Minimal',
-      icon: Navigation,
-      variant: 'secondary'
-    },
-    {
-      id: 'go-to-progress',
-      label: '→ Progress',
-      icon: Clock,
-      variant: 'secondary'
-    },
-    {
-      id: 'go-to-branded',
-      label: '→ Branded',
-      icon: Target,
-      variant: 'secondary'
     }
-  ],
-  loadingprogress: [
+  ], [...COMMON_ACTION_GROUPS.demoUtilities, 'go-to-minimal', 'go-to-progress', 'go-to-branded']),
+  loadingprogress: mergeWithCommonActions([
     {
       id: 'test-progress-bar',
       label: 'Test Progress Bar',
       icon: Clock,
       variant: 'default'
-    },
-    {
-      id: 'restart-animation',
-      label: 'Restart Animation',
-      icon: RotateCcw,
-      variant: 'secondary'
-    },
-    {
-      id: 'toggle-fullscreen',
-      label: 'Toggle Fullscreen',
-      icon: Maximize2,
-      variant: 'default',
-      shortcut: 'F11'
-    },
-    {
-      id: 'go-to-minimal',
-      label: '→ Minimal',
-      icon: Navigation,
-      variant: 'secondary'
-    },
-    {
-      id: 'go-to-animated',
-      label: '→ Animated',
-      icon: SkipForward,
-      variant: 'secondary'
-    },
-    {
-      id: 'go-to-branded',
-      label: '→ Branded',
-      icon: Target,
-      variant: 'secondary'
     }
-  ],
-  brandedsplash: [
+  ], [...COMMON_ACTION_GROUPS.demoUtilities, 'go-to-minimal', 'go-to-animated', 'go-to-branded']),
+  brandedsplash: mergeWithCommonActions([
     {
       id: 'test-brand-animation',
       label: 'Test Brand Animation',
       icon: Target,
       variant: 'default'
-    },
-    {
-      id: 'restart-animation',
-      label: 'Restart Animation',
-      icon: RotateCcw,
-      variant: 'secondary'
-    },
-    {
-      id: 'toggle-fullscreen',
-      label: 'Toggle Fullscreen',
-      icon: Maximize2,
-      variant: 'default',
-      shortcut: 'F11'
-    },
-    {
-      id: 'go-to-minimal',
-      label: '→ Minimal',
-      icon: Navigation,
-      variant: 'secondary'
-    },
-    {
-      id: 'go-to-animated',
-      label: '→ Animated',
-      icon: SkipForward,
-      variant: 'secondary'
-    },
-    {
-      id: 'go-to-progress',
-      label: '→ Progress',
-      icon: Clock,
-      variant: 'secondary'
     }
-  ],
-  dragtest: [
+  ], [...COMMON_ACTION_GROUPS.demoUtilities, 'go-to-minimal', 'go-to-animated', 'go-to-progress']),
+  dragtest: mergeWithCommonActions([
     {
       id: 'reset-board',
       label: 'Reset Board',
@@ -349,8 +203,8 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       icon: Move,
       variant: 'secondary'
     }
-  ],
-  uiaudiotest: [
+  ], ['go-to-audio-test', 'go-to-layout-test', 'go-to-mobile-drag-test']),
+  uiaudiotest: mergeWithCommonActions([
     {
       id: 'test-ui-sound',
       label: 'Test UI Sound',
@@ -371,7 +225,7 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       icon: RefreshCw,
       variant: 'destructive'
     }
-  ],
+  ], ['go-to-drag-test', 'go-to-layout-test', 'go-to-mobile-drag-test']),
   luxurysplash: [
     {
       id: 'test-luxury',
@@ -386,7 +240,7 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       variant: 'secondary'
     }
   ],
-  mobiledragtest: [
+  mobiledragtest: mergeWithCommonActions([
     {
       id: 'mobile-board-action',
       label: 'Mobile Board Action',
@@ -400,5 +254,5 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       variant: 'secondary',
       hasOwnAudio: true
     }
-  ],
+  ], ['go-to-drag-test', 'go-to-audio-test', 'go-to-layout-test']),
 }

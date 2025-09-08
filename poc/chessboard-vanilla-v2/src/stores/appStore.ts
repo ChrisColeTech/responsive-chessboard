@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { persist, subscribeWithSelector } from 'zustand/middleware'
 import type { TabId } from '../components/layout/types'
-import type { ThemeId, BaseTheme } from '../components/ThemeSwitcher'
-import type { BackgroundEffectVariant } from '../types/backgroundEffects'
+import type { ThemeId, BaseTheme } from '../components/core/ThemeSwitcher'
+import type { BackgroundEffectVariant } from '../types/core/backgroundEffects'
 
 interface AppState {
   // Navigation

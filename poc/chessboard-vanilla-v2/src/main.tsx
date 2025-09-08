@@ -11,9 +11,9 @@ import './styles/organized_themes/themes-effects.css'
 // Import splash screen styles
 import './styles/splash.css'
 // Import background effects registry to initialize effects
-import './services/backgroundEffectsRegistry'
+import './services/core/backgroundEffectsRegistry'
 import App from './App.tsx'
-import withSplashScreen from './components/withSplashScreen'
+import withSplashScreen from './components/splash/withSplashScreen'
 
 // Wrap App with splash screen HOC
 const AppWithSplash = withSplashScreen(App);

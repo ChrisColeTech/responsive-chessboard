@@ -1,7 +1,7 @@
 // play-game.types.ts - Play page specific game state type definitions
 // Phase 1: Foundation Types - Play game interfaces
 
-import type { ChessGameState, ChessPiece, PieceColor, PieceType } from '../chess.types';
+import type { ChessGameState, ChessPiece, PieceColor, PieceType } from './chess.types';
 import type { ComputerDifficulty, ComputerThinkingState } from './computer-opponent.types';
 
 /**

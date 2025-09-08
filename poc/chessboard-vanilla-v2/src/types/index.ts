@@ -14,7 +14,7 @@ export type {
   ChessMoveInput,
   ChessMoveResult,
   GameResult
-} from './chess.types';
+} from './chess/chess.types';
 
 export type {
   // Component types
@@ -24,7 +24,7 @@ export type {
   PieceProps,
   DraggedPieceProps,
   PlayChessboardProps
-} from './component.types';
+} from './core/component.types';
 
 // Phase 1: Computer opponent types
 export type {
@@ -49,6 +49,26 @@ export type {
   GameSession,
   GameMoveRecord
 } from './chess/play-game.types';
+
+// Phase 1: Mobile chess types
+export type {
+  MobileChessConfig,
+  MobileChessInteraction,
+  MobileBoardState,
+  MobileChessGameState,
+  MobileSquareState,
+  MobileTouchEvent,
+  MobileChessMoveResult,
+  MobileBoardDimensions,
+  MobilePieceAnimation
+} from './chess/mobile-chess.types';
+
+// Mobile chess constants
+export {
+  DEFAULT_MOBILE_CHESS_CONFIG,
+  MOBILE_BOARD_SIZE_PRESETS,
+  MOBILE_TOUCH_THRESHOLDS
+} from './chess/mobile-chess.types';
 
 // Phase 1: Play UI component types
 export type {
@@ -103,4 +123,4 @@ export type {
   DragTestActions,
   MoveHandler,
   DragTestingHook
-} from './ui-tests';
+} from './ui';

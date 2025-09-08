@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSpring, animated, useTrail } from '@react-spring/web';
-import { useAnimatedSplashActions } from '../../hooks/useAnimatedSplashActions';
+import { useAnimatedSplashActions } from '../../hooks/splash/useAnimatedSplashActions';
 
 interface AnimatedSplashPageProps {
   variant?: 'in-app' | 'modal';

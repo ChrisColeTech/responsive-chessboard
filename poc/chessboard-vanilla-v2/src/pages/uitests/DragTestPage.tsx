@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { TestBoard } from "../../components/TestBoard";
-import { CapturedPieces } from "../../components/CapturedPieces";
-import { ChessboardLayout } from "../../components/ChessboardLayout";
-import { MobileChessboardLayout } from "../../components/MobileChessboardLayout";
-import { usePageInstructions } from "../../hooks/usePageInstructions";
-import { useIsMobile } from "../../hooks/useIsMobile";
+import { TestBoard } from "../../components/chess/TestBoard";
+import { CapturedPieces } from "../../components/chess/CapturedPieces";
+import { ChessboardLayout } from "../../components/chess/ChessboardLayout";
+import { MobileChessboardLayout } from "../../components/chess/MobileChessboardLayout";
+import { usePageInstructions } from "../../hooks/core/usePageInstructions";
+import { useIsMobile } from "../../hooks/core/useIsMobile";
 import type { ChessPosition, ChessPiece } from "../../types";
 
 export const DragTestPage: React.FC = () => {

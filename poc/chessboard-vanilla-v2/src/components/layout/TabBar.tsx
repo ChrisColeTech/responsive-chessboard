@@ -1,8 +1,6 @@
 import { Settings, Target, Coins } from "lucide-react";
 import { MenuButton } from "./MenuButton";
 import type { TabId } from "./types";
-import { useUIClickSound } from "../../hooks/useUIClickSound";
-import { useUIHoverSound } from "../../hooks/useUIHoverSound";
 import { useAppStore } from "../../stores/appStore";
 
 interface TabBarProps {
@@ -47,8 +45,6 @@ const tabs: Tab[] = [
 ];
 
 export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: TabBarProps) {
-  const { playUIClick } = useUIClickSound();
-  const { playUIHover } = useUIHoverSound();
   const setCurrentChildPage = useAppStore((state) => state.setCurrentChildPage);
   const handleKeyDown = (event: React.KeyboardEvent, tabId: TabId) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -94,10 +90,7 @@ export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: Ta
               onTabChange(tab.id);
             }}
             onMouseEnter={() => {
-              // Play hover sound only for inactive tabs
-              if (!isActive) {
-                playUIHover(`Tab: ${tab.label}`);
-              }
+              // Note: UI hover sound is handled automatically by Global UI Audio System
             }}
             onKeyDown={(e) => handleKeyDown(e, tab.id)}
             role="tab"

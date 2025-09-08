@@ -1,6 +1,5 @@
 import { Coins } from 'lucide-react'
 import { useCoinsModal } from '../../stores/appStore'
-import { useUIClickSound } from '../../hooks/useUIClickSound'
 
 interface HeaderProps {
   onOpenSettings: () => void
@@ -10,7 +9,6 @@ interface HeaderProps {
 
 export function Header({ coinBalance }: HeaderProps) {
   const { open: openCoinsModal } = useCoinsModal()
-  const { playUIClick } = useUIClickSound()
   
   const handleCoinClick = () => {
     // Note: UI click sound is handled automatically by Global UI Audio System

@@ -20,23 +20,30 @@
 
 ```
 src/
-├── casino/
-│   ├── components/           # Reusable casino game components
-│   │   ├── shared/          # Shared UI components (BetControls, CoinDisplay, etc.)
-│   │   ├── slots/           # Slot machine specific components
-│   │   ├── blackjack/       # Blackjack specific components
-│   │   └── poker/           # Video poker specific components
-│   ├── hooks/               # Casino-specific React hooks (useCasinoAudio, useSlotMachine, etc.)
-│   ├── services/            # Game logic and external services (RNG, PayoutCalculation, etc.)
-│   ├── types/               # TypeScript type definitions
-│   ├── utils/               # Pure utility functions (currency, validation, etc.)
-│   ├── constants/           # Game configuration constants (payouts, symbols, etc.)
-│   └── animations/          # React Spring animation configs
+├── components/
+│   └── casino/              # Casino game components
+│       ├── shared/          # Shared UI components (BetControls, CoinDisplay, etc.)
+│       ├── slots/           # Slot machine specific components
+│       ├── blackjack/       # Blackjack specific components
+│       └── poker/           # Video poker specific components
+├── hooks/
+│   └── casino/              # Casino-specific React hooks (useCasinoAudio, useSlotMachine, etc.)
+├── services/
+│   └── casino/              # Casino game logic and external services (RNG, PayoutCalculation, etc.)
+├── types/
+│   └── casino/              # Casino TypeScript type definitions
+├── utils/
+│   └── casino/              # Casino pure utility functions (currency, validation, etc.)
+├── constants/
+│   └── casino/              # Casino game configuration constants (payouts, symbols, etc.)
+├── animations/
+│   └── casino/              # Casino React Spring animation configs
 ├── pages/
-│   ├── CasinoIndexPage.tsx  # Main casino page with game selection and overview
-│   ├── SlotsPage.tsx        # Enhanced slots page using shared casino infrastructure
-│   ├── BlackjackPage.tsx    # Blackjack page using shared casino services  
-│   └── VideoPokerPage.tsx   # Video poker page using shared casino infrastructure
+│   └── casino/              # Casino pages
+│       ├── CasinoIndexPage.tsx  # Main casino page with game selection and overview
+│       ├── SlotsPage.tsx        # Enhanced slots page using shared casino infrastructure
+│       ├── BlackjackPage.tsx    # Blackjack page using shared casino services  
+│       └── VideoPokerPage.tsx   # Video poker page using shared casino infrastructure
 └── stores/
     └── casinoStore.ts       # Casino-specific Zustand store (shared across all games)
 ```
@@ -49,22 +56,22 @@ src/
 Establish core infrastructure for casino games including types, utilities, services, and foundational hooks following SRP and DRY principles.
 
 ### Files to Create
-- `src/casino/types/index.ts`
-- `src/casino/types/slot-machine.types.ts`
-- `src/casino/types/casino-game.types.ts`
-- `src/casino/types/audio.types.ts`
-- `src/casino/utils/index.ts`
-- `src/casino/utils/random.utils.ts`
-- `src/casino/utils/currency.utils.ts`
-- `src/casino/utils/validation.utils.ts`
-- `src/casino/constants/index.ts`
-- `src/casino/constants/slot-symbols.constants.ts`
-- `src/casino/constants/payout-tables.constants.ts`
-- `src/casino/services/index.ts`
-- `src/casino/services/CasinoRNGService.ts`
-- `src/casino/hooks/index.ts`
-- `src/casino/hooks/useCasinoAudio.ts`
-- `src/casino/hooks/useHapticFeedback.ts`
+- `src/types/casino/index.ts`
+- `src/types/casino/slot-machine.types.ts`
+- `src/types/casino/casino-game.types.ts`
+- `src/types/casino/audio.types.ts`
+- `src/utils/casino/index.ts`
+- `src/utils/casino/random.utils.ts`
+- `src/utils/casino/currency.utils.ts`
+- `src/utils/casino/validation.utils.ts`
+- `src/constants/casino/index.ts`
+- `src/constants/casino/slot-symbols.constants.ts`
+- `src/constants/casino/payout-tables.constants.ts`
+- `src/services/casino/index.ts`
+- `src/services/casino/CasinoRNGService.ts`
+- `src/hooks/casino/index.ts`
+- `src/hooks/casino/useCasinoAudio.ts`
+- `src/hooks/casino/useHapticFeedback.ts`
 
 ### Files to Modify
 - `src/types/index.ts` (add casino type exports)
@@ -72,7 +79,7 @@ Establish core infrastructure for casino games including types, utilities, servi
 
 ### Integration Points (Files Used But Not Modified)
 - `src/stores/appStore.ts` (for coinBalance state)
-- `src/services/audioService.ts` (for base audio functionality)
+- `src/services/audio/audioService.ts` (for base audio functionality)
 - `src/components/layout/TabBar.tsx` (existing casino tab)
 
 ### Key Deliverables
@@ -105,7 +112,7 @@ const CHESS_SYMBOL_WEIGHTS = {
 }
 ```
 
-**useCasinoAudio.ts**:
+**hooks/casino/useCasinoAudio.ts**:
 ```typescript
 // Battery-efficient audio with preloading
 const AUDIO_CONFIG = {
@@ -116,7 +123,7 @@ const AUDIO_CONFIG = {
 }
 ```
 
-**useHapticFeedback.ts**:
+**hooks/casino/useHapticFeedback.ts**:
 ```typescript
 // Vibration patterns from research
 const HAPTIC_PATTERNS = {
@@ -135,22 +142,22 @@ const HAPTIC_PATTERNS = {
 Implement core game logic systems including weighted randomization, win detection, and payout calculations.
 
 ### Files to Create
-- `src/casino/services/SlotGameLogic.ts`
-- `src/casino/services/WinDetectionService.ts`
-- `src/casino/services/PayoutCalculationService.ts`
-- `src/casino/utils/slot-game.utils.ts`
-- `src/casino/utils/probability.utils.ts`
-- `src/casino/hooks/useSlotMachine.ts`
-- `src/casino/constants/slot-paylines.constants.ts`
-- `src/casino/constants/win-combinations.constants.ts`
+- `src/services/casino/SlotGameLogic.ts`
+- `src/services/casino/WinDetectionService.ts`
+- `src/services/casino/PayoutCalculationService.ts`
+- `src/utils/casino/slot-game.utils.ts`
+- `src/utils/casino/probability.utils.ts`
+- `src/hooks/casino/useSlotMachine.ts`
+- `src/constants/casino/slot-paylines.constants.ts`
+- `src/constants/casino/win-combinations.constants.ts`
 
 ### Files to Modify
-- `src/casino/services/index.ts` (add exports)
-- `src/casino/hooks/index.ts` (add exports)
+- `src/services/casino/index.ts` (add exports)
+- `src/hooks/casino/index.ts` (add exports)
 
 ### Integration Points
-- `src/casino/services/CasinoRNGService.ts` (from Phase 1)
-- `src/casino/constants/payout-tables.constants.ts` (from Phase 1)
+- `src/services/casino/CasinoRNGService.ts` (from Phase 1)
+- `src/constants/casino/payout-tables.constants.ts` (from Phase 1)
 - `src/stores/appStore.ts` (for balance updates)
 
 ### Key Deliverables
@@ -162,7 +169,7 @@ Implement core game logic systems including weighted randomization, win detectio
 
 ### Research-Based Implementation Details
 
-**SlotGameLogic.ts**:
+**services/casino/SlotGameLogic.ts**:
 ```typescript
 // Chess-themed payout table from research
 const CHESS_PAYOUTS = {
@@ -180,7 +187,7 @@ const generateNearMiss = (symbols: string[]): boolean => {
 }
 ```
 
-**WinDetectionService.ts**:
+**services/casino/WinDetectionService.ts**:
 ```typescript
 // Single payline for mobile optimization
 const MOBILE_PAYLINES = [
@@ -199,7 +206,7 @@ const detectWin = (reels: string[]): WinResult => {
 }
 ```
 
-**useSlotMachine.ts**:
+**hooks/casino/useSlotMachine.ts**:
 ```typescript
 // Complete game cycle with research-based timing
 const useSlotMachine = () => {
@@ -236,22 +243,22 @@ const useSlotMachine = () => {
 Implement React Spring-based animation system for smooth, performant mobile gaming experiences.
 
 ### Files to Create
-- `src/casino/animations/index.ts`
-- `src/casino/animations/slot-reel.animations.ts`
-- `src/casino/animations/win-celebration.animations.ts`
-- `src/casino/animations/ui-feedback.animations.ts`
-- `src/casino/hooks/useSlotAnimations.ts`
-- `src/casino/hooks/useSpringTransitions.ts`
-- `src/casino/components/shared/AnimatedCounter.tsx`
-- `src/casino/components/shared/SpringTransition.tsx`
+- `src/animations/casino/index.ts`
+- `src/animations/casino/slot-reel.animations.ts`
+- `src/animations/casino/win-celebration.animations.ts`
+- `src/animations/casino/ui-feedback.animations.ts`
+- `src/hooks/casino/useSlotAnimations.ts`
+- `src/hooks/casino/useSpringTransitions.ts`
+- `src/components/casino/shared/AnimatedCounter.tsx`
+- `src/components/casino/shared/SpringTransition.tsx`
 
 ### Files to Modify
-- `src/casino/hooks/index.ts` (add animation hooks)
-- `src/casino/components/shared/index.ts` (create and add exports)
+- `src/hooks/casino/index.ts` (add animation hooks)
+- `src/components/casino/shared/index.ts` (create and add exports)
 
 ### Integration Points
-- `src/casino/hooks/useSlotMachine.ts` (from Phase 2)
-- `src/casino/hooks/useHapticFeedback.ts` (from Phase 1)
+- `src/hooks/casino/useSlotMachine.ts` (from Phase 2)
+- `src/hooks/casino/useHapticFeedback.ts` (from Phase 1)
 - React Spring library (external dependency)
 
 ### Key Deliverables
@@ -263,7 +270,7 @@ Implement React Spring-based animation system for smooth, performant mobile gami
 
 ### Research-Based Implementation Details
 
-**slot-reel.animations.ts**:
+**animations/casino/slot-reel.animations.ts**:
 ```typescript
 // Hardware-accelerated spinning from research
 const useReelSpring = (isSpinning: boolean, symbols: string[]) => {
@@ -291,7 +298,7 @@ const useReelSpring = (isSpinning: boolean, symbols: string[]) => {
 const REEL_STOP_DELAYS = [0, 200, 400] // ms between reel stops
 ```
 
-**win-celebration.animations.ts**:
+**animations/casino/win-celebration.animations.ts**:
 ```typescript
 // Win animation patterns from research
 const useWinAnimation = (isWinning: boolean, winLevel: 'small' | 'big') => {
@@ -318,7 +325,7 @@ const useNearMissEffect = (isNearMiss: boolean) => {
 }
 ```
 
-**ui-feedback.animations.ts**:
+**animations/casino/ui-feedback.animations.ts**:
 ```typescript
 // Button feedback with 16ms response target
 const useTouchFeedback = (isPressed: boolean) => {
@@ -348,19 +355,19 @@ const useAccessibleAnimation = (normalConfig: any) => {
 Enhanced audio system with haptic feedback integration for immersive mobile gaming experience.
 
 ### Files to Create
-- `src/casino/services/CasinoAudioService.ts`
-- `src/casino/services/HapticFeedbackService.ts`
-- `src/casino/constants/audio-config.constants.ts`
-- `src/casino/constants/haptic-patterns.constants.ts`
-- `src/casino/utils/audio.utils.ts`
+- `src/services/casino/CasinoAudioService.ts`
+- `src/services/casino/HapticFeedbackService.ts`
+- `src/constants/casino/audio-config.constants.ts`
+- `src/constants/casino/haptic-patterns.constants.ts`
+- `src/utils/casino/audio.utils.ts`
 
 ### Files to Modify
-- `src/casino/hooks/useCasinoAudio.ts` (enhance from Phase 1)
-- `src/casino/hooks/useHapticFeedback.ts` (enhance from Phase 1)
-- `src/casino/services/index.ts` (add exports)
+- `src/hooks/casino/useCasinoAudio.ts` (enhance from Phase 1)
+- `src/hooks/casino/useHapticFeedback.ts` (enhance from Phase 1)
+- `src/services/casino/index.ts` (add exports)
 
 ### Integration Points
-- `src/services/audioService.ts` (base audio system)
+- `src/services/audio/audioService.ts` (base audio system)
 - `src/stores/appStore.ts` (audio settings)
 - Web Audio API and Vibration API (browser APIs)
 
@@ -373,7 +380,7 @@ Enhanced audio system with haptic feedback integration for immersive mobile gami
 
 ### Research-Based Implementation Details
 
-**CasinoAudioService.ts**:
+**services/casino/CasinoAudioService.ts**:
 ```typescript
 // Battery-efficient audio from research findings
 class CasinoAudioService {
@@ -422,7 +429,7 @@ class CasinoAudioService {
 }
 ```
 
-**HapticFeedbackService.ts**:
+**services/casino/HapticFeedbackService.ts**:
 ```typescript
 // Research-based haptic patterns
 const HAPTIC_LIBRARY = {
@@ -459,7 +466,7 @@ class HapticService {
 }
 ```
 
-**audio-config.constants.ts**:
+**constants/casino/audio-config.constants.ts**:
 ```typescript
 // Research-based audio configuration
 export const CASINO_AUDIO_CONFIG = {
@@ -497,24 +504,24 @@ export const CASINO_AUDIO_CONFIG = {
 Build complete, functional slot machine components with full game integration.
 
 ### Files to Create
-- `src/casino/components/slots/EnhancedSlotMachine.tsx`
-- `src/casino/components/slots/SlotReel.tsx`
-- `src/casino/components/slots/ReelSymbol.tsx`
-- `src/casino/components/slots/WinLineIndicator.tsx`
-- `src/casino/components/slots/BetControls.tsx`
-- `src/casino/components/slots/SpinButton.tsx`
-- `src/casino/components/slots/WinCelebration.tsx`
-- `src/casino/components/shared/CoinDisplay.tsx`
-- `src/casino/components/shared/GameLayout.tsx`
+- `src/components/casino/slots/EnhancedSlotMachine.tsx`
+- `src/components/casino/slots/SlotReel.tsx`
+- `src/components/casino/slots/ReelSymbol.tsx`
+- `src/components/casino/slots/WinLineIndicator.tsx`
+- `src/components/casino/slots/BetControls.tsx`
+- `src/components/casino/slots/SpinButton.tsx`
+- `src/components/casino/slots/WinCelebration.tsx`
+- `src/components/casino/shared/CoinDisplay.tsx`
+- `src/components/casino/shared/GameLayout.tsx`
 
 ### Files to Modify
-- `src/casino/components/slots/index.ts` (create and add exports)
+- `src/components/casino/slots/index.ts` (create and add exports)
 - `src/components/SlotMachine.tsx` (deprecate or refactor)
 
 ### Integration Points
-- `src/casino/hooks/useSlotMachine.ts` (from Phase 2)
-- `src/casino/hooks/useSlotAnimations.ts` (from Phase 3)
-- `src/casino/hooks/useCasinoAudio.ts` (from Phase 4)
+- `src/hooks/casino/useSlotMachine.ts` (from Phase 2)
+- `src/hooks/casino/useSlotAnimations.ts` (from Phase 3)
+- `src/hooks/casino/useCasinoAudio.ts` (from Phase 4)
 - `src/stores/appStore.ts` (coin balance)
 
 ### Key Deliverables
@@ -526,7 +533,7 @@ Build complete, functional slot machine components with full game integration.
 
 ### Research-Based Implementation Details
 
-**EnhancedSlotMachine.tsx**:
+**components/casino/slots/EnhancedSlotMachine.tsx**:
 ```typescript
 // Mobile-optimized slot machine from research
 const EnhancedSlotMachine: React.FC<SlotMachineProps> = ({ coinBalance, setCoinBalance }) => {
@@ -612,7 +619,7 @@ const EnhancedSlotMachine: React.FC<SlotMachineProps> = ({ coinBalance, setCoinB
 }
 ```
 
-**SlotReel.tsx**:
+**components/casino/slots/SlotReel.tsx**:
 ```typescript
 // Individual reel with React Spring physics
 const SlotReel: React.FC<SlotReelProps> = ({ symbol, isSpinning, delay }) => {
@@ -646,7 +653,7 @@ const SlotReel: React.FC<SlotReelProps> = ({ symbol, isSpinning, delay }) => {
 }
 ```
 
-**BetControls.tsx**:
+**components/casino/slots/BetControls.tsx**:
 ```typescript
 // Research-based betting interface
 const BetControls: React.FC = () => {
@@ -709,17 +716,17 @@ Enhanced state management with comprehensive balance tracking, transaction loggi
 
 ### Files to Create
 - `src/stores/casinoStore.ts`
-- `src/casino/services/BalanceService.ts`
-- `src/casino/services/TransactionLogger.ts`
-- `src/casino/utils/storage.utils.ts`
-- `src/casino/hooks/useCasinoBalance.ts`
-- `src/casino/hooks/useGameSession.ts`
-- `src/casino/types/transaction.types.ts`
+- `src/services/casino/BalanceService.ts`
+- `src/services/casino/TransactionLogger.ts`
+- `src/utils/casino/storage.utils.ts`
+- `src/hooks/casino/useCasinoBalance.ts`
+- `src/hooks/casino/useGameSession.ts`
+- `src/types/casino/transaction.types.ts`
 
 ### Files to Modify
 - `src/stores/appStore.ts` (integrate casino store)
-- `src/casino/types/index.ts` (add transaction types)
-- `src/casino/hooks/index.ts` (add balance hooks)
+- `src/types/casino/index.ts` (add transaction types)
+- `src/hooks/casino/index.ts` (add balance hooks)
 
 ### Integration Points
 - Zustand persistence middleware
@@ -735,7 +742,7 @@ Enhanced state management with comprehensive balance tracking, transaction loggi
 
 ### Research-Based Implementation Details
 
-**casinoStore.ts**:
+**stores/casinoStore.ts**:
 ```typescript
 // Research-optimized Zustand store
 interface CasinoState {
@@ -876,7 +883,7 @@ export const useCasinoStore = create<CasinoState & CasinoActions>()(
 )
 ```
 
-**BalanceService.ts**:
+**services/casino/BalanceService.ts**:
 ```typescript
 // Research-based balance validation service
 class BalanceService {
@@ -910,7 +917,7 @@ class BalanceService {
 }
 ```
 
-**useCasinoBalance.ts**:
+**hooks/casino/useCasinoBalance.ts**:
 ```typescript
 // Research-optimized balance hook
 const useCasinoBalance = () => {
@@ -949,17 +956,17 @@ const useCasinoBalance = () => {
 Mobile-specific optimizations for touch interactions, performance, and battery efficiency.
 
 ### Files to Create
-- `src/casino/hooks/useTouchGestures.ts`
-- `src/casino/hooks/usePerformanceMonitoring.ts`
-- `src/casino/utils/mobile-detection.utils.ts`
-- `src/casino/utils/performance.utils.ts`
-- `src/casino/services/PerformanceService.ts`
-- `src/casino/components/shared/TouchFeedback.tsx`
+- `src/hooks/casino/useTouchGestures.ts`
+- `src/hooks/casino/usePerformanceMonitoring.ts`
+- `src/utils/casino/mobile-detection.utils.ts`
+- `src/utils/casino/performance.utils.ts`
+- `src/services/casino/PerformanceService.ts`
+- `src/components/casino/shared/TouchFeedback.tsx`
 
 ### Files to Modify
 - All casino components (add mobile optimizations)
-- `src/casino/hooks/index.ts` (add mobile hooks)
-- `src/casino/utils/index.ts` (add mobile utils)
+- `src/hooks/casino/index.ts` (add mobile hooks)
+- `src/utils/casino/index.ts` (add mobile utils)
 
 ### Integration Points
 - All existing casino components
@@ -976,7 +983,7 @@ Mobile-specific optimizations for touch interactions, performance, and battery e
 
 ### Research-Based Implementation Details
 
-**useTouchGestures.ts**:
+**hooks/casino/useTouchGestures.ts**:
 ```typescript
 // Research-based touch interaction patterns
 const useTouchGestures = () => {
@@ -1015,7 +1022,7 @@ const useTouchGestures = () => {
 }
 ```
 
-**usePerformanceMonitoring.ts**:
+**hooks/casino/usePerformanceMonitoring.ts**:
 ```typescript
 // Research: Performance monitoring for 60fps target
 const usePerformanceMonitoring = () => {
@@ -1074,7 +1081,7 @@ const usePerformanceMonitoring = () => {
 }
 ```
 
-**mobile-detection.utils.ts**:
+**utils/casino/mobile-detection.utils.ts**:
 ```typescript
 // Research: Device capability detection
 export const MobileDetection = {
@@ -1114,7 +1121,7 @@ export const MobileDetection = {
 }
 ```
 
-**TouchFeedback.tsx**:
+**components/casino/shared/TouchFeedback.tsx**:
 ```typescript
 // Research: 16ms touch response target
 const TouchFeedback: React.FC<TouchFeedbackProps> = ({ 
@@ -1170,29 +1177,29 @@ const TouchFeedback: React.FC<TouchFeedbackProps> = ({
 Complete single-player blackjack game implementation with mobile-optimized UI.
 
 ### Files to Create
-- `src/pages/BlackjackPage.tsx`
-- `src/casino/components/blackjack/BlackjackGame.tsx`
-- `src/casino/components/blackjack/Card.tsx`
-- `src/casino/components/blackjack/Hand.tsx`
-- `src/casino/components/blackjack/DealerArea.tsx`
-- `src/casino/components/blackjack/PlayerArea.tsx`
-- `src/casino/components/blackjack/ActionButtons.tsx`
-- `src/casino/services/BlackjackLogic.ts`
-- `src/casino/services/CardDeckService.ts`
-- `src/casino/hooks/useBlackjack.ts`
-- `src/casino/types/blackjack.types.ts`
-- `src/casino/constants/blackjack-rules.constants.ts`
-- `src/casino/utils/card-game.utils.ts`
+- `src/pages/casino/BlackjackPage.tsx`
+- `src/components/casino/blackjack/BlackjackGame.tsx`
+- `src/components/casino/blackjack/Card.tsx`
+- `src/components/casino/blackjack/Hand.tsx`
+- `src/components/casino/blackjack/DealerArea.tsx`
+- `src/components/casino/blackjack/PlayerArea.tsx`
+- `src/components/casino/blackjack/ActionButtons.tsx`
+- `src/services/casino/BlackjackLogic.ts`
+- `src/services/casino/CardDeckService.ts`
+- `src/hooks/casino/useBlackjack.ts`
+- `src/types/casino/blackjack.types.ts`
+- `src/constants/casino/blackjack-rules.constants.ts`
+- `src/utils/casino/card-game.utils.ts`
 
 ### Files to Modify
 - `src/pages/index.ts` (add BlackjackPage export)
 - `src/App.tsx` (add blackjack routing)
-- `src/casino/types/index.ts` (add blackjack types)
+- `src/types/casino/index.ts` (add blackjack types)
 
 ### Integration Points
 - `src/stores/casinoStore.ts` (from Phase 6)
-- `src/casino/hooks/useCasinoAudio.ts` (from Phase 4)
-- `src/casino/hooks/useCasinoBalance.ts` (from Phase 6)
+- `src/hooks/casino/useCasinoAudio.ts` (from Phase 4)
+- `src/hooks/casino/useCasinoBalance.ts` (from Phase 6)
 
 ### Key Deliverables
 1. **Simplified Blackjack**: Basic hit/stand/double rules, single deck, dealer stands soft 17, 3:2 blackjack payout
@@ -1203,7 +1210,7 @@ Complete single-player blackjack game implementation with mobile-optimized UI.
 
 ### Research-Based Implementation Details
 
-**BlackjackGame.tsx**:
+**components/casino/blackjack/BlackjackGame.tsx**:
 ```typescript
 // Research: Simplified mobile blackjack
 const BlackjackGame: React.FC = () => {
@@ -1308,7 +1315,7 @@ const BlackjackGame: React.FC = () => {
 }
 ```
 
-**Card.tsx**:
+**components/casino/blackjack/Card.tsx**:
 ```typescript
 // Research: Mobile-optimized card display
 const Card: React.FC<CardProps> = ({ 
@@ -1391,7 +1398,7 @@ const Card: React.FC<CardProps> = ({
 }
 ```
 
-**useBlackjack.ts**:
+**hooks/casino/useBlackjack.ts**:
 ```typescript
 // Research-based blackjack game logic
 const useBlackjack = () => {
@@ -1483,29 +1490,29 @@ const useBlackjack = () => {
 Jacks or Better video poker implementation with strategy hints and mobile-optimized controls.
 
 ### Files to Create
-- `src/pages/VideoPokerPage.tsx`
-- `src/casino/components/poker/VideoPokerGame.tsx`
-- `src/casino/components/poker/PokerHand.tsx`
-- `src/casino/components/poker/PokerCard.tsx`
-- `src/casino/components/poker/HoldControls.tsx`
-- `src/casino/components/poker/PayTable.tsx`
-- `src/casino/components/poker/StrategyHints.tsx`
-- `src/casino/services/VideoPokerLogic.ts`
-- `src/casino/services/PokerHandEvaluator.ts`
-- `src/casino/hooks/useVideoPoker.ts`
-- `src/casino/types/poker.types.ts`
-- `src/casino/constants/poker-hands.constants.ts`
-- `src/casino/constants/poker-payouts.constants.ts`
-- `src/casino/utils/poker-strategy.utils.ts`
+- `src/pages/casino/VideoPokerPage.tsx`
+- `src/components/casino/poker/VideoPokerGame.tsx`
+- `src/components/casino/poker/PokerHand.tsx`
+- `src/components/casino/poker/PokerCard.tsx`
+- `src/components/casino/poker/HoldControls.tsx`
+- `src/components/casino/poker/PayTable.tsx`
+- `src/components/casino/poker/StrategyHints.tsx`
+- `src/services/casino/VideoPokerLogic.ts`
+- `src/services/casino/PokerHandEvaluator.ts`
+- `src/hooks/casino/useVideoPoker.ts`
+- `src/types/casino/poker.types.ts`
+- `src/constants/casino/poker-hands.constants.ts`
+- `src/constants/casino/poker-payouts.constants.ts`
+- `src/utils/casino/poker-strategy.utils.ts`
 
 ### Files to Modify
 - `src/pages/index.ts` (add VideoPokerPage export)
 - `src/App.tsx` (add video poker routing)
-- `src/casino/types/index.ts` (add poker types)
+- `src/types/casino/index.ts` (add poker types)
 
 ### Integration Points
-- `src/casino/services/CardDeckService.ts` (from Phase 8)
-- `src/casino/utils/card-game.utils.ts` (from Phase 8)
+- `src/services/casino/CardDeckService.ts` (from Phase 8)
+- `src/utils/casino/card-game.utils.ts` (from Phase 8)
 - `src/stores/casinoStore.ts` (from Phase 6)
 
 ### Key Deliverables
@@ -1517,7 +1524,7 @@ Jacks or Better video poker implementation with strategy hints and mobile-optimi
 
 ### Research-Based Implementation Details
 
-**VideoPokerGame.tsx**:
+**components/casino/poker/VideoPokerGame.tsx**:
 ```typescript
 // Research: Jacks or Better optimized for mobile
 const VideoPokerGame: React.FC = () => {
@@ -1713,7 +1720,7 @@ const VideoPokerGame: React.FC = () => {
 }
 ```
 
-**PokerHandEvaluator.ts**:
+**services/casino/PokerHandEvaluator.ts**:
 ```typescript
 // Research: Jacks or Better hand evaluation
 const JACKS_OR_BETTER_PAYOUTS = {
@@ -1761,7 +1768,7 @@ class PokerHandEvaluator {
 }
 ```
 
-**poker-strategy.utils.ts**:
+**utils/casino/poker-strategy.utils.ts**:
 ```typescript
 // Research: Optimal video poker strategy
 export const VideoPokerStrategy = {
@@ -1814,19 +1821,19 @@ Progressive Web App features for enhanced mobile experience including offline pl
 
 ### Files to Create
 - `public/sw.js` (service worker)
-- `src/casino/services/PWAService.ts`
-- `src/casino/services/CacheService.ts`
-- `src/casino/services/OfflineGameService.ts`
-- `src/casino/hooks/usePWAFeatures.ts`
-- `src/casino/hooks/useOfflineGame.ts`
-- `src/casino/components/shared/InstallPrompt.tsx`
-- `src/casino/components/shared/OfflineIndicator.tsx`
-- `src/casino/utils/cache.utils.ts`
+- `src/services/casino/PWAService.ts`
+- `src/services/casino/CacheService.ts`
+- `src/services/casino/OfflineGameService.ts`
+- `src/hooks/casino/usePWAFeatures.ts`
+- `src/hooks/casino/useOfflineGame.ts`
+- `src/components/casino/shared/InstallPrompt.tsx`
+- `src/components/casino/shared/OfflineIndicator.tsx`
+- `src/utils/casino/cache.utils.ts`
 
 ### Files to Modify
 - `public/manifest.json` (enhance PWA manifest)
 - `src/main.tsx` (register service worker)
-- `src/casino/components/shared/index.ts` (add PWA components)
+- `src/components/casino/shared/index.ts` (add PWA components)
 
 ### Integration Points
 - Service Worker API
@@ -1843,7 +1850,7 @@ Progressive Web App features for enhanced mobile experience including offline pl
 
 ### Research-Based Implementation Details
 
-**PWAService.ts**:
+**services/casino/PWAService.ts**:
 ```typescript
 // Research: Casino PWA optimization
 class PWAService {
@@ -1976,7 +1983,7 @@ self.addEventListener('sync', (event) => {
 })
 ```
 
-**CacheService.ts**:
+**services/casino/CacheService.ts**:
 ```typescript
 // Research: 50MB cache management
 class CacheService {

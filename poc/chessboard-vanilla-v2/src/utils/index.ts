@@ -45,3 +45,23 @@ export {
   groupExamplesByCategory,
   formatSelectorForDisplay
 } from './ui-tests';
+
+// Phase 3: Mobile chess utilities
+export {
+  calculateMobileBoardSize,
+  getTouchTargetSize,
+  screenCoordsToChessSquare,
+  chessSquareToScreenCoords,
+  detectTouchGesture,
+  isValidTouchTarget,
+  normalizeTouchEvent,
+  calculateTouchDistance,
+  exceedsDragThreshold,
+  getMobileSquareColor,
+  generateMobileBoardSquares,
+  debounceTouchEvent,
+  supportsHapticFeedback,
+  triggerHapticFeedback,
+  isLandscapeOrientation,
+  getSafeAreaInsets
+} from './chess';

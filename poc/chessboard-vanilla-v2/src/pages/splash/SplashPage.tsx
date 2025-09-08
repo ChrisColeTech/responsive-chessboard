@@ -1,9 +1,9 @@
 import React from "react";
 import { useAppStore } from "../../stores/appStore";
-import { MinimalSplashPageWrapper } from "../../components/MinimalSplashPageWrapper";
-import { AnimatedSplashPageWrapper } from "../../components/AnimatedSplashPageWrapper";
-import { LoadingProgressPageWrapper } from "../../components/LoadingProgressPageWrapper";
-import { BrandedSplashPageWrapper } from "../../components/BrandedSplashPageWrapper";
+import { MinimalSplashPageWrapper } from "../../components/splash/MinimalSplashPageWrapper";
+import { AnimatedSplashPageWrapper } from "../../components/splash/AnimatedSplashPageWrapper";
+import { LoadingProgressPageWrapper } from "../../components/splash/LoadingProgressPageWrapper";
+import { BrandedSplashPageWrapper } from "../../components/splash/BrandedSplashPageWrapper";
 
 export const SplashPage: React.FC = () => {
   const currentChildPage = useAppStore((state) => state.currentChildPage);

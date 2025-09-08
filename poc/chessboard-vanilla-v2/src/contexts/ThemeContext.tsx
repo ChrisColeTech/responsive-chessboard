@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
-import { type ThemeId, type BaseTheme } from '../components/ThemeSwitcher'
+import { type ThemeId, type BaseTheme } from '../components/core/ThemeSwitcher'
 
 interface ThemeContextValue {
   currentTheme: ThemeId

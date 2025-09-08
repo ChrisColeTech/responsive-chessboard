@@ -1,6 +1,6 @@
 // /src/pages/PlayPage.tsx - SIMPLE PLACEHOLDER FOR PHASE 3
 import React from "react";
-import { usePageInstructions } from "../../hooks/usePageInstructions";
+import { usePageInstructions } from "../../hooks/core/usePageInstructions";
 
 export const PlayPage: React.FC = () => {
   usePageInstructions("play");

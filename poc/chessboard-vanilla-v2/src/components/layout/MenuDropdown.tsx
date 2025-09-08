@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { Settings, HelpCircle, BarChart, Palette } from "lucide-react";
 import { useSettings } from "../../stores/appStore";
 import { useInstructions } from "../../contexts/InstructionsContext";
-import { useUIClickSound } from "../../hooks/useUIClickSound";
 
 interface MenuDropdownProps {
   onClose: () => void;
@@ -11,7 +10,6 @@ interface MenuDropdownProps {
 export function MenuDropdown({ onClose }: MenuDropdownProps) {
   const { open: openSettings } = useSettings();
   const { openInstructions } = useInstructions();
-  const { playUIClick } = useUIClickSound();
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { useSpring, animated } from '@react-spring/web';
-import { useLoadingProgressActions } from '../../hooks/useLoadingProgressActions';
+import { useLoadingProgressActions } from '../../hooks/splash/useLoadingProgressActions';
 
 interface LoadingProgressPageProps {
   variant?: 'in-app' | 'modal';

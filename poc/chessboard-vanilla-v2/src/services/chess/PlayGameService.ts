@@ -1,6 +1,6 @@
 // PlayGameService.ts - Core play game business logic
 // Phase 5: Business Logic Services - Play game service
-import { ChessGameService } from '../ChessGameService';
+import { ChessGameService } from './ChessGameService';
 import type { 
   ChessGameState, 
   ChessMoveResult, 

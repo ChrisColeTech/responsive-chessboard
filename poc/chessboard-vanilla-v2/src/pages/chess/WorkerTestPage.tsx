@@ -1,7 +1,7 @@
 import React from "react";
 import { CheckCircle, XCircle, Clock, Brain } from "lucide-react";
-import { useStockfish } from "../../hooks/useStockfish";
-import { usePageInstructions } from "../../hooks/usePageInstructions";
+import { useStockfish } from "../../hooks/chess/useStockfish";
+import { usePageInstructions } from "../../hooks/core/usePageInstructions";
 import { useWorkerTestStore } from "../../stores/workerTestStore";
 
 export const WorkerTestPage: React.FC = () => {

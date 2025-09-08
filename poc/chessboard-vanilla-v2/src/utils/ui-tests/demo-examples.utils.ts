@@ -4,7 +4,7 @@ import type {
   DemoButtonExample, 
   ExclusionExample, 
   CodeSnippet 
-} from '../../types/ui-tests';
+} from '../../types/ui/audio-demo.types';
 
 /**
  * Generate demo buttons for UI audio testing

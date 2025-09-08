@@ -1,6 +1,6 @@
 import React from "react";
-import { SlotMachine } from "../../components/SlotMachine";
-import { usePageInstructions } from "../../hooks/usePageInstructions";
+import { SlotMachine } from "../../components/casino/SlotMachine";
+import { usePageInstructions } from "../../hooks/core/usePageInstructions";
 import { useAppStore } from "../../stores/appStore";
 
 export const SlotMachineTestPage: React.FC = () => {

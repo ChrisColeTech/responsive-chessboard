@@ -1,6 +1,4 @@
 import { Menu } from "lucide-react";
-import { useUIClickSound } from "../../hooks/useUIClickSound";
-import { useUIHoverSound } from "../../hooks/useUIHoverSound";
 
 interface MenuButtonProps {
   isMenuOpen: boolean;
@@ -8,8 +6,6 @@ interface MenuButtonProps {
 }
 
 export function MenuButton({ isMenuOpen, onToggleMenu }: MenuButtonProps) {
-  const { playUIClick } = useUIClickSound();
-  const { playUIHover } = useUIHoverSound();
 
   const handleMenuClick = () => {
     // Note: UI click sound is handled automatically by Global UI Audio System
@@ -17,10 +13,7 @@ export function MenuButton({ isMenuOpen, onToggleMenu }: MenuButtonProps) {
   };
 
   const handleMenuHover = () => {
-    // Play hover sound only when menu is closed
-    if (!isMenuOpen) {
-      playUIHover('Menu Button');
-    }
+    // Note: UI hover sound is handled automatically by Global UI Audio System
   };
 
   return (

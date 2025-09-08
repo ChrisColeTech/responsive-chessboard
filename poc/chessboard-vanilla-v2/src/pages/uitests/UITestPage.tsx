@@ -1,10 +1,10 @@
 import React from "react";
 import { useAppStore } from "../../stores/appStore";
-import { UITestsMainPage } from "../../components/UITestsMainPage";
-import { DragTestPageWrapper } from "../../components/DragTestPageWrapper";
-import { UIAudioTestPageWrapper } from "../../components/UIAudioTestPageWrapper";
-import { LayoutTestPageWrapper } from "../../components/LayoutTestPageWrapper";
-import { MobileDragTestPageWrapper } from "../../components/MobileDragTestPageWrapper";
+import { UITestsMainPage } from "../../components/uitests/UITestsMainPage";
+import { DragTestPageWrapper } from "../../components/uitests/DragTestPageWrapper";
+import { UIAudioTestPageWrapper } from "../../components/uitests/UIAudioTestPageWrapper";
+import { LayoutTestPageWrapper } from "../../components/uitests/LayoutTestPageWrapper";
+import { MobileDragTestPageWrapper } from "../../components/uitests/MobileDragTestPageWrapper";
 
 export const UITestPage: React.FC = () => {
   const currentChildPage = useAppStore((state) => state.currentChildPage);

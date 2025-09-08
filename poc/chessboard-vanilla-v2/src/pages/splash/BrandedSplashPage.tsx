@@ -1,6 +1,6 @@
 import React from "react";
 import { useSpring, animated } from '@react-spring/web';
-import { useBrandedSplashActions } from '../../hooks/useBrandedSplashActions';
+import { useBrandedSplashActions } from '../../hooks/splash/useBrandedSplashActions';
 
 interface BrandedSplashPageProps {
   variant?: 'in-app' | 'modal';

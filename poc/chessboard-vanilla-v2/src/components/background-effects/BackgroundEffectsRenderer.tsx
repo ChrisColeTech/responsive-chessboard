@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useBackgroundEffects } from '../../hooks/useBackgroundEffects'
+import { useBackgroundEffects } from '../../hooks/core/useBackgroundEffects'
 
 interface BackgroundEffectsRendererProps {
   className?: string

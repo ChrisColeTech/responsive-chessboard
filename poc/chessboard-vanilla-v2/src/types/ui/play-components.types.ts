@@ -1,7 +1,7 @@
 // play-components.types.ts - Play page UI component interface definitions
 // Phase 1: Foundation Types - Play UI component interfaces
 
-import type { ChessPiece, PieceColor, ChessPosition } from '../chess.types';
+import type { ChessPiece, PieceColor, ChessPosition } from '../chess/chess.types';
 import type { ComputerDifficulty, ComputerThinkingState } from '../chess/computer-opponent.types';
 import type { PlayGameResult, PlayerInfo } from '../chess/play-game.types';
 

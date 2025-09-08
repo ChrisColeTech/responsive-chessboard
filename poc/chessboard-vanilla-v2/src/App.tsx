@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { AppLayout } from "./components/layout";
-import { useGlobalUIAudio } from "./hooks/useGlobalUIAudio";
+import { useGlobalUIAudio } from "./hooks/audio/useGlobalUIAudio";
 
 import { DragProvider, useDrag } from "./providers/DragProvider";
 import { InstructionsProvider } from "./contexts/InstructionsContext";
-import { DraggedPiece } from "./components/DraggedPiece";
-import { SplashModal } from "./components/SplashModal";
+import { DraggedPiece } from "./components/chess/DraggedPiece";
+import { SplashModal } from "./components/splash/SplashModal";
 import { useSelectedTab, useAppStore } from "./stores/appStore";
-import { useChessAudio } from "./services/audioService";
+import { useChessAudio } from "./services/audio/audioService";
 import {
   WorkerTestPage,
   UITestPage,

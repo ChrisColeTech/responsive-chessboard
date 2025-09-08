@@ -1,5 +1,5 @@
 import React from "react";
-import { usePageInstructions } from "../../hooks/usePageInstructions";
+import { usePageInstructions } from "../../hooks/core/usePageInstructions";
 
 export const UIAudioTestPage: React.FC = () => {
   usePageInstructions("uitests.audio-demo");
