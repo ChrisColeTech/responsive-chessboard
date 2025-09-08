@@ -17,6 +17,7 @@ import { useAnimatedSplashActions } from '../../hooks/splash/useAnimatedSplashAc
 import { useLoadingProgressActions } from '../../hooks/splash/useLoadingProgressActions'
 import { useBrandedSplashActions } from '../../hooks/splash/useBrandedSplashActions'
 import { useLuxurysplashActions } from '../../hooks/splash/useLuxurysplashActions'
+import { useFunctionalSplashActions } from '../../hooks/splash/useFunctionalSplashActions'
 import { useMobileDragTestActions } from '../../hooks/uitests/useMobileDragTestActions'
 import { useUIClickSound } from '../../hooks/audio/useUIClickSound'
 import { useUIHoverSound } from '../../hooks/audio/useUIHoverSound'
@@ -58,6 +59,7 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
   const loadingProgressActions = useLoadingProgressActions()
   const brandedSplashActions = useBrandedSplashActions()
   const luxurysplashActions = useLuxurysplashActions()
+  const functionalSplashActions = useFunctionalSplashActions()
   const mobileDragTestActions = useMobileDragTestActions()
   
   // Audio for action clicks and hovers
@@ -127,7 +129,8 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         'go-to-animated': splashActions.goToAnimated,
         'go-to-progress': splashActions.goToProgress,
         'go-to-branded': splashActions.goToBranded,
-        'go-to-luxurysplash': splashActions.goToLuxurysplash
+        'go-to-luxurysplash': splashActions.goToLuxurysplash,
+        'go-to-functional': splashActions.goToFunctional
       },
       minimalsplash: {
         'test-minimal-load': minimalSplashActions.testMinimalLoad,
@@ -164,6 +167,18 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
       luxurysplash: {
         'test-luxury': luxurysplashActions.testLuxury,
         'restart-demo': luxurysplashActions.restartDemo
+      },
+      functionalsplash: {
+        'test-functional-loading': functionalSplashActions.testFunctionalLoading,
+        'retry-loading': functionalSplashActions.retryLoading,
+        'skip-loading': functionalSplashActions.skipLoading,
+        'toggle-fullscreen': functionalSplashActions.toggleFullscreen,
+        'show-cache-stats': functionalSplashActions.showCacheStats,
+        'clear-cache': functionalSplashActions.clearCache,
+        'go-to-minimal': functionalSplashActions.goToMinimal,
+        'go-to-animated': functionalSplashActions.goToAnimated,
+        'go-to-progress': functionalSplashActions.goToProgress,
+        'go-to-branded': functionalSplashActions.goToBranded
       },
       layouttest: {
         // Navigation actions only
@@ -202,7 +217,7 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
     // Use HeadlessUI's close callback AND our onClose
     closeCallback()
     onClose()
-  }, [currentPage, playUIClick, playActions, slotsActions, workerActions, uiTestsActions, layoutActions, dragTestActions, uiAudioTestActions, splashActions, minimalSplashActions, animatedSplashActions, loadingProgressActions, brandedSplashActions, luxurysplashActions, mobileDragTestActions, onClose])
+  }, [currentPage, playUIClick, playActions, slotsActions, workerActions, uiTestsActions, layoutActions, dragTestActions, uiAudioTestActions, splashActions, minimalSplashActions, animatedSplashActions, loadingProgressActions, brandedSplashActions, luxurysplashActions, functionalSplashActions, mobileDragTestActions, onClose])
 
   const handleHover = useCallback((actionLabel: string) => {
     playUIHover(`Action: ${actionLabel}`)

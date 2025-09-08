@@ -4,6 +4,7 @@ import { MinimalSplashPageWrapper } from "../../components/splash/MinimalSplashP
 import { AnimatedSplashPageWrapper } from "../../components/splash/AnimatedSplashPageWrapper";
 import { LoadingProgressPageWrapper } from "../../components/splash/LoadingProgressPageWrapper";
 import { BrandedSplashPageWrapper } from "../../components/splash/BrandedSplashPageWrapper";
+import { FunctionalSplashPageWrapper } from "../../components/splash/FunctionalSplashPageWrapper";
 
 export const SplashPage: React.FC = () => {
   const currentChildPage = useAppStore((state) => state.currentChildPage);
@@ -18,6 +19,8 @@ export const SplashPage: React.FC = () => {
     CurrentPageComponent = LoadingProgressPageWrapper;
   } else if (currentChildPage === "brandedsplash") {
     CurrentPageComponent = BrandedSplashPageWrapper;
+  } else if (currentChildPage === "functionalsplash") {
+    CurrentPageComponent = FunctionalSplashPageWrapper;
   }
 
   return <CurrentPageComponent />;

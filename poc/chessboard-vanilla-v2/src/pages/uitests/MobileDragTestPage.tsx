@@ -58,12 +58,10 @@ export const MobileDragTestPage: React.FC = () => {
         }
       />
       
-      {/* Game Status Display */}
-      {gameState && (
-        <div className="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded text-sm">
-          Turn: {gameState.activeColor}
-          {gameState.isCheck && <span className="text-red-400 ml-2">CHECK!</span>}
-          {gameState.isCheckmate && <span className="text-red-600 ml-2">CHECKMATE!</span>}
+      {/* Game Status Display - Only critical game states */}
+      {gameState?.isCheckmate && (
+        <div className="absolute top-4 left-4 bg-red-800/90 text-white px-3 py-1 rounded text-sm font-medium animate-pulse">
+          CHECKMATE!
         </div>
       )}
     </div>

@@ -107,6 +107,65 @@ export class InstructionsService {
       ]
     })
 
+    // Splash Screen pages
+    this.instructionsMap.set('minimalsplash', {
+      title: 'Minimal Professional Splash',
+      instructions: [
+        '🎨 Clean single logo + brand colors with professional typography',
+        '👑 Floating chess crown symbol with subtle animation',
+        '⏱️ 1.5-2 second duration for quick professional impression',
+        '🔄 Restart animation using action sheet controls',
+        '🚀 Navigate to other splash screen examples'
+      ]
+    })
+
+    this.instructionsMap.set('animatedsplash', {
+      title: 'Progressive Piece Assembly',
+      instructions: [
+        '♗ Chess pieces appear in logical hierarchy sequence',
+        '🎭 Staggered timing creates engaging assembly animation', 
+        '📚 Educational value showing piece placement learning',
+        '🔄 Restart animation to see full piece assembly sequence',
+        '🎮 Test cross-navigation to other splash variants'
+      ]
+    })
+
+    this.instructionsMap.set('loadingprogress', {
+      title: 'Engine Loading Dashboard',
+      instructions: [
+        '🔧 Technical precision meets chess sophistication',
+        '📊 Real progress feedback for engine initialization sequence',
+        '🎯 Professional dashboard styling with readable timing',
+        '⚙️ Shows current service being initialized',
+        '🔄 Restart to see full loading sequence animation'
+      ]
+    })
+
+    this.instructionsMap.set('brandedsplash', {
+      title: 'Master Chess Training Branding',
+      instructions: [
+        '🏛️ Full brand identity with institutional excellence feel',
+        '🎓 Premium educational institution presentation',
+        '👑 Sophisticated typography with authority indicators',
+        '✨ No progress bars - pure brand experience focus',
+        '🎨 Dignified crown floating with elegant styling'
+      ]
+    })
+
+    this.instructionsMap.set('functionalsplash', {
+      title: 'Functional Asset Preloading',
+      instructions: [
+        '🎯 **Real Asset Preloading**: Performs actual app initialization, not fake animations',
+        '📊 **Live Progress**: Shows real loading stages (store → pieces → audio → background)',
+        '🎨 **User-Preference-Driven**: Loads your selected piece set first, others in background',
+        '🔊 **Smart Audio Loading**: Only preloads audio if enabled in settings',
+        '⚡ **Modern APIs**: Uses 2024 React preload API + custom Promise coordination',
+        '🚫 **Error Handling**: Shows retry options and graceful degradation on failures',
+        '⏭️ **Skip Option**: Power users can bypass loading for immediate access',
+        '📱 **Network Aware**: Adapts to connection speed with timeout handling'
+      ]
+    })
+
     // Future sub-pages can be added easily
     // this.instructionsMap.set('uitests.audio-demo.advanced', { ... })
     // this.instructionsMap.set('play.vs-computer.difficulty', { ... })

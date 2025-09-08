@@ -38,11 +38,19 @@ export function useSplashActions() {
     }, 100)
   }, [setCurrentChildPage])
 
+  const goToFunctional = useCallback(() => {
+    // Small delay to prevent hover sound from triggering after menu transition
+    setTimeout(() => {
+      setCurrentChildPage('functionalsplash')
+    }, 100)
+  }, [setCurrentChildPage])
+
   return {
     goToMinimal,
     goToAnimated,
     goToProgress,
     goToBranded,
-    goToLuxurysplash
+    goToLuxurysplash,
+    goToFunctional
   }
 }

@@ -2,7 +2,8 @@
 import { 
   RotateCcw, Eye, Pause, Undo, Coins, RefreshCw, Volume2, 
   Trash2, TestTube, SkipForward, Navigation,
-  Brain, Clock, CheckCircle, Target, Sword, Move, Crown
+  Brain, Clock, CheckCircle, Target, Sword, Move, Crown,
+  Database, BarChart3
 } from 'lucide-react'
 import type { ActionSheetAction } from '../../types/core/action-sheet.types'
 import { mergeWithCommonActions, COMMON_ACTION_GROUPS, COMMON_ACTIONS, buildCommonActions } from './common-actions.constants'
@@ -134,6 +135,12 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       label: 'Go to Luxurysplash',
       icon: Navigation,
       variant: 'secondary'
+    },
+    {
+      id: 'go-to-functional',
+      label: 'Functional Preloading',
+      icon: Target,
+      variant: 'default'
     }
   ],
   minimalsplash: mergeWithCommonActions([
@@ -240,6 +247,38 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       variant: 'secondary'
     }
   ],
+  functionalsplash: mergeWithCommonActions([
+    {
+      id: 'test-functional-loading',
+      label: 'Test Real Loading',
+      icon: TestTube,
+      variant: 'default'
+    },
+    {
+      id: 'retry-loading',
+      label: 'Retry Loading',
+      icon: RefreshCw,
+      variant: 'secondary'
+    },
+    {
+      id: 'skip-loading',
+      label: 'Skip Loading',
+      icon: SkipForward,
+      variant: 'destructive'
+    },
+    {
+      id: 'show-cache-stats',
+      label: 'Cache Statistics',
+      icon: BarChart3,
+      variant: 'secondary'
+    },
+    {
+      id: 'clear-cache',
+      label: 'Clear Cache',
+      icon: Database,
+      variant: 'destructive'
+    }
+  ], [...COMMON_ACTION_GROUPS.demoUtilities, 'go-to-minimal', 'go-to-animated', 'go-to-progress', 'go-to-branded']),
   mobiledragtest: mergeWithCommonActions([
     {
       id: 'mobile-board-action',

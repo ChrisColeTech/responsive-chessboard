@@ -103,7 +103,6 @@ export class StockfishService {
     if (typeof message === 'object' && message.type) {
       switch (message.type) {
         case 'log':
-          console.log('🔧 [WORKER]', message.message);
           return;
         case 'error':
           console.error('❌ [WORKER]', message.message);
@@ -123,11 +122,9 @@ export class StockfishService {
       return; // Skip noisy analysis output
     }
     
-    console.log('🔧 [STOCKFISH]', messageStr);
 
     // Handle UCI protocol responses (copied from v1)
     if (message === 'uciok') {
-      console.log('✅ [STOCKFISH] UCI protocol initialized');
       const uciInitCommand = this.pendingCommands.get('uci_init');
       if (uciInitCommand) {
         uciInitCommand(message);
@@ -146,11 +143,9 @@ export class StockfishService {
 
     // Handle bestmove responses
     if (messageStr.startsWith('bestmove')) {
-      console.log('♟️ [STOCKFISH] Received bestmove:', messageStr);
       
       // Resolve current search promise
       if (this.currentSearch) {
-        console.log('✅ [STOCKFISH] Resolving current search promise');
         
         if (this.currentSearch.timeoutId) {
           clearTimeout(this.currentSearch.timeoutId);
@@ -197,16 +192,9 @@ export class StockfishService {
    * Set handlers for engine events (with atomic updates)
    */
   public setHandlers(handlers: StockfishHandlers): void {
-    console.log('🔗 [STOCKFISH] Setting/updating handlers atomically');
     this.handlers = { ...handlers };
     
     // Verify handlers are properly set (Document 24 Lesson #14)
-    console.log('🔍 [STOCKFISH] Handler verification:', {
-      onBestMove: !!this.handlers.onBestMove,
-      onInfo: !!this.handlers.onInfo,
-      onError: !!this.handlers.onError,
-      onLog: !!this.handlers.onLog
-    });
   }
 
   /**
@@ -256,11 +244,9 @@ export class StockfishService {
     }
 
     try {
-      console.log('🎯 [STOCKFISH] Requesting best move:', { fen, skillLevel, timeLimit });
       
       // Single-flight protection (Document 24 Lesson #13)
       if (this.currentSearch) {
-        console.log('🔄 [STOCKFISH] Search already in progress - waiting for existing');
         return await this.currentSearch.promise;
       }
 
@@ -293,7 +279,6 @@ export class StockfishService {
       const result = await this.currentSearch.promise;
       this.currentSearch = undefined;
       
-      console.log('✅ [STOCKFISH] Best move calculated:', result);
       return result;
       
     } catch (error) {
@@ -328,23 +313,19 @@ export class StockfishService {
       
       // Clear any existing pending command of the same type to prevent conflicts
       if (this.pendingCommands.has(commandType)) {
-        console.log(`⚠️ [STOCKFISH] Replacing existing pending command: ${commandType}`);
         this.pendingCommands.delete(commandType);
       }
       
       this.pendingCommands.set(commandType, resolve);
-      console.log(`🔍 [STOCKFISH] Command '${command}' registered with key '${commandType}'`);
 
       // Only log important commands, not routine ones
       if (!command.startsWith('setoption') && !command.startsWith('position')) {
-        console.log('📤 [STOCKFISH] Sending:', command);
       }
       
       // Allow isready command during initialization (needed for two-stage init)
       if (this.workerState === 'ready' || (this.workerState === 'initializing' && command === 'isready')) {
         this.stockfish.postMessage(command);
       } else if (this.workerState === 'initializing') {
-        console.log('📦 [STOCKFISH] Queuing command until ready:', command);
         this.messageQueue.push(command);
       } else {
         reject(new Error(`Cannot send command - worker state: ${this.workerState}`));
@@ -376,7 +357,6 @@ export class StockfishService {
       
       // Single-flight protection (Document 24 Lesson #13)
       if (this.currentSearch) {
-        console.log('🔄 [STOCKFISH] Search already in progress - waiting for existing');
         return await this.currentSearch.promise;
       }
 
@@ -413,7 +393,6 @@ export class StockfishService {
       const match = result.match(/bestmove\s+([a-h][1-8][a-h][1-8][qrbn]?)/);
       if (match) {
         const move = match[1];
-        console.log('✅ [STOCKFISH] Best move calculated:', move);
         return move;
       }
       
@@ -442,14 +421,12 @@ export class StockfishService {
     }
 
     try {
-      console.log('📊 [STOCKFISH] Evaluating position:', { fen, depth });
       
       // Set position
       await this.sendCommand(`position fen ${fen}`);
       
       // Request evaluation - register handler for evaluation responses
       this.pendingCommands.set('evaluation', (response: string) => {
-        console.log('📊 [STOCKFISH] Evaluation response received:', response);
       });
       
       const response = await this.sendCommand(`go depth ${depth}`);
@@ -459,7 +436,6 @@ export class StockfishService {
       const cpMatch = response.match(/score cp (-?\d+)/);
       if (cpMatch) {
         const centipawns = parseInt(cpMatch[1], 10);
-        console.log('📊 [STOCKFISH] Position evaluation:', centipawns, 'centipawns');
         return centipawns;
       }
 
@@ -483,7 +459,6 @@ export class StockfishService {
 
     const clampedLevel = Math.max(0, Math.min(20, level));
     await this.sendCommand(`setoption name Skill Level value ${clampedLevel}`, false);
-    console.log('🎚️ [STOCKFISH] Skill level set to:', clampedLevel);
   }
 
   /**
@@ -494,7 +469,6 @@ export class StockfishService {
       return;
     }
 
-    console.log('💥 [STOCKFISH] Destroying service and cleaning up...');
     
     this.workerState = 'destroyed';
     this.engineReady = false;
@@ -517,14 +491,12 @@ export class StockfishService {
     // Clear handlers
     this.handlers = {};
     
-    console.log('✅ [STOCKFISH] Service destroyed successfully');
   }
 
   /**
    * Clear all handlers
    */
   public clearHandlers(): void {
-    console.log('🔌 [STOCKFISH] Clearing handlers atomically');
     this.handlers = {};
   }
 

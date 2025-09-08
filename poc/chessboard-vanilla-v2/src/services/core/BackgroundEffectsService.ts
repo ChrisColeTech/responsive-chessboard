@@ -38,7 +38,6 @@ export class BackgroundEffectsService implements IBackgroundEffectsService {
     }
     
     this.registry.set(config.id, config)
-    console.log(`🎨 [BackgroundEffectsService] Registered effect: ${config.id} - ${config.name}`)
   }
 
   /**
@@ -94,7 +93,6 @@ export class BackgroundEffectsService implements IBackgroundEffectsService {
   public unregisterEffect(variant: BackgroundEffectVariant): boolean {
     const wasRemoved = this.registry.delete(variant)
     if (wasRemoved) {
-      console.log(`🎨 [BackgroundEffectsService] Unregistered effect: ${variant}`)
     }
     return wasRemoved
   }
@@ -104,7 +102,6 @@ export class BackgroundEffectsService implements IBackgroundEffectsService {
    */
   public clearRegistry(): void {
     this.registry.clear()
-    console.log(`🎨 [BackgroundEffectsService] Registry cleared`)
   }
 
   /**
@@ -124,7 +121,6 @@ export class BackgroundEffectsService implements IBackgroundEffectsService {
     }
 
     this.initialized = true
-    console.log(`🎨 [BackgroundEffectsService] Service initialized with ${this.getRegistrySize()} effects`)
   }
 
   /**
