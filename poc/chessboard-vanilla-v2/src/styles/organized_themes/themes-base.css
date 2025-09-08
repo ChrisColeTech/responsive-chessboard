@@ -52,6 +52,20 @@
   --accent-glow: none;
   --text-glow: none;
   --neon-border: none;
+  
+  /* Chess board colors */
+  --chess-light-square: #f8fafc;
+  --chess-dark-square: #64748b;
+  --chess-selected-square: rgba(100, 116, 139, 0.7);
+}
+
+/* Chess square utility classes */
+.chess-light-square {
+  background-color: var(--chess-light-square);
+}
+
+.chess-dark-square {
+  background-color: var(--chess-dark-square);
 }
 
 /* Dark mode base */
@@ -75,4 +89,18 @@
   --border: #334155;
   --input: #334155;
   --ring: #0099ff;
+  
+  /* Chess board colors */
+  --chess-light-square: #334155;
+  --chess-dark-square: #94a3b8;
+  --chess-selected-square: rgba(148, 163, 184, 0.7);
+}
+
+/* Chess square utility classes */
+.chess-light-square {
+  background-color: var(--chess-light-square);
+}
+
+.chess-dark-square {
+  background-color: var(--chess-dark-square);
 }

@@ -68,12 +68,15 @@ export function generateGridCells(
  */
 export function generateChessGridCells(
   numCells: number,
-  lightColor: string = "#F0D9B5",
-  darkColor: string = "#B58863",
+  lightColor?: string,
+  darkColor?: string,
   config: ChessGridConfig = {}
 ): GridCell[] {
   const cells: GridCell[] = [];
   const gridSize = Math.sqrt(numCells);
+  
+  // Debug: Log that we're using CSS classes instead of inline colors
+  console.log('🎨 [DEBUG] generateChessGridCells using CSS classes for theme-aware colors');
   
   if (gridSize !== Math.floor(gridSize)) {
     throw new Error(`numCells must be a perfect square (4, 9, 16, etc.), got ${numCells}`);
@@ -126,12 +129,12 @@ export function generateChessGridCells(
       }
     }
     
-    // Create the cell element with coordinate positioning
+    // Create the cell element with coordinate positioning and CSS class for theme-aware colors
     const cellElement = React.createElement('div', {
       key: chessSquare,
       id: chessSquare,
+      className: isLight ? 'chess-light-square' : 'chess-dark-square',
       style: {
-        backgroundColor: isLight ? lightColor : darkColor,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -155,7 +158,7 @@ export function generateChessGridCells(
     cells.push({
       id: chessSquare,
       position: i,
-      backgroundColor: isLight ? lightColor : darkColor,
+      backgroundColor: '', // No longer used - using CSS classes instead
       displayText: displayText,
       element: cellElement
     });

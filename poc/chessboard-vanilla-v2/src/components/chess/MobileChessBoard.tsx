@@ -1,6 +1,7 @@
 // Dynamic 2x2 Grid with Click Tracking and Animation
 import React, { useState, useEffect } from "react";
 import { generateChessGridCells, type GridCell } from "../../utils/grid-generator.utils";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface MobileChessBoardProps {
   onGameStateChange?: (gameState: any) => void;
@@ -8,6 +9,10 @@ interface MobileChessBoardProps {
 }
 
 export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
+  const { currentTheme, isDarkMode } = useTheme();
+  
+  console.log('🎨 [DEBUG] MobileChessBoard render start with theme:', currentTheme, isDarkMode);
+  console.log('🎨 [DEBUG] Current document classes at render:', document.documentElement.className);
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
   const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null);
   const [animatingPiece, setAnimatingPiece] = useState<{
@@ -17,13 +22,21 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
   } | null>(null);
   const [animationStep, setAnimationStep] = useState<'start' | 'end'>('start');
   
-  // Generate 16 cells (4x4 grid) with chess-style alternating colors and coordinates only on edges
-  const gridCells = generateChessGridCells(16, "#F0D9B5", "#B58863", {
-    showCoordinates: true,
-    coordinateStyle: 'edges',
-    showFiles: true,
-    showRanks: true
-  });
+  // Generate 16 cells (4x4 grid) with chess-style alternating colors using CSS classes
+  const [gridCells, setGridCells] = useState<GridCell[]>([]);
+  
+  useEffect(() => {
+    console.log('🎨 [DEBUG] Generating grid cells with CSS classes for theme:', currentTheme, isDarkMode);
+    
+    const cells = generateChessGridCells(16, '', '', {
+      showCoordinates: true,
+      coordinateStyle: 'edges',
+      showFiles: true,
+      showRanks: true
+    });
+    setGridCells(cells);
+    console.log('🎨 [DEBUG] Grid cells generated and set, count:', cells.length);
+  }, [currentTheme, isDarkMode]);
 
   // Define pieces and their positions using chess notation
   const [pieces, setPieces] = useState<Record<string, { symbol: string; color: string; type: string }>>({
@@ -110,11 +123,8 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
 
   const getCellStyle = (cell: GridCell) => ({
     backgroundColor: selectedCell === cell.id 
-      ? "rgba(255, 255, 0, 0.8)" // Yellow when selected
-      : lastMove && (lastMove.from === cell.id || lastMove.to === cell.id)
-      ? "rgba(0, 255, 0, 0.6)" // Green for last move
-      : cell.backgroundColor,
-    border: selectedCell === cell.id ? "3px solid orange" : "1px solid #333",
+      ? "var(--chess-selected-square)" // Use chess-specific selection color
+      : undefined, // Let CSS variables handle the background color
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -142,7 +152,7 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)", // 4x4 grid
           gridTemplateRows: "repeat(4, 1fr)",
-          gap: "2px"
+          gap: "0px"
         }}
       >
         {gridCells.map((cell) => 

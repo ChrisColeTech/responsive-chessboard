@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { AppLayout } from "./components/layout";
 import { useGlobalUIAudio } from "./hooks/audio/useGlobalUIAudio";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 import { DragProvider, useDrag } from "./providers/DragProvider";
 import { InstructionsProvider } from "./contexts/InstructionsContext";
@@ -103,13 +104,15 @@ function AppContent() {
 
 function App() {
   return (
-    <InstructionsProvider>
-      <DragProvider>
-        <AppContent />
-        {/* Global splash modal overlay - outside AppLayout for proper positioning */}
-        <SplashModal />
-      </DragProvider>
-    </InstructionsProvider>
+    <ThemeProvider>
+      <InstructionsProvider>
+        <DragProvider>
+          <AppContent />
+          {/* Global splash modal overlay - outside AppLayout for proper positioning */}
+          <SplashModal />
+        </DragProvider>
+      </InstructionsProvider>
+    </ThemeProvider>
   );
 }
 
