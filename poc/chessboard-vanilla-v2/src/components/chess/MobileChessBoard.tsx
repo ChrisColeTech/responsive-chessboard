@@ -1,5 +1,5 @@
 // Dynamic 2x2 Grid with Click Tracking and Animation
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { generateChessGridCells, type GridCell } from "../../utils/grid-generator.utils";
 
 interface MobileChessBoardProps {
@@ -10,15 +10,18 @@ interface MobileChessBoardProps {
 export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
   const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null);
-  const [selectedPiece, setSelectedPiece] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
-  const pieceRef = useRef<HTMLDivElement>(null);
   
-  // Generate 16 cells (4x4 grid) with chess-style alternating colors
-  const gridCells = generateChessGridCells(16);
+  // Generate 16 cells (4x4 grid) with chess-style alternating colors and coordinates only on edges
+  const gridCells = generateChessGridCells(16, "#F0D9B5", "#B58863", {
+    showCoordinates: true,
+    coordinateStyle: 'edges',
+    showFiles: true,
+    showRanks: true
+  });
 
   // Define pieces and their positions using chess notation
-  const [pieces, setPieces] = useState({
+  const [pieces, setPieces] = useState<Record<string, { symbol: string; color: string; type: string }>>({
     "a4": { symbol: "♔", color: "white", type: "king" },    // Top-left: White King
     "b4": { symbol: "♕", color: "white", type: "queen" },   // Top-row: White Queen  
     "c1": { symbol: "♛", color: "black", type: "queen" },  // Bottom-row: Black Queen
@@ -49,7 +52,6 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
       // First click - select cell only if it has a piece
       if (pieceAtCell) {
         setSelectedCell(cellId);
-        setSelectedPiece(cellId);
         console.log(`Selected ${pieceAtCell.color} ${pieceAtCell.type} at: ${cellId}`);
       } else {
         console.log(`Clicked empty cell: ${cellId}`);
@@ -57,7 +59,6 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
     } else if (selectedCell === cellId) {
       // Clicking same cell - deselect
       setSelectedCell(null);
-      setSelectedPiece(null);
       console.log(`Deselected piece at: ${cellId}`);
     } else {
       // Second click - move piece to new cell
@@ -79,7 +80,6 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
       });
       
       setSelectedCell(null);
-      setSelectedPiece(null);
       
       // Reset animation state after transition completes
       setTimeout(() => {
@@ -127,18 +127,18 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
           gap: "2px"
         }}
       >
-        {gridCells.map((cell) => (
-          <div
-            key={cell.id}
-            id={cell.id}
-            onClick={() => handleCellClick(cell.id)}
-            style={getCellStyle(cell)}
-          >
-            {/* Show cell number only - pieces are now separate */}
-            {cell.displayText}
-          </div>
-        ))}
+        {gridCells.map((cell) => 
+          React.cloneElement(cell.element as React.ReactElement<any>, {
+            key: cell.id,
+            onClick: () => handleCellClick(cell.id),
+            style: {
+              ...(cell.element.props as any).style,
+              ...getCellStyle(cell)
+            }
+          })
+        )}
       </div>
+
 
       {/* Floating Chess Pieces */}
       {Object.entries(pieces).map(([cellId, piece]) => {

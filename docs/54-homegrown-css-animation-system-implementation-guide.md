@@ -595,4 +595,171 @@ The homegrown approach has delivered on all core requirements while maintaining 
 
 ---
 
+## Chess Board Visual Enhancement Lessons Learned
+
+### Coordinate Display Implementation Lessons
+
+**Critical Learning: Chess Coordinate Positioning Requirements**
+- **Individual Square Coordinates**: Chess coordinates (a1, b1, c1, etc.) should be displayed on individual squares, not at board edges
+- **Bottom-Right Corner Positioning**: Coordinates must be positioned at the bottom-right corner of each square for proper chess convention
+- **Edge-Only Display**: Show coordinates only on edge squares (bottom rank and rightmost file) to minimize visual clutter
+- **Responsive Design Protection**: Coordinate positioning changes must not break responsive grid layout
+
+**Implementation Challenges Encountered:**
+1. **Misunderstanding Board vs Square Positioning**: Initially attempted to place coordinates outside the board instead of on individual squares
+2. **Responsive Layout Disruption**: Adding padding and container modifications broke the responsive design
+3. **Visual Interference**: White backgrounds and excessive styling interfered with piece visibility
+4. **Configuration Complexity**: Over-engineered coordinate display logic when simple positioning was needed
+
+**Correct Implementation Pattern:**
+```typescript
+// Correct: Minimal styling at bottom-right of edge squares only
+style: {
+  position: 'absolute',
+  fontSize: '10px',
+  fontWeight: 'bold',
+  color: '#333',
+  bottom: '2px',
+  right: '2px'
+}
+```
+
+### Visual Enhancement Research Integration
+
+Based on comprehensive research from Document 25 (Chess Visual Enhancement Research), the following principles guide our implementation:
+
+**Chess-Specific Design Priorities:**
+1. **High-contrast colors** for piece distinguishability
+2. **Skill-adaptive coordinate display** (always visible for beginners, minimal for masters)
+3. **Context-specific positioning** based on game mode
+4. **Performance-first approach** maintaining <16ms frame times
+5. **Touch-optimized interfaces** without interference with piece movement
+
+---
+
+## Next Steps: Visual Enhancement Implementation Plan
+
+### Phase 1: Foundation Enhancements
+
+**1.1 Theme System Implementation**
+- **Priority**: High
+- **Target**: 3-5 distinct visual themes optimized for different chess contexts
+- **Implementation**:
+  - Analysis Mode: High-contrast, full coordinate visibility
+  - Rapid Play Mode: Minimal UI, reduced coordinate display  
+  - Learning Mode: Enhanced visual aids, prominent coordinates
+  - Tournament Mode: Minimal distractions, professional appearance
+- **Technical Approach**: CSS custom properties for theme switching without asset reloading
+- **Performance Target**: Theme switching should be instantaneous
+
+**1.2 Responsive Design Optimization**
+- **Priority**: High  
+- **Target**: Maintain responsive behavior across all device sizes
+- **Implementation**:
+  - Touch-optimized piece sizes and hit targets for mobile
+  - Adaptive notation display scaling for different screen densities
+  - Separate interaction models: drag-and-drop for desktop, tap-to-select for mobile
+- **Technical Approach**: CSS clamp() functions and container queries
+- **Performance Target**: Maintain smooth responsive transitions
+
+**1.3 Focus Mode Implementation**
+- **Priority**: High
+- **Target**: Context-aware UI reduction
+- **Implementation**:
+  - Tournament Mode: Minimal UI, essential elements only
+  - Analysis Mode: Full tools visibility
+  - Learning Mode: Hints and educational aids enabled
+  - Casual Mode: All features available
+- **Technical Approach**: Progressive UI disclosure based on mode selection
+- **Performance Target**: Instant mode switching
+
+### Phase 2: Advanced Visual Features
+
+**2.1 Animation System Enhancement**
+- **Priority**: Medium
+- **Target**: Adaptive animation speeds for different time controls
+- **Implementation**:
+  - Bullet games: Instant/no animation
+  - Blitz games: Fast animations
+  - Rapid/Classical: Smooth animations
+  - Pre-move animation feedback for time-critical games
+- **Technical Approach**: CSS transition duration variables based on game mode
+- **Performance Target**: Maintain smooth performance during rapid piece updates
+
+**2.2 Visual Feedback System**
+- **Priority**: Medium
+- **Target**: Skill-adaptive highlighting and move feedback
+- **Implementation**:
+  - Beginner Level: Highlight all legal moves, threat indicators
+  - Intermediate Level: Show threats and captures only
+  - Expert Level: Minimal visual feedback
+  - Color-coded move analysis: green (strong), yellow (questionable), red (blunder)
+- **Technical Approach**: Conditional CSS classes based on user skill level
+- **Performance Target**: Instant move highlighting response
+
+**2.3 Audio System Integration**
+- **Priority**: Medium
+- **Target**: Contextual sound design with environment adaptation
+- **Implementation**:
+  - Silent Profile: Tournament-appropriate (no audio)
+  - Subtle Profile: Study environment (minimal audio cues)
+  - Full Profile: Casual play (complete audio feedback)
+  - Escalating time warnings with customizable thresholds
+- **Technical Approach**: Web Audio API with lazy-loaded audio assets
+- **Performance Target**: Fast audio loading, minimal file sizes
+
+### Phase 3: Advanced Features
+
+**3.1 Accessibility Implementation**
+- **Priority**: Low
+- **Target**: WCAG 2.1 AA compliance
+- **Implementation**:
+  - High-contrast mode for visual impairment
+  - Keyboard navigation support for all features
+  - Screen reader compatibility for game state
+  - Customizable motion reduction settings
+- **Technical Approach**: CSS forced-colors media query, ARIA landmarks
+- **Performance Target**: No impact on core gameplay performance
+
+**3.2 Performance Optimization**
+- **Priority**: Low
+- **Target**: Chess-optimized rendering performance
+- **Implementation**:
+  - Custom DOM diffing to minimize board updates during analysis
+  - GPU acceleration for smooth animations
+  - Web workers for engine calculations
+  - Bundle splitting for optimal loading
+- **Technical Approach**: React.memo, useMemo, RAF scheduling
+- **Performance Target**: Fast DOM updates for smooth piece movements
+
+### Implementation Strategy & Success Metrics
+
+**Bundle Size Optimization:**
+- Target: Minimal additional bundle size for all visual enhancements
+- Use lazy loading for non-critical themes and animations
+- Optimize asset compression and sprite sheets
+- CSS custom properties for efficient theme management
+
+**Performance Benchmarks:**
+- Maintain smooth frame rates during gameplay
+- Fast DOM updates for piece movement animations  
+- Instant theme switching response
+- Quick audio loading for game event feedback
+
+**User Experience Goals:**
+- 3-5 meaningful customization options without overwhelming users
+- Context-aware defaults based on game mode and user skill level
+- Progressive disclosure of advanced features
+- Consistent visual language across all platforms
+
+**Technical Debt Management:**
+- Clean, maintainable implementation patterns
+- Comprehensive TypeScript coverage
+- Thorough testing of responsive behavior
+- Documentation updates for each enhancement phase
+
+This implementation plan builds directly on the successful homegrown animation system foundation while incorporating research-backed visual enhancement principles. Each phase includes clear priorities, technical approaches, and measurable success criteria to ensure systematic and effective enhancement of the chess board visual experience.
+
+---
+
 *This document serves as the definitive guide for understanding, maintaining, and extending the homegrown CSS animation system. All implementation details, lessons learned, and future considerations are based on actual development experience and testing.*

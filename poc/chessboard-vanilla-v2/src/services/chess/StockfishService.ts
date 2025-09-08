@@ -426,21 +426,18 @@ export class StockfishService {
       await this.sendCommand(`position fen ${fen}`);
       
       // Request evaluation - register handler for evaluation responses
+      let finalEvaluation = 0;
       this.pendingCommands.set('evaluation', (response: string) => {
+        // Parse centipawn evaluation from the response
+        const cpMatch = response.match(/cp\s+(-?\d+)/);
+        if (cpMatch) {
+          finalEvaluation = parseInt(cpMatch[1]);
+        }
       });
       
-      const response = await this.sendCommand(`go depth ${depth}`);
+      await this.sendCommand(`go depth ${depth}`);
       
-      // Parse evaluation from bestmove response (will contain final score)
-      // Look for "info depth X score cp Y" pattern in the logs
-      const cpMatch = response.match(/score cp (-?\d+)/);
-      if (cpMatch) {
-        const centipawns = parseInt(cpMatch[1], 10);
-        return centipawns;
-      }
-
-      console.warn('⚠️ [STOCKFISH] Could not parse evaluation from response:', response);
-      return 0;
+      return finalEvaluation;
       
     } catch (error) {
       console.error('❌ [STOCKFISH] Error evaluating position:', error);
