@@ -233,8 +233,9 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
               zIndex: 10,
               pointerEvents: "none",
               userSelect: "none",
-              filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))",
-              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)"
+              color: piece.color === 'white' ? '#f8f9fa' : '#212529', // White pieces = light gray, Black pieces = dark gray
+              filter: `drop-shadow(0 1px 2px ${piece.color === 'white' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.4)'})`,
+              textShadow: piece.color === 'white' ? '2px 2px 4px rgba(0, 0, 0, 0.8)' : '2px 2px 4px rgba(255, 255, 255, 0.3)'
             }}
           >
             {piece.symbol}
@@ -256,12 +257,13 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
               : cellToPixelPosition(animatingPiece.to).top,
             transform: "translate(-50%, -50%)",
             fontSize: "min(20vw, 20vh)",
+            color: animatingPiece.piece.color === 'white' ? '#f8f9fa' : '#212529',
             transition: animationStep === 'end' ? "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
             zIndex: 20, // Higher z-index during animation
             pointerEvents: "none",
             userSelect: "none",
-            filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))",
-            textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)"
+            filter: `drop-shadow(0 1px 2px ${animatingPiece.piece.color === 'white' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.4)'})`,
+            textShadow: animatingPiece.piece.color === 'white' ? '2px 2px 4px rgba(0, 0, 0, 0.8)' : '2px 2px 4px rgba(255, 255, 255, 0.3)'
           }}
         >
           {animatingPiece.piece.symbol}
@@ -283,6 +285,7 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
                 ? "translate(-50%, -50%) scale(0)" 
                 : "translate(-50%, -50%) scale(1)",
               fontSize: "min(20vw, 20vh)",
+              color: capturedPiece.piece.color === 'white' ? '#f8f9fa' : '#212529',
               opacity: capturedPiece.isAnimating ? 0 : 1,
               transition: capturedPiece.isAnimating 
                 ? "transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease-out" 
@@ -290,8 +293,8 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
               zIndex: 15, // Above static pieces, below moving piece
               pointerEvents: "none",
               userSelect: "none",
-              filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))",
-              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)"
+              filter: `drop-shadow(0 1px 2px ${capturedPiece.piece.color === 'white' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.4)'})`,
+              textShadow: capturedPiece.piece.color === 'white' ? '2px 2px 4px rgba(0, 0, 0, 0.8)' : '2px 2px 4px rgba(255, 255, 255, 0.3)'
             }}
           >
             {capturedPiece.piece.symbol}
