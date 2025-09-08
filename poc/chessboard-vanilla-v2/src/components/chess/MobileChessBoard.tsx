@@ -100,7 +100,7 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
           }));
           setAnimatingPiece(null);
           setAnimationStep('start');
-        }, 300);
+        }, 250);
       }
       
       setSelectedCell(null);
@@ -173,7 +173,7 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
               zIndex: 10,
               pointerEvents: "none",
               userSelect: "none",
-              filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
+              filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))",
               textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)"
             }}
           >
@@ -196,11 +196,11 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
               : cellToPixelPosition(animatingPiece.to).top,
             transform: "translate(-50%, -50%)",
             fontSize: "min(20vw, 20vh)",
-            transition: animationStep === 'end' ? "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
+            transition: animationStep === 'end' ? "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
             zIndex: 20, // Higher z-index during animation
             pointerEvents: "none",
             userSelect: "none",
-            filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
+            filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))",
             textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)"
           }}
         >
