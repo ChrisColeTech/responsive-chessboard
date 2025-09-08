@@ -1,5 +1,5 @@
 // Dynamic 2x2 Grid with Click Tracking and Animation
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { generateChessGridCells, type GridCell } from "../../utils/grid-generator.utils";
 
 interface MobileChessBoardProps {
@@ -10,7 +10,12 @@ interface MobileChessBoardProps {
 export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
   const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [animatingPiece, setAnimatingPiece] = useState<{
+    piece: { symbol: string; color: string; type: string };
+    from: string;
+    to: string;
+  } | null>(null);
+  const [animationStep, setAnimationStep] = useState<'start' | 'end'>('start');
   
   // Generate 16 cells (4x4 grid) with chess-style alternating colors and coordinates only on edges
   const gridCells = generateChessGridCells(16, "#F0D9B5", "#B58863", {
@@ -64,28 +69,41 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
       // Second click - move piece to new cell
       const move = { from: selectedCell, to: cellId };
       setLastMove(move);
-      setIsAnimating(true);
       
-      // Move piece in state
-      setPieces(prev => {
-        const newPieces = { ...prev };
-        const movingPiece = newPieces[selectedCell];
+      const movingPiece = pieces[selectedCell];
+      if (movingPiece) {
+        // Remove piece from current position and start animation
+        setPieces(prev => {
+          const newPieces = { ...prev };
+          delete newPieces[selectedCell];
+          return newPieces;
+        });
         
-        if (movingPiece) {
-          delete newPieces[selectedCell]; // Remove from old position
-          newPieces[cellId] = movingPiece; // Add to new position
-        }
+        // Start animation with the piece
+        setAnimatingPiece({
+          piece: movingPiece,
+          from: selectedCell,
+          to: cellId
+        });
+        setAnimationStep('start');
         
-        return newPieces;
-      });
+        // Trigger animation after a small delay
+        setTimeout(() => {
+          setAnimationStep('end');
+        }, 10);
+        
+        // Complete the move after animation
+        setTimeout(() => {
+          setPieces(prev => ({
+            ...prev,
+            [cellId]: movingPiece
+          }));
+          setAnimatingPiece(null);
+          setAnimationStep('start');
+        }, 300);
+      }
       
       setSelectedCell(null);
-      
-      // Reset animation state after transition completes
-      setTimeout(() => {
-        setIsAnimating(false);
-      }, 200);
-      
       console.log(`Moved piece: ${move.from} → ${move.to}`);
     }
   };
@@ -140,7 +158,7 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
       </div>
 
 
-      {/* Floating Chess Pieces */}
+      {/* Static Chess Pieces */}
       {Object.entries(pieces).map(([cellId, piece]) => {
         const position = cellToPixelPosition(cellId);
         return (
@@ -151,8 +169,7 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
               left: position.left,
               top: position.top,
               transform: "translate(-50%, -50%)",
-              fontSize: "min(20vw, 20vh)", // Smaller for 4x4 grid
-              transition: isAnimating ? "all 0.2s ease-out" : "none",
+              fontSize: "min(20vw, 20vh)",
               zIndex: 10,
               pointerEvents: "none",
               userSelect: "none",
@@ -164,6 +181,32 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = () => {
           </div>
         );
       })}
+
+      {/* Animated Piece (during movement) */}
+      {animatingPiece && (
+        <div 
+          key="animating-piece"
+          style={{ 
+            position: "absolute",
+            left: animationStep === 'start' 
+              ? cellToPixelPosition(animatingPiece.from).left 
+              : cellToPixelPosition(animatingPiece.to).left,
+            top: animationStep === 'start' 
+              ? cellToPixelPosition(animatingPiece.from).top 
+              : cellToPixelPosition(animatingPiece.to).top,
+            transform: "translate(-50%, -50%)",
+            fontSize: "min(20vw, 20vh)",
+            transition: animationStep === 'end' ? "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
+            zIndex: 20, // Higher z-index during animation
+            pointerEvents: "none",
+            userSelect: "none",
+            filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
+            textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)"
+          }}
+        >
+          {animatingPiece.piece.symbol}
+        </div>
+      )}
     </div>
   );
 };
