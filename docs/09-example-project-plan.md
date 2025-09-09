@@ -7,7 +7,7 @@ Before implementing this example project, read the following documents to unders
 ### Referenced External Documentation
 
 - **Chess Training Backend API**: `/mnt/c/Projects/chess-training/docs/frontend/20-user-journey-api-integration-specification.md`
-- **Chess Training Backend Source**: `/mnt/c/Projects/chess-training/backend/`
+- **Chess Training Backend Source**: `/mnt/c/Projects/responsive-chessboard\poc\chessboard-backend/`
 
 ### Core Architecture Documents (docs/)
 
@@ -239,7 +239,7 @@ example-project/
 
 ### Chess Training Backend Integration
 
-**Backend Location**: `/mnt/c/Projects/chess-training/backend`
+**Backend Location**: `/mnt/c/Projects/responsive-chessboard\poc\chessboard-backend`
 **API Documentation**: `/mnt/c/Projects/chess-training/docs/frontend/20-user-journey-api-integration-specification.md`
 **Backend Port**: `3000` (from app.ts line 39: `process.env.PORT || 3000`)
 **Example Client Port**: `5175` (Already configured in backend CORS - line 50 in app.ts)
@@ -615,17 +615,20 @@ export default defineConfig({
 ### App Launch to Gameplay Flow
 
 1. **App Launch**
+
    - User navigates to example project
    - Navigation shows 3 demo options: Free Play, Connected Games, Puzzles
    - No API calls on initial load
 
 2. **Free Play Demo Flow**
+
    - User selects Free Play Demo
    - No API calls - purely client-side chess.js implementation
    - Local game state management only
    - Interactive control panel for chessboard properties
 
 3. **Connected Games Flow**
+
    - User selects Connected Games Demo
    - **API Call**: `POST /api/auth/login` (demo user auto-login with `demo@responsivechessboard.com`)
    - **API Call**: `POST /api/games/create` (create new game against AI)
@@ -823,21 +826,25 @@ src/styles/globals.css               # UPDATE: Additional Tailwind classes
 #### **SRP Implementation:**
 
 1. **Layout System** (cohesive components working together)
+
    - `Layout.tsx`: Main page structure only
    - `Sidebar.tsx`: VS Code-style navigation with collapse state
    - `Header.tsx`: Auth controls display only
 
 2. **Authentication Components** (auth domain)
+
    - `LoginForm.tsx`: Reusable form component
    - `LoginButton.tsx`: Navigation to /login route
    - `UserMenu.tsx`: Dropdown with logout option
    - `AuthGuard.tsx`: Route protection wrapper
 
 3. **Base UI Components** (reusable across domains)
+
    - `Button.tsx`: Button variants with Tailwind styling
    - `Card.tsx`: Content containers with consistent styling
 
 4. **Domain-Organized Pages** (following established architecture)
+
    - `auth/`: Login functionality
    - `demo/`: Free play demonstration
    - `chess/`: Connected games and puzzles
@@ -864,21 +871,25 @@ src/styles/globals.css               # UPDATE: Additional Tailwind classes
 **Implementation Tasks:**
 
 1. **Backend Demo User Setup**
+
    - Create demo user in chess-training backend: `demo@responsivechessboard.com`
    - Test backend connectivity and API endpoints
    - Verify JWT token flow works
 
 2. **Complete LoginForm Implementation**
+
    - Add React Hook Form + Zod validation to LoginForm.tsx
    - Integrate with useAuthMutations for backend calls
    - Add loading states and error handling
 
 3. **Authentication State Integration**
+
    - Connect LoginButton to navigation
    - Connect UserMenu to logout functionality
    - Test AuthGuard redirects work properly
 
 4. **Token Management**
+
    - Verify automatic token refresh works
    - Test persistent login state across page refresh
    - Add token expiration handling
@@ -913,31 +924,36 @@ src/styles/globals.css               # UPDATE: Additional Tailwind classes
 **Root Cause**: Fundamental chessboard rendering and interaction failures
 
 #### **Intended Deliverables** (Not Achieved):
+
 - ❌ Working standalone chess demo (no auth required)
 - ❌ Theme and piece set selection
-- ❌ Responsive chessboard behavior validation  
+- ❌ Responsive chessboard behavior validation
 - ❌ Clean, minimal interface focused on chessboard
 
 #### **Critical Issues Identified**
 
 **1. Chessboard Component Non-Functional**
+
 - **Problem**: Chessboard component imported but did not render visible chess pieces or board
 - **Symptoms**: Empty container, no piece assets loading, no interactive functionality
 - **Impact**: Complete breakdown of core chess functionality
 
 **2. Asset Loading Failures**
+
 - **Problem**: Chess piece SVG assets not loading despite correct file structure
 - **Root Cause**: Incorrect asset path in `getPieceSvgPath()` utility function
 - **Path Issue**: Function looked for `/assets/pieces/` but assets located at `/assets/sets/`
 - **Fix Attempted**: Updated path, rebuilt package, copied assets to public folder
 - **Result**: Still non-functional
 
-**3. Component Integration Breakdown**  
+**3. Component Integration Breakdown**
+
 - **Problem**: Complex hook integration (useFreePlayState, useChessboardSettings, useResponsiveTesting) resulted in non-rendering components
 - **Symptoms**: Loading states perpetually active, undefined props passed to chessboard
 - **Impact**: No functional chess game despite sophisticated architecture
 
 **4. Package Build/Import Issues**
+
 - **Problem**: `responsive-chessboard` package import succeeded but component non-functional
 - **CSS Import**: Required manual CSS import (`import 'responsive-chessboard/styles'`)
 - **Package Exports**: Had to correct CSS export path from `/dist/style.css` to `/styles`
@@ -946,21 +962,25 @@ src/styles/globals.css               # UPDATE: Additional Tailwind classes
 #### **Architecture Problems Identified**
 
 **1. Over-Engineering Without Foundation**
+
 - **Issue**: Built complex hook system before verifying basic chessboard rendering
 - **Result**: Sophisticated error handling for non-functional core component
 - **Lesson**: Always verify basic functionality before adding complexity
 
 **2. Premature Optimization**
-- **Issue**: Created advanced responsive controls, theme selectors, piece set selectors before basic board worked  
+
+- **Issue**: Created advanced responsive controls, theme selectors, piece set selectors before basic board worked
 - **Result**: Beautiful UI controls for broken underlying functionality
 - **Lesson**: Core functionality first, polish second
 
 **3. Hook Dependency Chain Failures**
+
 - **Issue**: Complex interdependent hooks (gameState → settings → containerConfig) created fragile system
 - **Result**: One undefined prop broke entire rendering chain
 - **Lesson**: Reduce hook dependencies, favor simple prop passing
 
 **4. Integration Testing Gap**
+
 - **Issue**: No incremental testing of chessboard component in isolation
 - **Result**: Built entire page around non-functional component
 - **Lesson**: Test each layer before building next layer
@@ -968,18 +988,21 @@ src/styles/globals.css               # UPDATE: Additional Tailwind classes
 #### **Technical Debugging Process**
 
 **Phase 1: Initial Recognition**
+
 - User reported: "this page looks like shit, this is not how it was"
 - User reported: "the board isnt loading", "none of the pieces are loading"
 - User reported: "why isnt the chess board working? why isnt any of the controls working?"
 
 **Phase 2: Systematic Debugging**
+
 1. **Added debug output** to identify missing props and component state
 2. **Simplified component** to bypass complex hook integrations
-3. **Verified CSS imports** and corrected package export paths  
+3. **Verified CSS imports** and corrected package export paths
 4. **Fixed asset paths** in utility functions and rebuilt package
 5. **Created minimal test cases** with fallback rendering
 
 **Phase 3: Root Cause Analysis**
+
 - **Package Import**: ✅ Successful (`Chessboard` component imported correctly)
 - **CSS Loading**: ✅ Successful (after path correction)
 - **Asset Availability**: ✅ Successful (assets copied to public folder)
@@ -989,28 +1012,32 @@ src/styles/globals.css               # UPDATE: Additional Tailwind classes
 #### **Lessons Learned for Future Phases**
 
 **1. Bottom-Up Development Approach**
+
 ```
 ❌ FAILED APPROACH: Built complex UI → hooks → integration → test basic functionality
 ✅ CORRECT APPROACH: Test basic functionality → simple integration → add complexity → polish UI
 ```
 
 **2. Incremental Verification Strategy**
+
 ```
 1. Verify package import works
 2. Verify basic component renders
-3. Verify basic props work  
+3. Verify basic props work
 4. Verify basic interactions work
 5. Add complexity incrementally
 6. Test each addition immediately
 ```
 
 **3. Component Isolation Testing**
+
 ```
 ❌ FAILED: Built full page with complex hooks before testing chessboard alone
 ✅ CORRECT: Test chessboard component in isolation with minimal props first
 ```
 
-**4. Dependency Chain Management** 
+**4. Dependency Chain Management**
+
 ```
 ❌ FAILED: gameState → settings → containerConfig → chessboard (fragile chain)
 ✅ CORRECT: Direct props with fallbacks, minimal dependencies
@@ -1019,24 +1046,28 @@ src/styles/globals.css               # UPDATE: Additional Tailwind classes
 #### **Recommended Phase 9.6 Restart Approach**
 
 **Step 1: Minimal Component Verification**
-- Create simple test page with ONLY `<Chessboard FEN="..." />` 
+
+- Create simple test page with ONLY `<Chessboard FEN="..." />`
 - Verify basic rendering and piece display
 - Verify basic move functionality
 - No hooks, no complex state, no styling
 
 **Step 2: Incremental Feature Addition**
+
 - Add theme selection (test immediately)
-- Add piece set selection (test immediately) 
+- Add piece set selection (test immediately)
 - Add basic game state (test immediately)
 - Each feature verified before next feature
 
 **Step 3: Integration Testing**
+
 - Add minimal hooks one at a time
 - Test after each hook addition
 - Remove any hook that breaks functionality
 - Prefer simple props over complex state management
 
 **Step 4: Progressive Enhancement**
+
 - Add responsive container after basic board works
 - Add controls after basic board works
 - Add styling after basic board works
@@ -1045,18 +1076,21 @@ src/styles/globals.css               # UPDATE: Additional Tailwind classes
 #### **Critical Success Criteria for Restart**
 
 **Phase Gate 1**: Basic Board Rendering
+
 - [ ] Chessboard component renders visible squares
 - [ ] Chess pieces display correctly
 - [ ] Basic drag and drop works
 - [ ] Simple FEN position loads
 
-**Phase Gate 2**: Essential Functionality  
+**Phase Gate 2**: Essential Functionality
+
 - [ ] Theme selection works (immediate visual feedback)
 - [ ] Piece set selection works (immediate visual feedback)
 - [ ] Game state management works (move validation)
 - [ ] No undefined props or broken states
 
 **Phase Gate 3**: Integration Success
+
 - [ ] All hooks work without breaking core functionality
 - [ ] Complex state management enhances rather than breaks basic features
 - [ ] User interactions work reliably
@@ -1067,29 +1101,34 @@ src/styles/globals.css               # UPDATE: Additional Tailwind classes
 #### **Architecture Recommendations for Restart**
 
 **1. Simple, Direct Props**
+
 ```typescript
 // ❌ COMPLEX (Failed approach)
 const { gameState, settings, containerConfig, ... } = useComplexHooks();
 <Chessboard gameState={gameState} settings={settings} containerConfig={containerConfig} />
 
-// ✅ SIMPLE (Recommended approach)  
-<Chessboard 
+// ✅ SIMPLE (Recommended approach)
+<Chessboard
   FEN="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-  pieceSet="classic" 
+  pieceSet="classic"
   theme="brown"
   onMove={handleMove}
 />
 ```
 
 **2. Fallback-First Design**
+
 ```typescript
 // Always provide fallbacks for every prop
-const fen = gameState?.currentFen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-const pieceSet = settings?.pieceSet || 'classic';
-const theme = settings?.theme || 'brown';
+const fen =
+  gameState?.currentFen ||
+  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const pieceSet = settings?.pieceSet || "classic";
+const theme = settings?.theme || "brown";
 ```
 
 **3. Incremental Complexity**
+
 ```
 Level 1: Static chessboard with fixed FEN
 Level 2: Interactive chessboard with move validation
@@ -1109,6 +1148,7 @@ This failure analysis provides a complete roadmap for successfully restarting Ph
 **Phase 9.6** will create a comprehensive **Free Play Chess Demo** that showcases all responsive-chessboard library features in a sophisticated, professional interface following the golden standard style guide.
 
 #### **Page Purpose**
+
 - **Showcase Library Features**: Demonstrate all chessboard capabilities in an interactive environment
 - **Frontend-Only Chess**: Pure client-side chess.js integration (no backend required)
 - **Responsive Testing**: Allow users to test chessboard behavior across different container sizes
@@ -1155,6 +1195,7 @@ This failure analysis provides a complete roadmap for successfully restarting Ph
 ```
 
 #### **Layout Architecture (Following Golden Standard)**
+
 - **Collapsible Control Toolbar**: Compact top toolbar containing all essential controls
   - **Collapsed State**: Essential controls in single row (New, Reset, Flip, Theme dropdown, Piece dropdown, Size indicator ●M)
   - **Expanded State**: Full control panel with responsive controls (Size: Small/Medium/Large radio buttons, coordinates, animations, game status, FEN display)
@@ -1168,16 +1209,18 @@ This failure analysis provides a complete roadmap for successfully restarting Ph
 - **Semantic color system**: Using chess-stone, chess-royal, chess-gold palette
 
 #### **Visual Hierarchy Priority**
+
 1. **CHESSBOARD** - Dominates 90%+ of screen real estate (true hero element)
 2. **Essential controls** - Compact toolbar with primary actions (New, Reset, Flip)
-3. **Visual customization** - Theme and piece selection in toolbar dropdowns  
+3. **Visual customization** - Theme and piece selection in toolbar dropdowns
 4. **Responsive controls** - Size selection to showcase responsive behavior
 5. **Advanced settings** - Hidden in expanded panel (coordinates, animations, status)
 6. **Game information** - Minimal display in expanded panel only
 
 #### **Clean Interaction Design**
+
 - **Primary Actions**: Always visible in collapsed toolbar (New, Reset, Flip, Theme, Pieces, Size indicator)
-- **Responsive Testing**: Size controls in expanded panel to showcase library responsiveness 
+- **Responsive Testing**: Size controls in expanded panel to showcase library responsiveness
 - **Secondary Settings**: Hidden in expanded panel (coordinates, animations, game status)
 - **No Redundancy**: Each control appears exactly once in the interface
 - **Progressive Disclosure**: Advanced options revealed on demand
@@ -1193,10 +1236,10 @@ Based on build analysis, the following file structure needs to be recreated:
 src/pages/demo/                              ❌ MISSING ENTIRELY
 └── FreePlayPage.tsx                         ❌ MISSING (imported by App.tsx)
 
-src/hooks/demo/                              ❌ MISSING ENTIRELY  
+src/hooks/demo/                              ❌ MISSING ENTIRELY
 ├── index.ts                                 ❌ MISSING (imported by hooks/index.ts)
 ├── useFreePlayState.ts                      ❌ MISSING
-├── useChessboardSettings.ts                 ❌ MISSING  
+├── useChessboardSettings.ts                 ❌ MISSING
 └── useResponsiveTesting.ts                  ❌ MISSING
 
 src/services/demo/                           ❌ MISSING ENTIRELY
@@ -1204,7 +1247,7 @@ src/services/demo/                           ❌ MISSING ENTIRELY
 └── DemoConfigService.ts                     ❌ MISSING
 
 src/components/demo/                         ❌ MISSING ENTIRELY
-├── ChessboardDemo.tsx                       ❌ MISSING  
+├── ChessboardDemo.tsx                       ❌ MISSING
 ├── ControlPanel.tsx                         ❌ MISSING
 ├── ThemeSelector.tsx                        ❌ MISSING
 ├── PieceSetSelector.tsx                     ❌ MISSING
@@ -1217,7 +1260,7 @@ src/components/demo/                         ❌ MISSING ENTIRELY
 ```
 src/types/demo/                              ✅ COMPLETE
 ├── demo.types.ts                            ✅ EXISTS
-├── freeplay.types.ts                        ✅ EXISTS  
+├── freeplay.types.ts                        ✅ EXISTS
 ├── chessboard-demo.types.ts                 ✅ EXISTS
 └── control.types.ts                         ✅ EXISTS
 
@@ -1226,7 +1269,7 @@ src/constants/demo/
 
 src/utils/demo/                              ✅ COMPLETE
 ├── demo.utils.ts                            ✅ EXISTS
-├── chess-game.utils.ts                      ✅ EXISTS  
+├── chess-game.utils.ts                      ✅ EXISTS
 └── responsive-demo.utils.ts                 ✅ EXISTS
 
 src/data/
@@ -1238,6 +1281,7 @@ src/data/
 Based on source code analysis, the responsive-chessboard library supports:
 
 #### **Core Features to Showcase**
+
 - **POC API Compatibility**: `FEN`, `onChange`, `playerColor`, `boardSize` props
 - **Enhanced API**: `initialFen`, `onMove`, `onGameChange`, `boardOrientation`
 - **5 Piece Sets**: classic, modern, tournament, executive, conqueror
@@ -1250,11 +1294,12 @@ Based on source code analysis, the responsive-chessboard library supports:
 - **Custom Styling**: `customSquareStyles`, `theme` overrides
 
 #### **Visual Options Available**
+
 ```typescript
 // Piece Sets (asset-based SVGs)
-type PieceSet = 'classic' | 'modern' | 'tournament' | 'executive' | 'conqueror'
+type PieceSet = "classic" | "modern" | "tournament" | "executive" | "conqueror";
 
-// Board Themes (color combinations)  
+// Board Themes (color combinations)
 interface BoardTheme {
   lightSquareColor: string;
   darkSquareColor: string;
@@ -1263,20 +1308,27 @@ interface BoardTheme {
 }
 
 // Highlights for gameplay
-type HighlightType = 'selected' | 'valid-move' | 'last-move' | 'check' | 'capture'
+type HighlightType =
+  | "selected"
+  | "valid-move"
+  | "last-move"
+  | "check"
+  | "capture";
 ```
 
 ### **Implementation Priority & Strategy (Following Architecture Rules)**
 
 #### **Priority 1: Foundation Layer (30 min)**
+
 **Rule**: Build foundation before infrastructure - No circular dependencies possible
 
 1. **Create Missing Index Files** (Build Fix)
+
 ```typescript
 // src/hooks/demo/index.ts - Empty exports to unblock build
 export {};
 
-// src/services/demo/index.ts - Empty exports to unblock build  
+// src/services/demo/index.ts - Empty exports to unblock build
 export {};
 
 // src/pages/demo/FreePlayPage.tsx - Placeholder to unblock build
@@ -1286,9 +1338,11 @@ export const FreePlayPage = () => <div>FreePlayPage Placeholder</div>;
 **Build Success Checkpoint**: `npm run build` completes without errors
 
 #### **Priority 2: Infrastructure Layer (1 hour)**
+
 **Rule**: Services before hooks - Business logic before state management
 
 1. **Demo Services** (Simple, focused)
+
 ```typescript
 // src/services/demo/DemoConfigService.ts
 export class DemoConfigService {
@@ -1296,18 +1350,19 @@ export class DemoConfigService {
   static validatePieceSet(pieceSet: string): boolean;
   static getDefaultConfig(): ChessboardSettings;
 }
-
 ```
 
 #### **Priority 3: Data Layer (2 hours)**
+
 **Rule**: Hooks after services - State management bridges services to components
 
 1. **Demo Hooks** (Simple, focused on single responsibilities)
+
 ```typescript
 // src/hooks/demo/useFreePlayState.ts - Chess.js integration
 export const useFreePlayState = (options: UseFreePlayStateOptions): UseFreePlayStateReturn
 
-// src/hooks/demo/useChessboardSettings.ts - UI settings management  
+// src/hooks/demo/useChessboardSettings.ts - UI settings management
 export const useChessboardSettings = (options: UseChessboardSettingsOptions): UseChessboardSettingsReturn
 
 // src/hooks/demo/useResponsiveTesting.ts - Container size management
@@ -1316,20 +1371,22 @@ export const useResponsiveTesting = (options: UseResponsiveTestingOptions): UseR
 
 **Critical Rule**: Each hook has **fallback values** for every returned property to prevent undefined prop failures.
 
-#### **Priority 4: Presentation Layer (3 hours)**  
+#### **Priority 4: Presentation Layer (3 hours)**
+
 **Rule**: Components after hooks - Pure presentation consuming data
 
 1. **Core Components** (Single responsibility, minimal props)
+
 ```typescript
 // src/components/demo/ChessboardDemo.tsx - MINIMAL integration with chessboard
-<Chessboard 
+<Chessboard
   FEN={fen || INITIAL_FEN}
-  pieceSet={pieceSet || 'classic'}
+  pieceSet={pieceSet || "classic"}
   onChange={handleMove}
 />
 
 // src/components/demo/ThemeSelector.tsx - Theme selection with visual previews
-// src/components/demo/PieceSetSelector.tsx - Piece set selection with previews  
+// src/components/demo/PieceSetSelector.tsx - Piece set selection with previews
 // src/components/demo/ControlPanel.tsx - Game controls (new game, undo, etc.)
 // src/components/demo/GameStatus.tsx - Game state display (turn, move count, etc.)
 // src/components/demo/ResponsiveContainer.tsx - Container size controls
@@ -1338,49 +1395,53 @@ export const useResponsiveTesting = (options: UseResponsiveTestingOptions): UseR
 **Critical Rule**: **Test each component in isolation** before integration.
 
 #### **Priority 5: Feature Layer (1 hour)**
+
 **Rule**: Pages last - Features compose all lower layers
 
 1. **FreePlayPage.tsx** (Composition of all components)
+
 ```typescript
 export const FreePlayPage = () => {
   // Hook usage with fallbacks
   const gameState = useFreePlayState() || DEFAULT_GAME_STATE;
   const settings = useChessboardSettings() || DEFAULT_SETTINGS;
   const container = useResponsiveTesting() || DEFAULT_CONTAINER;
-  
+
   return (
-    <div className="free-play-page">
-      {/* Layout following ASCII mockup */}
-    </div>
+    <div className="free-play-page">{/* Layout following ASCII mockup */}</div>
   );
 };
 ```
 
 ### **Success Criteria & Testing Gates**
 
-#### **Phase Gate 1: Foundation Success**  
+#### **Phase Gate 1: Foundation Success**
+
 - [ ] `npm run build` completes without TypeScript errors
 - [ ] All import statements resolve correctly
 - [ ] Placeholder components render without crashes
 
 #### **Phase Gate 2: Core Functionality**
+
 - [ ] Chessboard renders with visible chess pieces
-- [ ] Basic moves work (drag & drop or click-click)  
+- [ ] Basic moves work (drag & drop or click-click)
 - [ ] Theme selection works with immediate visual feedback
 - [ ] Piece set selection works with immediate visual feedback
 - [ ] **NO undefined props** passed to any component
 
 #### **Phase Gate 3: Feature Integration**
+
 - [ ] All settings controls function correctly
 - [ ] Responsive container sizing works
 - [ ] Game status updates in real-time
-- [ ] Move history displays correctly  
+- [ ] Move history displays correctly
 - [ ] **NO regression** in basic functionality
 
 #### **Phase Gate 4: Style Guide Compliance**
+
 - [ ] Glass morphism cards with backdrop-blur effects
 - [ ] Semantic color system (chess-stone, chess-royal, etc.)
-- [ ] Professional typography hierarchy (stone color scale)  
+- [ ] Professional typography hierarchy (stone color scale)
 - [ ] VS Code-style layout integration
 - [ ] Premium button design system implementation
 
@@ -1389,23 +1450,28 @@ export const FreePlayPage = () => {
 ### **Critical Implementation Rules (Lessons Learned)**
 
 #### **1. Minimal Props First**
+
 ```typescript
 // ❌ COMPLEX (Failed approach)
 <Chessboard gameState={gameState} settings={settings} containerConfig={containerConfig} />
 
-// ✅ SIMPLE (Success approach)  
+// ✅ SIMPLE (Success approach)
 <Chessboard FEN={fen || INITIAL_FEN} pieceSet={pieceSet || 'classic'} onChange={handleMove} />
 ```
 
-#### **2. Always Provide Fallbacks**  
+#### **2. Always Provide Fallbacks**
+
 ```typescript
 // Every prop must have a fallback to prevent undefined errors
-const fen = gameState?.currentFen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-const pieceSet = settings?.pieceSet || 'classic';
-const theme = settings?.theme || 'brown';
+const fen =
+  gameState?.currentFen ||
+  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const pieceSet = settings?.pieceSet || "classic";
+const theme = settings?.theme || "brown";
 ```
 
 #### **3. Test Each Component Individually**
+
 ```typescript
 // Create isolated test pages for each component before integration
 const ChessboardDemoTest = () => <ChessboardDemo />;
@@ -1414,9 +1480,10 @@ const ThemeSelectorTest = () => <ThemeSelector />;
 ```
 
 #### **4. Incremental Integration**
+
 ```
 Step 1: Get basic chessboard rendering ✅
-Step 2: Add theme selection ✅  
+Step 2: Add theme selection ✅
 Step 3: Add piece set selection ✅
 Step 4: Add game controls ✅
 Step 5: Add responsive container ✅
@@ -1424,15 +1491,17 @@ Step 6: Full page integration ✅
 ```
 
 #### **5. Style Guide Compliance From Start**
+
 - Use semantic color variables from the start: `chess-royal`, `chess-stone`, etc.
-- Implement glass morphism cards: `backdrop-blur-sm bg-white/80`  
+- Implement glass morphism cards: `backdrop-blur-sm bg-white/80`
 - Follow typography hierarchy: `text-stone-900 dark:text-stone-100`
 - Professional spacing: 8px grid system
 - Premium animations: `transition-all duration-300`
 
 ### **Estimated Timeline**
+
 - **Foundation Fix**: 30 minutes
-- **Infrastructure**: 1 hour  
+- **Infrastructure**: 1 hour
 - **Data Layer**: 2 hours
 - **Presentation**: 3 hours
 - **Integration**: 1 hour
