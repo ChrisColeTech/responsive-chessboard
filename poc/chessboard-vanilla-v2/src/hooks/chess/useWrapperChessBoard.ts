@@ -1,6 +1,7 @@
 // useWrapperChessBoard.ts - Hook for wrapper-based chess board state management
 import { useState, useEffect, useCallback } from 'react';
 import { useChessBoardAudio } from '../../hooks/audio/useChessBoardAudio';
+import { useChessGameStore } from '../../stores/chessGameStore';
 
 interface WrapperPiece {
   id: string;
@@ -16,11 +17,18 @@ interface WrapperPiece {
 }
 
 export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-test' | 'mobile-test') => {
-  const [selectedCell, setSelectedCell] = useState<string | null>(null);
-  const [hoveredCell, setHoveredCell] = useState<string | null>(null);
   const [wrapperPieces, setWrapperPieces] = useState<WrapperPiece[]>([]);
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
-  const [draggedPiece, setDraggedPiece] = useState<WrapperPiece | null>(null);
+  
+  // Store integration
+  const store = useChessGameStore();
+  const { 
+    selectedCell, 
+    draggedPiece,
+    setSelectedCell: setStoreSelectedCell,
+    setDraggedPiece: setStoreDraggedPiece,
+    setPieces: setStorePieces
+  } = store;
   
   const {
     playPieceSelection,
@@ -174,14 +182,19 @@ export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-t
   // Reset function
   const handleReset = useCallback(() => {
     initializePieces();
-    setSelectedCell(null);
+    setStoreSelectedCell(null);
     console.log('🎯 [MOBILE WRAPPER] Board reset to initial position');
-  }, [initializePieces]);
+  }, [initializePieces, setStoreSelectedCell]);
 
   // Initialize pieces on mount or gridSize change
   useEffect(() => {
     initializePieces();
   }, [initializePieces]);
+
+  // Sync pieces with store whenever they change
+  useEffect(() => {
+    setStorePieces(wrapperPieces);
+  }, [wrapperPieces, setStorePieces]);
 
   // Expose reset and flip functions globally
   useEffect(() => {
@@ -199,7 +212,7 @@ export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-t
     if (selectedCell === null) {
       // First click - select cell only if it has a piece
       if (pieceAtCell) {
-        setSelectedCell(cellId);
+        setStoreSelectedCell(cellId);
         playPieceSelection();
         console.log(`Selected ${pieceAtCell.color} ${pieceAtCell.type} at: ${cellId}`);
       } else {
@@ -208,7 +221,7 @@ export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-t
       }
     } else if (selectedCell === cellId) {
       // Clicking same cell - deselect
-      setSelectedCell(null);
+      setStoreSelectedCell(null);
       playPieceDeselection();
       console.log(`Deselected piece at: ${cellId}`);
     } else {
@@ -260,7 +273,7 @@ export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-t
         }, 250);
       }
 
-      setSelectedCell(null);
+      setStoreSelectedCell(null);
       console.log(`Moved piece: ${selectedCell} → ${cellId}`);
     }
   }, [selectedCell, findPieceAt, chessToPx, playPieceSelection, playPieceDeselection, playPieceMove, playInvalidMove]);
@@ -272,18 +285,18 @@ export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-t
 
   // Drag handlers
   const handleDragStart = useCallback((piece: WrapperPiece) => {
-    setDraggedPiece(piece);
-    setSelectedCell(piece.boardPosition);
+    setStoreDraggedPiece(piece);
+    setStoreSelectedCell(piece.boardPosition);
     playPieceSelection();
     console.log(`🎯 [DRAG] Started dragging ${piece.color} ${piece.type} from ${piece.boardPosition}`);
     console.log(`🔥 [DRAG] isDragging state will be:`, !!piece);
-  }, [playPieceSelection]);
+  }, [playPieceSelection, setStoreDraggedPiece, setStoreSelectedCell]);
 
   const handleDrop = useCallback((targetSquare: string, dragData: { pieceId: string; fromPosition: string }) => {
     const piece = wrapperPieces.find(p => p.id === dragData.pieceId);
     if (!piece || targetSquare === dragData.fromPosition) {
-      setDraggedPiece(null);
-      setSelectedCell(null);
+      setStoreDraggedPiece(null);
+      setStoreSelectedCell(null);
       return;
     }
 
@@ -334,14 +347,12 @@ export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-t
 
     playPieceMove(wasCapture);
     console.log(`🔚 [DRAG] Ending drag, setting draggedPiece to null`);
-    setDraggedPiece(null);
-    setSelectedCell(null);
-  }, [wrapperPieces, findPieceAt, chessToPx, playPieceMove]);
+    setStoreDraggedPiece(null);
+    setStoreSelectedCell(null);
+  }, [wrapperPieces, findPieceAt, chessToPx, playPieceMove, setStoreDraggedPiece, setStoreSelectedCell]);
+
 
   return {
-    selectedCell,
-    hoveredCell,
-    setHoveredCell,
     wrapperPieces,
     handleCellClick,
     handlePieceClick,
@@ -352,6 +363,6 @@ export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-t
     isFlipped,
     findPieceAt,
     isDragging: !!draggedPiece,
-    setDraggedPiece // Expose this so PieceWrapper can manage it directly
+    setDraggedPiece: setStoreDraggedPiece // Expose this so PieceWrapper can manage it directly
   };
 };

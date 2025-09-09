@@ -1,6 +1,7 @@
 // Wrapper-based animation system for MobileChessBoard
 import React from "react";
 import { useWrapperChessBoard } from "../../hooks/chess/useWrapperChessBoard";
+import { useChessGameStore } from "../../stores/chessGameStore";
 import { ChessGrid } from "./ChessGrid";
 import { ChessOverlay } from "./ChessOverlay";
 import { PieceWrapper } from "./PieceWrapper";
@@ -19,7 +20,10 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = ({ gridSize = 8
   const PIECE_SIZE = `min(${100 / GRID_SIZE * 0.72}vw, ${100 / GRID_SIZE * 0.72}vh)`;
   
   // Use hook for chess board state
-  const { selectedCell, hoveredCell, setHoveredCell, wrapperPieces, handleCellClick, handlePieceClick, handleDragStart, handleDrop, isFlipped, isDragging, setDraggedPiece } = useWrapperChessBoard(GRID_SIZE, pieceConfig);
+  const { wrapperPieces, handleCellClick, handlePieceClick, handleDragStart, handleDrop, isFlipped, isDragging, setDraggedPiece } = useWrapperChessBoard(GRID_SIZE, pieceConfig);
+  
+  // Get store state directly
+  const setHoveredCell = useChessGameStore(state => state.setHoveredCell);
   
   // Debug dragging state
   React.useEffect(() => {
@@ -38,7 +42,7 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = ({ gridSize = 8
       {/* Chess Grid */}
       <ChessGrid 
         gridSize={GRID_SIZE}
-        selectedCell={selectedCell}
+        selectedCell={useChessGameStore(state => state.selectedCell)}
         onCellClick={handleCellClick}
         onCellDrop={handleDrop}
         onHoverChange={setHoveredCell}
@@ -49,8 +53,6 @@ export const MobileChessBoard: React.FC<MobileChessBoardProps> = ({ gridSize = 8
       {/* Chess Overlay - Glassmorphism effects */}
       <ChessOverlay
         gridSize={GRID_SIZE}
-        selectedCell={selectedCell}
-        hoveredCell={hoveredCell}
         isFlipped={isFlipped}
       />
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { getPieceImagePath } from '../../constants/pieces.constants';
 import { useAppStore } from '../../stores/appStore';
+import { useChessGameStore } from '../../stores/chessGameStore';
 
 interface WrapperPiece {
   id: string;
@@ -28,6 +29,9 @@ interface PieceWrapperProps {
 export const PieceWrapper: React.FC<PieceWrapperProps> = ({ piece, size, gridSize = 6, onDragStart, onPieceClick, onDrop, setDraggedPiece }) => {
   const selectedPieceSet = useAppStore((state) => state.selectedPieceSet);
   const [isDragging, setIsDragging] = React.useState(false);
+  
+  // Check if ANY piece is being dragged (from store)
+  const isAnyPieceDragging = useChessGameStore(state => state.isDragging);
   const [dragPosition, setDragPosition] = React.useState({ x: piece.x, y: piece.y });
   const [hasDragged, setHasDragged] = React.useState(false);
   const dragStartTimeRef = React.useRef<number>(0);
@@ -152,7 +156,7 @@ export const PieceWrapper: React.FC<PieceWrapperProps> = ({ piece, size, gridSiz
         opacity: isDragging ? 0.8 : piece.opacity,
         transition: piece.isAnimating && !isDragging ? 'all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.18s ease-out' : 'none',
         zIndex: isDragging ? 20 : 10,
-        pointerEvents: isDragging ? 'none' : 'auto',
+        pointerEvents: isAnyPieceDragging ? 'none' : 'auto',
         userSelect: 'none',
         cursor: isDragging ? 'grabbing' : 'grab',
       }}
@@ -172,6 +176,7 @@ export const PieceWrapper: React.FC<PieceWrapperProps> = ({ piece, size, gridSiz
           width: "100%",
           height: "100%",
           objectFit: "contain",
+          pointerEvents: isAnyPieceDragging ? 'none' : 'auto',
         }}
       />
     </div>
