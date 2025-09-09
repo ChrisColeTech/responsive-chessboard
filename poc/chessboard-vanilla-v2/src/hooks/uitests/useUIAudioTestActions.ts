@@ -22,9 +22,24 @@ export function useUIAudioTestActions() {
     // TODO: Implement audio settings reset
   }, [playError])
 
+  const testMoveSound = useCallback(() => {
+    playMove(false)
+  }, [playMove])
+
+  const testCaptureSound = useCallback(() => {
+    playMove(true)
+  }, [playMove])
+
+  const testErrorSound = useCallback(() => {
+    playError()
+  }, [playError])
+
   return {
     testUISound,
     testAudioSystem,
-    resetAudioSettings
+    resetAudioSettings,
+    testMoveSound,
+    testCaptureSound,
+    testErrorSound
   }
 }

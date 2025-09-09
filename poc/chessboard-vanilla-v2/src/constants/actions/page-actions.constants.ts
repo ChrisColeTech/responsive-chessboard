@@ -227,27 +227,6 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       hasOwnAudio: true
     },
     {
-      id: 'test-move-sound',
-      label: 'Test Move Sound',
-      icon: Volume2,
-      variant: 'default',
-      hasOwnAudio: true
-    },
-    {
-      id: 'test-capture-sound',
-      label: 'Test Capture Sound',
-      icon: Target,
-      variant: 'default',
-      hasOwnAudio: true
-    },
-    {
-      id: 'test-error-sound',
-      label: 'Test Error Sound',
-      icon: Sword,
-      variant: 'destructive',
-      hasOwnAudio: true
-    },
-    {
       id: 'toggle-pieces-position',
       label: 'Toggle Pieces Position',
       icon: Move,
@@ -273,6 +252,27 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       label: 'Test Audio System',
       icon: TestTube,
       variant: 'default',
+      hasOwnAudio: true
+    },
+    {
+      id: 'test-move-sound',
+      label: 'Test Move Sound',
+      icon: Volume2,
+      variant: 'default',
+      hasOwnAudio: true
+    },
+    {
+      id: 'test-capture-sound',
+      label: 'Test Capture Sound',
+      icon: Target,
+      variant: 'default',
+      hasOwnAudio: true
+    },
+    {
+      id: 'test-error-sound',
+      label: 'Test Error Sound',
+      icon: Sword,
+      variant: 'destructive',
       hasOwnAudio: true
     },
     {
@@ -334,20 +334,6 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       label: 'Reset Board',
       icon: RotateCcw,
       variant: 'secondary',
-      hasOwnAudio: true
-    },
-    {
-      id: 'test-move-sound',
-      label: 'Test Move Sound',
-      icon: Volume2,
-      variant: 'default',
-      hasOwnAudio: true
-    },
-    {
-      id: 'test-capture-sound',
-      label: 'Test Capture Sound',
-      icon: Target,
-      variant: 'default',
       hasOwnAudio: true
     },
     {

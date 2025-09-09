@@ -177,6 +177,9 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
       uiaudiotest: {
         'test-ui-sound': uiAudioTestActions.testUISound,
         'test-audio-system': uiAudioTestActions.testAudioSystem,
+        'test-move-sound': uiAudioTestActions.testMoveSound,
+        'test-capture-sound': uiAudioTestActions.testCaptureSound,
+        'test-error-sound': uiAudioTestActions.testErrorSound,
         'reset-audio-settings': uiAudioTestActions.resetAudioSettings,
         // Navigation actions
         'go-to-drag-test': uiTestsActions.goToDragTest,

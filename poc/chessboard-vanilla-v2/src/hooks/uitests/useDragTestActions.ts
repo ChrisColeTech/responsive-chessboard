@@ -8,8 +8,8 @@ export function useDragTestActions() {
   const { playMove, playError, playGameStart } = useChessAudio()
 
   const resetBoard = useCallback(() => {
-    if (typeof window !== 'undefined' && (window as any).__testBoardReset) {
-      (window as any).__testBoardReset()
+    if (typeof window !== 'undefined' && (window as any).__wrapperChessBoardReset) {
+      (window as any).__wrapperChessBoardReset()
       playGameStart() // Play welcome/new game sound when resetting board
     }
   }, [playGameStart])
