@@ -31,10 +31,10 @@ const tabs: Tab[] = [
     description: "UI Testing Hub",
   },
   {
-    id: "slots",
+    id: "casino",
     label: "Casino",
     icon: Coins,
-    description: "Slot Machine",
+    description: "Casino Games",
   },
   {
     id: "play",
@@ -82,8 +82,8 @@ export function TabBar({ currentTab, onTabChange, isMenuOpen, onToggleMenu }: Ta
             onClick={() => {
               // Note: UI click sound is handled automatically by Global UI Audio System
 
-              // If clicking on UI Tests tab, clear any child page
-              if (tab.id === 'uitests') {
+              // If clicking on UI Tests or Casino tab, clear any child page
+              if (tab.id === 'uitests' || tab.id === 'casino') {
                 setCurrentChildPage(null);
               }
 

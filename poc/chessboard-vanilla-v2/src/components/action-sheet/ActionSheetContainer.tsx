@@ -6,6 +6,7 @@ import { useCallback, useState, useEffect } from 'react'
 import { ActionSheet } from './ActionSheet'
 import { usePlayActions } from '../../hooks/chess/usePlayActions'
 import { useSlotsActions } from '../../hooks/casino/useSlotsActions'
+import { useCasinoActions } from '../../hooks/casino/useCasinoActions'
 import { useWorkerActions } from '../../hooks/chess/useWorkerActions'
 import { useUITestsActions } from '../../hooks/uitests/useUITestsActions'
 import { useLayoutActions } from '../../hooks/core/useLayoutActions'
@@ -31,16 +32,28 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
   const currentChildPage = useAppStore((state) => state.currentChildPage)
   const actionSheetPage = currentChildPage || currentPage
   
-  // Add delay when switching action menus
+  // Add delay when switching action menus (only for child page changes, not main tab changes)
   const [delayedActionSheetPage, setDelayedActionSheetPage] = useState(actionSheetPage)
   
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDelayedActionSheetPage(actionSheetPage)
-    }, 1000) // 1000ms delay when switching action menus
+    // Apply delay only when switching between child pages of the same parent
+    // Don't delay when switching main tabs or when no child page is active
+    const previousChildPage = delayedActionSheetPage === currentPage ? null : delayedActionSheetPage
+    const isSwitchingChildPages = currentChildPage && 
+                                  previousChildPage &&
+                                  currentChildPage !== previousChildPage
     
-    return () => clearTimeout(timer)
-  }, [actionSheetPage])
+    if (isSwitchingChildPages) {
+      const timer = setTimeout(() => {
+        setDelayedActionSheetPage(actionSheetPage)
+      }, 1000) // 1000ms delay when switching between child pages
+      
+      return () => clearTimeout(timer)
+    } else {
+      // Immediate update for main tab changes, initial load, or going to child from main
+      setDelayedActionSheetPage(actionSheetPage)
+    }
+  }, [actionSheetPage, currentChildPage, currentPage, delayedActionSheetPage])
   
   // Get actions for current page (with delay)
   const actions = PAGE_ACTIONS[delayedActionSheetPage] || []
@@ -48,6 +61,7 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
   // Get page-specific action handlers
   const playActions = usePlayActions()
   const slotsActions = useSlotsActions()
+  const casinoActions = useCasinoActions()
   const workerActions = useWorkerActions()
   const uiTestsActions = useUITestsActions()
   const layoutActions = useLayoutActions()
@@ -79,11 +93,55 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         'show-moves': playActions.showMoves,
         'undo-move': playActions.undoMove
       },
+      casino: {
+        'go-to-slots': casinoActions.goToSlots,
+        'go-to-blackjack': casinoActions.goToBlackjack,
+        'go-to-holdem': casinoActions.goToHoldem,
+        'go-to-roulette': casinoActions.goToRoulette,
+        'go-to-craps': casinoActions.goToCraps
+      },
       slots: {
         'test-spin': slotsActions.testSpin,
         'test-win': slotsActions.testWin,
         'test-lose': slotsActions.testLose,
-        'reset-coins': slotsActions.resetCoins
+        'reset-coins': slotsActions.resetCoins,
+        // Navigation actions
+        'go-to-blackjack': casinoActions.goToBlackjack,
+        'go-to-holdem': casinoActions.goToHoldem,
+        'go-to-roulette': casinoActions.goToRoulette,
+        'go-to-craps': casinoActions.goToCraps
+      },
+      blackjack: {
+        'deal-cards': () => console.log('Deal cards - placeholder'),
+        // Navigation actions
+        'go-to-slots': casinoActions.goToSlots,
+        'go-to-holdem': casinoActions.goToHoldem,
+        'go-to-roulette': casinoActions.goToRoulette,
+        'go-to-craps': casinoActions.goToCraps
+      },
+      holdem: {
+        'new-hand': () => console.log('New hand - placeholder'),
+        // Navigation actions
+        'go-to-slots': casinoActions.goToSlots,
+        'go-to-blackjack': casinoActions.goToBlackjack,
+        'go-to-roulette': casinoActions.goToRoulette,
+        'go-to-craps': casinoActions.goToCraps
+      },
+      roulette: {
+        'spin-wheel': () => console.log('Spin wheel - placeholder'),
+        // Navigation actions
+        'go-to-slots': casinoActions.goToSlots,
+        'go-to-blackjack': casinoActions.goToBlackjack,
+        'go-to-holdem': casinoActions.goToHoldem,
+        'go-to-craps': casinoActions.goToCraps
+      },
+      craps: {
+        'roll-dice': () => console.log('Roll dice - placeholder'),
+        // Navigation actions
+        'go-to-slots': casinoActions.goToSlots,
+        'go-to-blackjack': casinoActions.goToBlackjack,
+        'go-to-holdem': casinoActions.goToHoldem,
+        'go-to-roulette': casinoActions.goToRoulette
       },
       worker: {
         'test-worker-ready': workerActions.testWorkerReady,
@@ -110,6 +168,7 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         'test-capture-sound': dragTestActions.testCaptureSound,
         'test-error-sound': dragTestActions.testErrorSound,
         'toggle-pieces-position': dragTestActions.togglePiecesPosition,
+        'flip-board': dragTestActions.flipBoard,
         // Navigation actions
         'go-to-audio-test': uiTestsActions.goToAudioTest,
         'go-to-layout-test': uiTestsActions.goToLayoutTest,
@@ -181,14 +240,17 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         'go-to-branded': functionalSplashActions.goToBranded
       },
       layouttest: {
-        // Navigation actions only
+        'toggle-layout-elements': layoutActions.toggleLayoutElements,
+        // Navigation actions
         'go-to-drag-test': uiTestsActions.goToDragTest,
         'go-to-audio-test': uiTestsActions.goToAudioTest,
         'go-to-mobile-drag-test': uiTestsActions.goToMobileDragTest
       },
       mobiledragtest: {
-        'mobile-board-action': mobileDragTestActions.mobileBoardAction,
-        'mobile-test-sound': mobileDragTestActions.mobileTestSound,
+        'reset-board': mobileDragTestActions.resetBoard,
+        'test-move-sound': mobileDragTestActions.testMoveSound,
+        'test-capture-sound': mobileDragTestActions.testCaptureSound,
+        'flip-board': mobileDragTestActions.flipBoard,
         // Navigation actions
         'go-to-drag-test': uiTestsActions.goToDragTest,
         'go-to-audio-test': uiTestsActions.goToAudioTest,
@@ -217,7 +279,7 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
     // Use HeadlessUI's close callback AND our onClose
     closeCallback()
     onClose()
-  }, [currentPage, playUIClick, playActions, slotsActions, workerActions, uiTestsActions, layoutActions, dragTestActions, uiAudioTestActions, splashActions, minimalSplashActions, animatedSplashActions, loadingProgressActions, brandedSplashActions, luxurysplashActions, functionalSplashActions, mobileDragTestActions, onClose])
+  }, [currentPage, playUIClick, playActions, slotsActions, casinoActions, workerActions, uiTestsActions, layoutActions, dragTestActions, uiAudioTestActions, splashActions, minimalSplashActions, animatedSplashActions, loadingProgressActions, brandedSplashActions, luxurysplashActions, functionalSplashActions, mobileDragTestActions, onClose])
 
   const handleHover = useCallback((actionLabel: string) => {
     playUIHover(`Action: ${actionLabel}`)

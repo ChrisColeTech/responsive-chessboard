@@ -33,11 +33,19 @@ export function useDragTestActions() {
     }
   }, [playMove])
 
+  const flipBoard = useCallback(() => {
+    if (typeof window !== 'undefined' && (window as any).__wrapperChessBoardFlip) {
+      (window as any).__wrapperChessBoardFlip()
+      playMove(false)
+    }
+  }, [playMove])
+
   return {
     resetBoard,
     testMoveSound,
     testCaptureSound,
     testErrorSound,
-    togglePiecesPosition
+    togglePiecesPosition,
+    flipBoard
   }
 }

@@ -79,10 +79,13 @@ class ColorGenerator:
         return (204, 204, 204)
     
     @classmethod
-    def generate_variations(cls, base_color: str, count: int = 2, output_format: str = 'hex') -> List[str]:
+    def generate_variations(cls, base_color: str, count: int = 2, output_format: str = 'hex', opacity: Optional[float] = None) -> List[str]:
         """Generate color variations based on a base color"""
         if not base_color:
-            fallback = "#cccccc" if output_format == 'hex' else f"rgb(204, 204, 204)" if output_format == 'rgb' else "hsl(0, 0%, 80%)"
+            if opacity is not None:
+                fallback = f"rgba(204, 204, 204, {opacity})"
+            else:
+                fallback = "#cccccc" if output_format == 'hex' else f"rgb(204, 204, 204)" if output_format == 'rgb' else "hsl(0, 0%, 80%)"
             return [fallback] * count
             
         rgb = cls.parse_color_to_rgb(base_color)
@@ -108,13 +111,27 @@ class ColorGenerator:
             
             # Format output based on requested format
             if output_format == 'hex':
-                variations.append(cls.rgb_to_hex(new_rgb))
+                if opacity is not None:
+                    # Convert hex to rgba for opacity
+                    variations.append(f'rgba({new_rgb[0]}, {new_rgb[1]}, {new_rgb[2]}, {opacity})')
+                else:
+                    variations.append(cls.rgb_to_hex(new_rgb))
             elif output_format == 'rgb':
-                variations.append(f'rgb({new_rgb[0]}, {new_rgb[1]}, {new_rgb[2]})')
+                if opacity is not None:
+                    variations.append(f'rgba({new_rgb[0]}, {new_rgb[1]}, {new_rgb[2]}, {opacity})')
+                else:
+                    variations.append(f'rgb({new_rgb[0]}, {new_rgb[1]}, {new_rgb[2]})')
             elif output_format == 'hsl':
-                variations.append(f'hsl({int(new_h * 360)}, {int(new_s * 100)}%, {int(new_l * 100)}%)')
+                if opacity is not None:
+                    variations.append(f'hsla({int(new_h * 360)}, {int(new_s * 100)}%, {int(new_l * 100)}%, {opacity})')
+                else:
+                    variations.append(f'hsl({int(new_h * 360)}, {int(new_s * 100)}%, {int(new_l * 100)}%)')
             else:
-                variations.append(cls.rgb_to_hex(new_rgb))  # Default to hex
+                # Default to hex
+                if opacity is not None:
+                    variations.append(f'rgba({new_rgb[0]}, {new_rgb[1]}, {new_rgb[2]}, {opacity})')
+                else:
+                    variations.append(cls.rgb_to_hex(new_rgb))
         
         return variations
 
@@ -122,11 +139,13 @@ class ColorGenerator:
 class ThemeUpdater:
     """Updates CSS theme files with new variables"""
     
-    def __init__(self, professional_file: Path, gaming_file: Path, output_format: str = 'hex'):
+    def __init__(self, professional_file: Path, gaming_file: Path, output_format: str = 'hex', opacity: Optional[float] = None, base_color: Optional[str] = None):
         self.professional_file = professional_file
         self.gaming_file = gaming_file
         self.color_gen = ColorGenerator()
         self.output_format = output_format
+        self.opacity = opacity
+        self.base_color = base_color
     
     def backup_files(self) -> None:
         """Create backup copies of the CSS files"""
@@ -137,7 +156,7 @@ class ThemeUpdater:
         print(f"   {self.gaming_file}.backup")
     
     def extract_theme_colors(self, content: str, theme_name: str) -> Dict[str, str]:
-        """Extract primary and secondary colors from a theme block"""
+        """Extract primary, secondary, and background colors from a theme block"""
         # Find the theme block
         theme_pattern = rf'\.{re.escape(theme_name)}\s*\{{([^}}]+)}}'
         match = re.search(theme_pattern, content, re.DOTALL)
@@ -147,15 +166,18 @@ class ThemeUpdater:
         
         theme_content = match.group(1)
         
-        # Extract primary and secondary colors
+        # Extract primary, secondary, and background colors
         colors = {}
         primary_match = re.search(r'--primary:\s*([^;]+);', theme_content)
         secondary_match = re.search(r'--secondary:\s*([^;]+);', theme_content)
+        background_match = re.search(r'--background:\s*([^;]+);', theme_content)
         
         if primary_match:
             colors['primary'] = primary_match.group(1).strip()
         if secondary_match:
             colors['secondary'] = secondary_match.group(1).strip()
+        if background_match:
+            colors['background'] = background_match.group(1).strip()
             
         return colors
     
@@ -182,19 +204,34 @@ class ThemeUpdater:
         
         all_variations = []
         
-        # Generate variations from primary color
-        if 'primary' in theme_colors:
-            primary_variations = self.color_gen.generate_variations(theme_colors['primary'], 2, self.output_format)
-            all_variations.extend(primary_variations)
-        
-        # Generate variations from secondary color  
-        if 'secondary' in theme_colors:
-            secondary_variations = self.color_gen.generate_variations(theme_colors['secondary'], 2, self.output_format)
-            all_variations.extend(secondary_variations)
+        # Determine which base color to use
+        if self.base_color == 'primary':
+            if 'primary' in theme_colors:
+                primary_variations = self.color_gen.generate_variations(theme_colors['primary'], 2, self.output_format, self.opacity)
+                all_variations.extend(primary_variations)
+        elif self.base_color == 'secondary':
+            if 'secondary' in theme_colors:
+                secondary_variations = self.color_gen.generate_variations(theme_colors['secondary'], 2, self.output_format, self.opacity)
+                all_variations.extend(secondary_variations)
+        elif self.base_color == 'background':
+            if 'background' in theme_colors:
+                background_variations = self.color_gen.generate_variations(theme_colors['background'], 2, self.output_format, self.opacity)
+                all_variations.extend(background_variations)
+        else:
+            # Default behavior: use both primary and secondary colors
+            if 'primary' in theme_colors:
+                primary_variations = self.color_gen.generate_variations(theme_colors['primary'], 2, self.output_format, self.opacity)
+                all_variations.extend(primary_variations)
+            
+            if 'secondary' in theme_colors:
+                secondary_variations = self.color_gen.generate_variations(theme_colors['secondary'], 2, self.output_format, self.opacity)
+                all_variations.extend(secondary_variations)
         
         # If no valid variations, return a default in the requested format
         if not all_variations:
-            if self.output_format == 'hex':
+            if self.opacity is not None:
+                return f"rgba(204, 204, 204, {self.opacity})"
+            elif self.output_format == 'hex':
                 return "#cccccc"
             elif self.output_format == 'rgb':
                 return "rgb(204, 204, 204)"
@@ -339,8 +376,24 @@ def main():
         default='hex',
         help='Output color format (default: hex)'
     )
+    parser.add_argument(
+        '--opacity',
+        type=float,
+        help='Opacity value between 0.0 and 1.0 (e.g., 0.5 for 50%% transparency)'
+    )
+    parser.add_argument(
+        '--base-color',
+        choices=['primary', 'secondary', 'background'],
+        help='Which base color to use for variations (default: randomly choose from primary and secondary)'
+    )
     
     args = parser.parse_args()
+    
+    # Validate opacity value
+    if args.opacity is not None:
+        if not 0.0 <= args.opacity <= 1.0:
+            print("❌ Error: Opacity must be between 0.0 and 1.0")
+            return
     
     # Collect all variables from both sources
     variables = []
@@ -381,7 +434,7 @@ def main():
         return 1
     
     # Create updater and run
-    updater = ThemeUpdater(professional_file, gaming_file, args.output_format)
+    updater = ThemeUpdater(professional_file, gaming_file, args.output_format, args.opacity, args.base_color)
     try:
         updater.update_variables(unique_variables, args.backup)
         return 0

@@ -9,7 +9,6 @@
 
 @tailwind utilities;
 
-
 @keyframes pulse-glow {
   0%,
   100% {
@@ -175,7 +174,6 @@
     --titlebar-hover: #334155;
     --titlebar-close-hover: #ef4444;
   }
-
 }
 
 @layer base {
@@ -404,13 +402,13 @@
   .tab-button-inactive:hover {
     @apply text-foreground -translate-y-0.5;
     backdrop-filter: blur(24px);
-    background-color: var(--titlebar);
+    background-color: var(--titlebar-hover);
   }
 
   .tab-button-active {
     @apply text-foreground font-bold shadow-xl border-t-4 border-primary -translate-y-1;
     backdrop-filter: blur(24px);
-    background-color: var(--titlebar);
+    background-color: var(--titlebar-hover);
   }
 
   .tab-icon-active {
@@ -698,7 +696,16 @@
 
   /* Settings Panel System */
   .settings-panel {
-    @apply w-80 sm:w-96 h-full glass-layout border-l border-border shadow-2xl;
+    @apply w-80 sm:w-96 h-full border-l border-border shadow-2xl;
+    -webkit-backdrop-filter: blur(60px);
+    backdrop-filter: blur(60px);
+    background-color: rgb(var(--foreground) / 0.15);
+
+    background-color: rgb(var(--foreground) / 0.15);
+    border: 1px solid rgb(var(--border) / 0.2);
+
+    box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.15);
+    transition: all 0.5s;
   }
 
   .settings-header {
@@ -816,7 +823,13 @@
     @apply text-foreground font-bold  border-t-4 border-primary -translate-y-1;
     z-index: 10;
     backdrop-filter: blur(24px);
-    background-color: var(--titlebar);
+    background-color: var(--titlebar-hover);
+  }
+
+  .menu-button-inactive:hover {
+    @apply text-foreground -translate-y-0.5;
+    backdrop-filter: blur(24px);
+    background-color: var(--titlebar-hover);
   }
 
   .menu-button-inactive {

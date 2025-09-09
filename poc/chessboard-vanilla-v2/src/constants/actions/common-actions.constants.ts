@@ -1,7 +1,7 @@
 // Common action configurations that can be reused across different page groups
 import { 
   Navigation, SkipForward, Clock, Target, Maximize2, RotateCcw,
-  Eye, Move, VolumeX
+  Eye, Move, VolumeX, Coins, Spade, Crown, Disc, Dices
 } from 'lucide-react'
 import type { ActionSheetAction } from '../../types/core/action-sheet.types'
 
@@ -77,6 +77,38 @@ export const COMMON_ACTIONS: Record<string, ActionSheetAction> = {
     variant: 'secondary'
   },
   
+  // Casino navigation actions
+  'go-to-slots': {
+    id: 'go-to-slots',
+    label: '→ Slots',
+    icon: Coins,
+    variant: 'secondary'
+  },
+  'go-to-blackjack': {
+    id: 'go-to-blackjack',
+    label: '→ Blackjack',
+    icon: Spade,
+    variant: 'secondary'
+  },
+  'go-to-holdem': {
+    id: 'go-to-holdem',
+    label: '→ Hold\'em',
+    icon: Crown,
+    variant: 'secondary'
+  },
+  'go-to-roulette': {
+    id: 'go-to-roulette',
+    label: '→ Roulette',
+    icon: Disc,
+    variant: 'secondary'
+  },
+  'go-to-craps': {
+    id: 'go-to-craps',
+    label: '→ Craps',
+    icon: Dices,
+    variant: 'secondary'
+  },
+  
   // Utility actions
   'toggle-fullscreen': {
     id: 'toggle-fullscreen',
@@ -111,6 +143,15 @@ export const COMMON_ACTION_GROUPS = {
     'go-to-audio-test',
     'go-to-layout-test',
     'go-to-mobile-drag-test'
+  ],
+  
+  // Casino game siblings (child pages)
+  casinoSiblings: [
+    'go-to-slots',
+    'go-to-blackjack',
+    'go-to-holdem',
+    'go-to-roulette',
+    'go-to-craps'
   ],
   
   // Common utilities for demo/test pages

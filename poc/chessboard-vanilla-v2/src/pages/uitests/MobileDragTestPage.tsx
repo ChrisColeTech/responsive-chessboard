@@ -4,11 +4,12 @@ import {
   CapturedPieces,
   MobileChessBoard,
 } from "../../components/chess";
-import { usePageInstructions } from "../../hooks/core/usePageInstructions";
+import { useMobileDragTestActions } from "../../hooks/uitests/useMobileDragTestActions";
 import type { MobileChessGameState, ChessPiece } from "../../types";
 
 export const MobileDragTestPage: React.FC = () => {
-  usePageInstructions("uitests.mobile-drag-test");
+  // Setup actions (handled by wrapper for page instructions and action sheet context)
+  useMobileDragTestActions();
   
   // Track captured pieces for display
   const [capturedPieces, setCapturedPieces] = useState<ChessPiece[]>([]);
@@ -46,6 +47,8 @@ export const MobileDragTestPage: React.FC = () => {
         }
         center={
           <MobileChessBoard 
+            gridSize={6}
+            pieceConfig="mobile-test"
             onGameStateChange={handleGameStateChange}
             onCapturedPiecesChange={setCapturedPieces}
           />
@@ -64,6 +67,7 @@ export const MobileDragTestPage: React.FC = () => {
           CHECKMATE!
         </div>
       )}
+      
     </div>
   );
 };

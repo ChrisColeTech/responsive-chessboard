@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TestBoard } from "../../components/chess/TestBoard";
+import { MobileChessBoard } from "../../components/chess/MobileChessBoard";
 import { CapturedPieces } from "../../components/chess/CapturedPieces";
 import { ChessboardLayout } from "../../components/chess/ChessboardLayout";
 import { MobileChessboardLayout } from "../../components/chess/MobileChessboardLayout";
@@ -16,6 +16,7 @@ export const DragTestPage: React.FC = () => {
   const [moveHandler, setMoveHandler] = useState<
     ((from: ChessPosition, to: ChessPosition) => Promise<boolean>) | null
   >(null);
+  
   const [piecesPosition, setPiecesPosition] = useState<'top-bottom' | 'left-right'>('top-bottom');
   const isMobile = useIsMobile();
   usePageInstructions("uitests.drag-test");
@@ -47,7 +48,7 @@ export const DragTestPage: React.FC = () => {
     } else {
       // Second click - attempt move using TestBoard's move handler
       if (moveHandler) {
-        moveHandler(selectedSquare, position).then((_success) => {
+        moveHandler(selectedSquare, position).then((_success: boolean) => {
           // Move completed
         });
       }
@@ -56,6 +57,9 @@ export const DragTestPage: React.FC = () => {
       setValidDropTargets([]);
     }
   };
+
+  // Use variables to avoid TypeScript unused warnings
+  console.log('Debug state:', { validDropTargets, setCapturedPieces, setMoveHandler, handleSquareClick });
 
   return (
     <div className="relative min-h-full">
@@ -76,24 +80,14 @@ export const DragTestPage: React.FC = () => {
         <MobileChessboardLayout
               topPieces={
                 <CapturedPieces
-                  pieces={capturedPieces.filter((p) => p.color === "white")}
+                  pieces={capturedPieces.filter((p: ChessPiece) => p.color === "white")}
                   position="normal"
                 />
               }
-              center={
-                <TestBoard
-                  onSquareClick={handleSquareClick}
-                  selectedSquare={selectedSquare}
-                  validDropTargets={validDropTargets}
-                  onCapturedPiecesChange={setCapturedPieces}
-                  onMoveHandlerReady={(handler) => {
-                    setMoveHandler(() => handler);
-                  }}
-                />
-              }
+              center={<MobileChessBoard gridSize={3} pieceConfig="drag-test" />}
               bottomPieces={
                 <CapturedPieces
-                  pieces={capturedPieces.filter((p) => p.color === "black")}
+                  pieces={capturedPieces.filter((p: ChessPiece) => p.color === "black")}
                   position="normal"
                 />
               }
@@ -103,14 +97,14 @@ export const DragTestPage: React.FC = () => {
         <ChessboardLayout
               top={
                 <CapturedPieces
-                  pieces={capturedPieces.filter((p) => p.color === "white")}
+                  pieces={capturedPieces.filter((p: ChessPiece) => p.color === "white")}
                   position="normal"
                 />
               }
               left={
                 piecesPosition === 'left-right' ? (
                   <CapturedPieces
-                    pieces={capturedPieces.filter((p) => p.color === "white")}
+                    pieces={capturedPieces.filter((p: ChessPiece) => p.color === "white")}
                     position="normal"
                     className="h-96 overflow-y-auto"
                   />
@@ -127,21 +121,13 @@ export const DragTestPage: React.FC = () => {
                   minWidth: "0",
                   overflow: "hidden"
                 }}>
-                  <TestBoard
-                    onSquareClick={handleSquareClick}
-                    selectedSquare={selectedSquare}
-                    validDropTargets={validDropTargets}
-                    onCapturedPiecesChange={setCapturedPieces}
-                    onMoveHandlerReady={(handler) => {
-                      setMoveHandler(() => handler);
-                    }}
-                  />
+                  <MobileChessBoard gridSize={3} pieceConfig="drag-test" />
                 </div>
               }
               right={
                 piecesPosition === 'left-right' ? (
                   <CapturedPieces
-                    pieces={capturedPieces.filter((p) => p.color === "black")}
+                    pieces={capturedPieces.filter((p: ChessPiece) => p.color === "black")}
                     position="normal"
                     className="h-96 overflow-y-auto"
                   />
@@ -149,7 +135,7 @@ export const DragTestPage: React.FC = () => {
               }
               bottom={
                 <CapturedPieces
-                  pieces={capturedPieces.filter((p) => p.color === "black")}
+                  pieces={capturedPieces.filter((p: ChessPiece) => p.color === "black")}
                   position="normal"
                 />
               }

@@ -1,327 +1,110 @@
 /* =============================================================================
-   MODERN FILTER EFFECTS FOR CHESS SQUARES
-   15+ Visual effects for enhanced chess board experience
+   CHESS GAME STATE VISUAL EFFECTS
+   Minimal game state styles + overlay classes
    ============================================================================= */
 
-/* 1. Glassmorphism Effect */
-.chess-square.glassmorphism {
-  backdrop-filter: blur(10px) saturate(180%);
-  background: rgba(255, 255, 255, 0.15);
+/* Overlay cell base styles */
+.overlay-cell {
+  position: relative;
 }
 
-/* 2. Neon Glow Gaming */
-.chess-square.neon-glow {
-  filter: brightness(1.2) saturate(1.5);
-  transition: filter 0.3s ease;
+/* Color-aware overlay effects */
+.overlay-cell.overlay-light-square.selected {
+  backdrop-filter: blur(3px) !important;
+  background-color: rgba(255, 255, 255, 0.15) !important; /* Light overlay for light squares */
+  animation: selected-glow 2s ease-in-out infinite;
 }
 
-.chess-dark-square.neon-glow {
-  filter: brightness(1.2) saturate(1.5);
+.overlay-cell.overlay-dark-square.selected {
+  backdrop-filter: blur(3px) !important;
+  background-color: rgba(0, 0, 0, 0.15) !important; /* Dark overlay for dark squares */
+  animation: selected-glow 2s ease-in-out infinite;
 }
 
-/* 3. Vintage Sepia Tone */
-.chess-square.vintage {
-  filter: sepia(60%) contrast(1.2) brightness(1.1);
+.overlay-cell.overlay-light-square.hovered {
+  backdrop-filter: blur(1.5px) !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  animation: hover-glow 1.5s ease-in-out infinite;
 }
 
-/* 4. High Contrast Gaming */
-.chess-square.high-contrast {
-  filter: contrast(1.8) brightness(0.9) saturate(2);
+.overlay-cell.overlay-dark-square.hovered {
+  backdrop-filter: blur(1.5px) !important;
+  background-color: rgba(0, 0, 0, 0.08) !important;
+  animation: hover-glow 1.5s ease-in-out infinite;
 }
 
-/* 5. Cyberpunk Hue Shift */
-.chess-square.cyberpunk {
-  filter: hue-rotate(180deg) saturate(1.5) contrast(1.3);
-}
-
-/* 6. Frosted Glass Blur */
-.chess-square.frosted {
-  backdrop-filter: blur(4px) brightness(1.1);
-  background: rgba(255, 255, 255, 0.15);
-}
-
-/* 7. Holographic Iridescent */
-.chess-square.holographic {
-  filter: hue-rotate(45deg) saturate(1.8) brightness(1.2);
-  background: linear-gradient(45deg, 
-    transparent 25%, 
-    rgba(255, 255, 255, 0.3) 50%, 
-    transparent 75%);
-  background-size: 20px 20px;
-  animation: holographic-shift 3s ease-in-out infinite;
-}
-
-@keyframes holographic-shift {
-  0%, 100% { filter: hue-rotate(45deg) saturate(1.8) brightness(1.2); }
-  50% { filter: hue-rotate(225deg) saturate(2.2) brightness(1.4); }
-}
-
-/* 8. Retro Game Invert */
-.chess-square.retro-invert {
-  filter: invert(80%) hue-rotate(120deg) saturate(1.4);
-}
-
-/* 9. Soft Shadow Depth */
-.chess-square.soft-depth {
-  filter: brightness(1.05);
-}
-
-/* 10. Matrix Code Green */
-.chess-square.matrix {
-  filter: grayscale(100%) brightness(0.8) contrast(2);
-  background: radial-gradient(circle, #00ff00 20%, #003300 80%);
-  animation: matrix-pulse 2s ease-in-out infinite;
-}
-
-@keyframes matrix-pulse {
-  0%, 100% { filter: grayscale(100%) brightness(0.8) contrast(2); }
-  50% { filter: grayscale(100%) brightness(1.2) contrast(2.5); }
-}
-
-/* 11. Noir Black & White */
-.chess-square.noir {
-  filter: grayscale(100%) contrast(1.8) brightness(1.2);
-}
-
-/* 12. Animated Shimmer */
-.chess-square.shimmer {
-  filter: brightness(1.1);
-  background: linear-gradient(
-    45deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.3) 50%,
-    transparent 70%
-  );
-  background-size: 200% 200%;
-  animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-  0% { 
-    background-position: -200% -200%;
-    filter: brightness(1.1) saturate(1); 
+/* Keyframe animations */
+@keyframes selected-glow {
+  0%, 100% {
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
   }
-  50% { 
-    background-position: 200% 200%;
-    filter: brightness(1.4) saturate(1.3); 
-  }
-  100% { 
-    background-position: -200% -200%;
-    filter: brightness(1.1) saturate(1); 
+  50% {
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
   }
 }
 
-/* 13. Gaming RGB Pulse */
-.chess-square.rgb-pulse {
-  filter: saturate(1.5);
-  animation: rgb-pulse 3s infinite;
-}
-
-@keyframes rgb-pulse {
-  0% { filter: hue-rotate(0deg) saturate(1.5); }
-  33% { filter: hue-rotate(120deg) saturate(1.8); }
-  66% { filter: hue-rotate(240deg) saturate(1.8); }
-  100% { filter: hue-rotate(360deg) saturate(1.5); }
-}
-
-/* 14. Luxury Gold Metallic */
-.chess-square.luxury-gold {
-  filter: sepia(100%) hue-rotate(35deg) saturate(1.8) brightness(1.3);
-  background: linear-gradient(135deg, 
-    #ffd700 0%, #ffed4a 50%, #f39c12 100%);
-}
-
-/* 15. Accessibility High Visibility */
-.chess-square.high-visibility {
-  filter: contrast(3) brightness(1.5) saturate(0.5);
-}
-
-/* =============================================================================
-   CHESS GAME STATE UTILITY CLASSES
-   Visual indicators for selected pieces, check, checkmate, etc.
-   ============================================================================= */
-
-/* Selected Piece/Square - Bright highlight with pulsing animation */
-.chess-square.selected {
-  background: var(--chess-selected-square) !important;
-  filter: brightness(1.4) saturate(1.6);
-  animation: selected-pulse 2s ease-in-out infinite;
-}
-
-@keyframes selected-pulse {
-  0%, 100% { 
-    filter: brightness(1.4) saturate(1.6);
+@keyframes hover-glow {
+  0%, 100% {
+    backdrop-filter: blur(1.5px);
+    -webkit-backdrop-filter: blur(1.5px);
   }
-  50% { 
-    filter: brightness(1.7) saturate(2);
+  50% {
+    backdrop-filter: blur(2.5px);
+    -webkit-backdrop-filter: blur(2.5px);
+  }
+}
+
+/* Accessibility: Disable animations for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .overlay-cell {
+    animation: none !important;
   }
 }
 
 /* King in Check - Urgent red warning effect */
 .chess-square.king-in-check {
   background: rgba(255, 0, 0, 0.8) !important;
-  filter: brightness(1.3) saturate(2);
   animation: check-warning 1.5s ease-in-out infinite;
 }
 
 @keyframes check-warning {
   0%, 100% { 
-    filter: brightness(1.3) saturate(2);
+    background: rgba(255, 0, 0, 0.8);
   }
   50% { 
-    filter: brightness(1.8) saturate(2.5);
+    background: rgba(255, 0, 0, 1.0);
   }
 }
 
 /* Checkmate - Game over dramatic effect */
 .chess-square.checkmate {
   background: rgba(139, 0, 0, 0.9) !important;
-  filter: brightness(0.8) saturate(2.5);
   animation: checkmate-flash 0.8s ease-in-out infinite alternate;
 }
 
 @keyframes checkmate-flash {
   0% { 
-    filter: brightness(0.8) saturate(2.5);
+    background: rgba(139, 0, 0, 0.9);
   }
   100% { 
-    filter: brightness(1.5) saturate(3);
+    background: rgba(255, 0, 0, 1.0);
   }
 }
 
-/* Last Move - Subtle green highlight for previous move */
-.chess-square.last-move {
-  background: rgba(0, 255, 0, 0.3) !important;
-  filter: brightness(1.15) saturate(1.3);
-}
-
-/* Valid Move Target - Blue highlight for legal moves */
-.chess-square.valid-move {
-  background: rgba(0, 150, 255, 0.4) !important;
-  filter: brightness(1.2) saturate(1.4);
-}
-
-/* Capture Target - Orange/red highlight for capture moves */
-.chess-square.capture-target {
-  background: rgba(255, 140, 0, 0.5) !important;
-  filter: brightness(1.3) saturate(1.5);
-}
-
-/* Under Attack - Warning indicator for threatened pieces */
-.chess-square.under-attack {
-  background: rgba(255, 69, 0, 0.3) !important;
-  filter: brightness(1.1) saturate(1.2);
-  animation: under-attack-pulse 3s ease-in-out infinite;
-}
-
-@keyframes under-attack-pulse {
-  0%, 100% { 
-    filter: brightness(1.1) saturate(1.2);
-  }
-  50% { 
-    filter: brightness(1.2) saturate(1.3);
-  }
-}
-
-/* Promotion Square - Golden highlight for pawn promotion */
-.chess-square.promotion {
-  background: rgba(255, 215, 0, 0.6) !important;
-  filter: brightness(1.4) saturate(1.8);
-  animation: promotion-glow 2s ease-in-out infinite;
-}
-
-@keyframes promotion-glow {
-  0%, 100% { 
-    filter: brightness(1.4) saturate(1.8);
-  }
-  50% { 
-    filter: brightness(1.8) saturate(2.2);
-  }
-}
-
-/* En Passant Target - Purple highlight for en passant moves */
-.chess-square.en-passant {
-  background: rgba(138, 43, 226, 0.4) !important;
-  filter: brightness(1.2) saturate(1.3);
-}
-
-/* Castling Squares - Royal blue highlight for castling moves */
-.chess-square.castling {
-  background: rgba(65, 105, 225, 0.4) !important;
-  filter: brightness(1.25) saturate(1.4);
-}
-
-/* =============================================================================
-   HOVER AND INTERACTIVE EFFECTS
-   Enhanced user feedback for chess squares
-   ============================================================================= */
-
-/* Subtle Hover Enhancement */
-.chess-square:hover {
-  filter: brightness(1.1) saturate(1.1);
-  transition: filter 0.2s ease;
-}
-
-/* Gaming Theme Hover Glow */
-.chess-square.gaming-hover:hover {
-  filter: brightness(1.3) saturate(1.4);
-  transition: filter 0.2s ease;
-}
-
-/* Professional Theme Hover */
-.chess-square.professional-hover:hover {
-  filter: brightness(1.05) contrast(1.1);
-  transition: filter 0.2s ease;
-}
-
-/* =============================================================================
-   PERFORMANCE CONSIDERATIONS
-   Motion-safe overrides for accessibility
-   ============================================================================= */
-
+/* Performance: Disable animations for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .chess-square.holographic,
-  .chess-square.matrix,
-  .chess-square.shimmer,
-  .chess-square.rgb-pulse,
-  .chess-square.selected,
   .chess-square.king-in-check,
-  .chess-square.checkmate,
-  .chess-square.under-attack,
-  .chess-square.promotion {
+  .chess-square.checkmate {
     animation: none;
   }
   
-  .chess-square.holographic {
-    filter: hue-rotate(45deg) saturate(1.8) brightness(1.2);
-  }
-  
-  .chess-square.matrix {
-    filter: grayscale(100%) brightness(0.8) contrast(2);
-  }
-  
-  .chess-square.shimmer {
-    filter: brightness(1.1);
-  }
-  
-  .chess-square.rgb-pulse {
-    filter: saturate(1.5);
-  }
-  
-  /* Static game state indicators for accessibility */
-  .chess-square.selected {
-    filter: brightness(1.4) saturate(1.6);
-  }
-  
   .chess-square.king-in-check {
-    filter: brightness(1.3) saturate(2);
+    background: rgba(255, 0, 0, 0.8) !important;
   }
   
   .chess-square.checkmate {
-    filter: brightness(0.8) saturate(2.5);
-  }
-  
-  .chess-square.promotion {
-    filter: brightness(1.4) saturate(1.8);
+    background: rgba(139, 0, 0, 0.9) !important;
   }
 }

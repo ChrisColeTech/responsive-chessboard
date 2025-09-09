@@ -3,10 +3,10 @@ import {
   RotateCcw, Eye, Pause, Undo, Coins, RefreshCw, Volume2, 
   Trash2, TestTube, SkipForward, Navigation,
   Brain, Clock, CheckCircle, Target, Sword, Move, Crown,
-  Database, BarChart3
+  Database, BarChart3, EyeOff, RotateCw
 } from 'lucide-react'
 import type { ActionSheetAction } from '../../types/core/action-sheet.types'
-import { mergeWithCommonActions, COMMON_ACTION_GROUPS, COMMON_ACTIONS, buildCommonActions } from './common-actions.constants'
+import { mergeWithCommonActions, COMMON_ACTION_GROUPS, COMMON_ACTIONS } from './common-actions.constants'
 
 export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
   play: [
@@ -38,7 +38,11 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       shortcut: 'Ctrl+Z'
     }
   ],
-  slots: [
+  casino: [...COMMON_ACTION_GROUPS.casinoSiblings.map(name => ({
+    ...COMMON_ACTIONS[name],
+    variant: 'secondary' as const
+  }))],
+  slots: mergeWithCommonActions([
     {
       id: 'test-spin',
       label: 'Test Spin',
@@ -66,7 +70,39 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       icon: RefreshCw,
       variant: 'secondary'
     }
-  ],
+  ], ['go-to-blackjack', 'go-to-holdem', 'go-to-roulette', 'go-to-craps']),
+  blackjack: mergeWithCommonActions([
+    {
+      id: 'deal-cards',
+      label: 'Deal Cards',
+      icon: RotateCcw,
+      variant: 'default'
+    }
+  ], ['go-to-slots', 'go-to-holdem', 'go-to-roulette', 'go-to-craps']),
+  holdem: mergeWithCommonActions([
+    {
+      id: 'new-hand',
+      label: 'New Hand',
+      icon: RotateCcw,
+      variant: 'default'
+    }
+  ], ['go-to-slots', 'go-to-blackjack', 'go-to-roulette', 'go-to-craps']),
+  roulette: mergeWithCommonActions([
+    {
+      id: 'spin-wheel',
+      label: 'Spin Wheel',
+      icon: RotateCcw,
+      variant: 'default'
+    }
+  ], ['go-to-slots', 'go-to-blackjack', 'go-to-holdem', 'go-to-craps']),
+  craps: mergeWithCommonActions([
+    {
+      id: 'roll-dice',
+      label: 'Roll Dice',
+      icon: RotateCcw,
+      variant: 'default'
+    }
+  ], ['go-to-slots', 'go-to-blackjack', 'go-to-holdem', 'go-to-roulette']),
   worker: [
     {
       id: 'test-worker-ready',
@@ -104,7 +140,14 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
     ...COMMON_ACTIONS[name],
     variant: 'secondary' as const
   }))],
-  layouttest: [...buildCommonActions(['go-to-drag-test', 'go-to-audio-test', 'go-to-mobile-drag-test'])],
+  layouttest: mergeWithCommonActions([
+    {
+      id: 'toggle-layout-elements',
+      label: 'Toggle Page Elements',
+      icon: EyeOff,
+      variant: 'default'
+    }
+  ], ['go-to-drag-test', 'go-to-audio-test', 'go-to-mobile-drag-test']),
   splash: [
     {
       id: 'go-to-minimal',
@@ -209,6 +252,12 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       label: 'Toggle Pieces Position',
       icon: Move,
       variant: 'secondary'
+    },
+    {
+      id: 'flip-board',
+      label: 'Flip Board',
+      icon: RotateCw,
+      variant: 'default'
     }
   ], ['go-to-audio-test', 'go-to-layout-test', 'go-to-mobile-drag-test']),
   uiaudiotest: mergeWithCommonActions([
@@ -281,17 +330,31 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
   ], [...COMMON_ACTION_GROUPS.demoUtilities, 'go-to-minimal', 'go-to-animated', 'go-to-progress', 'go-to-branded']),
   mobiledragtest: mergeWithCommonActions([
     {
-      id: 'mobile-board-action',
-      label: 'Mobile Board Action',
-      icon: Target,
-      variant: 'default'
-    },
-    {
-      id: 'mobile-test-sound',
-      label: 'Mobile Test Sound',
-      icon: Volume2,
+      id: 'reset-board',
+      label: 'Reset Board',
+      icon: RotateCcw,
       variant: 'secondary',
       hasOwnAudio: true
+    },
+    {
+      id: 'test-move-sound',
+      label: 'Test Move Sound',
+      icon: Volume2,
+      variant: 'default',
+      hasOwnAudio: true
+    },
+    {
+      id: 'test-capture-sound',
+      label: 'Test Capture Sound',
+      icon: Target,
+      variant: 'default',
+      hasOwnAudio: true
+    },
+    {
+      id: 'flip-board',
+      label: 'Flip Board',
+      icon: RotateCw,
+      variant: 'default'
     }
   ], ['go-to-drag-test', 'go-to-audio-test', 'go-to-layout-test']),
 }

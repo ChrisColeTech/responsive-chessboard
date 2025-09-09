@@ -24,10 +24,18 @@ export function useLayoutActions() {
     // TODO: Implement theme shuffle logic
   }, [])
 
+  const toggleLayoutElements = useCallback(() => {
+    // Call the layout test page's toggle function
+    if (typeof (window as any).__toggleLayoutElements === 'function') {
+      (window as any).__toggleLayoutElements();
+    }
+  }, [])
+
   return {
     changeBackground,
     resetLayout,
     toggleEffects,
-    shuffleTheme
+    shuffleTheme,
+    toggleLayoutElements
   }
 }

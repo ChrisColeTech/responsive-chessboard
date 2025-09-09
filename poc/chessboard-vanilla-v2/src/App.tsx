@@ -11,9 +11,9 @@ import { useChessAudio } from "./services/audio/audioService";
 import {
   WorkerTestPage,
   UITestPage,
-  SlotMachineTestPage,
   PlayPage,
 } from "./pages";
+import { CasinoPage } from "./pages/casino/CasinoPage";
 
 /*
  * To add a new route/page:
@@ -86,7 +86,7 @@ function AppContent() {
       {/* Page routing */}
       {selectedTab === "worker" && <WorkerTestPage />}
       {selectedTab === "uitests" && <UITestPage />}
-      {selectedTab === "slots" && <SlotMachineTestPage />}
+      {selectedTab === "casino" && <CasinoPage />}
       {selectedTab === "play" && <PlayPage />}
 
       {/* Global drag overlay */}

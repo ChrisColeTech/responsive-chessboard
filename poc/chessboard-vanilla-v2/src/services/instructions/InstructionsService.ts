@@ -55,13 +55,63 @@ export class InstructionsService {
       ]
     })
 
-    this.instructionsMap.set('slots', {
-      title: 'Slot Machine Casino Experience',
+    this.instructionsMap.set('casino', {
+      title: 'Chess Casino Games Hub',
       instructions: [
-        'Experience the thrill of a casino slot machine with visual and audio feedback',
+        'Welcome to the chess-themed casino! Choose from our exciting selection of games',
+        'Navigate between different casino games using the action menu',
+        'All games feature chess piece symbols and themes for a unique experience',
+        'Start with slots for the full casino slot machine experience'
+      ]
+    })
+
+    this.instructionsMap.set('slots', {
+      title: 'Chess Slot Machine Experience',
+      instructions: [
+        'Experience the thrill of a chess-themed casino slot machine',
         'Use the +/- buttons to adjust your coin wager amount',
         'Click the SPIN button to start the slot machine animation',
-        'Watch for winning combinations and enjoy the casino atmosphere'
+        'Watch for winning chess piece combinations and enjoy the casino atmosphere'
+      ]
+    })
+
+    this.instructionsMap.set('blackjack', {
+      title: 'Chess Blackjack Coming Soon',
+      instructions: [
+        'Chess-themed blackjack game with traditional rules',
+        'Play against the dealer with chess piece card designs',
+        'Try to get as close to 21 without going over',
+        'Use the action menu to navigate to other casino games'
+      ]
+    })
+
+    this.instructionsMap.set('holdem', {
+      title: 'Chess Texas Hold\'em Poker',
+      instructions: [
+        'Chess-themed Texas Hold\'em poker against AI opponents',
+        'Features different AI difficulty levels and strategies',
+        'Complete betting rounds: preflop, flop, turn, and river',
+        'Master poker hand rankings with chess piece themes'
+      ]
+    })
+
+    this.instructionsMap.set('roulette', {
+      title: 'Chess Roulette Wheel',
+      instructions: [
+        'Chess-themed roulette with realistic physics simulation',
+        'Place bets on numbers, colors, and special chess piece sections',
+        'Watch the wheel spin with smooth animations',
+        'Experience the excitement of European-style roulette'
+      ]
+    })
+
+    this.instructionsMap.set('craps', {
+      title: 'Chess Craps Dice Game',
+      instructions: [
+        'Chess-themed craps with simplified mobile-friendly rules',
+        'Roll the dice with chess piece patterns',
+        'Place bets on various dice outcomes and combinations',
+        'Enjoy the fast-paced excitement of this classic casino game'
       ]
     })
 
@@ -104,6 +154,16 @@ export class InstructionsService {
         'Experience touch-friendly drag and drop functionality',
         'See how the board adapts to mobile screen constraints',
         'Test mobile-specific chess interaction patterns'
+      ]
+    })
+
+    this.instructionsMap.set('mobiledragtest', {
+      title: 'Mobile Chess Board Testing',
+      instructions: [
+        'Test the wrapper-based chess board animation system',
+        'Use action sheet to reset the board to initial position',
+        'Test move sounds and capture animations',
+        'Experience smooth piece animations and shrinking capture effects'
       ]
     })
 
