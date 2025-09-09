@@ -17,10 +17,10 @@ interface MobileChessBoardProps {
 // Helper function to get size multiplier based on setting
 const getPieceSizeMultiplier = (size: 'small' | 'medium' | 'large'): number => {
   switch (size) {
-    case 'small': return 0.65;   // Was 0.6, now 5% larger
-    case 'medium': return 0.9;   // Was 0.8, now 10% larger  
-    case 'large': return 1.15;   // Was 1.0, now 15% larger
-    default: return 0.9;
+    case 'small': return 0.55;   // Reduced by 15% (from 0.65)
+    case 'medium': return 0.63;  // Reduced by 30% (from 0.9)
+    case 'large': return 0.81;   // Reduced by 30% (from 1.15)
+    default: return 0.63;
   }
 };
 

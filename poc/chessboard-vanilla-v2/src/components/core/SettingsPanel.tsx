@@ -83,6 +83,7 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
         {/* Settings Content */}
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
           {/* Piece Size Toggle */}
+          {/* Size values controlled in: src/components/chess/MobileChessBoard.tsx:getPieceSizeMultiplier() */}
           <div>
             <h3 className="text-base font-semibold text-foreground mb-3">Piece Size</h3>
             <div className="settings-toggle-container">
