@@ -1,6 +1,6 @@
 // Define all page-specific actions based on current page controls
 import { 
-  RotateCcw, Eye, Pause, Undo, Coins, RefreshCw, Volume2, 
+  RotateCcw, Eye, Pause, Undo, RefreshCw, Volume2, 
   Trash2, TestTube, SkipForward, Navigation,
   Brain, Clock, CheckCircle, Target, Sword, Move, Crown,
   Database, BarChart3, EyeOff, RotateCw
@@ -48,20 +48,6 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       label: 'Test Spin',
       icon: RotateCcw,
       variant: 'default',
-      hasOwnAudio: true
-    },
-    {
-      id: 'test-win',
-      label: 'Test Win Sound',
-      icon: Coins,
-      variant: 'secondary',
-      hasOwnAudio: true
-    },
-    {
-      id: 'test-lose',
-      label: 'Test Lose Sound',
-      icon: Volume2,
-      variant: 'destructive',
       hasOwnAudio: true
     },
     {
@@ -240,20 +226,6 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
     }
   ], ['go-to-audio-test', 'go-to-layout-test', 'go-to-mobile-drag-test']),
   uiaudiotest: mergeWithCommonActions([
-    {
-      id: 'test-ui-sound',
-      label: 'Test UI Sound',
-      icon: Volume2,
-      variant: 'default',
-      hasOwnAudio: true
-    },
-    {
-      id: 'test-audio-system',
-      label: 'Test Audio System',
-      icon: TestTube,
-      variant: 'default',
-      hasOwnAudio: true
-    },
     {
       id: 'test-move-sound',
       label: 'Test Move Sound',

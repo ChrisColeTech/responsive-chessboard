@@ -5,6 +5,8 @@ import { useChessGameStore } from "../../stores/chessGameStore";
 import { ChessGrid } from "./ChessGrid";
 import { ChessOverlay } from "./ChessOverlay";
 import { PieceWrapper } from "./PieceWrapper";
+import { MobileChessboardLayout } from "./MobileChessboardLayout";
+import { CapturedPieces } from "./CapturedPieces";
 import type { MobileChessGameState, ChessPiece } from "../../types";
 
 interface MobileChessBoardProps {
@@ -12,15 +14,16 @@ interface MobileChessBoardProps {
   pieceConfig?: 'drag-test' | 'mobile-test';
   onGameStateChange?: (gameState: MobileChessGameState) => void;
   onCapturedPiecesChange?: (pieces: ChessPiece[]) => void;
+  showLayout?: boolean; // Whether to wrap in MobileChessboardLayout with captured pieces
 }
 
-export const MobileChessBoard: React.FC<MobileChessBoardProps> = ({ gridSize = 8, pieceConfig }) => {
+export const MobileChessBoard: React.FC<MobileChessBoardProps> = ({ gridSize = 8, pieceConfig, showLayout = true }) => {
   // Centralized responsive piece sizing based on grid size
   const GRID_SIZE = gridSize;
   const PIECE_SIZE = `min(${100 / GRID_SIZE * 0.72}vw, ${100 / GRID_SIZE * 0.72}vh)`;
   
   // Use hook for chess board state
-  const { wrapperPieces, handleCellClick, handlePieceClick, handleDragStart, handleDrop, isFlipped, isDragging, setDraggedPiece } = useWrapperChessBoard(GRID_SIZE, pieceConfig);
+  const { wrapperPieces, handleCellClick, handlePieceClick, handleDragStart, handleDrop, isFlipped, isDragging, setDraggedPiece, whiteCapturedPieces, blackCapturedPieces } = useWrapperChessBoard(GRID_SIZE, pieceConfig);
   
   // Get store state directly
   const setHoveredCell = useChessGameStore(state => state.setHoveredCell);

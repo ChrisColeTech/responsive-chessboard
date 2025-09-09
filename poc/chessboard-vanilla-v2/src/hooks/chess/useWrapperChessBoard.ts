@@ -2,19 +2,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useChessBoardAudio } from '../../hooks/audio/useChessBoardAudio';
 import { useChessGameStore } from '../../stores/chessGameStore';
-
-interface WrapperPiece {
-  id: string;
-  symbol: string;
-  color: string;
-  type: string;
-  x: number; // Pixel position
-  y: number; // Pixel position
-  opacity: number;
-  isAnimating: boolean;
-  boardPosition: string; // Chess notation
-  scale: number; // Scale for capture animation
-}
+import { PIECE_CONFIGURATIONS } from '../../constants/chess/piece-configurations.constants';
+import type { WrapperPiece } from '../../types/chess/wrapper-piece.types';
 
 export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-test' | 'mobile-test') => {
   const [wrapperPieces, setWrapperPieces] = useState<WrapperPiece[]>([]);
@@ -25,9 +14,12 @@ export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-t
   const { 
     selectedCell, 
     draggedPiece,
+    capturedPieces,
     setSelectedCell: setStoreSelectedCell,
     setDraggedPiece: setStoreDraggedPiece,
-    setPieces: setStorePieces
+    setPieces: setStorePieces,
+    setCapturedPieces: setStoreCapturedPieces,
+    addCapturedPiece: addStoreCapturedPiece
   } = store;
   
   const {
@@ -67,111 +59,22 @@ export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-t
 
   // Initialize wrapper pieces with pixel positions
   const initializePieces = useCallback(() => {
-    const topRank = gridSize;
-    const bottomRank = 1;
+    const configKey = pieceConfig || 'mobile-test';
+    const pieceConfigs = PIECE_CONFIGURATIONS[configKey];
     
-    let initialPieces: WrapperPiece[] = [];
-    
-    if (pieceConfig === 'drag-test') {
-      // Drag test: 2 black pawns + white king + white queen on 3x3
-      initialPieces = [
-        {
-          id: 'black-pawn1',
-          symbol: '♟',
-          color: 'black',
-          type: 'pawn',
-          ...chessToPx('a1'),
-          opacity: 1,
-          isAnimating: false,
-          boardPosition: 'a1',
-          scale: 1
-        },
-        {
-          id: 'black-pawn2',
-          symbol: '♟',
-          color: 'black',
-          type: 'pawn',
-          ...chessToPx('c1'),
-          opacity: 1,
-          isAnimating: false,
-          boardPosition: 'c1',
-          scale: 1
-        },
-        {
-          id: 'white-king',
-          symbol: '♔',
-          color: 'white',
-          type: 'king',
-          ...chessToPx('a3'),
-          opacity: 1,
-          isAnimating: false,
-          boardPosition: 'a3',
-          scale: 1
-        },
-        {
-          id: 'white-queen',
-          symbol: '♕',
-          color: 'white',
-          type: 'queen',
-          ...chessToPx('c3'),
-          opacity: 1,
-          isAnimating: false,
-          boardPosition: 'c3',
-          scale: 1
-        }
-      ];
-    } else {
-      // Mobile test: both kings and queens on 6x6
-      initialPieces = [
-        {
-          id: 'white-king',
-          symbol: '♔',
-          color: 'white',
-          type: 'king',
-          ...chessToPx(`a${topRank}`),
-          opacity: 1,
-          isAnimating: false,
-          boardPosition: `a${topRank}`,
-          scale: 1
-        },
-        {
-          id: 'white-queen',
-          symbol: '♕',
-          color: 'white',
-          type: 'queen',
-          ...chessToPx(`b${topRank}`),
-          opacity: 1,
-          isAnimating: false,
-          boardPosition: `b${topRank}`,
-          scale: 1
-        },
-        {
-          id: 'black-queen',
-          symbol: '♛',
-          color: 'black',
-          type: 'queen',
-          ...chessToPx(`e${bottomRank}`),
-          opacity: 1,
-          isAnimating: false,
-          boardPosition: `e${bottomRank}`,
-          scale: 1
-        },
-        {
-          id: 'black-king',
-          symbol: '♚',
-          color: 'black',
-          type: 'king',
-          ...chessToPx(`f${bottomRank}`),
-          opacity: 1,
-          isAnimating: false,
-          boardPosition: `f${bottomRank}`,
-          scale: 1
-        }
-      ];
-    }
+    const initialPieces: WrapperPiece[] = pieceConfigs.map(config => ({
+      id: config.id,
+      color: config.color,
+      type: config.type,
+      ...chessToPx(config.boardPosition),
+      opacity: 1,
+      isAnimating: false,
+      boardPosition: config.boardPosition,
+      scale: 1
+    }));
     
     setWrapperPieces(initialPieces);
-  }, [chessToPx, gridSize, pieceConfig]);
+  }, [chessToPx, pieceConfig]);
 
   // Flip board function
   const handleFlipBoard = useCallback(() => {
@@ -183,8 +86,9 @@ export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-t
   const handleReset = useCallback(() => {
     initializePieces();
     setStoreSelectedCell(null);
+    setStoreCapturedPieces([]);
     console.log('🎯 [MOBILE WRAPPER] Board reset to initial position');
-  }, [initializePieces, setStoreSelectedCell]);
+  }, [initializePieces, setStoreSelectedCell, setStoreCapturedPieces]);
 
   // Initialize pieces on mount or gridSize change
   useEffect(() => {
@@ -229,10 +133,30 @@ export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-t
       const movingPiece = findPieceAt(selectedCell);
       if (movingPiece) {
         const targetPiece = findPieceAt(cellId);
+        
+        // Check if trying to capture own piece
+        if (targetPiece && targetPiece.color === movingPiece.color) {
+          playInvalidMove();
+          console.log(`❌ Cannot capture own piece: ${targetPiece.color} ${targetPiece.type} at ${cellId}`);
+          setStoreSelectedCell(null);
+          return;
+        }
+        
         const wasCapture = !!targetPiece;
 
         // Handle captured piece (shrink and fade out)
         if (wasCapture && targetPiece) {
+          // Add to captured pieces list
+          addStoreCapturedPiece({
+            id: targetPiece.id,
+            color: targetPiece.color as any,
+            type: targetPiece.type as any,
+            position: { 
+              file: targetPiece.boardPosition[0] as any, 
+              rank: parseInt(targetPiece.boardPosition[1]) as any 
+            }
+          });
+          
           setWrapperPieces(prev => prev.map(p => 
             p.id === targetPiece.id 
               ? { ...p, opacity: 0, scale: 0.1, isAnimating: true }
@@ -302,12 +226,32 @@ export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-t
 
     // Attempt move
     const targetPiece = findPieceAt(targetSquare);
+    
+    // Check if trying to capture own piece
+    if (targetPiece && targetPiece.color === piece.color) {
+      console.log(`❌ [DRAG] Cannot capture own piece: ${targetPiece.color} ${targetPiece.type} at ${targetSquare}`);
+      setStoreDraggedPiece(null);
+      setStoreSelectedCell(null);
+      return;
+    }
+    
     const wasCapture = !!targetPiece;
 
     console.log(`🎯 [DRAG] Dropping ${piece.color} ${piece.type}: ${dragData.fromPosition} → ${targetSquare}${wasCapture ? ' (capture)' : ''}`);
 
     // Handle captured piece (shrink and fade out)
     if (wasCapture && targetPiece) {
+      // Add to captured pieces list
+      addStoreCapturedPiece({
+        id: targetPiece.id,
+        color: targetPiece.color as any,
+        type: targetPiece.type as any,
+        position: { 
+          file: targetPiece.boardPosition[0] as any, 
+          rank: parseInt(targetPiece.boardPosition[1]) as any 
+        }
+      });
+      
       setWrapperPieces(prev => prev.map(p => 
         p.id === targetPiece.id 
           ? { ...p, opacity: 0, scale: 0.1, isAnimating: true }
@@ -349,8 +293,12 @@ export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-t
     console.log(`🔚 [DRAG] Ending drag, setting draggedPiece to null`);
     setStoreDraggedPiece(null);
     setStoreSelectedCell(null);
-  }, [wrapperPieces, findPieceAt, chessToPx, playPieceMove, setStoreDraggedPiece, setStoreSelectedCell]);
+  }, [wrapperPieces, findPieceAt, chessToPx, playPieceMove, setStoreDraggedPiece, setStoreSelectedCell, addStoreCapturedPiece]);
 
+
+  // Separate captured pieces by color
+  const whiteCapturedPieces = capturedPieces.filter(p => p.color === 'white');
+  const blackCapturedPieces = capturedPieces.filter(p => p.color === 'black');
 
   return {
     wrapperPieces,
@@ -363,6 +311,9 @@ export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-t
     isFlipped,
     findPieceAt,
     isDragging: !!draggedPiece,
-    setDraggedPiece: setStoreDraggedPiece // Expose this so PieceWrapper can manage it directly
+    setDraggedPiece: setStoreDraggedPiece, // Expose this so PieceWrapper can manage it directly
+    capturedPieces,
+    whiteCapturedPieces,
+    blackCapturedPieces
   };
 };

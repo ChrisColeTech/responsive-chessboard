@@ -7,16 +7,6 @@ import { useChessAudio } from '../../services/audio/audioService'
 export function useUIAudioTestActions() {
   const { playMove, playError } = useChessAudio()
 
-  const testUISound = useCallback(() => {
-    playMove(false)
-    // TODO: Implement actual UI audio testing
-  }, [playMove])
-
-  const testAudioSystem = useCallback(() => {
-    playMove(false)
-    // TODO: Implement audio system testing
-  }, [playMove])
-
   const resetAudioSettings = useCallback(() => {
     playError()
     // TODO: Implement audio settings reset
@@ -35,8 +25,6 @@ export function useUIAudioTestActions() {
   }, [playError])
 
   return {
-    testUISound,
-    testAudioSystem,
     resetAudioSettings,
     testMoveSound,
     testCaptureSound,

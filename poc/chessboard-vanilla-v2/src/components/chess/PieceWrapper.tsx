@@ -2,19 +2,7 @@ import React from 'react';
 import { getPieceImagePath } from '../../constants/pieces.constants';
 import { useAppStore } from '../../stores/appStore';
 import { useChessGameStore } from '../../stores/chessGameStore';
-
-interface WrapperPiece {
-  id: string;
-  symbol: string;
-  color: string;
-  type: string;
-  x: number; // Pixel position
-  y: number; // Pixel position
-  opacity: number;
-  isAnimating: boolean;
-  boardPosition: string; // Chess notation
-  scale: number; // Scale for capture animation
-}
+import type { WrapperPiece } from '../../types/chess/wrapper-piece.types';
 
 interface PieceWrapperProps {
   piece: WrapperPiece;

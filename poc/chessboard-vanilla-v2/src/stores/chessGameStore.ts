@@ -1,22 +1,12 @@
 import { create } from 'zustand';
-
-interface WrapperPiece {
-  id: string;
-  symbol: string;
-  color: string;
-  type: string;
-  x: number;
-  y: number;
-  opacity: number;
-  isAnimating: boolean;
-  boardPosition: string;
-  scale: number;
-}
+import type { ChessPiece } from '../types';
+import type { WrapperPiece } from '../types/chess/wrapper-piece.types';
 
 interface ChessGameState {
   // Piece data
   pieces: WrapperPiece[];
   squareMap: Record<string, { color: string; type: string } | null>;
+  capturedPieces: ChessPiece[];
   
   // Game state
   selectedCell: string | null;
@@ -32,10 +22,12 @@ interface ChessGameState {
   setSelectedCell: (cell: string | null) => void;
   setHoveredCell: (cell: string | null) => void;
   setDraggedPiece: (piece: WrapperPiece | null) => void;
+  setCapturedPieces: (pieces: ChessPiece[]) => void;
+  addCapturedPiece: (piece: ChessPiece) => void;
   flipBoard: () => void;
   
-  // Computed getters
-  getCaptureSquares: () => string[];
+  // Helper methods
+  isCapturePossible: (cellId: string) => boolean;
   getPieceAt: (position: string) => { color: string; type: string } | null;
 }
 
@@ -43,6 +35,7 @@ export const useChessGameStore = create<ChessGameState>((set, get) => ({
   // Initial state
   pieces: [],
   squareMap: {},
+  capturedPieces: [],
   selectedCell: null,
   hoveredCell: null,
   isFlipped: false,
@@ -69,6 +62,12 @@ export const useChessGameStore = create<ChessGameState>((set, get) => ({
     isDragging: !!piece 
   }),
   
+  setCapturedPieces: (pieces) => set({ capturedPieces: pieces }),
+  
+  addCapturedPiece: (piece) => set((state) => ({ 
+    capturedPieces: [...state.capturedPieces, piece] 
+  })),
+  
   flipBoard: () => set((state) => ({ isFlipped: !state.isFlipped })),
   
   // Helper methods (non-reactive)
@@ -79,7 +78,7 @@ export const useChessGameStore = create<ChessGameState>((set, get) => ({
     }
     
     const pieceOnSquare = state.squareMap[cellId];
-    return pieceOnSquare && pieceOnSquare.color !== state.draggedPiece.color;
+    return !!(pieceOnSquare && pieceOnSquare.color !== state.draggedPiece.color);
   },
   
   getPieceAt: (position) => {

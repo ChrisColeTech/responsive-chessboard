@@ -102,8 +102,6 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
       },
       slots: {
         'test-spin': slotsActions.testSpin,
-        'test-win': slotsActions.testWin,
-        'test-lose': slotsActions.testLose,
         'reset-coins': slotsActions.resetCoins,
         // Navigation actions
         'go-to-blackjack': casinoActions.goToBlackjack,
@@ -175,8 +173,6 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
         'go-to-mobile-drag-test': uiTestsActions.goToMobileDragTest
       },
       uiaudiotest: {
-        'test-ui-sound': uiAudioTestActions.testUISound,
-        'test-audio-system': uiAudioTestActions.testAudioSystem,
         'test-move-sound': uiAudioTestActions.testMoveSound,
         'test-capture-sound': uiAudioTestActions.testCaptureSound,
         'test-error-sound': uiAudioTestActions.testErrorSound,

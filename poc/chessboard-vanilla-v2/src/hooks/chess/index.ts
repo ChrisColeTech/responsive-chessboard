@@ -8,4 +8,3 @@ export { usePlayGame } from './usePlayGame';
 
 // Mobile chess hooks (Phase 4)
 export { useMobileChess, type UseMobileChessHook } from './useMobileChess';
-export { useMobileChessInteractions, type UseMobileChessInteractionsHook } from './useMobileChessInteractions';

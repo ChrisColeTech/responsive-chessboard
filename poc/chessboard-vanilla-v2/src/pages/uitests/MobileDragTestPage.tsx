@@ -1,23 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   MobileChessboardLayout,
   CapturedPieces,
   MobileChessBoard,
 } from "../../components/chess";
 import { useMobileDragTestActions } from "../../hooks/uitests/useMobileDragTestActions";
+import { useChessGameStore } from "../../stores/chessGameStore";
 import type { MobileChessGameState, ChessPiece } from "../../types";
 
 export const MobileDragTestPage: React.FC = () => {
   // Setup actions (handled by wrapper for page instructions and action sheet context)
   useMobileDragTestActions();
   
-  // Track captured pieces for display
-  const [capturedPieces, setCapturedPieces] = useState<ChessPiece[]>([]);
   const [gameState, setGameState] = useState<MobileChessGameState | null>(null);
 
-  // Separate captured pieces by color
+  // Use store for captured pieces instead of local state
+  const capturedPieces = useChessGameStore(state => state.capturedPieces);
+  const setCapturedPieces = useChessGameStore(state => state.setCapturedPieces);
   const whiteCaptured = capturedPieces.filter(p => p.color === 'white');
   const blackCaptured = capturedPieces.filter(p => p.color === 'black');
+
+  // Clear captured pieces when page loads
+  useEffect(() => {
+    setCapturedPieces([]);
+  }, [setCapturedPieces]);
 
   const handleGameStateChange = (newGameState: MobileChessGameState) => {
     setGameState(newGameState);
@@ -50,7 +56,6 @@ export const MobileDragTestPage: React.FC = () => {
             gridSize={6}
             pieceConfig="mobile-test"
             onGameStateChange={handleGameStateChange}
-            onCapturedPiecesChange={setCapturedPieces}
           />
         }
         bottomPieces={

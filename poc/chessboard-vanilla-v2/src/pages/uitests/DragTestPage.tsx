@@ -1,21 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MobileChessBoard } from "../../components/chess/MobileChessBoard";
 import { CapturedPieces } from "../../components/chess/CapturedPieces";
 import { ChessboardLayout } from "../../components/chess/ChessboardLayout";
 import { MobileChessboardLayout } from "../../components/chess/MobileChessboardLayout";
 import { usePageInstructions } from "../../hooks/core/usePageInstructions";
 import { useIsMobile } from "../../hooks/core/useIsMobile";
-import type { ChessPosition, ChessPiece } from "../../types";
+import { useChessGameStore } from "../../stores/chessGameStore";
+import type { ChessPosition } from "../../types";
 
 export const DragTestPage: React.FC = () => {
   const [selectedSquare, setSelectedSquare] = useState<ChessPosition | null>(
     null
   );
   const [validDropTargets, setValidDropTargets] = useState<ChessPosition[]>([]);
-  const [capturedPieces, setCapturedPieces] = useState<ChessPiece[]>([]);
   const [moveHandler, setMoveHandler] = useState<
     ((from: ChessPosition, to: ChessPosition) => Promise<boolean>) | null
   >(null);
+  
+  // Use store for captured pieces
+  const capturedPieces = useChessGameStore(state => state.capturedPieces);
+  const setCapturedPieces = useChessGameStore(state => state.setCapturedPieces);
+  const whiteCapturedPieces = capturedPieces.filter(p => p.color === 'white');
+  const blackCapturedPieces = capturedPieces.filter(p => p.color === 'black');
+
+  // Clear captured pieces when page loads
+  useEffect(() => {
+    setCapturedPieces([]);
+  }, [setCapturedPieces]);
   
   const [piecesPosition, setPiecesPosition] = useState<'top-bottom' | 'left-right'>('top-bottom');
   const isMobile = useIsMobile();
@@ -59,7 +70,7 @@ export const DragTestPage: React.FC = () => {
   };
 
   // Use variables to avoid TypeScript unused warnings
-  console.log('Debug state:', { validDropTargets, setCapturedPieces, setMoveHandler, handleSquareClick });
+  console.log('Debug state:', { validDropTargets, setMoveHandler, handleSquareClick });
 
   return (
     <div className="relative min-h-full">
@@ -80,14 +91,14 @@ export const DragTestPage: React.FC = () => {
         <MobileChessboardLayout
               topPieces={
                 <CapturedPieces
-                  pieces={capturedPieces.filter((p: ChessPiece) => p.color === "white")}
+                  pieces={whiteCapturedPieces}
                   position="normal"
                 />
               }
               center={<MobileChessBoard gridSize={3} pieceConfig="drag-test" />}
               bottomPieces={
                 <CapturedPieces
-                  pieces={capturedPieces.filter((p: ChessPiece) => p.color === "black")}
+                  pieces={blackCapturedPieces}
                   position="normal"
                 />
               }
@@ -97,14 +108,14 @@ export const DragTestPage: React.FC = () => {
         <ChessboardLayout
               top={
                 <CapturedPieces
-                  pieces={capturedPieces.filter((p: ChessPiece) => p.color === "white")}
+                  pieces={whiteCapturedPieces}
                   position="normal"
                 />
               }
               left={
                 piecesPosition === 'left-right' ? (
                   <CapturedPieces
-                    pieces={capturedPieces.filter((p: ChessPiece) => p.color === "white")}
+                    pieces={whiteCapturedPieces}
                     position="normal"
                     className="h-96 overflow-y-auto"
                   />
@@ -127,7 +138,7 @@ export const DragTestPage: React.FC = () => {
               right={
                 piecesPosition === 'left-right' ? (
                   <CapturedPieces
-                    pieces={capturedPieces.filter((p: ChessPiece) => p.color === "black")}
+                    pieces={blackCapturedPieces}
                     position="normal"
                     className="h-96 overflow-y-auto"
                   />
@@ -135,7 +146,7 @@ export const DragTestPage: React.FC = () => {
               }
               bottom={
                 <CapturedPieces
-                  pieces={capturedPieces.filter((p: ChessPiece) => p.color === "black")}
+                  pieces={blackCapturedPieces}
                   position="normal"
                 />
               }
