@@ -5,7 +5,7 @@ import { useChessGameStore } from '../../stores/chessGameStore';
 import { PIECE_CONFIGURATIONS } from '../../constants/chess/piece-configurations.constants';
 import type { WrapperPiece } from '../../types/chess/wrapper-piece.types';
 
-export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-test' | 'mobile-test') => {
+export const useWrapperChessBoard = (gridSize: number = 6, pieceConfig?: 'drag-test' | 'mobile-test' | 'standard-chess' | 'puzzle') => {
   const [wrapperPieces, setWrapperPieces] = useState<WrapperPiece[]>([]);
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
   

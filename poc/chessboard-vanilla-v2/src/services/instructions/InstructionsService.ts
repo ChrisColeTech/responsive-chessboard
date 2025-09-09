@@ -116,13 +116,34 @@ export class InstructionsService {
     })
 
     this.instructionsMap.set('play', {
-      title: 'Play Chess vs Computer - Coming Soon',
+      title: 'Chess Play Hub',
       instructions: [
-        'This page will feature human vs computer chess gameplay',
-        'Computer opponent with 10 difficulty levels (1-10)',
-        'Full drag & drop chessboard interface',
-        'Audio feedback and professional game controls',
-        'Currently under development...'
+        'Welcome to the Chess Play Hub - Your gateway to chess gameplay',
+        'Choose between classical chess games or challenging puzzles',
+        'Navigate using the action menu to select your preferred play mode',
+        'Each mode offers unique features and learning opportunities'
+      ]
+    })
+
+    this.instructionsMap.set('playchess', {
+      title: 'Classical Chess Games',
+      instructions: [
+        'Play full chess games on a complete 8x8 board with all 32 pieces',
+        'Experience professional drag & drop chess interactions',
+        'Features include move history, game controls, and audio feedback',
+        'Challenge yourself against the computer or practice openings and endgames',
+        'Use action menu for game controls: New Game, Pause, Show Moves, Undo'
+      ]
+    })
+
+    this.instructionsMap.set('playpuzzles', {
+      title: 'Chess Puzzle Training',
+      instructions: [
+        'Sharpen your tactical skills with our comprehensive puzzle collection',
+        'Solve mate-in-1, mate-in-2, tactical combinations, and endgame studies',
+        'Learn from famous positions in chess history',
+        'Get hints when you\'re stuck or reveal the full solution',
+        'Use action menu for puzzle controls: New Puzzle, Hint, Solve Puzzle'
       ]
     })
 

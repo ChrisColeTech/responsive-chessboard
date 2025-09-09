@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "lsof -ti:5173 | xargs -r kill -9 2>/dev/null; concurrently --kill-others --prefix \"{name}\" --names \"VITE,TUNNEL\" \"npm run dev:local\" \"npm run dev:ngrok\"",
+    "dev": "lsof -ti:5173 | xargs -r kill -9 2>/dev/null; concurrently --kill-others --prefix \"{name}\" --names \"FULLSTACK,TUNNEL\" \"npm run fullstack\" \"npm run dev:ngrok\"",
     "dev:web": "lsof -ti:5173 | xargs -r kill -9 2>/dev/null; concurrently --kill-others --prefix \"{name}\" --names \"VITE,TUNNEL\" \"npm run dev:web:local\" \"npm run dev:ngrok\"",
     "dev:local": "vite",
     "dev:web:local": "vite --config vite.config.web.ts",
@@ -15,11 +15,15 @@
     "ngrok": "ngrok http 5173",
     "ngrok:url": "curl -s http://localhost:4040/api/tunnels | grep -o '\"public_url\":\"[^\"]*\"' | cut -d'\"' -f4",
     "tunnel:url": "echo 'Permanent URL: https://eager-terrier-especially.ngrok-free.app'",
-    "cloudflared": "cloudflared tunnel --url http://localhost:5173 --no-autoupdate"
+    "cloudflared": "cloudflared tunnel --url http://localhost:5173 --no-autoupdate",
+    "backend": "cd ../chessboard-backend && npm run dev",
+    "fullstack": "concurrently --kill-others --prefix \"{name}\" --names \"FRONTEND,BACKEND\" \"npm run dev:local\" \"npm run backend\""
   },
   "dependencies": {
     "@headlessui/react": "^2.2.7",
     "@hookform/resolvers": "^5.2.1",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
     "@react-spring/web": "^10.0.2",
     "animate-css-grid": "^1.5.1",
     "chess.js": "^1.4.0",

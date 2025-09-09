@@ -22,3 +22,7 @@ export * from './clients';
 
 // Phase 4: UI Tests services
 export { UIDemoService } from './ui';
+
+// Authentication services
+export { AuthService, authService } from './auth.service';
+export type { AuthService as AuthServiceClass } from './auth.service';

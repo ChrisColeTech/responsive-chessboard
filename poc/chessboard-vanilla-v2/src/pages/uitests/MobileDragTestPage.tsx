@@ -6,7 +6,7 @@ import {
 } from "../../components/chess";
 import { useMobileDragTestActions } from "../../hooks/uitests/useMobileDragTestActions";
 import { useChessGameStore } from "../../stores/chessGameStore";
-import type { MobileChessGameState, ChessPiece } from "../../types";
+import type { MobileChessGameState } from "../../types";
 
 export const MobileDragTestPage: React.FC = () => {
   // Setup actions (handled by wrapper for page instructions and action sheet context)
@@ -53,7 +53,7 @@ export const MobileDragTestPage: React.FC = () => {
         }
         center={
           <MobileChessBoard 
-            gridSize={6}
+            gridSize={4}
             pieceConfig="mobile-test"
             onGameStateChange={handleGameStateChange}
           />

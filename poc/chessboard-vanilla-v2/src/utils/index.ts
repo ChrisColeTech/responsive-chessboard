@@ -65,3 +65,20 @@ export {
   isLandscapeOrientation,
   getSafeAreaInsets
 } from './chess';
+
+// Authentication utilities
+export {
+  DEFAULT_AUTH_CONFIG,
+  TokenUtils,
+  AuthStorageService,
+  ValidationUtils,
+  AuthErrorUtils,
+  ApiUtils,
+  SessionUtils,
+  authStorage,
+  tokenUtils,
+  validationUtils,
+  authErrorUtils,
+  apiUtils,
+  sessionUtils
+} from './auth.utils';

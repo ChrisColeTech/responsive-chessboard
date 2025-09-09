@@ -2,28 +2,39 @@
 import React from "react";
 import { useWrapperChessBoard } from "../../hooks/chess/useWrapperChessBoard";
 import { useChessGameStore } from "../../stores/chessGameStore";
+import { useChessSettings } from "../../stores/appStore";
 import { ChessGrid } from "./ChessGrid";
 import { ChessOverlay } from "./ChessOverlay";
 import { PieceWrapper } from "./PieceWrapper";
-import { MobileChessboardLayout } from "./MobileChessboardLayout";
-import { CapturedPieces } from "./CapturedPieces";
-import type { MobileChessGameState, ChessPiece } from "../../types";
+import type { MobileChessGameState } from "../../types";
 
 interface MobileChessBoardProps {
   gridSize?: number;
-  pieceConfig?: 'drag-test' | 'mobile-test';
+  pieceConfig?: 'drag-test' | 'mobile-test' | 'standard-chess' | 'puzzle';
   onGameStateChange?: (gameState: MobileChessGameState) => void;
-  onCapturedPiecesChange?: (pieces: ChessPiece[]) => void;
-  showLayout?: boolean; // Whether to wrap in MobileChessboardLayout with captured pieces
 }
 
-export const MobileChessBoard: React.FC<MobileChessBoardProps> = ({ gridSize = 8, pieceConfig, showLayout = true }) => {
-  // Centralized responsive piece sizing based on grid size
+// Helper function to get size multiplier based on setting
+const getPieceSizeMultiplier = (size: 'small' | 'medium' | 'large'): number => {
+  switch (size) {
+    case 'small': return 0.65;   // Was 0.6, now 5% larger
+    case 'medium': return 0.9;   // Was 0.8, now 10% larger  
+    case 'large': return 1.15;   // Was 1.0, now 15% larger
+    default: return 0.9;
+  }
+};
+
+export const MobileChessBoard: React.FC<MobileChessBoardProps> = ({ gridSize = 8, pieceConfig, onGameStateChange: _onGameStateChange }) => {
+  // Get piece size setting from store
+  const { pieceSize } = useChessSettings();
+  
+  // Centralized responsive piece sizing based on grid size and user setting
   const GRID_SIZE = gridSize;
-  const PIECE_SIZE = `min(${100 / GRID_SIZE * 0.72}vw, ${100 / GRID_SIZE * 0.72}vh)`;
+  const sizeMultiplier = getPieceSizeMultiplier(pieceSize);
+  const PIECE_SIZE = `min(${100 / GRID_SIZE * sizeMultiplier}vw, ${100 / GRID_SIZE * sizeMultiplier}vh)`;
   
   // Use hook for chess board state
-  const { wrapperPieces, handleCellClick, handlePieceClick, handleDragStart, handleDrop, isFlipped, isDragging, setDraggedPiece, whiteCapturedPieces, blackCapturedPieces } = useWrapperChessBoard(GRID_SIZE, pieceConfig);
+  const { wrapperPieces, handleCellClick, handlePieceClick, handleDragStart, handleDrop, isFlipped, isDragging, setDraggedPiece } = useWrapperChessBoard(GRID_SIZE, pieceConfig);
   
   // Get store state directly
   const setHoveredCell = useChessGameStore(state => state.setHoveredCell);

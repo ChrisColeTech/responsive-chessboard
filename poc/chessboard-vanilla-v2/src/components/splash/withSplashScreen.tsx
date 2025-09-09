@@ -19,7 +19,7 @@ export default function withSplashScreen<P extends object>(
       const initializeApp = async () => {
         try {
           // Simulate initialization tasks
-          await new Promise(resolve => setTimeout(resolve, 800)); // Fast loading
+          await new Promise(resolve => setTimeout(resolve, 1500)); // Allow time for initialization
           
           // You could add real initialization here:
           // await preloadSounds();

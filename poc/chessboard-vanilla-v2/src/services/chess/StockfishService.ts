@@ -31,14 +31,18 @@ export class StockfishService {
   }
 
   private initializeEngine(): void {
+    console.log('🧠 [STOCKFISH] Starting engine initialization...');
     try {
       // Use improved Stockfish worker with proper error handling (copied from working v1)
       const workerUrl = new URL('../../workers/stockfish-worker.js', import.meta.url);
+      console.log('🧠 [STOCKFISH] Worker URL resolved:', workerUrl.href);
       
       // Use classic worker (not ES module) to support importScripts()
+      console.log('🧠 [STOCKFISH] Creating new Worker...');
       this.stockfish = new Worker(workerUrl);
       this.stockfish.addEventListener('message', this.handleMessage.bind(this));
       this.stockfish.addEventListener('error', this.handleError.bind(this));
+      console.log('🧠 [STOCKFISH] Worker created and event listeners attached');
 
       // Initialize UCI protocol (no response expected) - v1 pattern
       this.sendCommand('uci', false);

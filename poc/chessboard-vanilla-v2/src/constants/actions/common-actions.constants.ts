@@ -1,7 +1,7 @@
 // Common action configurations that can be reused across different page groups
 import { 
   Navigation, SkipForward, Clock, Target, Maximize2, RotateCcw,
-  Eye, Move, VolumeX, Coins, Spade, Crown, Disc, Dices
+  Eye, Move, VolumeX, Coins, Spade, Crown, Disc, Dices, Gamepad2, Brain
 } from 'lucide-react'
 import type { ActionSheetAction } from '../../types/core/action-sheet.types'
 
@@ -109,6 +109,20 @@ export const COMMON_ACTIONS: Record<string, ActionSheetAction> = {
     variant: 'secondary'
   },
   
+  // Play navigation actions
+  'go-to-playchess': {
+    id: 'go-to-playchess',
+    label: '→ Play Chess',
+    icon: Gamepad2,
+    variant: 'secondary'
+  },
+  'go-to-playpuzzles': {
+    id: 'go-to-playpuzzles',
+    label: '→ Puzzles',
+    icon: Brain,
+    variant: 'secondary'
+  },
+  
   // Utility actions
   'toggle-fullscreen': {
     id: 'toggle-fullscreen',
@@ -152,6 +166,12 @@ export const COMMON_ACTION_GROUPS = {
     'go-to-holdem',
     'go-to-roulette',
     'go-to-craps'
+  ],
+  
+  // Play mode siblings (child pages)
+  playSiblings: [
+    'go-to-playchess',
+    'go-to-playpuzzles'
   ],
   
   // Common utilities for demo/test pages

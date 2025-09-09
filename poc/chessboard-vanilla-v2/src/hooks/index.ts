@@ -1,10 +1,5 @@
 // index.ts - Hooks exports barrel
 
-// Core chess hooks
-export { useChessGame } from './chess/useChessGame';
-export { useDragAndDrop } from './chess/useDragAndDrop';
-export { useResponsiveBoard } from './chess/useResponsiveBoard';
-
 // Audio hooks
 export { useGlobalUIAudio } from './audio/useGlobalUIAudio';
 
@@ -26,8 +21,20 @@ export { useLayoutActions } from './core/useLayoutActions';
 export { useDragTestActions } from './uitests/useDragTestActions';
 export { useUIAudioTestActions } from './uitests/useUIAudioTestActions';
 
-// Chess subdomain hooks
-export { useComputerOpponent, usePlayGame } from './chess';
+// Authentication hooks
+export {
+  useAuth,
+  useLogin,
+  useRegister,
+  useForgotPassword,
+  useProfile,
+  useAuthStatus,
+  useUser,
+  useLogout,
+  useAuthError,
+  useAuthInitialization,
+  useProtectedRoute,
+  useTokenVerification
+} from './useAuth';
 
-// Phase 5: UI Tests hooks
-export { useUITestNavigation, useAudioDemo, useDragTesting } from './uitests';
+export { useDemoLogin, DEMO_USER_CREDENTIALS } from './useDemoLogin';

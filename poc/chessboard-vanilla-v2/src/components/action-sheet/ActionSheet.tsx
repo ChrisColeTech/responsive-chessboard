@@ -4,7 +4,7 @@
  * Bottom sheet positioned above TabBar with backdrop dismissal
  */
 import { Dialog, DialogPanel } from "@headlessui/react";
-import { Settings } from "lucide-react";
+import { Settings, LogOut } from "lucide-react";
 import { ActionItem } from "./ActionItem";
 import type { ActionSheetProps } from "../../types/core/action-sheet.types";
 import { useRef, useState } from "react";
@@ -133,6 +133,29 @@ export function ActionSheet({
               handleClose();
             }}
             onHover={() => onActionHover?.("Settings")}
+          />
+          
+          {/* Logout Button */}
+          <ActionItem
+            action={{
+              id: "logout",
+              label: "Logout",
+              icon: LogOut,
+              variant: "destructive",
+            }}
+            onSelect={() => {
+              onActionClick(
+                {
+                  id: "logout",
+                  label: "Logout",
+                  icon: LogOut,
+                  variant: "destructive",
+                },
+                handleClose
+              );
+              handleClose();
+            }}
+            onHover={() => onActionHover?.("Logout")}
           />
         </DialogPanel>
       </div>

@@ -1,24 +1,25 @@
-// /src/pages/PlayPage.tsx - SIMPLE PLACEHOLDER FOR PHASE 3
 import React from "react";
-import { usePageInstructions } from "../../hooks/core/usePageInstructions";
+import { useAppStore } from "../../stores/appStore";
+import { PlayMainPage } from "../../components/play/PlayMainPage";
+import { PlayChessPageWrapper } from "../../components/play/PlayChessPageWrapper";
+import { PlayPuzzlesPageWrapper } from "../../components/play/PlayPuzzlesPageWrapper";
 
 export const PlayPage: React.FC = () => {
-  usePageInstructions("play");
+  const currentChildPage = useAppStore((state) => state.currentChildPage);
+
+  // Determine which component to render
+  let CurrentPageComponent = PlayMainPage;
+
+  if (currentChildPage === "playchess") {
+    CurrentPageComponent = PlayChessPageWrapper;
+  } else if (currentChildPage === "playpuzzles") {
+    CurrentPageComponent = PlayPuzzlesPageWrapper;
+  }
 
   return (
-    <div className="flex items-center justify-center min-h-[400px]">
-      <div className="card-gaming p-8 text-center max-w-md">
-        <h1 className="text-2xl font-bold mb-4">Play vs Computer</h1>
-        <p className="text-muted-foreground mb-6">
-          Professional chess gameplay with AI opponent coming soon!
-        </p>
-        <div className="space-y-2 text-sm text-muted-foreground">
-          <p>🎯 10 difficulty levels</p>
-          <p>🎵 Audio feedback</p>
-          <p>🎮 Drag & drop interface</p>
-          <p>🤖 Stockfish AI engine</p>
-        </div>
-      </div>
+    <div className="relative h-full">
+      {/* Current page content */}
+      <CurrentPageComponent />
     </div>
   );
 };

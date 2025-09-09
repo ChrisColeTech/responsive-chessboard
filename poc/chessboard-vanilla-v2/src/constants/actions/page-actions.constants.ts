@@ -9,7 +9,11 @@ import type { ActionSheetAction } from '../../types/core/action-sheet.types'
 import { mergeWithCommonActions, COMMON_ACTION_GROUPS, COMMON_ACTIONS } from './common-actions.constants'
 
 export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
-  play: [
+  play: [...COMMON_ACTION_GROUPS.playSiblings.map(name => ({
+    ...COMMON_ACTIONS[name],
+    variant: 'secondary' as const
+  }))],
+  playchess: mergeWithCommonActions([
     {
       id: 'new-game',
       label: 'New Game',
@@ -37,7 +41,27 @@ export const PAGE_ACTIONS: Record<string, ActionSheetAction[]> = {
       variant: 'secondary',
       shortcut: 'Ctrl+Z'
     }
-  ],
+  ], ['go-to-playpuzzles']),
+  playpuzzles: mergeWithCommonActions([
+    {
+      id: 'new-puzzle',
+      label: 'New Puzzle',
+      icon: RotateCcw,
+      variant: 'default'
+    },
+    {
+      id: 'hint',
+      label: 'Show Hint',
+      icon: Eye,
+      variant: 'secondary'
+    },
+    {
+      id: 'solve-puzzle',
+      label: 'Solve Puzzle',
+      icon: CheckCircle,
+      variant: 'default'
+    }
+  ], ['go-to-playchess']),
   casino: [...COMMON_ACTION_GROUPS.casinoSiblings.map(name => ({
     ...COMMON_ACTIONS[name],
     variant: 'secondary' as const

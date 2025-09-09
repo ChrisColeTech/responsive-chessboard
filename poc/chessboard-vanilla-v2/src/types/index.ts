@@ -152,3 +152,37 @@ export {
   DEFAULT_AUDIO_TIMING,
   AUDIO_FEEDBACK_PATTERNS
 } from './audio/audio-feedback.types';
+
+// Authentication types
+export type {
+  User,
+  UserProgress,
+  LoginRequest,
+  RegisterRequest,
+  ForgotPasswordRequest,
+  ResetPasswordRequest,
+  ChangePasswordRequest,
+  UpdateProfileRequest,
+  VerifyTokenRequest,
+  AuthResponse,
+  LoginResponse,
+  MeResponse,
+  TokenVerificationResponse,
+  AuthState,
+  AuthActions,
+  UseAuthReturn,
+  UseLoginReturn,
+  UseRegisterReturn,
+  UseForgotPasswordReturn,
+  FormValidationError,
+  AuthFormState,
+  TokenInfo,
+  AuthConfig,
+  ProtectedRouteProps,
+  AuthGuardProps,
+  AuthContextValue,
+  AuthErrorType,
+  AuthError,
+  AuthStorage,
+  AuthApiClient
+} from './auth/auth.types';

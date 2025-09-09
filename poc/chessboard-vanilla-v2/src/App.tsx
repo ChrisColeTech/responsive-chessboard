@@ -8,11 +8,13 @@ import { DraggedPiece } from "./components/chess/DraggedPiece";
 import { SplashModal } from "./components/splash/SplashModal";
 import { useSelectedTab, useAppStore } from "./stores/appStore";
 import { useChessAudio } from "./services/audio/audioService";
+import { useAuthStatus } from "./hooks";
 import {
   WorkerTestPage,
   UITestPage,
   PlayPage,
 } from "./pages";
+import { AuthRouter } from "./components/auth/AuthRouter";
 import { CasinoPage } from "./pages/casino/CasinoPage";
 
 /*
@@ -33,6 +35,7 @@ function AppContent() {
   const coinBalance = useAppStore((state) => state.coinBalance);
   const { draggedPiece, cursorPosition, draggedPieceSize } = useDrag();
   const { preloadSounds, playGameStart } = useChessAudio();
+  const { isAuthenticated, isLoading: authLoading } = useAuthStatus();
 
   // Initialize Global UI Audio System
   useGlobalUIAudio({
@@ -76,6 +79,11 @@ function AppContent() {
       document.removeEventListener("keydown", handleFirstInteraction);
     };
   }, []); // Empty dependency array - run only on mount
+
+  // Show auth pages if not authenticated (and not loading)
+  if (!authLoading && !isAuthenticated) {
+    return <AuthRouter />;
+  }
 
   return (
     <AppLayout

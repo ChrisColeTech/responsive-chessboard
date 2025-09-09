@@ -23,6 +23,7 @@ import { useMobileDragTestActions } from '../../hooks/uitests/useMobileDragTestA
 import { useUIClickSound } from '../../hooks/audio/useUIClickSound'
 import { useUIHoverSound } from '../../hooks/audio/useUIHoverSound'
 import { useAppStore } from '../../stores/appStore'
+import { useAuthStore } from '../../store/auth.store'
 import type { ActionSheetContainerProps, ActionSheetAction } from '../../types/core/action-sheet.types'
 import { PAGE_ACTIONS } from '../../constants/actions/page-actions.constants'
 
@@ -79,6 +80,9 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
   // Audio for action clicks and hovers
   const { playUIClick } = useUIClickSound()
   const { playUIHover } = useUIHoverSound()
+  
+  // Auth store for logout
+  const logout = useAuthStore((state) => state.logout)
 
   // HeadlessUI action handler - fixed typing for string indexing
   const handleAction = useCallback((action: ActionSheetAction, closeCallback: () => void) => {
@@ -88,10 +92,23 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
     type Fn = () => void | Promise<void>
     const actionMap: Record<string, Record<string, Fn>> = {
       play: {
+        'go-to-playchess': playActions.goToPlayChess,
+        'go-to-playpuzzles': playActions.goToPlayPuzzles
+      },
+      playchess: {
         'new-game': playActions.newGame,
         'pause-game': playActions.pauseGame,
         'show-moves': playActions.showMoves,
-        'undo-move': playActions.undoMove
+        'undo-move': playActions.undoMove,
+        // Navigation actions
+        'go-to-playpuzzles': playActions.goToPlayPuzzles
+      },
+      playpuzzles: {
+        'new-puzzle': playActions.newPuzzle,
+        'hint': playActions.hint,
+        'solve-puzzle': playActions.solvePuzzle,
+        // Navigation actions
+        'go-to-playchess': playActions.goToPlayChess
       },
       casino: {
         'go-to-slots': casinoActions.goToSlots,
@@ -262,6 +279,13 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
       onOpenSettings()
       return
     }
+    
+    // Handle logout action
+    if (action.id === 'logout') {
+      console.log('🚪 [ACTION SHEET] Logging out user...')
+      logout()
+      return
+    }
 
     // Call the action function with proper typing
     const pageActions = actionMap[delayedActionSheetPage]          // Record<string, Fn> | undefined
@@ -278,7 +302,7 @@ export function ActionSheetContainer({ currentPage, className, onClose, isOpen, 
     // Use HeadlessUI's close callback AND our onClose
     closeCallback()
     onClose()
-  }, [currentPage, playUIClick, playActions, slotsActions, casinoActions, workerActions, uiTestsActions, layoutActions, dragTestActions, uiAudioTestActions, splashActions, minimalSplashActions, animatedSplashActions, loadingProgressActions, brandedSplashActions, luxurysplashActions, functionalSplashActions, mobileDragTestActions, onClose])
+  }, [currentPage, playUIClick, playActions, slotsActions, casinoActions, workerActions, uiTestsActions, layoutActions, dragTestActions, uiAudioTestActions, splashActions, minimalSplashActions, animatedSplashActions, loadingProgressActions, brandedSplashActions, luxurysplashActions, functionalSplashActions, mobileDragTestActions, onClose, logout, onOpenSettings])
 
   const handleHover = useCallback((actionLabel: string) => {
     playUIHover(`Action: ${actionLabel}`)

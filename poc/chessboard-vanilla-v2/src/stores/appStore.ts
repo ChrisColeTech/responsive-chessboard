@@ -33,6 +33,7 @@ interface AppState {
   
   // Chess settings
   selectedPieceSet: keyof typeof PIECE_SETS
+  pieceSize: 'small' | 'medium' | 'large'
   
   // UI State
   lastVisited: Date
@@ -77,6 +78,7 @@ interface AppActions {
   
   // Chess actions
   setPieceSet: (pieceSet: keyof typeof PIECE_SETS) => void
+  setPieceSize: (size: 'small' | 'medium' | 'large') => void
   
   // Splash modal actions
   openSplashModal: (page: string) => void
@@ -110,6 +112,7 @@ const initialState: AppState = {
   uiSounds: true,
   backgroundEffectVariant: 'gaming',
   selectedPieceSet: 'classic',
+  pieceSize: 'medium',
   lastVisited: new Date(),
   splashModalOpen: false,
   splashModalPage: null,
@@ -209,6 +212,7 @@ export const useAppStore = create<AppStore>()(
       
       // Chess actions
       setPieceSet: (pieceSet) => set({ selectedPieceSet: pieceSet }),
+      setPieceSize: (size) => set({ pieceSize: size }),
       
       // Splash modal actions
       openSplashModal: (page) => set({ splashModalOpen: true, splashModalPage: page }),
@@ -240,6 +244,7 @@ export const useAppStore = create<AppStore>()(
         uiSounds: state.uiSounds,
         backgroundEffectVariant: state.backgroundEffectVariant,
         selectedPieceSet: state.selectedPieceSet,
+        pieceSize: state.pieceSize,
         lastVisited: new Date(),
         coinBalance: state.coinBalance,
       }),
@@ -414,5 +419,19 @@ export const useCoinsModal = () => {
     close,
     coinBalance,
     setCoinBalance,
+  }
+}
+
+export const useChessSettings = () => {
+  const selectedPieceSet = useAppStore((state) => state.selectedPieceSet)
+  const pieceSize = useAppStore((state) => state.pieceSize)
+  const setPieceSet = useAppStore((state) => state.setPieceSet)
+  const setPieceSize = useAppStore((state) => state.setPieceSize)
+  
+  return {
+    selectedPieceSet,
+    pieceSize,
+    setPieceSet,
+    setPieceSize,
   }
 }

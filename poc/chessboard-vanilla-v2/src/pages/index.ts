@@ -19,3 +19,12 @@ export { SlotMachineTestPage } from "./casino/SlotMachineTestPage";
 export { UIAudioTestPage } from "./uitests/UIAudioTestPage";
 export { UITestPage } from "./uitests/UITestPage";
 export { WorkerTestPage } from "./chess/WorkerTestPage";
+
+// Auth pages
+export { LoginPage } from "./user/LoginPage";
+export { RegisterPage } from "./user/RegisterPage";
+export { ForgotPasswordPage } from "./user/ForgotPasswordPage";
+export { ProfilePage } from "./user/ProfilePage";
+
+// Dashboard page
+export { DashboardPage } from "./dashboard/DashboardPage";
